@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    /* Core */
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
+    /* Strictness */
+    "strict": true,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    /* Absolute Paths */
+    "baseUrl": ".",
+    "paths": {
+      "@b-config/*": ["backend/config/*"],
+      "@b-IAM/routes": ["backend/modules/IAM/routes.ts"],
+      "@b-IAM/types": ["backend/modules/IAM/types.ts"]
+    }
+  }
+}
