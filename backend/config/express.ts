@@ -24,16 +24,10 @@ app.get('/', (_req: Request, res: Response) => {
 /* =========================
    SERVER START
 ========================= */
-export const start = async () => {
-  return new Promise<void>((resolve, reject) => {
-    const server = app.listen(BACKEND_PORT, BACKEND_HOST, () => {
-      console.log(`[EXPRESS] '${BACKEND_URL}'`);
-      resolve();
-    });
-
-    server.on('error', (err) => {
-      reject(err);
-    });
+export const start = () => {
+  app.listen(BACKEND_PORT, BACKEND_HOST, (err) => {
+    if (err) throw err;
+    console.log(`[EXPRESS] '${BACKEND_URL}'`);
   });
 };
 
