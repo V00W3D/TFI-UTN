@@ -20,7 +20,6 @@ const envSchema = z.object({
   PGSQL_USERNAME: z.string(),
   PGSQL_PASSWORD: z.string(),
   PGSQL_DATABASE: z.string(),
-  PGSQL_EXTRA: z.string().optional(),
 
   REDIS_HOST: z.string(),
   REDIS_PORT: z.string(),
@@ -51,7 +50,7 @@ export const BACKEND_URL = `${protocol}://${BACKEND_HOST}:${BACKEND_PORT}`;
    POSTGRESQL
 ========================= */
 
-export const PG_URL = `postgresql://${parsed.PGSQL_USERNAME}:${parsed.PGSQL_PASSWORD}@${parsed.PGSQL_HOST}:${parsed.PGSQL_PORT}/${parsed.PGSQL_DATABASE}${parsed.PGSQL_EXTRA ?? ''}`;
+export const PG_URL = `postgresql://${parsed.PGSQL_USERNAME}:${parsed.PGSQL_PASSWORD}@${parsed.PGSQL_HOST}:${parsed.PGSQL_PORT}/${parsed.PGSQL_DATABASE}`;
 
 /* =========================
    REDIS

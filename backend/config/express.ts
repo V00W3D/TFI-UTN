@@ -4,6 +4,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '../../env';
+import './pgsql';
+import './redis';
+
 const app = express();
 
 /* =========================
