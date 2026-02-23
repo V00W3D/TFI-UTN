@@ -4,14 +4,16 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '../../env';
+import cookieparser from 'cookie-parser';
 import './pgsql';
-import './redis';
-
+import { AuthMiddleware } from 'backend/middleware/authmiddleware';
+import IAMRoutes from '@b-IAM/routes';
 const app = express();
 
 /* =========================
    MIDDLEWARE
 ========================= */
+app.use(cookieparser());
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
@@ -23,7 +25,8 @@ app.use(morgan('dev'));
 app.get('/', (_req: Request, res: Response) => {
   return res.json({ '~': ':D' });
 });
-
+app.use(IAMRoutes);
+app.use(AuthMiddleware);
 /* =========================
    SERVER START
 ========================= */

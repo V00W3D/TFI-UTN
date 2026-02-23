@@ -5,6 +5,7 @@ export const LoginSchema = z.object({
   identity: z
     .string()
     .trim()
+    .toLowerCase()
     .refine((value) => {
       const isEmail = zEmail.safeParse(value).success;
       const isPhone = zPhone.safeParse(value).success;

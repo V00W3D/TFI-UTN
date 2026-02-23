@@ -57,3 +57,6 @@ export const PG_URL = `postgresql://${parsed.PGSQL_USERNAME}:${parsed.PGSQL_PASS
 ========================= */
 
 export const REDIS_URL = `redis://${parsed.REDIS_USERNAME}:${parsed.REDIS_PASSWORD}@${parsed.REDIS_HOST}:${parsed.REDIS_PORT}`;
+
+export const SESSION_SECRET = process.env.SESSION_SECRET!;
+export const REFRESH_SECRET = process.env.REFRESH_SECRET!;

@@ -51,6 +51,7 @@ export const zUsername = z
   .trim()
   .min(LIMITS.USERNAME_MIN)
   .max(LIMITS.USERNAME_MAX)
+  .toLowerCase()
   .regex(REGEX.USERNAME, MSG.USERNAME_INVALID);
 
 export const zPassword = z
@@ -59,7 +60,7 @@ export const zPassword = z
   .max(LIMITS.PASSWORD_MAX)
   .regex(REGEX.PASSWORD, MSG.PASSWORD_WEAK);
 
-export const zEmail = z.email(MSG.EMAIL_INVALID).max(LIMITS.EMAIL_MAX);
+export const zEmail = z.email(MSG.EMAIL_INVALID).toLowerCase().max(LIMITS.EMAIL_MAX);
 
 export const zPhone = z.string().trim().regex(REGEX.PHONE_E164, MSG.PHONE_INVALID);
 

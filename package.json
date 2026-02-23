@@ -13,13 +13,17 @@
     "typecheck": "tsc -b tsconfig.frontend.json tsconfig.backend.json"
   },
   "dependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/pg": "^8.16.0",
     "argon2": "^0.44.0",
     "chalk": "^5.6.2",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "motion": "^12.34.3",
     "pg": "^8.18.0",
