@@ -7,7 +7,7 @@ import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '../../env';
 import cookieparser from 'cookie-parser';
 import './pgsql';
 import { AuthMiddleware } from 'backend/middleware/authmiddleware';
-import IAMRoutes from '@b-IAM/routes';
+import IAMRoutes from '@IAM/routes';
 const app = express();
 
 /* =========================

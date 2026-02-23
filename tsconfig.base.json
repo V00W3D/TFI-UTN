@@ -22,10 +22,25 @@
     /* Absolute Paths */
     "baseUrl": ".",
     "paths": {
+      /* Global */
       "@env": ["env.ts"],
-      "@b-config/*": ["backend/config/*"],
-      "@b-IAM/routes": ["backend/modules/IAM/routes.ts"],
-      "@b-IAM/types": ["backend/modules/IAM/types.ts"]
+
+      /* Backend Core */
+      "@config/*": ["backend/config/*"],
+
+      /* Backend Modules */
+      "@IAM/*": ["backend/modules/IAM/*"],
+      "@POS/*": ["backend/modules/POS/*"],
+      "@ADMIN/*": ["backend/modules/ADMIN/*"],
+      "@CORE/*": ["backend/modules/CORE/*"],
+
+      /* Frontend */
+      "@pages/*": ["frontend/pages/*"],
+      "@layouts/*": ["frontend/layouts/*"],
+      "@store/*": ["frontend/store/*"],
+      "@components/*": ["frontend/components/*"],
+      "@routes/*": ["frontend/routes/*"],
+      "@main": ["frontend/main.tsx"]
     }
   }
 }
