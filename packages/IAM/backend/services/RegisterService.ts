@@ -1,5 +1,5 @@
 import type { RegisterType } from '../schemas/RegisterSchema';
-import pg from '@b-config/pgsql';
+import pg from '@backend/pgsql';
 import argon2 from 'argon2';
 
 export const RegisterService = async (input: RegisterType) => {

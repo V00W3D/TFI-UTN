@@ -25,22 +25,15 @@
       /* Global */
       "@env": ["env.ts"],
 
-      /* Backend Core */
-      "@config/*": ["backend/config/*"],
+      /* backend cfg */
+      "@backend/*": ["main/backend/*"],
+      "@frontend/*": ["main/frontend/*"],
 
-      /* Backend Modules */
-      "@IAM/*": ["backend/modules/IAM/*"],
-      "@POS/*": ["backend/modules/POS/*"],
-      "@ADMIN/*": ["backend/modules/ADMIN/*"],
-      "@CORE/*": ["backend/modules/CORE/*"],
-
-      /* Frontend */
-      "@pages/*": ["frontend/pages/*"],
-      "@layouts/*": ["frontend/layouts/*"],
-      "@store/*": ["frontend/store/*"],
-      "@components/*": ["frontend/components/*"],
-      "@routes/*": ["frontend/routes/*"],
-      "@main": ["frontend/main.tsx"]
+      /* Modules */
+      "@IAM/*": ["packages/IAM/*"],
+      "@POS/*": ["packages/POS/*"],
+      "@ADMIN/*": ["packages/ADMIN/*"],
+      "@CORE/*": ["packages/CORE/*"]
     }
   }
 }

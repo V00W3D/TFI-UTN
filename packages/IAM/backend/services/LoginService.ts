@@ -1,5 +1,5 @@
 import type { LoginType } from '../schemas/LoginSchema';
-import pg from '@b-config/pgsql';
+import pg from '@backend/pgsql';
 import argon2 from 'argon2';
 
 export const LoginService = async (input: LoginType) => {

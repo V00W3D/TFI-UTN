@@ -3,11 +3,11 @@ import type { Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '../../env';
+import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '@env';
 import cookieparser from 'cookie-parser';
 import './pgsql';
-import { AuthMiddleware } from 'backend/middleware/authmiddleware';
-import IAMRoutes from '@IAM/routes';
+import { AuthMiddleware } from 'main/backend/authmiddleware';
+import IAMRoutes from '@IAM/backend/routes';
 const app = express();
 
 /* =========================

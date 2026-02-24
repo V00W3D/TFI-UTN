@@ -21,10 +21,8 @@ const envSchema = z.object({
   PGSQL_PASSWORD: z.string(),
   PGSQL_DATABASE: z.string(),
 
-  REDIS_HOST: z.string(),
-  REDIS_PORT: z.string(),
-  REDIS_USERNAME: z.string(),
-  REDIS_PASSWORD: z.string(),
+  SESSION_SECRET: z.string(),
+  REFRESH_SECRET: z.string(),
 });
 
 const parsed = envSchema.parse(process.env);
@@ -52,11 +50,5 @@ export const BACKEND_URL = `${protocol}://${BACKEND_HOST}:${BACKEND_PORT}`;
 
 export const PG_URL = `postgresql://${parsed.PGSQL_USERNAME}:${parsed.PGSQL_PASSWORD}@${parsed.PGSQL_HOST}:${parsed.PGSQL_PORT}/${parsed.PGSQL_DATABASE}`;
 
-/* =========================
-   REDIS
-========================= */
-
-export const REDIS_URL = `redis://${parsed.REDIS_USERNAME}:${parsed.REDIS_PASSWORD}@${parsed.REDIS_HOST}:${parsed.REDIS_PORT}`;
-
-export const SESSION_SECRET = process.env.SESSION_SECRET!;
-export const REFRESH_SECRET = process.env.REFRESH_SECRET!;
+export const SESSION_SECRET = parsed.SESSION_SECRET;
+export const REFRESH_SECRET = parsed.REFRESH_SECRET;

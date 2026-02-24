@@ -1,4 +1,4 @@
-import { start } from '@config/express';
+import { start } from 'main/backend/express';
 import { BUN_MODE } from 'env';
 
 if (BUN_MODE === 'dev') {
