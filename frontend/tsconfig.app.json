@@ -32,7 +32,6 @@
       "@POS/*": ["src/POS/*"],
       "@ADMIN/*": ["src/ADMIN/*"],
       "@CORE/*": ["src/CORE/*"],
-      "@assets/*": ["src/assets/*"],
       "@env": ["src/env.ts"]
     }
   },
