@@ -4,5 +4,6 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), tailwindcss()],
+  root: '.',
+  plugins: [react(), tsconfigPaths({ projects: ['./tsconfig.base.json'] }), tailwindcss()],
 });

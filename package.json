@@ -3,9 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "bdev": "bun --watch backend/index.ts",
-    "fdev": "vite",
-    "bbuild": "bun build backend/index.ts --outdir backend/dist",
+    "bdev": "bun --watch main/backend/index.ts",
+    "fdev": "vite --host",
+    "bbuild": "bun build main/backend/index.ts --outdir main/backend/dist",
     "fbuild": "tsc -b tsconfig.frontend.json && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",

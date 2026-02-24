@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.app.json",
-  "include": [".", "../../packages/IAM/frontend/IAMRoutes.tsx"]
+  "include": [".", "../../vite.config.ts"]
 }
