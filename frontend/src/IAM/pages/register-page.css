@@ -1,0 +1,163 @@
+@import 'tailwindcss';
+
+/* ===============================
+   REGISTER PAGE - QART
+   =============================== */
+
+.register-wrapper {
+  @apply w-full flex items-center justify-center px-6;
+}
+
+/* Card */
+
+.register-card {
+  @apply w-full max-w-3xl p-10 rounded-xl transition-colors duration-300;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* Título */
+
+.register-title {
+  @apply text-2xl font-bold mb-8 text-center;
+  color: var(--text-primary);
+}
+
+/* Form */
+
+.register-form {
+  @apply flex flex-col gap-8;
+}
+
+/* Grid */
+
+.register-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-6;
+}
+
+/* Input Group */
+
+.input-group {
+  @apply flex flex-col gap-2;
+}
+
+.input-group label {
+  @apply text-sm font-medium;
+  color: var(--text-secondary);
+}
+
+.input-group input {
+  @apply px-4 py-3 rounded-md transition-all duration-200 outline-none;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+
+/* Focus */
+
+.input-group input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+/* Button */
+
+.register-button {
+  @apply mt-4 py-3 rounded-md font-semibold transition-all duration-300;
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.register-button:hover {
+  background-color: var(--color-primary-dark);
+}
+/* ===============================
+   SECTIONS (Accordion)
+   =============================== */
+
+.register-section {
+  @apply border rounded-lg overflow-hidden transition-all duration-300;
+  border-color: var(--border);
+  background-color: var(--surface);
+}
+
+.section-header {
+  @apply px-5 py-4 font-semibold cursor-pointer flex justify-between items-center transition-all duration-300;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border);
+}
+
+.section-header:hover {
+  background-color: var(--color-primary-soft);
+}
+
+.section-complete {
+  background-color: hsl(140 60% 40%);
+  color: white;
+}
+
+.section-content {
+  @apply p-6;
+  background-color: var(--surface);
+}
+
+/* simple fade */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade {
+  animation: fadeIn 0.25s ease;
+}
+
+/* SEX SELECTOR */
+
+.sex-selector {
+  @apply mt-6 flex flex-col gap-3;
+}
+
+.sex-options {
+  @apply flex gap-4;
+}
+
+.sex-button {
+  @apply px-4 py-2 rounded-lg border transition-all duration-200;
+  border-color: var(--border);
+  background-color: var(--surface);
+  color: var(--text-secondary);
+}
+
+.sex-button:hover {
+  background-color: var(--color-primary-soft);
+}
+
+.sex-selected {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* PHONE INPUT */
+
+.phone-input input {
+  @apply w-full px-4 py-2 rounded-lg border outline-none;
+  border-color: var(--border);
+  background-color: var(--surface);
+  color: var(--text-primary);
+}
+
+/* BUTTON DISABLED */
+
+.register-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

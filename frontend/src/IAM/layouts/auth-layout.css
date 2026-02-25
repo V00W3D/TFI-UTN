@@ -1,0 +1,60 @@
+@import 'tailwindcss';
+
+/* ===============================
+   AUTH LAYOUT - QART DYNAMIC
+   =============================== */
+
+/* Layout general */
+
+.auth-container {
+  @apply min-h-screen flex flex-col transition-colors duration-300;
+  background-color: var(--bg);
+  color: var(--text-primary);
+}
+
+/* ===============================
+   Navbar
+   =============================== */
+
+.auth-navbar {
+  @apply flex items-center justify-center gap-6 px-8 py-5 border-b transition-all duration-300;
+  background-color: var(--surface);
+  border-color: var(--border);
+
+  /* Más presencia */
+  backdrop-filter: blur(6px);
+  box-shadow:
+    0 1px 0 var(--border),
+    0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+/* Links base */
+
+.auth-link {
+  @apply px-6 py-2 rounded-md font-semibold tracking-wide transition-all duration-300 relative;
+  color: var(--text-secondary);
+}
+
+/* Hover */
+
+.auth-link:hover {
+  background-color: var(--color-primary-soft);
+  color: var(--text-primary);
+}
+
+/* Activo */
+
+.auth-link-active {
+  background-color: var(--color-primary);
+  color: white;
+
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* ===============================
+   Contenido
+   =============================== */
+
+.auth-content {
+  @apply flex-1 flex items-center justify-center p-8;
+}

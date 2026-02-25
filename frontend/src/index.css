@@ -1,1 +1,57 @@
 @import 'tailwindcss';
+
+/* =========================================
+   🎨 QART DYNAMIC COLOR SYSTEM (HSL BASED)
+   ========================================= */
+
+/* -----------------------------
+   CONFIGURACIÓN BASE
+   Solo cambiando --primary-hue
+   cambia toda la app
+------------------------------ */
+
+:root {
+  --primary-hue: 25; /* 25 = naranja */
+  --primary-saturation: 85%;
+  --primary-lightness: 55%;
+
+  /* Derivados automáticos */
+  --color-primary: hsl(var(--primary-hue) var(--primary-saturation) var(--primary-lightness));
+  --color-primary-soft: hsl(var(--primary-hue) 85% 85%);
+  --color-primary-dark: hsl(var(--primary-hue) 85% 40%);
+
+  /* Complementario automático */
+  --secondary-hue: calc(var(--primary-hue) + 180);
+  --color-secondary: hsl(var(--secondary-hue) 60% 50%);
+
+  /* Neutrales modo claro */
+  --bg: hsl(40 20% 97%);
+  --surface: hsl(0 0% 100%);
+  --border: hsl(240 6% 90%);
+  --text-primary: hsl(240 10% 10%);
+  --text-secondary: hsl(240 6% 40%);
+}
+
+/* -----------------------------
+   MODO OSCURO
+------------------------------ */
+
+.dark {
+  --bg: hsl(240 10% 8%);
+  --surface: hsl(240 8% 12%);
+  --border: hsl(240 6% 20%);
+  --text-primary: hsl(0 0% 95%);
+  --text-secondary: hsl(240 6% 65%);
+}
+
+/* =========================================
+   UTILIDADES BASE
+   ========================================= */
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
