@@ -3,12 +3,15 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import './register-page.css';
 
+import UsernameField from '@IAM/components/UsernameField';
+import PasswordField from '@IAM/components/PasswordField';
+import ConfirmPasswordField from '@IAM/components/ConfirmPasswordField';
+import NameField from '@IAM/components/NameField';
+import SexField from '@IAM/components/SexField';
+import type { SexType } from '@IAM/components/SexField';
 type SectionKey = 'personal' | 'credentials' | 'contact';
-type Sex = 'male' | 'female' | 'other' | '';
 
 const RegisterPage = () => {
-  const [openSection, setOpenSection] = useState<SectionKey>('personal');
-
   const [form, setForm] = useState({
     firstName: '',
     middleName: '',
@@ -18,11 +21,18 @@ const RegisterPage = () => {
     phone: '',
     password: '',
     confirmPassword: '',
-    sex: '' as Sex,
+    sex: '' as SexType | '',
   });
 
+  /* =========================================
+     INPUT HANDLER (ONLY REAL INPUTS)
+  ========================================= */
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   const isSectionComplete = (section: SectionKey) => {
@@ -53,10 +63,6 @@ const RegisterPage = () => {
     form.email &&
     form.sex;
 
-  const toggleSection = (section: SectionKey) => {
-    setOpenSection(section);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isFormComplete) return;
@@ -70,129 +76,66 @@ const RegisterPage = () => {
 
         <form onSubmit={handleSubmit} className="register-form">
           {/* ================= PERSONAL ================= */}
-          <div className="register-section">
-            <div
-              className={`section-header ${
-                isSectionComplete('personal') ? 'section-complete' : ''
-              }`}
-              onClick={() => toggleSection('personal')}
-            >
-              👤 Información Personal
-            </div>
+          <h3 className={`section-title ${isSectionComplete('personal') ? 'section-done' : ''}`}>
+            Información Personal
+          </h3>
 
-            {openSection === 'personal' && (
-              <div className="section-content">
-                <div className="register-grid">
-                  <div className="input-group">
-                    <label>Nombre</label>
-                    <input name="firstName" value={form.firstName} onChange={handleChange} />
-                  </div>
+          <NameField field="firstName" value={form.firstName} onChange={handleChange} />
 
-                  <div className="input-group">
-                    <label>Segundo Nombre</label>
-                    <input name="middleName" value={form.middleName} onChange={handleChange} />
-                  </div>
+          <NameField field="middleName" value={form.middleName} onChange={handleChange} />
 
-                  <div className="input-group">
-                    <label>Apellido</label>
-                    <input name="lastName" value={form.lastName} onChange={handleChange} />
-                  </div>
-                </div>
+          <NameField field="lastName" value={form.lastName} onChange={handleChange} />
 
-                {/* SEX SELECTOR */}
-                <div className="sex-selector">
-                  <label>Sexo</label>
-                  <div className="sex-options">
-                    {['male', 'female', 'other'].map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        className={`sex-button ${form.sex === option ? 'sex-selected' : ''}`}
-                        onClick={() => setForm({ ...form, sex: option as Sex })}
-                      >
-                        {option === 'male' && 'Masculino'}
-                        {option === 'female' && 'Femenino'}
-                        {option === 'other' && 'Otro'}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          <SexField
+            value={form.sex || 'female'}
+            onChange={(value) =>
+              setForm((prev) => ({
+                ...prev,
+                sex: value,
+              }))
+            }
+          />
 
           {/* ================= CREDENTIALS ================= */}
-          <div className="register-section">
-            <div
-              className={`section-header ${
-                isSectionComplete('credentials') ? 'section-complete' : ''
-              }`}
-              onClick={() => toggleSection('credentials')}
-            >
-              🔐 Credenciales
-            </div>
+          <h3 className={`section-title ${isSectionComplete('credentials') ? 'section-done' : ''}`}>
+            Credenciales
+          </h3>
 
-            {openSection === 'credentials' && (
-              <div className="section-content">
-                <div className="register-grid">
-                  <div className="input-group">
-                    <label>Usuario</label>
-                    <input name="username" value={form.username} onChange={handleChange} />
-                  </div>
+          <UsernameField value={form.username} onChange={handleChange} mode="register" />
 
-                  <div className="input-group">
-                    <label>Contraseña</label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={form.password}
-                      onChange={handleChange}
-                    />
-                  </div>
+          <PasswordField value={form.password} onChange={handleChange} mode="register" />
 
-                  <div className="input-group">
-                    <label>Confirmar Contraseña</label>
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={form.confirmPassword}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          <ConfirmPasswordField
+            value={form.confirmPassword}
+            onChange={handleChange}
+            versus={form.password}
+          />
 
           {/* ================= CONTACT ================= */}
-          <div className="register-section">
-            <div
-              className={`section-header ${isSectionComplete('contact') ? 'section-complete' : ''}`}
-              onClick={() => toggleSection('contact')}
-            >
-              📩 Contacto
+          <h3 className={`section-title ${isSectionComplete('contact') ? 'section-done' : ''}`}>
+            Contacto
+          </h3>
+
+          <div className="register-grid">
+            <div className="input-group">
+              <label>Email</label>
+              <input type="email" name="email" value={form.email} onChange={handleChange} />
             </div>
 
-            {openSection === 'contact' && (
-              <div className="section-content">
-                <div className="register-grid">
-                  <div className="input-group">
-                    <label>Email</label>
-                    <input type="email" name="email" value={form.email} onChange={handleChange} />
-                  </div>
-
-                  <div className="input-group">
-                    <label>Teléfono</label>
-                    <PhoneInput
-                      defaultCountry="AR"
-                      value={form.phone}
-                      onChange={(value) => setForm({ ...form, phone: value || '' })}
-                      className="phone-input"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+            <div className="input-group">
+              <label>Teléfono</label>
+              <PhoneInput
+                defaultCountry="AR"
+                value={form.phone}
+                onChange={(value) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    phone: value || '',
+                  }))
+                }
+                className="phone-input"
+              />
+            </div>
           </div>
 
           <button type="submit" className="register-button" disabled={!isFormComplete}>

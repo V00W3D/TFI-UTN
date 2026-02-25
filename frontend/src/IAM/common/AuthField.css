@@ -1,0 +1,162 @@
+@import 'tailwindcss';
+
+/* =========================================
+   ROOT
+========================================= */
+
+.auth-field {
+  @apply flex flex-col gap-3 pb-5 w-full;
+}
+
+/* =========================================
+   LABEL ROW
+========================================= */
+
+.auth-field__label-row {
+  @apply flex items-center justify-between;
+}
+
+.auth-field__label {
+  @apply text-sm font-medium transition-colors;
+}
+
+.auth-field__label--default {
+  color: var(--text-secondary);
+}
+
+.auth-field__label--error {
+  @apply text-red-500;
+}
+
+.auth-field__label--success {
+  @apply text-green-500;
+}
+
+.auth-field__required {
+  @apply ml-1 text-red-500;
+}
+
+.auth-field__help-btn {
+  @apply text-xs font-semibold transition-colors cursor-pointer bg-transparent border-none;
+  color: var(--text-secondary);
+}
+
+.auth-field__help-btn:hover {
+  color: var(--color-primary);
+}
+
+/* =========================================
+   INPUT BLOCK
+========================================= */
+
+.auth-field__input-wrapper {
+  @apply flex items-end border-b transition-all duration-200;
+  border-color: var(--border);
+}
+
+.auth-field__input-wrapper:focus-within {
+  border-color: var(--color-primary);
+}
+
+.auth-field__input-wrapper--error {
+  @apply border-red-500;
+}
+
+.auth-field__input-wrapper--success {
+  @apply border-green-500;
+}
+
+/* =========================================
+   SLOTS
+========================================= */
+
+.auth-field__slot-left,
+.auth-field__slot-right {
+  @apply flex items-end;
+}
+
+.auth-field__slot-box-left {
+  @apply flex items-center justify-center h-10 w-10 shrink-0;
+  background-color: var(--color-primary);
+}
+
+.auth-field__slot-box-right {
+  @apply flex items-center justify-center h-10 w-10 shrink-0;
+  color: var(--color-primary);
+}
+
+/* =========================================
+   INPUT
+========================================= */
+
+.auth-field__input {
+  @apply flex-1 bg-transparent py-2 pl-3 outline-none border-none disabled:opacity-50 disabled:cursor-not-allowed;
+  color: var(--text-primary);
+}
+
+.auth-field__input::placeholder {
+  color: var(--text-secondary);
+}
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+.auth-field__messages {
+  @apply flex flex-col gap-1;
+  animation: fadeIn 0.2s ease;
+}
+
+.auth-field__message {
+  @apply text-xs;
+}
+
+.auth-field__message--error {
+  @apply text-red-500;
+}
+
+.auth-field__message--warning {
+  @apply text-yellow-400;
+}
+
+.auth-field__message--info {
+  color: var(--text-secondary);
+}
+
+/* =========================================
+   HINT & DESCRIPTION
+========================================= */
+
+.auth-field__hint {
+  @apply text-xs opacity-80;
+  color: var(--text-secondary);
+}
+
+.auth-field__description {
+  @apply text-xs leading-relaxed;
+  color: var(--text-secondary);
+  animation: fadeIn 0.2s ease;
+}
+
+.auth-field__separator {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.75rem;
+  margin: 1.5rem 0;
+  user-select: none;
+}
+
+/* =========================================
+   ANIMATION
+========================================= */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
