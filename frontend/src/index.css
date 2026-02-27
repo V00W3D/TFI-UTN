@@ -71,6 +71,24 @@
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+
+  /* =============================
+   🔘 BUTTON SYSTEM (LIGHT)
+============================== */
+
+  --button-default: var(--surface-elevated);
+  --button-default-text: var(--text-primary);
+
+  --button-active: var(--color-primary);
+  --button-active-text: var(--text-inverse);
+
+  /* =============================
+   🧭 FLOATING MENU (LIGHT)
+============================== */
+
+  --floating-bg: var(--surface-elevated);
+  --floating-border: var(--border);
+  --floating-shadow: var(--shadow-lg);
 }
 
 /* =========================================================
@@ -112,6 +130,24 @@
   --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.6);
+
+  /* =============================
+   🔘 BUTTON SYSTEM (DARK)
+============================== */
+
+  --button-default: var(--surface-elevated);
+  --button-default-text: var(--text-primary);
+
+  --button-active: var(--color-primary);
+  --button-active-text: var(--text-inverse);
+
+  /* =============================
+   🧭 FLOATING MENU (DARK)
+============================== */
+
+  --floating-bg: var(--surface-elevated);
+  --floating-border: var(--border);
+  --floating-shadow: var(--shadow-lg);
 }
 
 /* =========================================================

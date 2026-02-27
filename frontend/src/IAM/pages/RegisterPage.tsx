@@ -1,15 +1,7 @@
-import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import './register-page.css';
-
 import { useRegisterStore } from '@IAM/store/IAMStore';
-
-import UsernameField from '@IAM/components/UsernameField';
-import PasswordField from '@IAM/components/PasswordField';
-import NameField from '@IAM/components/NameField';
-import SexField from '@IAM/components/SexField';
-import EmailField from '@IAM/components/EmailField';
-import PhoneField from '@IAM/components/PhoneField';
+import RegisterField from '@IAM/components/RegisterField';
 
 const RegisterPage = () => {
   const {
@@ -48,26 +40,19 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit} className="register-form">
           {/* ================= PERSONAL ================= */}
           <h3 className="section-title">Información Personal</h3>
-
-          <NameField field="firstName" />
-          <NameField field="middleName" />
-          <NameField field="lastName" />
-
-          <SexField />
-
+          <RegisterField for="firstName" />
+          <RegisterField for="middleName" />
+          <RegisterField for="lastName" />
+          <RegisterField for="sex" />
           {/* ================= CREDENTIALS ================= */}
           <h3 className="section-title">Credenciales</h3>
-
-          <UsernameField />
-          <PasswordField mode="password" />
-          <PasswordField mode="confirm" />
-
+          <RegisterField for="username" />
+          <RegisterField for="password" />
+          <RegisterField for="confirmPassword" />
           {/* ================= CONTACT ================= */}
           <h3 className="section-title">Contacto</h3>
-
-          <EmailField />
-          <PhoneField />
-
+          <RegisterField for="email" />
+          <RegisterField for="phone" />
           <button type="submit" className="register-button" disabled={!isFormValid}>
             Crear Cuenta
           </button>

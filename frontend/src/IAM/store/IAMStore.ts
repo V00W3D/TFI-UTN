@@ -25,7 +25,7 @@ const isValid = (v: ValidationResult) => v === true;
    STATE
 ====================================================== */
 
-interface RegisterState {
+export interface RegisterState {
   /* ===== VALUES ===== */
   firstName: string;
   middleName: string;

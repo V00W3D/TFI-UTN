@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+@layer components {
+  .toggle-mode-button {
+    @apply w-10 h-10 flex items-center justify-center rounded-full
+           backdrop-blur-md
+           transition-all duration-300
+           cursor-pointer
+           hover:scale-110
+           active:scale-95;
+
+    background-color: var(--button-default);
+    color: var(--button-default-text);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .toggle-mode-button img {
+    @apply w-5 h-5 transition-all duration-300;
+    filter: brightness(0); /* por defecto negro */
+  }
+
+  /* =============================
+     🌙 MODO ACTIVO (dark)
+  ============================== */
+
+  .dark .toggle-mode-button {
+    background-color: var(--button-active);
+    color: var(--button-active-text);
+    box-shadow: var(--shadow-md);
+  }
+
+  .dark .toggle-mode-button img {
+    filter: brightness(0) invert(1); /* se vuelve blanca */
+  }
+
+  /* =============================
+     ✨ HOVER REFINADO
+  ============================== */
+
+  .toggle-mode-button:hover {
+    box-shadow: var(--shadow-md);
+  }
+}
