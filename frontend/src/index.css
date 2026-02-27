@@ -1,57 +1,171 @@
 @import 'tailwindcss';
 
-/* =========================================
-   🎨 QART DYNAMIC COLOR SYSTEM (HSL BASED)
-   ========================================= */
+/* =========================================================
+   🎨 QART DESIGN SYSTEM — RESTAURANT EDITION
+   Elegant • High Contrast • Modern • Premium
+========================================================= */
 
-/* -----------------------------
-   CONFIGURACIÓN BASE
-   Solo cambiando --primary-hue
-   cambia toda la app
------------------------------- */
+/* =========================================================
+   🌅 LIGHT MODE (Smoke / Soft Contrast)
+========================================================= */
 
 :root {
-  --primary-hue: 25; /* 25 = naranja */
-  --primary-saturation: 85%;
-  --primary-lightness: 55%;
+  /* =============================
+   🎨 PRIMARY — Deep Royal Blue
+   Premium • Contrast • Elegant
+============================== */
 
-  /* Derivados automáticos */
+  --primary-hue: 220; /* azul noche elegante */
+  --primary-saturation: 65%;
+  --primary-lightness: 42%;
+
   --color-primary: hsl(var(--primary-hue) var(--primary-saturation) var(--primary-lightness));
-  --color-primary-soft: hsl(var(--primary-hue) 85% 85%);
-  --color-primary-dark: hsl(var(--primary-hue) 85% 40%);
+  --color-primary-soft: hsl(var(--primary-hue) 70% 90%);
+  --color-primary-muted: hsl(var(--primary-hue) 35% 60%);
+  --color-primary-dark: hsl(var(--primary-hue) 75% 28%);
+  --color-primary-glow: hsl(var(--primary-hue) 85% 60% / 0.25);
 
-  /* Complementario automático */
-  --secondary-hue: calc(var(--primary-hue) + 180);
-  --color-secondary: hsl(var(--secondary-hue) 60% 50%);
+  /* Accent gastronómico refinado */
+  --color-accent: hsl(35 90% 55%); /* cobre suave */
+  --color-accent-soft: hsl(35 90% 85%);
 
-  /* Neutrales modo claro */
-  --bg: hsl(40 20% 97%);
+  /* =============================
+     ❌ ERROR / ✅ SUCCESS GLOBAL
+  ============================== */
+
+  --color-error: hsl(0 75% 52%);
+  --color-error-soft: hsl(0 80% 92%);
+  --color-error-dark: hsl(0 70% 38%);
+
+  --color-success: hsl(145 63% 42%);
+  --color-success-soft: hsl(145 65% 90%);
+  --color-success-dark: hsl(145 55% 32%);
+
+  --color-warning: hsl(40 90% 50%);
+  --color-info: hsl(210 70% 50%);
+
+  /* =============================
+     🪵 LIGHT SMOKE SYSTEM
+  ============================== */
+
+  --bg: hsl(30 15% 95%);
+  --bg-gradient: linear-gradient(180deg, hsl(30 15% 96%) 0%, hsl(30 15% 92%) 100%);
+
   --surface: hsl(0 0% 100%);
-  --border: hsl(240 6% 90%);
-  --text-primary: hsl(240 10% 10%);
-  --text-secondary: hsl(240 6% 40%);
+  --surface-soft: hsl(30 10% 93%);
+  --surface-muted: hsl(30 8% 88%);
+  --surface-elevated: hsl(0 0% 100%);
+
+  --border: hsl(240 6% 82%);
+  --border-strong: hsl(240 8% 70%);
+
+  --text-primary: hsl(240 12% 14%);
+  --text-secondary: hsl(240 6% 38%);
+  --text-muted: hsl(240 5% 55%);
+  --text-inverse: hsl(0 0% 100%);
+
+  /* =============================
+     🌫 Shadows & Depth
+  ============================== */
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
-/* -----------------------------
-   MODO OSCURO
------------------------------- */
+/* =========================================================
+   🌙 DARK MODE — Deep Night / Premium Black
+   (Discord vibes but more elegant)
+========================================================= */
 
 .dark {
-  --bg: hsl(240 10% 8%);
-  --surface: hsl(240 8% 12%);
-  --border: hsl(240 6% 20%);
-  --text-primary: hsl(0 0% 95%);
-  --text-secondary: hsl(240 6% 65%);
+  /* Primary adaptado a dark */
+  --color-primary: hsl(var(--primary-hue) 75% 60%);
+  --color-primary-soft: hsl(var(--primary-hue) 60% 18%);
+  --color-primary-muted: hsl(var(--primary-hue) 50% 45%);
+  --color-primary-dark: hsl(var(--primary-hue) 80% 40%);
+  --color-primary-glow: hsl(var(--primary-hue) 95% 65% / 0.35);
+
+  /* Error / Success adaptados a dark */
+  --color-error: hsl(0 85% 62%);
+  --color-error-soft: hsl(0 50% 18%);
+  --color-success: hsl(150 70% 55%);
+  --color-success-soft: hsl(150 50% 18%);
+
+  /* Dark ultra profundo */
+  --bg: hsl(240 12% 6%);
+  --bg-gradient: linear-gradient(180deg, hsl(240 12% 7%) 0%, hsl(240 14% 4%) 100%);
+
+  --surface: hsl(240 10% 9%);
+  --surface-soft: hsl(240 9% 12%);
+  --surface-muted: hsl(240 8% 15%);
+  --surface-elevated: hsl(240 8% 18%);
+
+  --border: hsl(240 6% 22%);
+  --border-strong: hsl(240 6% 30%);
+
+  --text-primary: hsl(0 0% 94%);
+  --text-secondary: hsl(240 6% 70%);
+  --text-muted: hsl(240 6% 50%);
+  --text-inverse: hsl(240 15% 8%);
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.6);
 }
 
-/* =========================================
-   UTILIDADES BASE
-   ========================================= */
+/* =========================================================
+   🌍 GLOBAL BASE
+========================================================= */
 
 body {
+  font-family:
+    'Segoe UI',
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    sans-serif;
+
+  background: var(--bg-gradient);
   background-color: var(--bg);
+
   color: var(--text-primary);
+
   transition:
+    background 0.3s ease,
     background-color 0.3s ease,
     color 0.3s ease;
+}
+
+/* =========================================================
+   🧩 GLOBAL UTILITY CLASSES
+   (Para usar rápido en componentes)
+========================================================= */
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-error {
+  color: var(--color-error);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-elevated {
+  background-color: var(--surface-elevated);
+}
+
+.border-default {
+  border-color: var(--border);
+}
+
+.shadow-elevated {
+  box-shadow: var(--shadow-md);
 }

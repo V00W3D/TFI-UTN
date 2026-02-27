@@ -1,60 +1,124 @@
 @import 'tailwindcss';
 
-/* ===============================
-   AUTH LAYOUT - QART DYNAMIC
-   =============================== */
+/* =========================================================
+   AUTH LAYOUT — QART PREMIUM (Restaurant Edition)
+   Elegant • Refined • High Contrast • No Neon
+========================================================= */
 
-/* Layout general */
+/* =========================================================
+   🏗 Layout General
+========================================================= */
 
 .auth-container {
   @apply min-h-screen flex flex-col transition-colors duration-300;
+
+  background: var(--bg-gradient);
   background-color: var(--bg);
   color: var(--text-primary);
 }
 
-/* ===============================
-   Navbar
-   =============================== */
+/* =========================================================
+   🧭 Navbar
+========================================================= */
 
 .auth-navbar {
-  @apply flex items-center justify-center gap-6 px-8 py-5 border-b transition-all duration-300;
-  background-color: var(--surface);
+  @apply flex items-center justify-center gap-8
+         px-10 py-5
+         border-b
+         backdrop-blur-sm
+         transition-all duration-300;
+
+  background-color: var(--surface-elevated);
   border-color: var(--border);
 
-  /* Más presencia */
-  backdrop-filter: blur(6px);
+  /* Profundidad elegante */
   box-shadow:
     0 1px 0 var(--border),
-    0 8px 24px rgba(0, 0, 0, 0.04);
+    var(--shadow-md);
 }
 
-/* Links base */
+/* =========================================================
+   🔗 Links Base
+========================================================= */
 
 .auth-link {
-  @apply px-6 py-2 rounded-md font-semibold tracking-wide transition-all duration-300 relative;
+  @apply relative
+         px-6 py-2.5
+         rounded-lg
+         text-sm font-semibold tracking-wide
+         transition-all duration-200;
+
   color: var(--text-secondary);
 }
 
-/* Hover */
+/* Hover elegante, sin glow */
 
 .auth-link:hover {
-  background-color: var(--color-primary-soft);
+  background-color: var(--surface-soft);
   color: var(--text-primary);
 }
 
-/* Activo */
+/* =========================================================
+   🔥 Link Activo
+========================================================= */
 
 .auth-link-active {
-  background-color: var(--color-primary);
-  color: white;
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
 
-  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border: 1px solid var(--color-primary-muted);
+
+  box-shadow: 0 2px 8px var(--color-primary-glow);
 }
 
-/* ===============================
-   Contenido
-   =============================== */
+/* =========================================================
+   📦 Contenido Principal
+========================================================= */
 
 .auth-content {
-  @apply flex-1 flex items-center justify-center p-8;
+  @apply flex-1 flex items-center justify-center
+         px-8 py-16
+         transition-colors duration-300;
+}
+
+/* =========================================================
+   🎨 Estados opcionales refinados
+   (Por si los querés usar en auth más adelante)
+========================================================= */
+
+.auth-card {
+  @apply rounded-xl p-10 transition-all duration-300;
+
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-card-muted {
+  background-color: var(--surface-soft);
+}
+
+.auth-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border), transparent);
+}
+
+/* =========================================================
+   🎯 Estados de color coherentes con paleta
+========================================================= */
+
+.auth-text-muted {
+  color: var(--text-muted);
+}
+
+.auth-text-accent {
+  color: var(--color-accent);
+}
+
+.auth-text-primary {
+  color: var(--color-primary);
+}
+
+.auth-border-strong {
+  border-color: var(--border-strong);
 }

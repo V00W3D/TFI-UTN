@@ -1,155 +1,193 @@
 @import 'tailwindcss';
 
-/* =========================================
-   ROOT
-========================================= */
+/* =========================================================
+   AUTH FIELD — QART SYSTEM (DRY / Compact / Palette Driven)
+========================================================= */
 
 .auth-field {
-  @apply flex flex-col gap-3 pb-5 w-full;
+  @apply flex flex-col gap-3 w-full;
 }
 
-/* =========================================
-   LABEL ROW
-========================================= */
-
+/* LABEL */
 .auth-field__label-row {
   @apply flex items-center justify-between;
 }
-
 .auth-field__label {
-  @apply text-sm font-medium transition-colors;
+  @apply text-sm font-semibold transition-colors duration-200 text-(--text-secondary);
 }
-
-.auth-field__label--default {
-  color: var(--text-secondary);
+.auth-field--error .auth-field__label {
+  @apply text-(--color-error);
 }
-
-.auth-field__label--error {
-  @apply text-red-500;
+.auth-field--success .auth-field__label {
+  @apply text-(--color-success);
 }
-
-.auth-field__label--success {
-  @apply text-green-500;
-}
-
 .auth-field__required {
-  @apply ml-1 text-red-500;
+  @apply ml-1 text-(--color-error);
 }
-
 .auth-field__help-btn {
-  @apply text-xs font-semibold transition-colors cursor-pointer bg-transparent border-none;
-  color: var(--text-secondary);
+  @apply text-xs font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-(--text-muted);
 }
-
 .auth-field__help-btn:hover {
-  color: var(--color-primary);
+  @apply text-(--color-primary);
 }
 
-/* =========================================
-   INPUT BLOCK
-========================================= */
-
+/* INPUT WRAPPER */
 .auth-field__input-wrapper {
-  @apply flex items-end border-b transition-all duration-200;
-  border-color: var(--border);
+  @apply flex items-end transition-colors duration-200 border-b border-(--border);
 }
-
 .auth-field__input-wrapper:focus-within {
-  border-color: var(--color-primary);
+  @apply border-(--color-primary);
+}
+.auth-field--error .auth-field__input-wrapper {
+  @apply border-(--color-error);
+}
+.auth-field--success .auth-field__input-wrapper {
+  @apply border-(--color-success);
 }
 
-.auth-field__input-wrapper--error {
-  @apply border-red-500;
-}
-
-.auth-field__input-wrapper--success {
-  @apply border-green-500;
-}
-
-/* =========================================
-   SLOTS
-========================================= */
-
+/* SLOTS */
 .auth-field__slot-left,
 .auth-field__slot-right {
   @apply flex items-end;
 }
 
-.auth-field__slot-box-left {
-  @apply flex items-center justify-center h-10 w-10 shrink-0;
-  background-color: var(--color-primary);
+.auth-field__slot-right {
+  @apply items-center justify-center h-10 w-10 shrink-0 transition-colors duration-200 cursor-pointer text-(--text-muted);
+}
+.auth-field__slot-right img {
+  @apply pointer-events-none;
+}
+.auth-field__slot-right:hover {
+  @apply bg-(--surface-soft);
+}
+.dark .auth-field__slot-right {
+  @apply bg-(--color-primary-soft) text-(--color-primary);
 }
 
+.auth-field__slot-box-left,
 .auth-field__slot-box-right {
-  @apply flex items-center justify-center h-10 w-10 shrink-0;
-  color: var(--color-primary);
+  @apply flex items-center justify-center h-10 w-10 shrink-0 transition-colors duration-200 text-(--text-muted);
+}
+.dark .auth-field__slot-box-left {
+  @apply bg-(--color-primary-soft) text-(--color-primary);
+}
+.auth-field--error .auth-field__slot-box-left {
+  @apply bg-(--color-error-soft) text-(--color-error);
+}
+.auth-field--success .auth-field__slot-box-left {
+  @apply bg-(--color-success-soft) text-(--color-success);
 }
 
-/* =========================================
-   INPUT
-========================================= */
-
+/* INPUT */
 .auth-field__input {
-  @apply flex-1 bg-transparent py-2 pl-3 outline-none border-none disabled:opacity-50 disabled:cursor-not-allowed;
-  color: var(--text-primary);
+  @apply flex-1 bg-transparent px-3 py-2 outline-none border-none disabled:opacity-50 disabled:cursor-not-allowed text-(--text-primary);
 }
-
 .auth-field__input::placeholder {
-  color: var(--text-secondary);
+  @apply text-(--text-muted);
 }
 
-/* =========================================
-   MESSAGES
-========================================= */
-
+/* MESSAGES */
 .auth-field__messages {
-  @apply flex flex-col gap-1;
-  animation: fadeIn 0.2s ease;
+  @apply flex flex-col gap-1 text-xs animate-[fadeIn_.15s_ease];
 }
-
-.auth-field__message {
-  @apply text-xs;
-}
-
 .auth-field__message--error {
-  @apply text-red-500;
+  @apply text-(--color-error-dark);
 }
-
 .auth-field__message--warning {
-  @apply text-yellow-400;
+  @apply text-(--color-warning);
 }
-
 .auth-field__message--info {
-  color: var(--text-secondary);
+  @apply text-(--text-muted);
 }
 
-/* =========================================
-   HINT & DESCRIPTION
-========================================= */
-
+/* HINT */
 .auth-field__hint {
-  @apply text-xs opacity-80;
-  color: var(--text-secondary);
+  @apply text-xs text-(--text-muted);
 }
 
-.auth-field__description {
-  @apply text-xs leading-relaxed;
-  color: var(--text-secondary);
-  animation: fadeIn 0.2s ease;
+/* RULES */
+.auth-field__rules-container {
+  @apply mt-2 p-3 border border-(--border) bg-(--surface-soft) animate-[fadeIn_.15s_ease];
+}
+.auth-field__rules {
+  @apply space-y-2;
+}
+.auth-field__rule {
+  @apply flex items-start gap-2 text-xs leading-relaxed text-(--text-secondary);
+}
+.auth-field__rule-dot {
+  @apply mt-1 h-1.5 w-1.5 rounded-full shrink-0 bg-(--color-primary-muted);
+}
+.auth-field__rule-text {
+  @apply flex-1;
 }
 
-.auth-field__separator {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.15);
-  font-size: 0.75rem;
-  margin: 1.5rem 0;
-  user-select: none;
+/* PLUGINS */
+.auth-field__plugins {
+  @apply mt-2;
 }
 
-/* =========================================
-   ANIMATION
-========================================= */
+/* RADIO */
+.auth-field__radio-group {
+  @apply flex gap-3 w-full;
+}
+.auth-field__radio-option {
+  @apply flex-1 cursor-pointer;
+}
+.auth-field__radio-input {
+  @apply hidden;
+}
+.auth-field__radio-card {
+  @apply flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 border border-(--border) bg-(--surface-soft);
+}
+.auth-field__radio-card:hover {
+  @apply border-(--color-primary-muted);
+}
+.auth-field__radio-circle {
+  @apply flex items-center justify-center w-4 h-4 rounded-full border-2 border-(--border-strong) transition-all duration-200;
+}
+.auth-field__radio-dot {
+  @apply w-2 h-2 rounded-full;
+}
+.auth-field__radio-icon {
+  @apply w-6 h-6 object-contain transition-all duration-300;
+}
+.auth-field__radio-label {
+  @apply text-xs font-medium transition-colors duration-300 text-(--text-secondary);
+}
 
+/* RADIO — dynamic by data-value using primary scale */
+.auth-field__radio-option[data-value] .auth-field__radio-card--checked {
+  @apply border-(--color-primary) bg-(--color-primary-soft);
+}
+.auth-field__radio-option[data-value] .auth-field__radio-card--checked .auth-field__radio-circle {
+  @apply border-(--color-primary);
+}
+.auth-field__radio-option[data-value] .auth-field__radio-card--checked .auth-field__radio-dot {
+  @apply bg-(--color-primary);
+}
+.auth-field__radio-option[data-value] .auth-field__radio-card--checked .auth-field__radio-label {
+  @apply text-(--color-primary-dark);
+}
+
+/* PHONE INPUT (Integrated / DRY) */
+.auth-phone {
+  @apply flex items-center w-full bg-transparent border-none;
+}
+.auth-phone .PhoneInputCountry {
+  @apply mr-2 flex items-center;
+}
+.auth-phone .PhoneInputCountrySelect {
+  @apply bg-transparent border-none outline-none cursor-pointer text-(--text-secondary);
+}
+.auth-phone .PhoneInputInput {
+  @apply flex-1 bg-transparent border-none outline-none px-2 py-2 text-sm text-(--text-primary) placeholder:text-(--text-muted);
+}
+.PhoneInputCountrySelect option {
+  @apply bg-(--surface) text-(--text-primary);
+}
+
+/* ANIMATION */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -159,4 +197,121 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+/* =========================================================
+   RADIO — INTERACTION REFINEMENTS (ESENCIAL)
+========================================================= */
+
+/* Animación suave al activar */
+.auth-field__radio-card--checked {
+  transform: scale(1.02);
+}
+
+/* Efecto press */
+.auth-field__radio-option:active .auth-field__radio-card {
+  transform: scale(0.98);
+}
+
+/* Transición más fluida del círculo */
+.auth-field__radio-circle {
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* Dot invisible por defecto */
+.auth-field__radio-dot {
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+
+/* Dot visible cuando está activo */
+.auth-field__radio-card--checked .auth-field__radio-dot {
+  transform: scale(1);
+}
+
+/* Hover más premium */
+.auth-field__radio-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* =========================================================
+   🌸 FEMENINO — Ajuste Premium Rosita
+   (Mejor contraste + más elegante)
+========================================================= */
+
+.auth-field__radio-option[data-value='female'] .auth-field__radio-card--checked {
+  border-color: hsl(330 78% 62%);
+  background-color: hsl(330 90% 95%);
+}
+
+.auth-field__radio-option[data-value='female']
+  .auth-field__radio-card--checked
+  .auth-field__radio-label {
+  color: hsl(330 70% 38%);
+}
+
+/* =========================================================
+   🟣 OTHER — Ajuste Violet Premium
+========================================================= */
+
+.auth-field__radio-option[data-value='other'] .auth-field__radio-card--checked {
+  border-color: hsl(270 72% 58%);
+  background-color: hsl(270 85% 96%);
+}
+
+.auth-field__radio-option[data-value='other']
+  .auth-field__radio-card--checked
+  .auth-field__radio-label {
+  color: hsl(270 60% 38%);
+}
+
+/* =========================================================
+   PHONE INPUT — INTEGRACIÓN REAL CON AUTH FIELD
+========================================================= */
+
+/* Que el PhoneInput respete el bottom-border system */
+.auth-field__input-wrapper .PhoneInput {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
+/* Bandera */
+.auth-field__input-wrapper .PhoneInputCountry {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+/* Selector */
+.auth-field__input-wrapper .PhoneInputCountrySelect {
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+/* Input número */
+.auth-field__input-wrapper .PhoneInputInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 8px 0;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+/* Hover suave al selector */
+.auth-field__input-wrapper .PhoneInputCountrySelect:hover {
+  color: var(--color-primary);
+}
+
+/* Dropdown consistente con el sistema */
+.PhoneInputCountrySelect option {
+  background-color: var(--surface);
+  color: var(--text-primary);
 }

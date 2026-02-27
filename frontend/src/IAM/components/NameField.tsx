@@ -1,17 +1,13 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import AuthField from '../common/AuthField';
+import { useRegisterStore } from '@IAM/store/IAMStore';
 
 /* =========================================
-   BACKEND-ALIGNED LIMITS & REGEX
+   CONFIG
 ========================================= */
 
 const NAME_MIN = 2;
 const NAME_MAX = 50;
-const NAME_REGEX = /^[A-Za-zÀ-ÿ\s'-]+$/;
-
-/* =========================================
-   ICON MAP
-========================================= */
 
 const iconMap: Record<'firstName' | 'middleName' | 'lastName', string> = {
   firstName: '/first-name.png',
@@ -25,71 +21,52 @@ const labelMap: Record<'firstName' | 'middleName' | 'lastName', string> = {
   lastName: 'Apellido',
 };
 
-const NameIcon = ({ type }: { type: 'firstName' | 'middleName' | 'lastName' }) => (
-  <div className="flex items-center justify-center shrink-0">
-    <img src={iconMap[type]} alt={type} className="w-5 h-5 object-contain" />
-  </div>
-);
-
 /* =========================================
    PROPS
 ========================================= */
 
 interface Props {
   field: 'firstName' | 'middleName' | 'lastName';
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  separatorTop?: boolean;
-  separatorBottom?: boolean;
 }
 
 /* =========================================
    COMPONENT
 ========================================= */
 
-const NameField = ({
-  field,
-  value,
-  onChange,
-  separatorTop = false,
-  separatorBottom = false,
-}: Props) => {
-  const trimmed = value.trim();
+const NameField = ({ field }: Props) => {
+  const {
+    firstName,
+    middleName,
+    lastName,
+    vFirstName,
+    vMiddleName,
+    vLastName,
+    setFirstName,
+    setMiddleName,
+    setLastName,
+  } = useRegisterStore();
 
-  const messages = useMemo(() => {
-    if (!trimmed) return [];
+  const valueMap = {
+    firstName,
+    middleName,
+    lastName,
+  };
 
-    const issues: { type: 'error' | 'warning'; text: string }[] = [];
+  const validationMap = {
+    firstName: vFirstName,
+    middleName: vMiddleName,
+    lastName: vLastName,
+  };
 
-    if (!NAME_REGEX.test(trimmed)) {
-      issues.push({
-        type: 'error',
-        text: 'Solo se permiten letras, espacios, guiones y apóstrofes',
-      });
-    }
+  const setterMap = {
+    firstName: setFirstName,
+    middleName: setMiddleName,
+    lastName: setLastName,
+  };
 
-    if (trimmed.length < NAME_MIN) {
-      issues.push({
-        type: 'warning',
-        text: `Debe tener al menos ${NAME_MIN} caracteres`,
-      });
-    }
-
-    if (trimmed.length > NAME_MAX) {
-      issues.push({
-        type: 'error',
-        text: `No puede superar los ${NAME_MAX} caracteres`,
-      });
-    }
-
-    return issues;
-  }, [trimmed]);
-
-  const hasErrors = messages.some((m) => m.type === 'error');
-  const hasWarnings = messages.some((m) => m.type === 'warning');
-
-  const success =
-    trimmed.length >= NAME_MIN && trimmed.length <= NAME_MAX && NAME_REGEX.test(trimmed);
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setterMap[field](e.target.value);
+  };
 
   return (
     <AuthField
@@ -97,29 +74,18 @@ const NameField = ({
       name={field}
       type="text"
       autoComplete="given-name"
-      value={value}
-      onChange={onChange}
-      required
-      error={hasErrors}
-      success={success && !hasWarnings}
-      messages={messages}
+      value={valueMap[field]}
+      onChange={handleChange}
+      required={field !== 'middleName'}
+      validate={validationMap[field]}
+      inputIcon={iconMap[field]}
       hint={`${NAME_MIN}-${NAME_MAX} caracteres`}
-      description={
-        <>
-          Este campo:
-          <ul className="list-disc pl-4 mt-1 space-y-1">
-            <li>
-              Debe tener entre {NAME_MIN} y {NAME_MAX} caracteres
-            </li>
-            <li>Solo puede contener letras, espacios, guiones y apóstrofes</li>
-          </ul>
-        </>
-      }
+      rules={[
+        `Debe tener entre ${NAME_MIN} y ${NAME_MAX} caracteres`,
+        'Solo puede contener letras, espacios, guiones y apóstrofes',
+      ]}
       showHelpToggle
-      leftSlot={[<NameIcon key="icon" type={field} />]}
       maxLength={NAME_MAX}
-      separatorTop={separatorTop}
-      separatorBottom={separatorBottom}
     />
   );
 };

@@ -6,15 +6,15 @@ import { useRegisterStore } from '@IAM/store/IAMStore';
    COMPONENT
 ========================================= */
 
-const UsernameField = () => {
-  const { username, vUsername, setUsername } = useRegisterStore();
+const EmailField = () => {
+  const { email, vEmail, setEmail } = useRegisterStore();
 
   /* =========================================
      HANDLER
   ========================================= */
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setUsername(e.target.value);
+    setEmail(e.target.value);
   };
 
   /* =========================================
@@ -23,26 +23,26 @@ const UsernameField = () => {
 
   return (
     <AuthField
-      label="Usuario"
-      name="username"
-      type="text"
-      autoComplete="username"
-      value={username}
+      label="Correo electrónico"
+      name="email"
+      type="email"
+      autoComplete="email"
+      value={email}
       onChange={handleChange}
       required
-      maxLength={20}
-      validate={vUsername}
-      inputIcon="/user-icon.png"
-      placeholder="ju4n_"
-      hint="4–20 caracteres"
+      maxLength={254}
+      validate={vEmail}
+      inputIcon="/email-icon.png"
+      placeholder="ejemplo@correo.com"
+      hint="Ingresa un correo válido"
       rules={[
-        'Debe tener entre 4 y 20 caracteres',
-        'Solo letras, números y guiones bajos (_)',
-        'Se almacenará automáticamente en minúsculas',
+        'Debe ser un correo electrónico válido',
+        'Debe incluir un @',
+        'Debe incluir un dominio válido (ej: .com, .net)',
       ]}
       showHelpToggle
     />
   );
 };
 
-export default UsernameField;
+export default EmailField;

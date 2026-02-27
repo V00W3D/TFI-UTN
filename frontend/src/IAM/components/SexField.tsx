@@ -1,70 +1,43 @@
-import { useMemo } from 'react';
 import AuthField from '../common/AuthField';
-
-/* =========================================
-   TYPES
-========================================= */
-
-export type SexType = 'male' | 'female' | 'other';
-
-/* =========================================
-   LABEL MAP
-========================================= */
-
-const labelMap: Record<SexType, string> = {
-  female: 'Femenino',
-  male: 'Masculino',
-  other: 'Otro',
-};
-
-/* =========================================
-   PROPS
-========================================= */
-
-interface Props {
-  value: SexType;
-  onChange: (value: SexType) => void;
-  separatorTop?: boolean;
-  separatorBottom?: boolean;
-}
-
+import { useRegisterStore } from '@IAM/store/IAMStore';
+import type { SexType } from '@IAM/store/IAMStore';
 /* =========================================
    COMPONENT
 ========================================= */
 
-const SexField = ({ value, onChange, separatorTop = false, separatorBottom = false }: Props) => {
-  const messages = useMemo(() => {
-    if (!value) {
-      return [
-        {
-          type: 'error' as const,
-          text: 'Debe seleccionar una opción',
-        },
-      ];
-    }
+const SexField = () => {
+  const { sex, vSex, setSex } = useRegisterStore();
 
-    return [];
-  }, [value]);
-
-  const hasErrors = messages.length > 0;
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setSex(e.target.value as SexType);
+  };
 
   return (
     <AuthField
       label="Sexo"
       name="sex"
-      type="select"
-      value={value}
-      onChange={(e: any) => onChange(e.target.value as SexType)}
+      type="radio"
+      value={sex}
+      onChange={handleChange}
       required
-      error={hasErrors}
-      success={!hasErrors}
-      messages={messages}
-      separatorTop={separatorTop}
-      separatorBottom={separatorBottom}
-      selectOptions={[
-        { value: 'female', label: labelMap.female },
-        { value: 'male', label: labelMap.male },
-        { value: 'other', label: labelMap.other },
+      validate={vSex}
+      hint="Seleccioná cómo te identificás"
+      radioOptions={[
+        {
+          value: 'male',
+          label: 'Masculino',
+          icon: '/masculine-icon.png',
+        },
+        {
+          value: 'female',
+          label: 'Femenino',
+          icon: '/femenine-icon.png',
+        },
+        {
+          value: 'other',
+          label: 'Otro',
+          icon: '/other-gender.png',
+        },
       ]}
     />
   );

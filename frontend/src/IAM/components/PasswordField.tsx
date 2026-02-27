@@ -1,110 +1,56 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import AuthField from '../common/AuthField';
 import PasswordStrengthPlugin from '../utils/PasswordStrength';
+import { useRegisterStore } from '@IAM/store/IAMStore';
 
-/* =========================================
-   LIMITS & REGEX (ALINEADO AL BACKEND)
-========================================= */
-
-const PASSWORD_MIN = 8;
-const PASSWORD_MAX = 72;
-
-// Exactamente igual a tu backend
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/;
-
-/* =========================================
-   ICON
-========================================= */
-
-const LockIcon = () => (
-  <div className="flex items-center justify-center shrink-0">
-    <img src="/lock-icon.png" alt="lock-icon" className="w-5 h-5 object-contain" />
-  </div>
-);
-
-/* =========================================
-   TYPES
-========================================= */
+type Mode = 'password' | 'confirm';
 
 interface Props {
-  value: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
-  mode?: 'register' | 'login';
-  separatorTop?: boolean;
-  separatorBottom?: boolean;
+  mode: Mode;
 }
 
-/* =========================================
-   COMPONENT
-========================================= */
+const PasswordField = ({ mode }: Props) => {
+  const {
+    password,
+    confirmPassword,
+    vPassword,
+    vConfirmPassword,
+    setPassword,
+    setConfirmPassword,
+  } = useRegisterStore();
 
-const PasswordField = ({
-  value,
-  onChange,
-  mode = 'register',
-  separatorTop = false,
-  separatorBottom = false,
-}: Props) => {
-  const [visible, setVisible] = useState(false);
-
-  const password = value;
-  const isRegister = mode === 'register';
+  const isMain = mode === 'password';
 
   /* =========================================
-     VALIDATIONS (100% IGUAL BACKEND)
+     STORE BINDING (100% aligned)
   ========================================= */
 
-  const messages = useMemo(() => {
-    if (!isRegister || !password) return [];
-
-    const issues: { type: 'warning' | 'error'; text: string }[] = [];
-
-    if (password.length < PASSWORD_MIN) {
-      issues.push({
-        type: 'warning',
-        text: `Debe tener al menos ${PASSWORD_MIN} caracteres`,
-      });
-    }
-
-    if (password.length > PASSWORD_MAX) {
-      issues.push({
-        type: 'error',
-        text: `No puede superar los ${PASSWORD_MAX} caracteres`,
-      });
-    }
-
-    if (!PASSWORD_REGEX.test(password)) {
-      issues.push({
-        type: 'warning',
-        text: 'Debe incluir al menos una mayúscula, una minúscula, un número y un símbolo',
-      });
-    }
-
-    return issues;
-  }, [password, isRegister]);
-
-  const hasErrors = messages.some((m) => m.type === 'error');
-
-  const success =
-    isRegister &&
-    password.length >= PASSWORD_MIN &&
-    password.length <= PASSWORD_MAX &&
-    PASSWORD_REGEX.test(password);
+  const value = isMain ? password : confirmPassword;
+  const validate = isMain ? vPassword : vConfirmPassword;
+  const setter = isMain ? setPassword : setConfirmPassword;
 
   /* =========================================
-     PASSWORD STRENGTH PLUGIN
+     PASSWORD STRENGTH (ONLY MAIN PASSWORD)
   ========================================= */
 
   const plugins = useMemo(() => {
-    if (!isRegister) return [];
+    if (!isMain) return [];
+    if (!password) return [];
 
     return [
       {
-        position: 'below-input' as const,
         render: () => <PasswordStrengthPlugin password={password} mode="register" />,
       },
     ];
-  }, [isRegister, password]);
+  }, [password, isMain]);
+
+  /* =========================================
+     HANDLER
+  ========================================= */
+
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setter(e.target.value);
+  };
 
   /* =========================================
      RENDER
@@ -112,49 +58,32 @@ const PasswordField = ({
 
   return (
     <AuthField
-      label="Contraseña"
-      name="password"
-      type={visible ? 'text' : 'password'}
-      autoComplete={isRegister ? 'new-password' : 'current-password'}
+      label={isMain ? 'Contraseña' : 'Confirmar contraseña'}
+      name={isMain ? 'password' : 'confirmPassword'}
+      type="password"
+      autoComplete="new-password"
       value={value}
-      onChange={onChange}
+      onChange={handleChange}
       required
-      error={isRegister ? hasErrors : false}
-      success={success}
-      messages={isRegister ? messages : []}
-      hint={isRegister ? `${PASSWORD_MIN}-${PASSWORD_MAX} caracteres` : undefined}
-      description={
-        isRegister ? (
-          <>
-            La contraseña debe:
-            <ul className="list-disc pl-4 mt-1 space-y-1">
-              <li>
-                Tener entre {PASSWORD_MIN} y {PASSWORD_MAX} caracteres
-              </li>
-              <li>Incluir mayúsculas</li>
-              <li>Incluir minúsculas</li>
-              <li>Incluir números</li>
-              <li>Incluir símbolos</li>
-            </ul>
-          </>
-        ) : undefined
+      maxLength={72}
+      validate={validate}
+      inputIcon={isMain ? '/lock-icon.png' : '/key-icon.png'}
+      placeholder={isMain ? 'Creá una contraseña fuerte' : 'Repetí tu contraseña'}
+      hint="8–72 caracteres"
+      rules={
+        isMain
+          ? [
+              'Debe tener entre 8 y 72 caracteres',
+              'Incluir al menos una letra mayúscula',
+              'Incluir al menos una letra minúscula',
+              'Incluir al menos un número',
+              'Incluir al menos un símbolo o carácter especial',
+            ]
+          : ['Debe coincidir exactamente con la contraseña anterior']
       }
-      showHelpToggle={isRegister}
-      leftSlot={[<LockIcon key="icon" />]}
-      rightSlot={[
-        <button
-          type="button"
-          key="toggle"
-          onClick={() => setVisible((v) => !v)}
-          className="text-xs font-semibold text-(--text-secondary)"
-        >
-          {visible ? 'Ocultar' : 'Mostrar'}
-        </button>,
-      ]}
-      maxLength={PASSWORD_MAX}
+      showHelpToggle={isMain}
       plugins={plugins}
-      separatorTop={separatorTop}
-      separatorBottom={separatorBottom}
+      visionToggler
     />
   );
 };
