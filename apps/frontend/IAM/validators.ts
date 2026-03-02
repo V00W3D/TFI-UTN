@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { zUsername, zPassword, zEmail, zPhone, zName, zSex } from './shared';
+import { zUsername, zPassword, zEmail, zPhone, zName, zSex } from './IAMSchema';
 
 /* ============================================================
    GENERIC HELPER → devuelve true o string

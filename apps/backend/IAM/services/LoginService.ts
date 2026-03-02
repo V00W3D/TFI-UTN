@@ -1,23 +1,24 @@
 import type { LoginType } from '../schemas/LoginSchema';
-import pg from '@pg';
+import { prisma } from '@db';
 import argon2 from 'argon2';
 
 export const LoginService = async (input: LoginType) => {
   const { identity, password } = input;
 
-  const result = await pg.query(
-    `
-    SELECT id, username, email, phone, password, role
-    FROM users
-    WHERE username = $1
-       OR email = $1
-       OR phone = $1
-    LIMIT 1
-    `,
-    [identity],
-  );
-
-  const user = result.rows[0];
+  // Prisma permite OR directamente
+  const user = await prisma.user.findFirst({
+    where: {
+      OR: [{ username: identity }, { email: identity }, { phone: identity }],
+    },
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      phone: true,
+      password: true,
+      role: true,
+    },
+  });
 
   if (!user) {
     throw new Error('Credenciales inválidas');

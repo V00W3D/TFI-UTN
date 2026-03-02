@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 /* ============================================================
    LIMITS
-   ============================================================ */
+============================================================ */
 
 export const LIMITS = {
   NAME_MIN: 2,
@@ -16,7 +16,7 @@ export const LIMITS = {
 
 /* ============================================================
    REGEX
-   ============================================================ */
+============================================================ */
 
 export const REGEX = {
   NAME: /^[A-Za-zÀ-ÿ\s'-]+$/,
@@ -27,7 +27,7 @@ export const REGEX = {
 
 /* ============================================================
    MESSAGES
-   ============================================================ */
+============================================================ */
 
 export const MSG = {
   NAME_INVALID: 'Solo se permiten letras, espacios, guiones y apóstrofes',
@@ -40,37 +40,51 @@ export const MSG = {
   SEX_INVALID: 'Sexo inválido',
   IDENTITY_INVALID: 'Debe ser un usuario, correo o teléfono válido',
   PASSWORD_REQUIRED: 'La contraseña es obligatoria',
+
+  MIN: (min: number) => `Debe tener al menos ${min} caracteres`,
+  MAX: (max: number) => `No puede tener más de ${max} caracteres`,
 } as const;
 
 /* ============================================================
    BASE ZOD BUILDERS (REUTILIZABLES)
-   ============================================================ */
+============================================================ */
 
 export const zUsername = z
   .string()
   .trim()
-  .min(LIMITS.USERNAME_MIN)
-  .max(LIMITS.USERNAME_MAX)
+  .min(LIMITS.USERNAME_MIN, { message: MSG.MIN(LIMITS.USERNAME_MIN) })
+  .max(LIMITS.USERNAME_MAX, { message: MSG.MAX(LIMITS.USERNAME_MAX) })
   .toLowerCase()
   .regex(REGEX.USERNAME, MSG.USERNAME_INVALID);
 
 export const zPassword = z
   .string()
-  .min(LIMITS.PASSWORD_MIN)
-  .max(LIMITS.PASSWORD_MAX)
+  .min(LIMITS.PASSWORD_MIN, { message: MSG.MIN(LIMITS.PASSWORD_MIN) })
+  .max(LIMITS.PASSWORD_MAX, { message: MSG.MAX(LIMITS.PASSWORD_MAX) })
   .regex(REGEX.PASSWORD, MSG.PASSWORD_WEAK);
 
-export const zEmail = z.email(MSG.EMAIL_INVALID).toLowerCase().max(LIMITS.EMAIL_MAX);
+export const zEmail = z
+  .string()
+  .trim()
+  .max(LIMITS.EMAIL_MAX, { message: MSG.MAX(LIMITS.EMAIL_MAX) })
+  .email(MSG.EMAIL_INVALID)
+  .toLowerCase();
 
 export const zPhone = z.string().trim().regex(REGEX.PHONE_E164, MSG.PHONE_INVALID);
 
 export const zName = z
   .string()
   .trim()
-  .min(LIMITS.NAME_MIN)
-  .max(LIMITS.NAME_MAX)
+  .min(LIMITS.NAME_MIN, { message: MSG.MIN(LIMITS.NAME_MIN) })
+  .max(LIMITS.NAME_MAX, { message: MSG.MAX(LIMITS.NAME_MAX) })
   .regex(REGEX.NAME, MSG.NAME_INVALID);
 
-export const zSex = z.enum(['male', 'female', 'other'], {
-  message: MSG.SEX_INVALID,
-});
+/* ============================================================
+   SEX (Acepta minúsculas y mayúsculas, devuelve MAYÚSCULAS)
+============================================================ */
+
+export const zSex = z
+  .string()
+  .transform((val) => val.toUpperCase())
+  .refine((val) => ['MALE', 'FEMALE', 'OTHER'].includes(val), { message: MSG.SEX_INVALID })
+  .transform((val) => val as 'MALE' | 'FEMALE' | 'OTHER');

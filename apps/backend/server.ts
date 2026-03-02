@@ -5,7 +5,6 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '@env';
 import cookieparser from 'cookie-parser';
-import './pgsql';
 import { AuthMiddleware } from './authmiddleware';
 import IAMRoutes from '@IAM/routes';
 const app = express();

@@ -64,9 +64,10 @@ export const zPassword = z
   .regex(REGEX.PASSWORD, MSG.PASSWORD_WEAK);
 
 export const zEmail = z
-  .email(MSG.EMAIL_INVALID)
+  .string()
   .trim()
   .max(LIMITS.EMAIL_MAX, { message: MSG.MAX(LIMITS.EMAIL_MAX) })
+  .email(MSG.EMAIL_INVALID)
   .toLowerCase();
 
 export const zPhone = z.string().trim().regex(REGEX.PHONE_E164, MSG.PHONE_INVALID);
@@ -78,6 +79,12 @@ export const zName = z
   .max(LIMITS.NAME_MAX, { message: MSG.MAX(LIMITS.NAME_MAX) })
   .regex(REGEX.NAME, MSG.NAME_INVALID);
 
-export const zSex = z.enum(['male', 'female', 'other'], {
-  message: MSG.SEX_INVALID,
-});
+/* ============================================================
+   SEX (Acepta minúsculas y mayúsculas, devuelve MAYÚSCULAS)
+============================================================ */
+
+export const zSex = z
+  .string()
+  .transform((val) => val.toUpperCase())
+  .refine((val) => ['MALE', 'FEMALE', 'OTHER'].includes(val), { message: MSG.SEX_INVALID })
+  .transform((val) => val as 'MALE' | 'FEMALE' | 'OTHER');

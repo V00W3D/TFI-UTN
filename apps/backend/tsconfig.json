@@ -29,7 +29,9 @@
     "baseUrl": ".",
     "paths": {
       "@env": ["env.ts"],
-      "@IAM/*": ["IAM/*"]
+      "@IAM/*": ["IAM/*"],
+      "@prisma": ["prisma/generated/client.ts"],
+      "@db": ["pg.ts"]
     }
   }
 }

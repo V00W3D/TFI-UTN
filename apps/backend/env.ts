@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { config } from 'dotenv';
+
 config();
 
 /* =========================
@@ -15,11 +16,7 @@ const envSchema = z.object({
   FRONTEND_PORT: z.string().optional(),
   FRONTEND_HOST: z.string().optional(),
 
-  PGSQL_HOST: z.string(),
-  PGSQL_PORT: z.string(),
-  PGSQL_USERNAME: z.string(),
-  PGSQL_PASSWORD: z.string(),
-  PGSQL_DATABASE: z.string(),
+  DATABASE_URL: z.string().url(),
 
   SESSION_SECRET: z.string(),
   REFRESH_SECRET: z.string(),
@@ -45,10 +42,14 @@ export const BACKEND_PORT = Number(parsed.BACKEND_PORT);
 export const BACKEND_URL = `${protocol}://${BACKEND_HOST}:${BACKEND_PORT}`;
 
 /* =========================
-   POSTGRESQL
+   DATABASE
 ========================= */
 
-export const PG_URL = `postgresql://${parsed.PGSQL_USERNAME}:${parsed.PGSQL_PASSWORD}@${parsed.PGSQL_HOST}:${parsed.PGSQL_PORT}/${parsed.PGSQL_DATABASE}`;
+export const DATABASE_URL = parsed.DATABASE_URL;
+
+/* =========================
+   SECRETS
+========================= */
 
 export const SESSION_SECRET = parsed.SESSION_SECRET;
 export const REFRESH_SECRET = parsed.REFRESH_SECRET;

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { zUsername, zEmail, zPhone, MSG } from './UserInput';
+import { zUsername, zEmail, zPhone, MSG } from './IAMSchema';
 
 export const LoginSchema = z.object({
   identity: z

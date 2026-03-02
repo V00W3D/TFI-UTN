@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { zUsername, zPassword, zEmail, zPhone, zName, zSex } from './UserInput';
+import { zUsername, zPassword, zEmail, zPhone, zName, zSex } from './IAMSchema';
 
 export const RegisterSchema = z.object({
   name: zName,
-  s_name: zName,
-  l_name: zName,
+  sname: zName,
+  lname: zName,
   sex: zSex,
   username: zUsername,
   password: zPassword,
