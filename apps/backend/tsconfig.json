@@ -28,7 +28,7 @@
 
     "baseUrl": ".",
     "paths": {
-      "@contracts/*": ["../shared/contracts/*"],
+      "@contracts/*": ["../../shared/contracts/*"],
       "@env": ["env.ts"],
       "@IAM/*": ["IAM/*"],
       "@prisma": ["prisma/generated/client.ts"],

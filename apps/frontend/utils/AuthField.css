@@ -240,12 +240,12 @@
    (Mejor contraste + más elegante)
 ========================================================= */
 
-.auth-field__radio-option[data-value='female'] .auth-field__radio-card--checked {
+.auth-field__radio-option[data-value='FEMALE'] .auth-field__radio-card--checked {
   border-color: hsl(330 78% 62%);
   background-color: hsl(330 90% 95%);
 }
 
-.auth-field__radio-option[data-value='female']
+.auth-field__radio-option[data-value='FEMALE']
   .auth-field__radio-card--checked
   .auth-field__radio-label {
   color: hsl(330 70% 38%);
@@ -255,12 +255,12 @@
    🟣 OTHER — Ajuste Violet Premium
 ========================================================= */
 
-.auth-field__radio-option[data-value='other'] .auth-field__radio-card--checked {
+.auth-field__radio-option[data-value='OTHER'] .auth-field__radio-card--checked {
   border-color: hsl(270 72% 58%);
   background-color: hsl(270 85% 96%);
 }
 
-.auth-field__radio-option[data-value='other']
+.auth-field__radio-option[data-value='OTHER']
   .auth-field__radio-card--checked
   .auth-field__radio-label {
   color: hsl(270 60% 38%);

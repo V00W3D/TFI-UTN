@@ -1,4 +1,4 @@
-import AuthFieldBuilder from '../common/AuthFieldBuilder';
+import AuthFieldBuilder from '../../utils/FieldFactory';
 import { useRegisterStore } from '@IAM/store/IAMStore';
 import { LIMITS, MSG } from '@IAM/IAMSchema';
 

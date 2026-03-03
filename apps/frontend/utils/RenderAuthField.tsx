@@ -1,4 +1,3 @@
-import React from 'react';
 import PhoneInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 
@@ -10,38 +9,39 @@ export type FieldType =
   | 'text'
   | 'password'
   | 'email'
-  | 'tel'
   | 'phone'
   | 'select'
   | 'textarea'
   | 'radio'
   | 'checkbox';
 
-export interface SelectOption {
+export interface FieldOption {
   value: string;
   label: string;
-}
-
-export interface RadioOption {
-  value: string;
-  label: string;
-  icon?: string;
+  icon?: string; // solo usado en radio
 }
 
 interface RenderAuthFieldProps {
   type: FieldType;
   inputId: string;
-  name?: string;
+  name: string;
   required?: boolean;
   placeholder?: string;
 
   resolvedType: string;
 
-  inputProps: any;
+  options?: FieldOption[];
 
-  selectOptions: SelectOption[];
-  radioOptions: RadioOption[];
+  inputProps: {
+    value: any;
+    onChange?: (e: any) => void;
+    onBlur?: () => void;
+  };
 }
+
+/* =========================================================
+   RENDER
+========================================================= */
 
 export const renderAuthField = ({
   type,
@@ -50,11 +50,12 @@ export const renderAuthField = ({
   required,
   placeholder,
   resolvedType,
+  options = [],
   inputProps,
-  selectOptions,
-  radioOptions,
 }: RenderAuthFieldProps) => {
   switch (type) {
+    /* ===================== SELECT ===================== */
+
     case 'select':
       return (
         <select
@@ -62,15 +63,19 @@ export const renderAuthField = ({
           name={name}
           required={required}
           className="auth-field__input"
-          {...(inputProps as React.SelectHTMLAttributes<HTMLSelectElement>)}
+          value={inputProps.value}
+          onChange={inputProps.onChange}
+          onBlur={inputProps.onBlur}
         >
-          {selectOptions.map((opt) => (
+          {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
           ))}
         </select>
       );
+
+    /* ===================== TEXTAREA ===================== */
 
     case 'textarea':
       return (
@@ -80,14 +85,18 @@ export const renderAuthField = ({
           required={required}
           placeholder={placeholder}
           className="auth-field__input"
-          {...(inputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          value={inputProps.value}
+          onChange={inputProps.onChange}
+          onBlur={inputProps.onBlur}
         />
       );
+
+    /* ===================== RADIO ===================== */
 
     case 'radio':
       return (
         <div className="auth-field__radio-group">
-          {radioOptions.map((opt) => {
+          {options.map((opt) => {
             const checked = inputProps.value === opt.value;
 
             return (
@@ -98,8 +107,10 @@ export const renderAuthField = ({
                   value={opt.value}
                   checked={checked}
                   onChange={inputProps.onChange}
+                  onBlur={inputProps.onBlur}
                   className="auth-field__radio-input"
                 />
+
                 <div
                   className={`auth-field__radio-card ${
                     checked ? 'auth-field__radio-card--checked' : ''
@@ -121,6 +132,8 @@ export const renderAuthField = ({
         </div>
       );
 
+    /* ===================== PHONE ===================== */
+
     case 'phone':
       return (
         <PhoneInput
@@ -133,12 +146,34 @@ export const renderAuthField = ({
             if (inputProps.onChange) {
               inputProps.onChange({
                 target: { value: value ?? '' },
-              } as any);
+              });
             }
           }}
+          onBlur={inputProps.onBlur}
           className="auth-phone pl-3"
         />
       );
+
+    /* ===================== CHECKBOX ===================== */
+
+    case 'checkbox':
+      return (
+        <input
+          id={inputId}
+          name={name}
+          type="checkbox"
+          checked={Boolean(inputProps.value)}
+          onChange={(e) =>
+            inputProps.onChange?.({
+              target: { value: e.target.checked },
+            })
+          }
+          onBlur={inputProps.onBlur}
+          className="auth-field__checkbox"
+        />
+      );
+
+    /* ===================== DEFAULT INPUT ===================== */
 
     default:
       return (
@@ -149,7 +184,9 @@ export const renderAuthField = ({
           required={required}
           placeholder={placeholder}
           className="auth-field__input"
-          {...inputProps}
+          value={inputProps.value}
+          onChange={inputProps.onChange}
+          onBlur={inputProps.onBlur}
         />
       );
   }

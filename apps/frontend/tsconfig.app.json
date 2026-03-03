@@ -28,7 +28,8 @@
       "@GENERAL/*": ["GENERAL/*"],
       "@store": ["appStore.ts"],
       "@IAM/*": ["IAM/*"],
-      "@schemas/*": ["../shared/contracts/*"]
+      "@contracts/*": ["../../shared/contracts/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
