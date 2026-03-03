@@ -26,8 +26,9 @@
     "baseUrl": ".",
     "paths": {
       "@GENERAL/*": ["GENERAL/*"],
-      "@store": ["appStore.tsx"],
-      "@IAM/*": ["IAM/*"]
+      "@store": ["appStore.ts"],
+      "@IAM/*": ["IAM/*"],
+      "@schemas/*": ["../shared/contracts/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

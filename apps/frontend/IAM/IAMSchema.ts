@@ -88,3 +88,9 @@ export const zSex = z
   .transform((val) => val.toUpperCase())
   .refine((val) => ['MALE', 'FEMALE', 'OTHER'].includes(val), { message: MSG.SEX_INVALID })
   .transform((val) => val as 'MALE' | 'FEMALE' | 'OTHER');
+
+export const zIdentity = z
+  .union([zUsername, zEmail, zPhone])
+  .refine((val) => !!val && val.length > 0, {
+    message: MSG.IDENTITY_INVALID,
+  });

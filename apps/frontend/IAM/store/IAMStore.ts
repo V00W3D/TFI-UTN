@@ -8,6 +8,7 @@ import {
   NameValidator,
   PhoneValidator,
   SexValidator,
+  IdentityValidator,
 } from '@IAM/validators';
 
 export type SexType = 'male' | 'female' | 'other';
@@ -18,15 +19,35 @@ export type SexType = 'male' | 'female' | 'other';
 
 type ValidationResult = true | string[];
 
-/* Helper */
 const isValid = (v: ValidationResult) => v === true;
 
 /* ======================================================
-   STATE
+   SHARED HELPERS (DRY CORE)
+====================================================== */
+
+const computeIsFormValid = (validations: ValidationResult[]) => validations.every(isValid);
+
+const createValidatedSetter =
+  <T>(
+    set: any,
+    get: any,
+    key: string,
+    validator: (value: T) => ValidationResult,
+    after?: (value: T) => void,
+  ) =>
+  (value: T) => {
+    const result = validator(value);
+    set({ [key]: value, [`v${capitalize(key)}`]: result });
+    after?.(value);
+  };
+
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
+
+/* ======================================================
+   REGISTER STATE
 ====================================================== */
 
 export interface RegisterState {
-  /* ===== VALUES ===== */
   firstName: string;
   middleName: string;
   lastName: string;
@@ -37,7 +58,6 @@ export interface RegisterState {
   confirmPassword: string;
   sex: SexType | '';
 
-  /* ===== VALID FLAGS ===== */
   vFirstName: ValidationResult;
   vMiddleName: ValidationResult;
   vLastName: ValidationResult;
@@ -50,7 +70,6 @@ export interface RegisterState {
 
   isFormValid: boolean;
 
-  /* ===== SETTERS ===== */
   setFirstName: (value: string) => void;
   setMiddleName: (value: string) => void;
   setLastName: (value: string) => void;
@@ -63,10 +82,6 @@ export interface RegisterState {
 
   validateForm: () => void;
 }
-
-/* ======================================================
-   STORE
-====================================================== */
 
 export const useRegisterStore = create<RegisterState>((set, get) => ({
   /* ===== VALUES ===== */
@@ -97,11 +112,9 @@ export const useRegisterStore = create<RegisterState>((set, get) => ({
      SETTERS
   ====================================================== */
 
-  setFirstName: (value) => {
-    const result = NameValidator(value);
-    set({ firstName: value, vFirstName: result });
-    get().validateForm();
-  },
+  setFirstName: createValidatedSetter(set, get, 'firstName', NameValidator, () =>
+    get().validateForm(),
+  ),
 
   setMiddleName: (value) => {
     const result = value.length === 0 ? true : NameValidator(value);
@@ -109,11 +122,9 @@ export const useRegisterStore = create<RegisterState>((set, get) => ({
     get().validateForm();
   },
 
-  setLastName: (value) => {
-    const result = NameValidator(value);
-    set({ lastName: value, vLastName: result });
-    get().validateForm();
-  },
+  setLastName: createValidatedSetter(set, get, 'lastName', NameValidator, () =>
+    get().validateForm(),
+  ),
 
   setUsername: (value) => {
     const lower = value.toLowerCase();
@@ -122,11 +133,7 @@ export const useRegisterStore = create<RegisterState>((set, get) => ({
     get().validateForm();
   },
 
-  setEmail: (value) => {
-    const result = EmailValidator(value);
-    set({ email: value, vEmail: result });
-    get().validateForm();
-  },
+  setEmail: createValidatedSetter(set, get, 'email', EmailValidator, () => get().validateForm()),
 
   setPhone: (value) => {
     const result = value.length === 0 ? true : PhoneValidator(value);
@@ -153,30 +160,68 @@ export const useRegisterStore = create<RegisterState>((set, get) => ({
     get().validateForm();
   },
 
-  setSex: (value) => {
-    const result = SexValidator(value);
-    set({ sex: value, vSex: result });
-    get().validateForm();
-  },
-
-  /* ======================================================
-     GLOBAL FORM VALIDATION
-  ====================================================== */
+  setSex: createValidatedSetter(set, get, 'sex', SexValidator, () => get().validateForm()),
 
   validateForm: () => {
     const s = get();
+    const isFormValid = computeIsFormValid([
+      s.vFirstName,
+      s.vMiddleName,
+      s.vLastName,
+      s.vUsername,
+      s.vEmail,
+      s.vPhone,
+      s.vPassword,
+      s.vConfirmPassword,
+      s.vSex,
+    ]);
+    set({ isFormValid });
+  },
+}));
 
-    const isFormValid =
-      isValid(s.vFirstName) &&
-      isValid(s.vMiddleName) &&
-      isValid(s.vLastName) &&
-      isValid(s.vUsername) &&
-      isValid(s.vEmail) &&
-      isValid(s.vPhone) &&
-      isValid(s.vPassword) &&
-      isValid(s.vConfirmPassword) &&
-      isValid(s.vSex);
+/* ======================================================
+   LOGIN STATE
+====================================================== */
 
+export interface LoginState {
+  identity: string;
+  password: string;
+
+  vIdentity: ValidationResult;
+  vPassword: ValidationResult;
+
+  isFormValid: boolean;
+
+  setIdentity: (value: string) => void;
+  setPassword: (value: string) => void;
+
+  validateForm: () => void;
+}
+
+export const useLoginStore = create<LoginState>((set, get) => ({
+  identity: '',
+  password: '',
+
+  vIdentity: [],
+  vPassword: [],
+
+  isFormValid: false,
+
+  setIdentity: (value) => {
+    const result = IdentityValidator(value);
+    set({ identity: value, vIdentity: result });
+    get().validateForm();
+  },
+
+  setPassword: (value) => {
+    const result = PasswordValidator(value);
+    set({ password: value, vPassword: result });
+    get().validateForm();
+  },
+
+  validateForm: () => {
+    const s = get();
+    const isFormValid = computeIsFormValid([s.vIdentity, s.vPassword]);
     set({ isFormValid });
   },
 }));

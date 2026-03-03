@@ -3,6 +3,9 @@
   "private": true,
   "type": "module",
   "module": "index.ts",
+  "scripts": {
+    "dev": "bun --watch index.ts"
+  },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",

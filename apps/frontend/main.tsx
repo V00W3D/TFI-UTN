@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import FloatingMenu from '@GENERAL/FloatingMenu';
 import { useAppStore } from './appStore';
+import './index.css';
 
 const Root = () => {
   const { mode } = useAppStore();

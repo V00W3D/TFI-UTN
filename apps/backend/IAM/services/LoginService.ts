@@ -1,8 +1,8 @@
-import type { LoginType } from '../schemas/LoginSchema';
+import type { LoginInput } from '@contracts/LoginSchema';
 import { prisma } from '@db';
 import argon2 from 'argon2';
 
-export const LoginService = async (input: LoginType) => {
+export const LoginService = async (input: LoginInput) => {
   const { identity, password } = input;
 
   // Prisma permite OR directamente

@@ -1,8 +1,8 @@
-import type { RegisterType } from '../schemas/RegisterSchema';
+import type { RegisterInput } from '@contracts/RegisterSchema';
 import { prisma } from '@db';
 import argon2 from 'argon2';
 
-export const RegisterService = async (input: RegisterType) => {
+export const RegisterService = async (input: RegisterInput) => {
   const { name, sname, lname, sex, username, email, phone } = input;
   const password = await argon2.hash(input.password, {
     type: argon2.argon2id,
