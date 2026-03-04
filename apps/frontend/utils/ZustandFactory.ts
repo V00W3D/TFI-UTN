@@ -282,9 +282,33 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
      */
     const validateForm = () => {
       const current = get();
-      const isValid = Object.keys(shape).every(
-        (fieldName) => current[`v${capitalize(fieldName)}`] === true,
-      );
+
+      const isValid = Object.keys(shape).every((fieldName) => {
+        const config = shape[fieldName];
+        const value = current[fieldName];
+        const validation = current[`v${capitalize(fieldName)}`];
+
+        // Si no tiene schema, solo depende del resultado de validation
+        if (!config.schema) {
+          return validation === true;
+        }
+
+        // Detectamos si el schema acepta undefined
+        const acceptsUndefined = config.schema.safeParse(undefined).success;
+
+        const hasValue =
+          typeof value === 'string'
+            ? value.trim().length > 0
+            : value !== undefined && value !== null;
+
+        // Si acepta undefined y no tiene valor → válido
+        if (acceptsUndefined && !hasValue) {
+          return true;
+        }
+
+        return validation === true;
+      });
+
       set({ isFormValid: isValid });
     };
 

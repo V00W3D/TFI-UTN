@@ -286,3 +286,48 @@ export type CorePhone = z.infer<ReturnType<typeof createCore>['phone']>;
 export type CoreName = z.infer<ReturnType<typeof createCore>['name']>;
 export type CoreSex = z.infer<ReturnType<typeof createCore>['sex']>;
 export type CoreIdentity = z.infer<ReturnType<typeof createCore>['identity']>;
+
+/* ============================================================
+   8. DOMAIN RULES (HUMAN FRIENDLY)
+============================================================ */
+
+export const CORE_RULES = Object.freeze({
+  username: [
+    `Debe tener entre ${LIMITS.USERNAME_MIN} y ${LIMITS.USERNAME_MAX} caracteres.`,
+    'Puede incluir letras, números y guiones bajos (_).',
+    'No se permiten espacios.',
+  ],
+
+  password: [
+    `Debe tener entre ${LIMITS.PASSWORD_MIN} y ${LIMITS.PASSWORD_MAX} caracteres.`,
+    'Incluir al menos una letra mayúscula.',
+    'Incluir al menos una letra minúscula.',
+    'Incluir al menos un número.',
+    'Incluir al menos un símbolo (por ejemplo: ! @ # $ %).',
+  ],
+
+  email: [
+    `No puede superar los ${LIMITS.EMAIL_MAX} caracteres.`,
+    'Debe incluir un @.',
+    'Debe tener un dominio válido (por ejemplo: usuario@correo.com).',
+  ],
+
+  phone: [
+    'Ingresalo en formato internacional.',
+    'Debe comenzar con el código de país (por ejemplo: +54).',
+    'Ejemplo válido: +5493811234567.',
+  ],
+
+  name: [
+    `Debe tener entre ${LIMITS.NAME_MIN} y ${LIMITS.NAME_MAX} caracteres.`,
+    'Solo se permiten letras.',
+    "Puede incluir espacios, guiones (-) y apóstrofes (').",
+  ],
+
+  sex: ['Elegí una de las opciones disponibles.'],
+
+  identity: [
+    'Podés ingresar tu nombre de usuario, email o teléfono.',
+    'El formato debe ser válido según el tipo que elijas.',
+  ],
+});

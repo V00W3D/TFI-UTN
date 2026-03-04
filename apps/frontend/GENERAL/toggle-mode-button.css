@@ -24,7 +24,7 @@
 
   .dark .toggle-mode-button {
     background-color: var(--button-active);
-    color: var(--button-active-text);
+    color: var(--button-default-text);
     box-shadow: var(--shadow-md);
   }
 

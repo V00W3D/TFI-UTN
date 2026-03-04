@@ -1,9 +1,6 @@
 @import 'tailwindcss';
 
-/* =========================================================
-   AUTH FIELD — QART SYSTEM (DRY / Compact / Palette Driven)
-========================================================= */
-
+/* ================= AUTH FIELD ================= */
 .auth-field {
   @apply flex flex-col gap-3 w-full;
 }
@@ -50,32 +47,34 @@
 .auth-field__slot-right {
   @apply flex items-end;
 }
-
 .auth-field__slot-right {
-  @apply items-center justify-center h-10 w-10 shrink-0 transition-colors duration-200 cursor-pointer text-(--text-muted);
+  @apply flex items-center gap-2 shrink-0;
 }
-.auth-field__slot-right img {
-  @apply pointer-events-none;
-}
-.auth-field__slot-right:hover {
-  @apply bg-(--surface-soft);
-}
-.dark .auth-field__slot-right {
-  @apply bg-(--color-primary-soft) text-(--color-primary);
-}
-
-.auth-field__slot-box-left,
-.auth-field__slot-box-right {
+.auth-field__slot-box-left {
   @apply flex items-center justify-center h-10 w-10 shrink-0 transition-colors duration-200 text-(--text-muted);
 }
 .dark .auth-field__slot-box-left {
-  @apply bg-(--color-primary-soft) text-(--color-primary);
+  @apply text-(--color-primary) invert;
 }
 .auth-field--error .auth-field__slot-box-left {
-  @apply bg-(--color-error-soft) text-(--color-error);
+  @apply text-(--color-error);
 }
 .auth-field--success .auth-field__slot-box-left {
-  @apply bg-(--color-success-soft) text-(--color-success);
+  @apply text-(--color-success);
+}
+
+/* SLOT BUTTON (rubber + toggle) */
+.auth-field__slot-btn {
+  @apply flex items-center justify-center h-10 w-10 shrink-0 transition-colors duration-200 cursor-pointer text-(--text-muted) bg-transparent border-none;
+}
+.auth-field__slot-btn:hover {
+  @apply bg-(--surface-soft);
+}
+.dark .auth-field__slot-btn {
+  @apply text-(--color-primary) invert;
+}
+.auth-field__slot-btn img {
+  @apply pointer-events-none;
 }
 
 /* INPUT */
@@ -99,8 +98,6 @@
 .auth-field__message--info {
   @apply text-(--text-muted);
 }
-
-/* HINT */
 .auth-field__hint {
   @apply text-xs text-(--text-muted);
 }
@@ -122,11 +119,6 @@
   @apply flex-1;
 }
 
-/* PLUGINS */
-.auth-field__plugins {
-  @apply mt-2;
-}
-
 /* RADIO */
 .auth-field__radio-group {
   @apply flex gap-3 w-full;
@@ -143,11 +135,25 @@
 .auth-field__radio-card:hover {
   @apply border-(--color-primary-muted);
 }
+.auth-field__radio-card--checked {
+  transform: scale(1.02);
+}
+.auth-field__radio-option:active .auth-field__radio-card {
+  transform: scale(0.98);
+}
 .auth-field__radio-circle {
-  @apply flex items-center justify-center w-4 h-4 rounded-full border-2 border-(--border-strong) transition-all duration-200;
+  @apply flex items-center justify-center w-4 h-4 rounded-full border-2 border-(--border-strong);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 .auth-field__radio-dot {
   @apply w-2 h-2 rounded-full;
+  transform: scale(0);
+  transition: transform 0.2s ease;
+}
+.auth-field__radio-card--checked .auth-field__radio-dot {
+  transform: scale(1);
 }
 .auth-field__radio-icon {
   @apply w-6 h-6 object-contain transition-all duration-300;
@@ -155,8 +161,9 @@
 .auth-field__radio-label {
   @apply text-xs font-medium transition-colors duration-300 text-(--text-secondary);
 }
-
-/* RADIO — dynamic by data-value using primary scale */
+.auth-field__radio-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 .auth-field__radio-option[data-value] .auth-field__radio-card--checked {
   @apply border-(--color-primary) bg-(--color-primary-soft);
 }
@@ -170,18 +177,43 @@
   @apply text-(--color-primary-dark);
 }
 
-/* PHONE INPUT (Integrated / DRY) */
-.auth-phone {
-  @apply flex items-center w-full bg-transparent border-none;
+/* FEMALE */
+.auth-field__radio-option[data-value='FEMALE'] .auth-field__radio-card--checked {
+  border-color: hsl(330 78% 62%);
+  background-color: hsl(330 90% 95%);
 }
-.auth-phone .PhoneInputCountry {
+.auth-field__radio-option[data-value='FEMALE']
+  .auth-field__radio-card--checked
+  .auth-field__radio-label {
+  color: hsl(330 70% 38%);
+}
+
+/* OTHER */
+.auth-field__radio-option[data-value='OTHER'] .auth-field__radio-card--checked {
+  border-color: hsl(270 72% 58%);
+  background-color: hsl(270 85% 96%);
+}
+.auth-field__radio-option[data-value='OTHER']
+  .auth-field__radio-card--checked
+  .auth-field__radio-label {
+  color: hsl(270 60% 38%);
+}
+
+/* PHONE INPUT */
+.auth-field__input-wrapper .PhoneInput {
+  @apply w-full flex items-center bg-transparent;
+}
+.auth-field__input-wrapper .PhoneInputCountry {
   @apply mr-2 flex items-center;
 }
-.auth-phone .PhoneInputCountrySelect {
+.auth-field__input-wrapper .PhoneInputCountrySelect {
   @apply bg-transparent border-none outline-none cursor-pointer text-(--text-secondary);
 }
-.auth-phone .PhoneInputInput {
-  @apply flex-1 bg-transparent border-none outline-none px-2 py-2 text-sm text-(--text-primary) placeholder:text-(--text-muted);
+.auth-field__input-wrapper .PhoneInputCountrySelect:hover {
+  @apply text-(--color-primary);
+}
+.auth-field__input-wrapper .PhoneInputInput {
+  @apply flex-1 bg-transparent border-none outline-none py-2 text-sm text-(--text-primary);
 }
 .PhoneInputCountrySelect option {
   @apply bg-(--surface) text-(--text-primary);
@@ -197,121 +229,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-/* =========================================================
-   RADIO — INTERACTION REFINEMENTS (ESENCIAL)
-========================================================= */
-
-/* Animación suave al activar */
-.auth-field__radio-card--checked {
-  transform: scale(1.02);
-}
-
-/* Efecto press */
-.auth-field__radio-option:active .auth-field__radio-card {
-  transform: scale(0.98);
-}
-
-/* Transición más fluida del círculo */
-.auth-field__radio-circle {
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease;
-}
-
-/* Dot invisible por defecto */
-.auth-field__radio-dot {
-  transform: scale(0);
-  transition: transform 0.2s ease;
-}
-
-/* Dot visible cuando está activo */
-.auth-field__radio-card--checked .auth-field__radio-dot {
-  transform: scale(1);
-}
-
-/* Hover más premium */
-.auth-field__radio-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-/* =========================================================
-   🌸 FEMENINO — Ajuste Premium Rosita
-   (Mejor contraste + más elegante)
-========================================================= */
-
-.auth-field__radio-option[data-value='FEMALE'] .auth-field__radio-card--checked {
-  border-color: hsl(330 78% 62%);
-  background-color: hsl(330 90% 95%);
-}
-
-.auth-field__radio-option[data-value='FEMALE']
-  .auth-field__radio-card--checked
-  .auth-field__radio-label {
-  color: hsl(330 70% 38%);
-}
-
-/* =========================================================
-   🟣 OTHER — Ajuste Violet Premium
-========================================================= */
-
-.auth-field__radio-option[data-value='OTHER'] .auth-field__radio-card--checked {
-  border-color: hsl(270 72% 58%);
-  background-color: hsl(270 85% 96%);
-}
-
-.auth-field__radio-option[data-value='OTHER']
-  .auth-field__radio-card--checked
-  .auth-field__radio-label {
-  color: hsl(270 60% 38%);
-}
-
-/* =========================================================
-   PHONE INPUT — INTEGRACIÓN REAL CON AUTH FIELD
-========================================================= */
-
-/* Que el PhoneInput respete el bottom-border system */
-.auth-field__input-wrapper .PhoneInput {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  background: transparent;
-}
-
-/* Bandera */
-.auth-field__input-wrapper .PhoneInputCountry {
-  margin-right: 8px;
-  display: flex;
-  align-items: center;
-}
-
-/* Selector */
-.auth-field__input-wrapper .PhoneInputCountrySelect {
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: var(--text-secondary);
-}
-
-/* Input número */
-.auth-field__input-wrapper .PhoneInputInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 8px 0;
-  color: var(--text-primary);
-  font-size: 14px;
-}
-
-/* Hover suave al selector */
-.auth-field__input-wrapper .PhoneInputCountrySelect:hover {
-  color: var(--color-primary);
-}
-
-/* Dropdown consistente con el sistema */
-.PhoneInputCountrySelect option {
-  background-color: var(--surface);
-  color: var(--text-primary);
 }

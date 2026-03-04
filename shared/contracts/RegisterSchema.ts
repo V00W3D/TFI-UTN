@@ -22,13 +22,13 @@ export const RegisterSchema = createContract(
   ---------------------------- */
   z.object({
     name: CORE.name,
-    sname: CORE.name,
+    sname: CORE.name.optional(),
     lname: CORE.name,
     sex: CORE.sex,
     username: CORE.username,
     password: CORE.password,
     email: CORE.email,
-    phone: CORE.phone,
+    phone: CORE.phone.optional(),
   }),
 
   /* ---------------------------

@@ -1,39 +1,30 @@
-import 'react-phone-number-input/style.css';
 import './register-page.css';
 import { useRegisterStore } from '@IAM/store/IAMStore';
-import axios from 'axios';
-import UsernameField from '@IAM/components/UsernameField';
+
+import UsernameFieldComponent from '@IAM/components/Register/UsernameField';
+import PasswordFieldComponent from '@IAM/components/Register/PasswordField';
+import CPasswordFieldComponent from '@IAM/components/Register/ConfirmPasswordField';
+import {
+  FirstNameFieldComponent,
+  LastNameFieldComponent,
+  SecondNameFieldComponent,
+} from '@IAM/components/Register/NameField';
+import SexFieldComponent from '@IAM/components/Register/SexField';
+import EmailFieldComponent from '@IAM/components/Register/EmailField';
+import PhoneFieldComponent from '@IAM/components/Register/PhoneField';
 
 const RegisterPage = () => {
-  const {
-    firstName,
-    middleName,
-    lastName,
-    username,
-    email,
-    phone,
-    password,
-    confirmPassword,
-    sex,
-    isFormValid,
-  } = useRegisterStore();
+  const submit = useRegisterStore((s) => s.submit);
+  const isSubmitting = useRegisterStore((s) => s.isSubmitting);
 
-  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isFormValid) return;
-    const compras = axios.get('https://apirest-production-8554.up.railway.app/compras');
 
-    console.log({
-      firstName,
-      middleName,
-      lastName,
-      username,
-      email,
-      phone,
-      password,
-      confirmPassword,
-      sex,
-      compras,
+    await submit(async (values) => {
+      console.log('Valores válidos:', values);
+
+      // acá iría tu llamada a API
+      // await api.register(values)
     });
   };
 
@@ -43,22 +34,24 @@ const RegisterPage = () => {
         <form onSubmit={handleSubmit} className="register-form">
           {/* ================= PERSONAL ================= */}
           <h3 className="section-title">Información Personal</h3>
-          {/* <RegisterField for="firstName" />
-          <RegisterField for="middleName" />
-          <RegisterField for="lastName" />
-          <RegisterField for="sex" /> */}
+          <FirstNameFieldComponent />
+          <SecondNameFieldComponent />
+          <LastNameFieldComponent />
+          <SexFieldComponent />
+
           {/* ================= CREDENTIALS ================= */}
           <h3 className="section-title">Credenciales</h3>
-          {/* <RegisterField for="username" /> */}
-          <UsernameField />
-          {/* <RegisterField for="password" />
-          <RegisterField for="confirmPassword" /> */}
+          <UsernameFieldComponent />
+          <PasswordFieldComponent />
+          <CPasswordFieldComponent />
+
           {/* ================= CONTACT ================= */}
           <h3 className="section-title">Contacto</h3>
-          {/* <RegisterField for="email" />
-          <RegisterField for="phone" /> */}
-          <button type="submit" className="register-button" disabled={!isFormValid}>
-            Crear Cuenta
+          <EmailFieldComponent />
+          <PhoneFieldComponent />
+
+          <button type="submit" className="register-button">
+            {isSubmitting ? 'Creando cuenta...' : 'Crear Cuenta'}
           </button>
         </form>
       </div>

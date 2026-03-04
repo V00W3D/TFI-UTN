@@ -3,7 +3,7 @@ import type { UseBoundStore, StoreApi } from 'zustand';
 import './AuthField.css';
 import 'react-phone-number-input/style.css';
 
-import { renderAuthField, type FieldType, type FieldOption } from './RenderAuthField';
+import { renderAuthField, type FieldType, type FieldOption } from './RenderField';
 
 import type { ZustandFactoryReturn } from './ZustandFactory';
 import { useFieldAddons, type FieldAddon } from './addons';
@@ -59,6 +59,11 @@ export function FieldFactory<T extends Record<string, any>>(
 
       const blur = useStore((s) => s[`blur${capitalize(name)}` as keyof typeof s]) as () => void;
 
+      // 👇 NUEVO: reset dinámico para rubber
+      const reset = useStore((s) => s[`reset${capitalize(name)}` as keyof typeof s]) as
+        | (() => void)
+        | undefined;
+
       /* ===================== CONTROL PARSING ===================== */
 
       let type: FieldType = 'text';
@@ -82,6 +87,7 @@ export function FieldFactory<T extends Record<string, any>>(
         renderHint,
         renderRules,
         renderError,
+        renderStrength, // 👈 nuevo
       } = useFieldAddons({
         addons,
         context: {
@@ -90,6 +96,7 @@ export function FieldFactory<T extends Record<string, any>>(
           value,
           touched,
           validation,
+          reset, // 👈 PASAMOS RESET
         },
       });
 
@@ -105,7 +112,6 @@ export function FieldFactory<T extends Record<string, any>>(
 
             {renderLabelAction()}
           </div>
-
           <div className="auth-field__input-wrapper">
             {renderLeftSlot()}
 
@@ -120,7 +126,6 @@ export function FieldFactory<T extends Record<string, any>>(
               inputProps: {
                 value,
                 onChange: (e: any) => {
-                  // soporta checkbox / phone / input estándar
                   if (e?.target?.value !== undefined) {
                     setValue(e.target.value);
                   } else {
@@ -133,8 +138,8 @@ export function FieldFactory<T extends Record<string, any>>(
 
             {renderRightSlot()}
           </div>
-
           {renderError()}
+          {renderStrength()}
           {renderHint()}
           {renderRules()}
         </div>
