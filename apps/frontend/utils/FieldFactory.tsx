@@ -3,10 +3,10 @@ import type { UseBoundStore, StoreApi } from 'zustand';
 import './AuthField.css';
 import 'react-phone-number-input/style.css';
 
-import { renderAuthField, type FieldType, type FieldOption } from './RenderField';
+import { renderAuthField, type FieldType, type FieldOption } from './IFieldFactory/RenderField';
 
 import type { ZustandFactoryReturn } from './ZustandFactory';
-import { useFieldAddons, type FieldAddon } from './addons';
+import { useFieldAddons, type FieldAddon } from './IFieldFactory/addons';
 
 /* =========================================================
    TYPES

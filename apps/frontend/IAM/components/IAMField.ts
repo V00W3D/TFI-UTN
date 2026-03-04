@@ -1,4 +1,4 @@
-import { useLoginStore, useRegisterStore } from '@IAM/store/IAMStore';
+import { useLoginStore, useRegisterStore } from '@IAM/IAMStore';
 import { FieldFactory } from '@utils/FieldFactory';
 
 const RegisterField = FieldFactory(useRegisterStore);

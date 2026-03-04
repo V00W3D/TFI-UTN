@@ -1,5 +1,6 @@
-import './register-page.css';
-import { useRegisterStore } from '@IAM/store/IAMStore';
+import './AuthPages.css';
+import { useRegisterStore } from '@IAM/IAMStore';
+import { RegisterHook } from '@IAM/IAMHooks';
 
 import UsernameFieldComponent from '@IAM/components/Register/UsernameField';
 import PasswordFieldComponent from '@IAM/components/Register/PasswordField';
@@ -14,45 +15,59 @@ import EmailFieldComponent from '@IAM/components/Register/EmailField';
 import PhoneFieldComponent from '@IAM/components/Register/PhoneField';
 
 const RegisterPage = () => {
-  const submit = useRegisterStore((s) => s.submit);
-  const isSubmitting = useRegisterStore((s) => s.isSubmitting);
+  const form = useRegisterStore();
+  const register = RegisterHook();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await submit(async (values) => {
-      console.log('Valores válidos:', values);
+    const isValid = await form.validateAllFields();
+    if (!isValid) return;
 
-      // acá iría tu llamada a API
-      // await api.register(values)
-    });
+    try {
+      await register.execute({
+        body: form.getValues(),
+      });
+
+      console.log(register.response?.message);
+    } catch (err) {
+      console.log(register.error);
+    }
   };
 
   return (
-    <div className="register-wrapper">
-      <div className="register-card">
-        <form onSubmit={handleSubmit} className="register-form">
+    <div className="auth-wrapper">
+      <div className="auth-card">
+        <form onSubmit={handleSubmit} className="auth-form">
           {/* ================= PERSONAL ================= */}
-          <h3 className="section-title">Información Personal</h3>
+          <h3 className="auth-section-title">Información Personal</h3>
           <FirstNameFieldComponent />
           <SecondNameFieldComponent />
           <LastNameFieldComponent />
           <SexFieldComponent />
 
           {/* ================= CREDENTIALS ================= */}
-          <h3 className="section-title">Credenciales</h3>
+          <h3 className="auth-section-title">Credenciales</h3>
           <UsernameFieldComponent />
           <PasswordFieldComponent />
           <CPasswordFieldComponent />
 
           {/* ================= CONTACT ================= */}
-          <h3 className="section-title">Contacto</h3>
+          <h3 className="auth-section-title">Contacto</h3>
           <EmailFieldComponent />
           <PhoneFieldComponent />
 
-          <button type="submit" className="register-button">
-            {isSubmitting ? 'Creando cuenta...' : 'Crear Cuenta'}
+          <button
+            type="submit"
+            className="auth-button"
+            disabled={!form.isFormValid || register.isLoading}
+          >
+            {register.isLoading ? 'Creando cuenta...' : 'Crear Cuenta'}
           </button>
+
+          {register.isError && <p className="auth-error">{register.error?.message}</p>}
+
+          {register.isSuccess && <p className="auth-success">{register.response?.message}</p>}
         </form>
       </div>
     </div>

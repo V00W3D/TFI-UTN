@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+
+/* =========================================================
+   WRAPPER
+========================================================= */
+
+.auth-wrapper {
+  @apply w-full flex items-center justify-center px-6;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.auth-card {
+  @apply w-full max-w-3xl p-10 rounded-xl border shadow-lg bg-(--surface) border-(--border);
+}
+
+/* =========================================================
+   FORM LAYOUT
+========================================================= */
+
+.auth-form {
+  @apply flex flex-col gap-8;
+}
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.auth-section-title {
+  @apply text-xs font-semibold uppercase text-center mb-6 pb-3 border-b border-(--border) text-(--text-secondary);
+  letter-spacing: 0.12em;
+}
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.auth-button {
+  @apply mt-4
+    py-3
+    rounded-md
+    font-semibold
+    transition-all
+    duration-300
+    bg-(--color-primary)
+    text-(--text-inverse);
+}
+
+.auth-button:hover {
+  @apply cursor-pointer
+    bg-(--color-primary-dark)
+    text-(--text-inverse);
+
+  box-shadow: 0 0 0 4px var(--color-primary-glow);
+}
+
+.auth-button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}

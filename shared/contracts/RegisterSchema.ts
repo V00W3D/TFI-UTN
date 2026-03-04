@@ -7,29 +7,31 @@ import type { ContractType } from './ContractFactory';
    REGISTER CONTRACT
 ============================================================ */
 
-/**
- * Contrato formal del proceso de registro de usuario.
- *
- * - Input:
- *    Datos completos necesarios para crear un nuevo usuario.
- *
- * - Output:
- *    Información pública generada tras la creación exitosa.
- */
 export const RegisterSchema = createContract(
   /* ---------------------------
      INPUT
   ---------------------------- */
-  z.object({
-    name: CORE.name,
-    sname: CORE.name.optional(),
-    lname: CORE.name,
-    sex: CORE.sex,
-    username: CORE.username,
-    password: CORE.password,
-    email: CORE.email,
-    phone: CORE.phone.optional(),
-  }),
+  z
+    .object({
+      name: CORE.name,
+      sname: CORE.name.optional(),
+      lname: CORE.name,
+      sex: CORE.sex,
+      username: CORE.username,
+      password: CORE.password,
+      cpassword: CORE.cpassword,
+      email: CORE.email,
+      phone: CORE.phone.optional(),
+    })
+    .superRefine((data, ctx) => {
+      if (data.password !== data.cpassword) {
+        ctx.addIssue({
+          path: ['cpassword'], // ← importantísimo
+          code: z.ZodIssueCode.custom,
+          message: 'Las contraseñas no coinciden',
+        });
+      }
+    }),
 
   /* ---------------------------
      OUTPUT DATA (SUCCESS PAYLOAD)
@@ -41,17 +43,6 @@ export const RegisterSchema = createContract(
    TYPES
 ============================================================ */
 
-/**
- * Tipo de entrada del contrato Register.
- */
 export type RegisterInput = ContractType<typeof RegisterSchema.I>;
-
-/**
- * Tipo de salida exitosa del contrato Register.
- */
 export type RegisterOutput = ContractType<typeof RegisterSchema.O>;
-
-/**
- * Tipo de error del contrato Register.
- */
 export type RegisterError = ContractType<typeof RegisterSchema.E>;

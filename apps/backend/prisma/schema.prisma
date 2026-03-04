@@ -17,7 +17,7 @@ model User {
   id        String   @id @default(uuid())
 
   name      String   @db.VarChar(128)
-  sname     String   @db.VarChar(128)
+  sname     String?   @db.VarChar(128)
   lname     String   @db.VarChar(128)
   sex       Sex      @default(OTHER)
 
@@ -25,7 +25,7 @@ model User {
   password  String   @db.VarChar(128)
 
   email     String   @unique @db.VarChar(128)
-  phone     String   @unique @db.VarChar(15)
+  phone     String?   @unique @db.VarChar(15)
 
   role      Role     @default(CUSTOMER)
 

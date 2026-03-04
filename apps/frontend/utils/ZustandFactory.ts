@@ -1,68 +1,42 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ZodTypeAny, z } from 'zod';
+import type { ZodType, ZodObject } from 'zod';
+import { z } from 'zod';
 
 /* ============================================================
    CORE TYPES
 ============================================================ */
+type ExtractShape<T> =
+  // Caso contrato completo
+  T extends { I: infer I }
+    ? I extends ZodObject<infer Shape>
+      ? {
+          [K in keyof Shape]: {
+            schema: Shape[K];
+          };
+        }
+      : never
+    : // Caso z.object directo
+      T extends ZodObject<infer Shape>
+      ? {
+          [K in keyof Shape]: {
+            schema: Shape[K];
+          };
+        }
+      : // Caso manual
+        T extends Record<string, FieldConfig<any>>
+        ? T
+        : never;
 
-/**
- * Resultado estándar de una validación.
- *
- * - `true`  → válido
- * - `string[]` → lista de errores
- */
 export type ValidationResult = true | string[];
 
-/**
- * Define cuándo se ejecuta la validación automática.
- *
- * - `onChange` → cada vez que cambia el valor
- * - `onBlur`   → cuando el campo pierde foco
- * - `onSubmit` → únicamente al enviar el formulario
- */
 export type ValidationMode = 'onChange' | 'onBlur' | 'onSubmit';
 
-/**
- * Configuración declarativa de un campo del formulario.
- *
- * @template T Tipo del valor del campo
- */
 export type FieldConfig<T = any> = {
-  /**
-   * Schema Zod asociado al campo.
-   * Se usa como validación estructural principal.
-   */
-  schema?: ZodTypeAny;
-
-  /**
-   * Validador síncrono personalizado.
-   *
-   * @param value Valor actual del campo
-   * @param state Estado completo del formulario
-   */
+  schema?: ZodType;
   validate?: (value: T, state: any) => ValidationResult;
-
-  /**
-   * Validador asíncrono personalizado.
-   * Útil para checks contra API (ej: username existente).
-   */
   asyncValidate?: (value: T, state: any) => Promise<ValidationResult>;
-
-  /**
-   * Valor por defecto del campo.
-   * Si no se define, se intenta inferir desde el schema.
-   */
   defaultValue?: T;
-
-  /**
-   * Lista de campos de los que depende este.
-   *
-   * Si alguno cambia, este campo se revalida automáticamente.
-   *
-   * Ejemplo:
-   * confirmPassword depende de password.
-   */
   dependsOn?: string[];
 };
 
@@ -70,13 +44,8 @@ export type FieldConfig<T = any> = {
    TYPE INFERENCE
 ============================================================ */
 
-/**
- * Extrae el tipo real del campo desde:
- * - su schema Zod
- * - o el tipo genérico de FieldConfig
- */
 type InferFieldValue<F> = F extends { schema: infer S }
-  ? S extends ZodTypeAny
+  ? S extends ZodType
     ? z.infer<S>
     : F extends FieldConfig<infer U>
       ? U
@@ -85,33 +54,18 @@ type InferFieldValue<F> = F extends { schema: infer S }
     ? U
     : never;
 
-/**
- * Mapea los valores del formulario.
- */
 type InferValues<T> = {
   [K in keyof T]: InferFieldValue<T[K]>;
 };
 
-/**
- * Genera propiedades tipo:
- * vUsername, vPassword...
- */
 type InferValidations<T> = {
   [K in keyof T as `v${Capitalize<string & K>}`]: ValidationResult;
 };
 
-/**
- * Genera propiedades tipo:
- * tUsername, tPassword...
- */
 type InferTouched<T> = {
   [K in keyof T as `t${Capitalize<string & K>}`]: boolean;
 };
 
-/**
- * Genera setters:
- * setUsername, blurUsername, resetUsername...
- */
 type InferSetters<T> = {
   [K in keyof T as `set${Capitalize<string & K>}`]: (value: InferFieldValue<T[K]>) => void;
 } & {
@@ -120,51 +74,20 @@ type InferSetters<T> = {
   [K in keyof T as `reset${Capitalize<string & K>}`]: () => void;
 };
 
-/**
- * Métodos internos del formulario.
- */
 type InternalStore<T> = {
-  /** Indica si todos los campos son válidos */
   isFormValid: boolean;
-
-  /** Indica si el formulario está enviándose */
-  isSubmitting: boolean;
-
-  /** Indica si algún campo fue modificado */
   isDirty: boolean;
-
-  /** Mapa de campos modificados */
   dirtyFields: Record<string, boolean>;
 
-  /** Recalcula si el formulario completo es válido */
   validateForm: () => void;
-
-  /** Ejecuta validación en todos los campos */
   validateAllFields: () => Promise<boolean>;
-
-  /** Resetea todo el formulario */
   reset: () => void;
-
-  /** Limpia todos los errores */
   clearErrors: () => void;
 
-  /** Obtiene los valores actuales */
   getValues: () => InferValues<T>;
-
-  /** Setea múltiples valores */
   setValues: (values: Partial<InferValues<T>>) => void;
-
-  /**
-   * Ejecuta submit con validación automática.
-   *
-   * @param handler Función que recibe los valores válidos
-   */
-  submit: (handler: (values: InferValues<T>) => Promise<void> | void) => Promise<void>;
 };
 
-/**
- * Tipo final del store generado.
- */
 export type ZustandFactoryReturn<T> = InferValues<T> &
   InferValidations<T> &
   InferTouched<T> &
@@ -172,27 +95,39 @@ export type ZustandFactoryReturn<T> = InferValues<T> &
   InternalStore<T>;
 
 /* ============================================================
+   SHAPE NORMALIZER
+============================================================ */
+
+function normalizeShape(input: any): Record<string, FieldConfig> {
+  // Caso 1: contrato completo (LoginSchema)
+  if (input?.I instanceof z.ZodObject) {
+    input = input.I;
+  }
+
+  // Caso 2: z.object() directo
+  if (input instanceof z.ZodObject) {
+    const shape = input.shape;
+
+    return Object.fromEntries(Object.entries(shape).map(([key, schema]) => [key, { schema }]));
+  }
+
+  // Caso 3: ya es shape manual
+  return input;
+}
+
+/* ============================================================
    FACTORY
 ============================================================ */
 
-/**
- * Crea un store de formulario completamente tipado.
- *
- * @param shape Definición declarativa de los campos
- * @param persistEnabled Si se debe persistir en localStorage
- * @param options Configuración adicional
- */
-export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
-  shape: T,
-  persistEnabled: boolean = false,
-  options?: { mode?: ValidationMode },
-) {
+export function ZustandFactory<
+  TInput extends Record<string, FieldConfig<any>> | ZodObject<any> | { I: ZodObject<any> },
+>(input: TInput, persistEnabled: boolean = false, options?: { mode?: ValidationMode }) {
+  type T = ExtractShape<TInput>;
+  const normalizedShape = normalizeShape(input);
+
   const mode = options?.mode ?? 'onChange';
 
   const initializer = (set: any, get: any): ZustandFactoryReturn<T> => {
-    /**
-     * Intenta inferir un valor por defecto basado en el schema.
-     */
     const getDefaultValue = (config: FieldConfig) => {
       if (config.defaultValue !== undefined) return config.defaultValue;
 
@@ -218,11 +153,10 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
 
     const baseState: any = {};
 
-    /**
-     * Inicialización dinámica del estado base.
-     */
-    for (const fieldName in shape) {
-      const config = shape[fieldName];
+    /* ================= INITIALIZATION ================= */
+
+    for (const fieldName in normalizedShape) {
+      const config = normalizedShape[fieldName];
       const defaultValue = getDefaultValue(config);
 
       baseState[fieldName] = defaultValue;
@@ -231,15 +165,13 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
     }
 
     baseState.isFormValid = false;
-    baseState.isSubmitting = false;
     baseState.isDirty = false;
     baseState.dirtyFields = {};
 
-    /**
-     * Ejecuta todas las validaciones de un campo.
-     */
+    /* ================= VALIDATION ================= */
+
     const validateField = async (fieldName: string, value: any) => {
-      const config = shape[fieldName];
+      const config = normalizedShape[fieldName];
       const errors: string[] = [];
 
       if (config.schema) {
@@ -262,38 +194,29 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
       return errors.length ? errors : true;
     };
 
-    /**
-     * Revalida automáticamente campos dependientes.
-     */
     const validateDependents = async (changedField: string) => {
-      for (const fieldName in shape) {
-        const config = shape[fieldName];
+      for (const fieldName in normalizedShape) {
+        const config = normalizedShape[fieldName];
 
         if (config.dependsOn?.includes(changedField)) {
           const value = get()[fieldName];
           const result = await validateField(fieldName, value);
+
           set({ [`v${capitalize(fieldName)}`]: result });
         }
       }
     };
 
-    /**
-     * Recalcula si el formulario es válido.
-     */
     const validateForm = () => {
       const current = get();
 
-      const isValid = Object.keys(shape).every((fieldName) => {
-        const config = shape[fieldName];
+      const isValid = Object.keys(normalizedShape).every((fieldName) => {
+        const config = normalizedShape[fieldName];
         const value = current[fieldName];
         const validation = current[`v${capitalize(fieldName)}`];
 
-        // Si no tiene schema, solo depende del resultado de validation
-        if (!config.schema) {
-          return validation === true;
-        }
+        if (!config.schema) return validation === true;
 
-        // Detectamos si el schema acepta undefined
         const acceptsUndefined = config.schema.safeParse(undefined).success;
 
         const hasValue =
@@ -301,10 +224,7 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
             ? value.trim().length > 0
             : value !== undefined && value !== null;
 
-        // Si acepta undefined y no tiene valor → válido
-        if (acceptsUndefined && !hasValue) {
-          return true;
-        }
+        if (acceptsUndefined && !hasValue) return true;
 
         return validation === true;
       });
@@ -312,11 +232,8 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
       set({ isFormValid: isValid });
     };
 
-    /**
-     * Marca campos como dirty.
-     */
     const updateDirty = (fieldName: string, value: any) => {
-      const defaultValue = getDefaultValue(shape[fieldName]);
+      const defaultValue = getDefaultValue(normalizedShape[fieldName]);
       const isDirtyField = value !== defaultValue;
 
       const dirtyFields = {
@@ -325,22 +242,25 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
       };
 
       const isDirty = Object.values(dirtyFields).some(Boolean);
+
       set({ dirtyFields, isDirty });
     };
 
-    /**
-     * Generación dinámica de setters.
-     */
-    for (const fieldName in shape) {
+    /* ================= SETTERS ================= */
+
+    for (const fieldName in normalizedShape) {
       baseState[`set${capitalize(fieldName)}`] = async (value: any) => {
         set({ [fieldName]: value });
+
         updateDirty(fieldName, value);
 
         if (mode === 'onChange') {
           const result = await validateField(fieldName, value);
+
           set({ [`v${capitalize(fieldName)}`]: result });
 
           await validateDependents(fieldName);
+
           validateForm();
         }
       };
@@ -351,15 +271,17 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
         if (mode === 'onBlur') {
           const value = get()[fieldName];
           const result = await validateField(fieldName, value);
+
           set({ [`v${capitalize(fieldName)}`]: result });
 
           await validateDependents(fieldName);
+
           validateForm();
         }
       };
 
       baseState[`reset${capitalize(fieldName)}`] = () => {
-        const defaultValue = getDefaultValue(shape[fieldName]);
+        const defaultValue = getDefaultValue(normalizedShape[fieldName]);
 
         set({
           [fieldName]: defaultValue,
@@ -368,21 +290,23 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
         });
 
         updateDirty(fieldName, defaultValue);
+
         validateForm();
       };
     }
 
-    /**
-     * Ejecuta validación completa.
-     */
+    /* ================= INTERNAL METHODS ================= */
+
     baseState.validateAllFields = async () => {
-      for (const fieldName in shape) {
+      for (const fieldName in normalizedShape) {
         const value = get()[fieldName];
         const result = await validateField(fieldName, value);
+
         set({ [`v${capitalize(fieldName)}`]: result });
       }
 
       validateForm();
+
       return get().isFormValid;
     };
 
@@ -390,17 +314,32 @@ export function ZustandFactory<T extends Record<string, FieldConfig<any>>>(
 
     baseState.getValues = () => {
       const values: any = {};
-      for (const fieldName in shape) values[fieldName] = get()[fieldName];
+
+      for (const fieldName in normalizedShape) {
+        values[fieldName] = get()[fieldName];
+      }
+
       return values;
     };
 
-    baseState.submit = async (handler: any) => {
-      set({ isSubmitting: true });
+    baseState.setValues = (values: any) => {
+      for (const key in values) {
+        if (normalizedShape[key]) {
+          baseState[`set${capitalize(key)}`](values[key]);
+        }
+      }
+    };
 
-      const valid = await baseState.validateAllFields();
-      if (valid) await handler(baseState.getValues());
+    baseState.reset = () => {
+      for (const fieldName in normalizedShape) {
+        baseState[`reset${capitalize(fieldName)}`]();
+      }
+    };
 
-      set({ isSubmitting: false });
+    baseState.clearErrors = () => {
+      for (const fieldName in normalizedShape) {
+        set({ [`v${capitalize(fieldName)}`]: [] });
+      }
     };
 
     return baseState;
