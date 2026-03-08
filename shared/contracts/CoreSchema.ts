@@ -1,11 +1,11 @@
-import { username, CoreUsername, USERNAME_RULES } from './core/zUsername';
-import { password, CorePassword, PASSWORD_RULES } from './core/zPassword';
-import { cpassword, CoreCPassword, CPASSWORD_RULES } from './core/zCPassword';
-import { email, CoreEmail, EMAIL_RULES } from './core/zEmail';
-import { phone, CorePhone, PHONE_RULES } from './core/zPhone';
-import { name, CoreName, NAME_RULES } from './core/zName';
-import { sex, CoreSex, SEX_RULES } from './core/zSex';
-import { identity, CoreIdentity, IDENTITY_RULES } from './core/zIdentity';
+import { username, type CoreUsername, USERNAME_RULES } from './core/zUsername';
+import { password, type CorePassword, PASSWORD_RULES } from './core/zPassword';
+import { cpassword, type CoreCPassword, CPASSWORD_RULES } from './core/zCPassword';
+import { email, type CoreEmail, EMAIL_RULES } from './core/zEmail';
+import { phone, type CorePhone, PHONE_RULES } from './core/zPhone';
+import { name, type CoreName, NAME_RULES } from './core/zName';
+import { sex, type CoreSex, SEX_RULES } from './core/zSex';
+import { identity, type CoreIdentity, IDENTITY_RULES } from './core/zIdentity';
 
 /* ============================================================
    CORE EXPORT

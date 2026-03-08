@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { RegisterController } from './controllers/RegisterController';
-import { LoginController } from './controllers/LoginController';
+import { RegisterController } from './procedures/RegisterController';
+import { LoginController } from './procedures/login';
 import { CORE_ROUTES } from '@contracts/CoreSchema';
 
 const router = Router();

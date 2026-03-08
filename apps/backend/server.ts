@@ -1,19 +1,29 @@
 import express from 'express';
 import type { Request, Response } from 'express';
+
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+
+import { createExpressMiddleware } from '@trpc/server/adapters/express';
+
 import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '@env';
-import cookieparser from 'cookie-parser';
 import { AuthMiddleware } from './authmiddleware';
-import IAMRoutes from '@IAM/routes';
+
+import { appRouter } from './trpc/router';
+import { createContext } from './trpc/context';
+
 const app = express();
 
 /* =========================
    MIDDLEWARE
 ========================= */
-app.use(cookieparser());
+
 app.use(express.json());
+
+app.use(cookieParser());
+
 app.use(
   cors({
     origin: [
@@ -25,24 +35,47 @@ app.use(
     credentials: true,
   }),
 );
+
 app.use(helmet());
+
 app.use(morgan('dev'));
 
 /* =========================
-   ROUTES
+   HEALTH CHECK
 ========================= */
+
 app.get('/', (_req: Request, res: Response) => {
   return res.json({ '~': ':D' });
 });
-app.use(IAMRoutes);
+
+/* =========================
+   TRPC ROUTER
+========================= */
+
+app.use(
+  '/trpc',
+  createExpressMiddleware({
+    router: appRouter,
+    createContext,
+  }),
+);
+
+/* =========================
+   AUTH MIDDLEWARE
+========================= */
+
 app.use(AuthMiddleware);
+
 /* =========================
    SERVER START
 ========================= */
+
 export const start = () => {
-  app.listen(BACKEND_PORT, BACKEND_HOST, (err) => {
+  app.listen(BACKEND_PORT, BACKEND_HOST, (err?: any) => {
     if (err) throw err;
+
     console.log(`[EXPRESS] '${BACKEND_URL}'`);
+    console.log(`[TRPC] '${BACKEND_URL}/trpc'`);
   });
 };
 
