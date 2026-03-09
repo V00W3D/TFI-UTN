@@ -12,7 +12,8 @@ export const phone = z
         message: 'Teléfono inválido. Debe estar en formato internacional (+549...)',
       });
     }
-  });
+  })
+  .nullable();
 
 export type CorePhone = z.infer<typeof phone>;
 

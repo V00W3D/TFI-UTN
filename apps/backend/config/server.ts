@@ -8,11 +8,11 @@ import cookieParser from 'cookie-parser';
 
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 
-import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '@env';
-import { AuthMiddleware } from './authmiddleware';
+import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from './env';
 
-import { appRouter } from './trpc/router';
+import { appRouter } from '@config/trpc/router';
 import { createContext } from './trpc/context';
+import { printRoutes } from '@utils/autoRouter';
 
 const app = express();
 
@@ -61,12 +61,6 @@ app.use(
 );
 
 /* =========================
-   AUTH MIDDLEWARE
-========================= */
-
-app.use(AuthMiddleware);
-
-/* =========================
    SERVER START
 ========================= */
 
@@ -76,6 +70,7 @@ export const start = () => {
 
     console.log(`[EXPRESS] '${BACKEND_URL}'`);
     console.log(`[TRPC] '${BACKEND_URL}/trpc'`);
+    printRoutes();
   });
 };
 

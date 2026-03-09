@@ -1,28 +1,32 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { BUN_MODE, SESSION_SECRET, REFRESH_SECRET } from '@env';
+import { BUN_MODE, SESSION_SECRET, REFRESH_SECRET } from '@config/env';
 
-export const AuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export type UserPayload = {
+  id: string;
+  username: string;
+  email: string;
+  phone: string | null;
+  role: string;
+};
+export async function resolveUser(req: Request, res: Response): Promise<UserPayload | null> {
   const accessToken = req.cookies?.CupCake; // 1h
   const refreshToken = req.cookies?.Cake; // 7d
 
-  // 1️⃣ Validar access token
+  // 1️⃣ Access token
   if (accessToken) {
     try {
-      const decoded = jwt.verify(accessToken, SESSION_SECRET);
-      req.user = decoded as any;
-      return next();
+      return jwt.verify(accessToken, SESSION_SECRET) as UserPayload;
     } catch {
-      // vencido → intentamos refresh
+      // expirado → intentamos refresh
     }
   }
 
-  // 2️⃣ Intentar refresh
+  // 2️⃣ Refresh token
   if (refreshToken) {
     try {
-      const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as any;
+      const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as UserPayload;
 
-      // 🎂 Nuevo access token usando datos del refresh
       const newAccessToken = jwt.sign(
         {
           id: decoded.id,
@@ -42,24 +46,11 @@ export const AuthMiddleware = async (req: Request, res: Response, next: NextFunc
         maxAge: 1000 * 60 * 60,
       });
 
-      req.user = {
-        id: decoded.id,
-        username: decoded.username,
-        email: decoded.email,
-        phone: decoded.phone,
-        role: decoded.role,
-      };
-
-      return next();
+      return decoded;
     } catch {
-      // refresh inválido
+      return null;
     }
   }
 
-  // 3️⃣ Nada válido
-  return res.status(401).json({
-    ok: false,
-    code: 'SESSION_EXPIRED',
-    message: 'Sesión expirada. Inicie sesión nuevamente.',
-  });
-};
+  return null;
+}

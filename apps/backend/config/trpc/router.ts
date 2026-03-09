@@ -1,4 +1,4 @@
-import { createAutoRouter } from './autoRouter';
+import { createAutoRouter } from '../../utils/autoRouter';
 
 export const appRouter = await createAutoRouter(['IAM', 'POS', 'CORE', 'ADMIN']);
 

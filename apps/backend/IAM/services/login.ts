@@ -1,11 +1,10 @@
+import { prisma } from '@config/pg';
 import type { LoginInput } from '@contracts/LoginSchema';
-import { prisma } from '@db';
 import argon2 from 'argon2';
 
 export const LoginService = async (input: LoginInput) => {
   const { identity, password } = input;
 
-  // Prisma permite OR directamente
   const user = await prisma.user.findFirst({
     where: {
       OR: [{ username: identity }, { email: identity }, { phone: identity }],
@@ -20,7 +19,10 @@ export const LoginService = async (input: LoginInput) => {
     },
   });
 
+  const FAKE_HASH = '$argon2id$v=19$m=65536,t=3,p=4$C29tZXNhbHQ$9KjQ7xL9W8N7Zp7Kz1nG9w';
+
   if (!user) {
+    await argon2.verify(FAKE_HASH, password);
     throw new Error('Credenciales inválidas');
   }
 

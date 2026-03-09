@@ -1,5 +1,5 @@
-import { start } from './server';
-import { BUN_MODE } from '@env';
+import { start } from '@config/server';
+import { BUN_MODE } from '@config/env';
 
 if (BUN_MODE === 'dev') {
   console.clear();

@@ -29,10 +29,10 @@
     "baseUrl": ".",
     "paths": {
       "@contracts/*": ["../../shared/contracts/*"],
-      "@env": ["env.ts"],
+      "@config/*": ["config/*"],
+      "@utils/*": ["utils/*"],
       "@IAM/*": ["IAM/*"],
-      "@prisma": ["prisma/generated/client.ts"],
-      "@db": ["pg.ts"]
+      "@prisma": ["prisma/generated/client.ts"]
     }
   }
 }
