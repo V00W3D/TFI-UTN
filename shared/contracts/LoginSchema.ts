@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { CORE } from './CoreSchema';
-import { createContract } from './ContractFactory';
+import { CORE } from '../CoreSchema';
+import { createContract } from '../ContractFactory';
 
 /* ============================================================
    LOGIN CONTRACT

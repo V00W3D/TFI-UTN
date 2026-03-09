@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import { CORE } from './CoreSchema';
-import { createContract } from './ContractFactory';
-import type { ContractType } from './ContractFactory';
+import { CORE } from '../CoreSchema';
+import { createContract } from '../ContractFactory';
+import type { ContractType } from '../ContractFactory';
 
 /* ============================================================
    REGISTER CONTRACT

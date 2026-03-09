@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios, { type Method, type AxiosError } from 'axios';
-import type { Contract } from '@contracts/ContractFactory';
+import type { Contract } from '../../../shared/ContractFactory';
 import { z } from 'zod';
 import { BACKEND_URL } from '@env';
 

@@ -1,6 +1,6 @@
 import { publicProcedure, protectedProcedure } from '../config/trpc/trpc';
 import { errorFormatter } from '@utils/errorformatter';
-import type { Contract } from '@contracts/ContractFactory';
+import type { Contract } from '../../../shared/ContractFactory';
 import { z } from 'zod';
 
 type Visibility = 'public' | 'private';
