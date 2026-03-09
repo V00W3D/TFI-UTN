@@ -1,5 +1,5 @@
-import type { RegisterInput } from '@contracts/RegisterSchema';
-import { prisma } from '@config/pg';
+import type { RegisterInput } from '@shared/contracts/RegisterSchema';
+import { prisma } from '@tools/db';
 import argon2 from 'argon2';
 
 export const RegisterService = async (input: RegisterInput) => {

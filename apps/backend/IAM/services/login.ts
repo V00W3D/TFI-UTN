@@ -1,5 +1,5 @@
-import { prisma } from '@config/pg';
-import type { LoginInput } from '@contracts/LoginSchema';
+import { prisma } from '@tools/db';
+import type { LoginInput } from '@shared/contracts/LoginSchema';
 import argon2 from 'argon2';
 
 export const LoginService = async (input: LoginInput) => {

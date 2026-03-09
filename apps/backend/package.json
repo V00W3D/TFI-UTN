@@ -4,30 +4,14 @@
   "type": "module",
   "module": "index.ts",
   "scripts": {
-    "dev": "bun --watch index.ts",
-    "studio": "prisma studio"
-  },
-  "dependencies": {
-    "@prisma/adapter-pg": "^7.4.2",
-    "@prisma/client": "^7.4.2",
-    "@trpc/server": "^11.12.0",
-    "argon2": "^0.44.0",
-    "chalk": "^5.6.2",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "helmet": "^8.1.0",
-    "jsonwebtoken": "^9.0.3",
-    "morgan": "^1.10.1",
-    "pg": "^8.19.0"
-  },
-  "devDependencies": {
-    "@types/cookie-parser": "^1.4.10",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/morgan": "^1.9.10",
-    "prisma": "^7.4.2"
+    "dev": "bun run prisma:generate && bun run prisma:studio:bg & bun --watch index.ts",
+    "build": "bun build index.ts --outdir dist --target bun",
+    "start": "bun dist/index.js",
+    "prisma:generate": "prisma generate --schema ../../libs/server/db/prisma/schema.prisma",
+    "generate": "bun run prisma:generate",
+    "generate:reset": "rm -rf ../../libs/server/db/prisma/generated && bun run prisma:generate",
+    "migrate": "prisma migrate dev --schema ../../libs/server/db/prisma/schema.prisma",
+    "studio": "prisma studio --schema ../../libs/server/db/prisma/schema.prisma",
+    "prisma:studio:bg": "prisma studio --schema ../../libs/server/db/prisma/schema.prisma --browser none"
   }
 }

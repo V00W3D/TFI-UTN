@@ -1,4 +1,4 @@
-import { CORE_RULES } from '@contracts/CoreSchema';
+import { CORE_RULES } from '@shared/CoreSchema';
 import { NameField, LNameField, SNameField } from '../IAMField';
 
 export const FirstNameFieldComponent = () => {

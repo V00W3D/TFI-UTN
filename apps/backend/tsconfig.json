@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    // Environment setup & latest features
     "lib": ["ESNext"],
     "target": "ESNext",
     "module": "Preserve",
@@ -8,31 +7,31 @@
     "jsx": "react-jsx",
     "allowJs": true,
 
-    // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
 
-    // Best practices
     "strict": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
 
-    // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
+    "esModuleInterop": true,
 
     "baseUrl": ".",
     "paths": {
-      "@contracts/*": ["../../shared/contracts/*"],
-      "@config/*": ["config/*"],
-      "@utils/*": ["utils/*"],
-      "@IAM/*": ["IAM/*"],
-      "@prisma": ["prisma/generated/client.ts"]
+      "@shared/*": ["../../shared/*"],
+      "@env": ["../../libs/server/env.ts"],
+      "@server": ["../../libs/server/index.ts"],
+      "@_prisma/*": ["../../libs/server/db/prisma/*"],
+      "@_trpc/*": ["../../libs/server/trpc/*"],
+      "@tools/*": ["../../libs/server/tools/*"],
+      "@IAM/*": ["IAM/*"]
     }
   }
 }

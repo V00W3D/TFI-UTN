@@ -1,9 +1,9 @@
-import { procedure } from '@utils/procedurer';
-import { LoginSchema } from '@contracts/LoginSchema';
+import { procedure } from '@tools/procedurer';
+import { LoginSchema } from '@shared/contracts/LoginSchema';
 import { LoginService } from '../services/login';
 
 import jwt from 'jsonwebtoken';
-import { SESSION_SECRET, REFRESH_SECRET, BUN_MODE } from '@config/env';
+import { SESSION_SECRET, REFRESH_SECRET, BUN_MODE } from '@env';
 
 export default procedure('public', LoginSchema).mutation(async ({ input, ctx }) => {
   const user = await LoginService(input);

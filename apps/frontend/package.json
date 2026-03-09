@@ -7,27 +7,5 @@
     "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.90.21",
-    "@trpc/client": "^11.12.0",
-    "@trpc/react-query": "^11.12.0",
-    "axios": "^1.13.6",
-    "flags": "^4.0.3",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-phone-number-input": "^3.4.16",
-    "zustand": "^5.0.11"
-  },
-  "devDependencies": {
-    "@tailwindcss/vite": "^4.2.1",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
-    "@types/react-router-dom": "^5.3.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "react-router-dom": "^7.13.1",
-    "tailwindcss": "^4.2.1",
-    "vite": "^7.3.1",
-    "vite-tsconfig-paths": "^6.1.1"
   }
 }

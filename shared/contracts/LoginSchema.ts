@@ -20,7 +20,7 @@ export const LoginSchema = createContract(
   ---------------------------- */
   z
     .object({
-      id: z.string().uuid(),
+      id: z.uuid(),
 
       username: CORE.username,
       email: CORE.email,

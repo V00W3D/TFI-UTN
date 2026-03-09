@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+@layer components {
+  .floating-menu {
+    @apply fixed top-1/2 right-4 -translate-y-1/2
+           flex flex-col gap-4 p-3
+           rounded-2xl
+           backdrop-blur-xl
+           transition-all duration-500;
+
+    background-color: var(--floating-bg);
+    border: 1px solid var(--floating-border);
+    box-shadow: var(--floating-shadow);
+  }
+
+  /* Estado visible */
+  .floating-menu-visible {
+    @apply opacity-100 translate-x-0;
+  }
+
+  /* Estado oculto */
+  .floating-menu-hidden {
+    @apply opacity-0 translate-x-10 pointer-events-none;
+  }
+}

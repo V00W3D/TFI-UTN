@@ -3,19 +3,55 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "libs/*"
   ],
   "scripts": {
     "lint": "eslint . --fix",
     "format": "prettier . --write"
   },
   "dependencies": {
-    "zod": "^4.3.6"
+    "zod": "^4.3.6",
+    "chalk": "^5.6.2",
+    "@prisma/adapter-pg": "^7.4.2",
+    "@prisma/client": "^7.4.2",
+    "@trpc/server": "^11.12.0",
+    "@trpc/client": "^11.12.0",
+    "@trpc/react-query": "^11.12.0",
+    "@tanstack/react-query": "^5.90.21",
+    "argon2": "^0.44.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "pg": "^8.19.0",
+    "flags": "^4.0.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-phone-number-input": "^3.4.16",
+    "react-router-dom": "^7.13.1",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/bun": "^1.3.9",
     "@types/node": "^25.3.3",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-router-dom": "^5.3.3",
+    "@tailwindcss/vite": "^4.2.1",
+    "@vitejs/plugin-react": "^5.1.1",
+    "tailwindcss": "^4.2.1",
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^6.1.1",
     "eslint": "^10.0.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -23,6 +59,7 @@
     "globals": "^17.4.0",
     "prettier": "^3",
     "typescript": "^5",
-    "typescript-eslint": "^8.56.1"
+    "typescript-eslint": "^8.56.1",
+    "prisma": "^7.4.2"
   }
 }

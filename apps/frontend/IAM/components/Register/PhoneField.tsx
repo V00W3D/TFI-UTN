@@ -1,4 +1,4 @@
-import { CORE_RULES } from '@contracts/CoreSchema';
+import { CORE_RULES } from '@shared/CoreSchema';
 import { PhoneField } from '../IAMField';
 
 const PhoneFieldComponent = () => {

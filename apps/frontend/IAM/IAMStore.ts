@@ -1,6 +1,6 @@
 import { ZustandFactory } from '@utils/ZustandFactory';
-import { CORE } from '@contracts/CoreSchema';
-import { RegisterSchema } from '@contracts/RegisterSchema';
+import { CORE } from '@shared/CoreSchema';
+import { RegisterSchema } from '@shared/contracts/RegisterSchema';
 
 export const useRegisterStore = ZustandFactory(RegisterSchema);
 

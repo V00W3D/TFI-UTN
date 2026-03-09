@@ -1,4 +1,4 @@
-import { CORE_RULES } from '@contracts/CoreSchema';
+import { CORE_RULES } from '@shared/CoreSchema';
 import { PasswordField } from '../IAMField';
 
 const PasswordFieldComponent = () => {
