@@ -1,0 +1,93 @@
+{
+  "compilerOptions": {
+    /* ================================
+       RUNTIME TARGET
+    ================================= */
+
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext"],
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+
+    /* ================================
+       EMIT
+    ================================= */
+
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": false,
+    "noEmit": true,
+
+    /* ================================
+       INTEROP
+    ================================= */
+
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+
+    /* ================================
+       TYPES
+    ================================= */
+
+    "types": ["bun", "node"],
+
+    /* ================================
+       PROJECT STRUCTURE
+    ================================= */
+
+    "rootDirs": ["src", "../shared"],
+    "baseUrl": ".",
+
+    "paths": {
+      "@env": ["src/env.ts"],
+      "@shared/*": ["../shared/src/*"],
+      "@config/*": ["src/config/*"],
+      "@tools/*": ["src/tools/*"],
+      "@modules/*": ["src/modules/*"]
+    },
+
+    /* ================================
+       STRICTNESS (PRO LEVEL)
+    ================================= */
+
+    "strict": true,
+
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    /* ================================
+       CODE QUALITY
+    ================================= */
+
+    "useUnknownInCatchVariables": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+
+    /* ================================
+       PERFORMANCE
+    ================================= */
+
+    "skipLibCheck": true,
+
+    /* ================================
+       RELAXED OPTIONS
+    ================================= */
+
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
+
+    "allowJs": false
+  },
+
+  "include": ["src", "../shared"],
+
+  "exclude": ["dist", "node_modules"]
+}
