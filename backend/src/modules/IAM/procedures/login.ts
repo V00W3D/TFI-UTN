@@ -1,4 +1,4 @@
-import { procedure } from '@tools/procedurer';
+import { procedure } from '@tools/controller';
 import { LoginSchema } from '@shared/contracts/LoginSchema';
 import { LoginService } from '../services/login';
 

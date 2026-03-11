@@ -1,12 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createTRPCReact } from '@trpc/react-query';
 import { httpBatchLink } from '@trpc/client';
-import type { AppRouter } from '@shared/api-types';
+import type { AppRouter } from '../../../backend/src/config/trpc/router';
+import { BACKEND_URL } from '@env';
 
-const BACKEND_URL = 'http://localhost:8000';
-
-export const trpc = createTRPCReact<AppRouter>();
-
+export const trpc: ReturnType<typeof createTRPCReact<AppRouter>> = createTRPCReact<AppRouter>();
 const queryClient = new QueryClient();
 
 const trpcClient = trpc.createClient({

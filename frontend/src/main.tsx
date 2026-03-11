@@ -5,7 +5,7 @@ import App from './App';
 import FloatingMenu from '@modules/GENERAL/FloatingMenu';
 import { useAppStore } from './appStore';
 import './index.css';
-import { TRPCProvider } from 'src/trpcClient';
+import { TRPCProvider } from '@tools/trpcClient';
 
 const Root = () => {
   const { mode } = useAppStore();

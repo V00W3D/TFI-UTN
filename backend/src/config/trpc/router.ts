@@ -1,8 +1,8 @@
 import { router } from './trpc';
 
 /* IAM */
-// import login from '@IAM/procedures/login'
-// import register from '@IAM/procedures/register'
+import login from '@modules/IAM/procedures/login';
+import { registerController } from '@modules/IAM/procedures/register';
 // import logout from '@IAM/procedures/logout'
 
 // /* POS */
@@ -20,8 +20,8 @@ import { router } from './trpc';
 ====================================================== */
 
 const iamRouter = router({
-  // login,
-  // register,
+  login,
+  registerController,
   // logout,
 });
 
@@ -44,9 +44,9 @@ const adminRouter = router({
 
 export const appRouter = router({
   iam: iamRouter,
-  pos: posRouter,
-  core: coreRouter,
-  admin: adminRouter,
+  // pos: posRouter,
+  // core: coreRouter,
+  // admin: adminRouter,
 });
 
 export type AppRouter = typeof appRouter;

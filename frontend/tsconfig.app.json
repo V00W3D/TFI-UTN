@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "esnext",
     "useDefineForClassFields": true,
@@ -25,6 +26,7 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
+      "@apitypes": ["../backend/src/config/trpc/router.ts"],
       "@store": ["src/appStore.ts"],
       "@env": ["src/env.ts"],
       "@tools/*": ["src/tools/*"],
@@ -32,5 +34,5 @@
       "@modules/*": ["src/modules/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "../backend/src"]
 }

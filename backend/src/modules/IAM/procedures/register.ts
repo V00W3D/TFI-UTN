@@ -1,12 +1,9 @@
-import { procedure } from '@tools/procedurer';
+import { controller } from '@tools/controller';
 import { RegisterSchema } from '@shared/contracts/RegisterSchema';
 import { RegisterService } from '../services/register';
 
-export default procedure('public', RegisterSchema).mutation(async ({ input }) => {
+export const registerController = controller(RegisterSchema, async (input) => {
   await RegisterService(input);
-  return {
-    ok: true,
-    message: 'Usuario registrado correctamente',
-    data: undefined,
-  };
+
+  return undefined;
 });
