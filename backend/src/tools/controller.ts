@@ -1,33 +1,48 @@
 import type { Request, Response } from 'express';
-import type { Contract } from '@shared/ContractFactory';
+import type { Contract } from './ContractFactory';
 import { z } from 'zod';
-import { errorCatcher } from './errorcatcher';
+import { ErrorTools } from './ErrorTools';
+
+/* ============================================================
+   TYPE HELPERS
+============================================================ */
+
+type ExtractSuccess<T extends z.ZodTypeAny> =
+  Extract<z.infer<T>, { ok: true }> extends { data: infer D } ? D : never;
+
+/* ============================================================
+   CONTROLLER
+============================================================ */
 
 export const controller = <TInput extends z.ZodTypeAny, TOutput extends z.ZodTypeAny>(
   contract: Contract<TInput, TOutput>,
-  handler: (input: z.infer<TInput>, req: Request) => Promise<z.infer<TOutput> | undefined>,
+  handler: (input: z.infer<TInput>, req: Request) => Promise<ExtractSuccess<TOutput>>,
 ) => {
   return async (req: Request, res: Response) => {
     try {
-      const parsed = contract.I.parse(req.body);
+      const parsedInput = contract.I.parse(req.body) as z.infer<TInput>;
 
-      const data = await handler(parsed, req);
+      const data = await handler(parsedInput, req);
 
-      return res.json({
-        ok: true,
-        message: 'OK',
+      const response = {
+        ok: true as const,
         data,
-      });
-    } catch (error) {
-      const formatted = errorCatcher(error, contract.I, req.body);
+      };
 
-      return res.status(formatted.status).json({
-        ok: false,
-        message: formatted.message,
-        ...(formatted.params && { params: formatted.params }),
-        ...(formatted.forbidden_fields && { forbidden_fields: formatted.forbidden_fields }),
-        data: undefined,
-      });
+      contract.O.parse(response);
+
+      return res.json(response);
+    } catch (error) {
+      const formatted = ErrorTools.catch(error, contract.I, req.body);
+
+      const response = {
+        ok: false as const,
+        ...formatted,
+      };
+
+      contract.O.parse(response);
+
+      return res.status(400).json(response);
     }
   };
 };

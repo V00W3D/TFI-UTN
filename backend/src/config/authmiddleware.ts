@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { BUN_MODE, SESSION_SECRET, REFRESH_SECRET } from '@env';
 
@@ -9,20 +9,40 @@ export type UserPayload = {
   phone: string | null;
   role: string;
 };
-export async function resolveUser(req: Request, res: Response): Promise<UserPayload | null> {
+
+/* =========================================================
+   EXTEND EXPRESS REQUEST
+========================================================= */
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserPayload | null;
+    }
+  }
+}
+
+/* =========================================================
+   AUTH MIDDLEWARE
+========================================================= */
+
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.cookies?.CupCake; // 1h
   const refreshToken = req.cookies?.Cake; // 7d
 
-  // 1️⃣ Access token
+  // 1️⃣ ACCESS TOKEN
   if (accessToken) {
     try {
-      return jwt.verify(accessToken, SESSION_SECRET) as UserPayload;
+      const decoded = jwt.verify(accessToken, SESSION_SECRET) as UserPayload;
+
+      req.user = decoded;
+      return next();
     } catch {
       // expirado → intentamos refresh
     }
   }
 
-  // 2️⃣ Refresh token
+  // 2️⃣ REFRESH TOKEN
   if (refreshToken) {
     try {
       const decoded = jwt.verify(refreshToken, REFRESH_SECRET) as UserPayload;
@@ -46,11 +66,14 @@ export async function resolveUser(req: Request, res: Response): Promise<UserPayl
         maxAge: 1000 * 60 * 60,
       });
 
-      return decoded;
+      req.user = decoded;
+      return next();
     } catch {
-      return null;
+      req.user = null;
+      return next();
     }
   }
 
-  return null;
-}
+  req.user = null;
+  next();
+};

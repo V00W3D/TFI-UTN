@@ -3,8 +3,7 @@
   "private": true,
   "workspaces": [
     "backend",
-    "frontend",
-    "shared"
+    "frontend"
   ],
   "scripts": {
     "lint": "eslint . --fix",

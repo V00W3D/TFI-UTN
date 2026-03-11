@@ -1,18 +1,12 @@
 import express from 'express';
 import type { Request, Response } from 'express';
-
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-
-import { createExpressMiddleware } from '@trpc/server/adapters/express';
-
 import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '@env';
-
-import { appRouter } from '@config/trpc/router';
-import { createContext } from '@config/trpc/context';
-
+import { authMiddleware } from '@config/authmiddleware';
+import IAMRoutes from '@modules/IAM';
 const app = express();
 
 /* =========================
@@ -47,17 +41,13 @@ app.get('/', (_req: Request, res: Response) => {
   return res.json({ '~': ':D' });
 });
 
+app.use(IAMRoutes);
+
 /* =========================
    TRPC ROUTER
 ========================= */
 
-app.use(
-  '/trpc',
-  createExpressMiddleware({
-    router: appRouter,
-    createContext,
-  }),
-);
+app.use(authMiddleware);
 
 /* =========================
    SERVER START

@@ -26,13 +26,12 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@apitypes": ["../backend/src/config/trpc/router.ts"],
       "@store": ["src/appStore.ts"],
       "@env": ["src/env.ts"],
       "@tools/*": ["src/tools/*"],
-      "@shared/*": ["../shared/src/*"],
+      "@shared/*": ["../backend/src/shared/*"],
       "@modules/*": ["src/modules/*"]
     }
   },
-  "include": ["src", "../backend/src"]
+  "include": ["src", "../backend"]
 }

@@ -1,8 +1,9 @@
 import { prisma } from '@tools/db';
 import type { LoginInput } from '@shared/contracts/LoginSchema';
+import { ERR } from '@tools/ErrorTools';
 import argon2 from 'argon2';
 
-export const LoginService = async (input: LoginInput) => {
+export const loginService = async (input: LoginInput) => {
   const { identity, password } = input;
 
   const user = await prisma.user.findFirst({
@@ -23,13 +24,13 @@ export const LoginService = async (input: LoginInput) => {
 
   if (!user) {
     await argon2.verify(FAKE_HASH, password);
-    throw new Error('Credenciales inválidas');
+    throw ERR.INVALID_CREDENTIALS();
   }
 
   const validPassword = await argon2.verify(user.password, password);
 
   if (!validPassword) {
-    throw new Error('Credenciales inválidas');
+    throw ERR.INVALID_CREDENTIALS();
   }
 
   return {

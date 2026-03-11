@@ -2,7 +2,7 @@ import type { RegisterInput } from '@shared/contracts/RegisterSchema';
 import { prisma } from '@tools/db';
 import argon2 from 'argon2';
 
-export const RegisterService = async (input: RegisterInput) => {
+export const registerService = async (input: RegisterInput) => {
   const { name, sname, lname, sex, username, email, phone } = input;
 
   const password = await argon2.hash(input.password, {
