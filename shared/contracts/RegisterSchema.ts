@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { CORE } from '../CoreSchema';
-import { createContract } from '@tools/ContractFactory';
+import { createContract } from '../../backend/src/tools/ContractFactory';
 
 /* ============================================================
    INPUT SCHEMA

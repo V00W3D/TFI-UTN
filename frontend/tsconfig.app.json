@@ -1,37 +1,44 @@
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-    "target": "esnext",
+
+    "target": "ESNext",
     "useDefineForClassFields": true,
+
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "module": "esnext",
+
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
     "types": ["vite/client", "node"],
+
     "skipLibCheck": true,
 
-    "moduleResolution": "classic",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
+
     "noEmit": true,
+
     "jsx": "react-jsx",
 
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
 
     "baseUrl": ".",
+
+    "rootDirs": ["src", "../backend/src"],
 
     "paths": {
       "@store": ["src/appStore.ts"],
       "@env": ["src/env.ts"],
       "@tools/*": ["src/tools/*"],
-      "@shared/*": ["../backend/src/shared/*"],
-      "@modules/*": ["src/modules/*"]
+      "@modules/*": ["src/modules/*"],
+      "@shared/*": ["../shared/*"]
     }
   },
 
-  "include": ["src", "../backend/src/shared/**/*"]
+  "include": ["src", "../shared/**/*"]
 }

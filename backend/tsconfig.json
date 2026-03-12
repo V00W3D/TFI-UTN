@@ -7,7 +7,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "lib": ["ESNext"],
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "moduleDetection": "force",
 
     /* ================================
@@ -39,23 +39,22 @@
        PROJECT STRUCTURE
     ================================= */
 
-    "rootDirs": ["src", "../shared"],
+    "rootDirs": ["src"],
     "baseUrl": ".",
 
     "paths": {
       "@env": ["src/env.ts"],
-      "@shared/*": ["src/shared/*"],
+      "@shared/*": ["../shared/*"],
       "@config/*": ["src/config/*"],
       "@tools/*": ["src/tools/*"],
       "@modules/*": ["src/modules/*"]
     },
 
     /* ================================
-       STRICTNESS (PRO LEVEL)
+       STRICTNESS
     ================================= */
 
     "strict": true,
-
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
@@ -82,12 +81,10 @@
 
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false,
-
     "allowJs": false
   },
 
-  "include": ["src", "../shared"],
+  "include": ["src", "../frontend/**/*"],
 
   "exclude": ["dist", "node_modules"]
 }

@@ -5,16 +5,16 @@ import { PublicErrorSchema } from './ErrorTools';
    CONTRACT STRUCTURE
 ============================================================ */
 
-export type Contract<TInput extends z.ZodTypeAny, TOutput extends z.ZodTypeAny> = Readonly<{
-  I: TInput;
-  O: TOutput;
+export type Contract<I extends z.ZodTypeAny, O extends z.ZodTypeAny> = Readonly<{
+  I: I;
+  O: O;
 }>;
 
 /* ============================================================
    SUCCESS BUILDER
 ============================================================ */
 
-const buildSuccess = <TData extends z.ZodTypeAny>(data: TData) =>
+const buildSuccess = <T extends z.ZodTypeAny>(data: T) =>
   z
     .object({
       ok: z.literal(true),
@@ -45,7 +45,6 @@ export function createContract<TInput extends z.ZodTypeAny, TSuccess extends z.Z
   const InputSchema = input.readonly();
 
   const SuccessSchema = buildSuccess(successSchema);
-
   const ErrorSchema = buildError();
 
   const OutputSchema = z.discriminatedUnion('ok', [SuccessSchema, ErrorSchema]).readonly();
@@ -53,5 +52,5 @@ export function createContract<TInput extends z.ZodTypeAny, TSuccess extends z.Z
   return {
     I: InputSchema,
     O: OutputSchema,
-  } satisfies Contract<typeof InputSchema, typeof OutputSchema>;
+  } as const;
 }
