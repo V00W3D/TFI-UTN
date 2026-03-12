@@ -17,8 +17,8 @@ import type * as Prisma from "./prismaNamespace.ts"
 
 const config: runtime.GetPrismaClientConfig = {
   "previewFeatures": [],
-  "clientVersion": "7.4.2",
-  "engineVersion": "94a226be1cf2967af2541cca5529f0f7ba866919",
+  "clientVersion": "7.5.0",
+  "engineVersion": "280c870be64f457428992c43c1f6d557fab6e29e",
   "activeProvider": "postgresql",
   "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./generated\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id String @id @default(uuid())\n\n  name  String  @db.VarChar(128)\n  sname String? @db.VarChar(128)\n  lname String  @db.VarChar(128)\n  sex   Sex     @default(OTHER)\n\n  username String @unique @db.VarChar(32)\n  password String @db.VarChar(128)\n\n  email String  @unique @db.VarChar(128)\n  phone String? @unique @db.VarChar(15)\n\n  role Role @default(CUSTOMER)\n\n  createdat DateTime @default(now())\n  updatedat DateTime @updatedAt\n}\n\nenum Role {\n  CUSTOMER\n  CASHIER\n  ADMIN\n}\n\nenum Sex {\n  MALE\n  FEMALE\n  OTHER\n}\n",
   "runtimeDataModel": {

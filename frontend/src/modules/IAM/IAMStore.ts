@@ -1,14 +1,6 @@
 import { ZustandFactory } from '@tools/ZustandFactory';
-import { CORE } from '@shared/CoreSchema';
 import { RegisterSchema } from '@shared/contracts/RegisterSchema';
+import { LoginSchema } from '@shared/contracts/LoginSchema';
 
 export const useRegisterStore = ZustandFactory(RegisterSchema);
-
-export const useLoginStore = ZustandFactory({
-  identity: {
-    schema: CORE.identity,
-  },
-  password: {
-    schema: CORE.password,
-  },
-});
+export const useLoginStore = ZustandFactory(LoginSchema);
