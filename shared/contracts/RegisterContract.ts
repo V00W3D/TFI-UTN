@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { CORE } from '../CoreSchema';
-import { createContract } from '../../backend/src/tools/ContractFactory';
+import { ContractFactory } from '../ContractFactory';
 
 /* ============================================================
-   INPUT SCHEMA
+INPUT SCHEMA
 ============================================================ */
 
 export const RegisterInputSchema = z
@@ -12,9 +12,12 @@ export const RegisterInputSchema = z
     sname: CORE.name.nullable(),
     lname: CORE.name,
     sex: CORE.sex,
+
     username: CORE.username,
+
     password: CORE.password,
     cpassword: CORE.cpassword,
+
     email: CORE.email,
     phone: CORE.phone,
   })
@@ -29,20 +32,23 @@ export const RegisterInputSchema = z
   });
 
 /* ============================================================
-   SUCCESS SCHEMA
+SUCCESS SCHEMA
 ============================================================ */
 
 export const RegisterSuccessSchema = z.void();
 
 /* ============================================================
-   CONTRACT
+CONTRACT
 ============================================================ */
 
-export const RegisterSchema = createContract(RegisterInputSchema, RegisterSuccessSchema);
-
-/* ============================================================
-   TYPES
-============================================================ */
-
-export type RegisterInput = z.infer<typeof RegisterInputSchema>;
-export type RegisterOutput = z.infer<typeof RegisterSchema.O>;
+export const RegisterContract = ContractFactory({
+  method: 'POST',
+  path: '/iam/register',
+  access: 'public',
+  summary: 'Register new user',
+  description: 'Creates a new user account in the system',
+  tags: ['IAM', 'Auth'],
+  cache: 'no-store',
+  input: RegisterInputSchema,
+  success: RegisterSuccessSchema,
+});

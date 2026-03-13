@@ -9,19 +9,19 @@ const LoginPage = () => {
   const form = useLoginStore();
   const login = LoginHook();
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const isValid = await form.validateAllFields();
+    const isValid = await form.validate();
     if (!isValid) return;
 
     try {
-      await login.execute({
+      const result = await login({
         body: form.getValues(),
       });
 
-      console.log(login.response?.message);
-    } catch (err) {
+      console.log(result);
+    } catch {
       console.log(login.error);
     }
   };
@@ -36,14 +36,14 @@ const LoginPage = () => {
           <button
             type="submit"
             className="auth-button"
-            disabled={!form.isFormValid || login.isLoading}
+            disabled={!form.isFormValid || login.loading}
           >
-            {login.isLoading ? 'Entrando...' : 'Entrar'}
+            {login.loading ? 'Entrando...' : 'Entrar'}
           </button>
 
-          {login.isError && <p className="auth-error">{login.error?.message}</p>}
+          {login.error && <p className="auth-error">{login.error.error.code}</p>}
 
-          {login.isSuccess && <p className="auth-success">{login.response?.message}</p>}
+          {login.data && <p className="auth-success">Login exitoso</p>}
         </form>
       </div>
     </div>

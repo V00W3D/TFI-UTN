@@ -6,7 +6,8 @@ import { phone, type CorePhone, PHONE_RULES } from './core/zPhone';
 import { name, type CoreName, NAME_RULES } from './core/zName';
 import { sex, type CoreSex, SEX_RULES } from './core/zSex';
 import { identity, type CoreIdentity, IDENTITY_RULES } from './core/zIdentity';
-
+export type { ContractConfig } from '@tools/ContractFactory';
+export type { Contract } from '@tools/ContractFactory';
 /* ============================================================
    CORE EXPORT
 ============================================================ */

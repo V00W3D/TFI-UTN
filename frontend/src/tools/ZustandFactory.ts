@@ -1,355 +1,245 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { ZodType, ZodObject } from 'zod';
 import { z } from 'zod';
 
-/* ============================================================
-   CORE TYPES
-============================================================ */
-type ExtractShape<T> =
-  // Caso contrato completo
-  T extends { I: infer I }
-    ? I extends ZodObject<infer Shape>
-      ? {
-          [K in keyof Shape]: {
-            schema: Shape[K];
-          };
-        }
-      : never
-    : // Caso z.object directo
-      T extends ZodObject<infer Shape>
-      ? {
-          [K in keyof Shape]: {
-            schema: Shape[K];
-          };
-        }
-      : // Caso manual
-        T extends Record<string, FieldConfig<any>>
-        ? T
-        : never;
+type ValidationResult = true | string[];
+type ValidationMode = 'onChange' | 'onBlur' | 'onSubmit';
 
-export type ValidationResult = true | string[];
-
-export type ValidationMode = 'onChange' | 'onBlur' | 'onSubmit';
-
-export type FieldConfig<T = any> = {
-  schema?: ZodType;
+type FieldConfig<T = any> = {
+  schema?: z.ZodTypeAny;
   validate?: (value: T, state: any) => ValidationResult;
   asyncValidate?: (value: T, state: any) => Promise<ValidationResult>;
   defaultValue?: T;
   dependsOn?: string[];
 };
 
-/* ============================================================
-   TYPE INFERENCE
-============================================================ */
-
-type InferFieldValue<F> = F extends { schema: infer S }
-  ? S extends ZodType
-    ? z.infer<S>
-    : F extends FieldConfig<infer U>
-      ? U
+type ExtractShape<T> = T extends { I: infer I }
+  ? I extends z.ZodReadonly<z.ZodObject<infer Shape>>
+    ? Shape
+    : I extends z.ZodObject<infer Shape>
+      ? Shape
       : never
-  : F extends FieldConfig<infer U>
-    ? U
-    : never;
+  : T extends z.ZodObject<infer Shape>
+    ? Shape
+    : T extends Record<string, FieldConfig<any>>
+      ? { [K in keyof T]: T[K]['schema'] }
+      : never;
 
-type InferValues<T> = {
-  [K in keyof T]: InferFieldValue<T[K]>;
-};
+type Values<T> = { [K in keyof T]: z.infer<T[K]> };
 
-type InferValidations<T> = {
-  [K in keyof T as `v${Capitalize<string & K>}`]: ValidationResult;
-};
+type Store<T> = {
+  values: Values<T>;
+  errors: Partial<Record<keyof T, string[]>>;
+  touched: Partial<Record<keyof T, boolean>>;
+  dirty: Partial<Record<keyof T, boolean>>;
 
-type InferTouched<T> = {
-  [K in keyof T as `t${Capitalize<string & K>}`]: boolean;
-};
-
-type InferSetters<T> = {
-  [K in keyof T as `set${Capitalize<string & K>}`]: (value: InferFieldValue<T[K]>) => void;
-} & {
-  [K in keyof T as `blur${Capitalize<string & K>}`]: () => void;
-} & {
-  [K in keyof T as `reset${Capitalize<string & K>}`]: () => void;
-};
-
-type InternalStore<T> = {
   isFormValid: boolean;
   isDirty: boolean;
-  dirtyFields: Record<string, boolean>;
 
-  validateForm: () => void;
-  validateAllFields: () => Promise<boolean>;
+  set: <K extends keyof T>(key: K, value: Values<T>[K]) => Promise<void>;
+  blur: <K extends keyof T>(key: K) => Promise<void>;
+
+  validate: () => Promise<boolean>;
   reset: () => void;
-  clearErrors: () => void;
 
-  getValues: () => InferValues<T>;
-  setValues: (values: Partial<InferValues<T>>) => void;
+  getValues: () => Values<T>;
+  setValues: (v: Partial<Values<T>>) => void;
 };
 
-export type ZustandFactoryReturn<T> = InferValues<T> &
-  InferValidations<T> &
-  InferTouched<T> &
-  InferSetters<T> &
-  InternalStore<T>;
+/* ========================================================= */
 
-/* ============================================================
-   SHAPE NORMALIZER
-============================================================ */
+function normalize(input: any): {
+  shape: Record<string, FieldConfig>;
+  schema: z.ZodObject<any> | null;
+} {
+  let schema: z.ZodObject<any> | null = null;
 
-function normalizeShape(input: any): Record<string, FieldConfig> {
-  // Caso 1: contrato completo (LoginSchema)
-  if (input?.I instanceof z.ZodObject) {
-    input = input.I;
+  if (input?.I) input = input.I;
+
+  if (input instanceof z.ZodReadonly) {
+    input = input.unwrap();
   }
 
-  // Caso 2: z.object() directo
   if (input instanceof z.ZodObject) {
-    const shape = input.shape;
+    schema = input;
 
-    return Object.fromEntries(Object.entries(shape).map(([key, schema]) => [key, { schema }]));
-  }
+    const shape: Record<string, FieldConfig> = {};
 
-  // Caso 3: ya es shape manual
-  return input;
-}
-
-/* ============================================================
-   FACTORY
-============================================================ */
-
-export function ZustandFactory<
-  TInput extends Record<string, FieldConfig<any>> | ZodObject<any> | { I: ZodObject<any> },
->(input: TInput, persistEnabled: boolean = false, options?: { mode?: ValidationMode }) {
-  type T = ExtractShape<TInput>;
-  const normalizedShape = normalizeShape(input);
-
-  const mode = options?.mode ?? 'onChange';
-
-  const initializer = (set: any, get: any): ZustandFactoryReturn<T> => {
-    const getDefaultValue = (config: FieldConfig) => {
-      if (config.defaultValue !== undefined) return config.defaultValue;
-
-      if (config.schema) {
-        const typeName = (config.schema as any)._def?.typeName;
-
-        switch (typeName) {
-          case 'ZodString':
-            return '';
-          case 'ZodNumber':
-            return 0;
-          case 'ZodBoolean':
-            return false;
-          case 'ZodEnum':
-            return (config.schema as any)._def.values?.[0];
-          default:
-            return '';
-        }
-      }
-
-      return '';
-    };
-
-    const baseState: any = {};
-
-    /* ================= INITIALIZATION ================= */
-
-    for (const fieldName in normalizedShape) {
-      const config = normalizedShape[fieldName];
-      const defaultValue = getDefaultValue(config);
-
-      baseState[fieldName] = defaultValue;
-      baseState[`v${capitalize(fieldName)}`] = [];
-      baseState[`t${capitalize(fieldName)}`] = false;
+    for (const key in input.shape) {
+      shape[key] = { schema: input.shape[key] };
     }
 
-    baseState.isFormValid = false;
-    baseState.isDirty = false;
-    baseState.dirtyFields = {};
+    return { shape, schema };
+  }
 
-    /* ================= VALIDATION ================= */
+  return { shape: input, schema };
+}
 
-    const validateField = async (fieldName: string, value: any) => {
-      const config = normalizedShape[fieldName];
+/* ========================================================= */
+
+export function ZustandFactory<
+  TInput extends
+    | Record<string, FieldConfig>
+    | z.ZodObject<any>
+    | { I: z.ZodObject<any> | z.ZodReadonly<z.ZodObject<any>> },
+>(input: TInput, opts?: { persist?: boolean; mode?: ValidationMode }) {
+  type Shape = ExtractShape<TInput>;
+
+  const { shape, schema } = normalize(input);
+
+  const mode = opts?.mode ?? 'onChange';
+
+  const initializer = (set: any, get: any): Store<Shape> => {
+    const defaults = Object.fromEntries(
+      Object.entries(shape).map(([k, cfg]) => {
+        const field = cfg as FieldConfig;
+
+        if (field.defaultValue !== undefined) return [k, field.defaultValue];
+
+        const t = (field.schema as any)?._def?.typeName;
+
+        if (t === 'ZodNumber') return [k, 0];
+        if (t === 'ZodBoolean') return [k, false];
+
+        return [k, ''];
+      }),
+    );
+
+    const validateField = async (key: string, value: any) => {
+      const cfg = shape[key] as FieldConfig;
+
       const errors: string[] = [];
 
-      if (config.schema) {
-        const result = config.schema.safeParse(value);
-        if (!result.success) {
-          errors.push(...result.error.issues.map((i) => i.message));
+      if (cfg.schema) {
+        const r = cfg.schema.safeParse(value);
+
+        if (!r.success) {
+          errors.push(...r.error.issues.map((i: z.ZodIssue) => i.message));
         }
       }
 
-      if (config.validate) {
-        const custom = config.validate(value, get());
-        if (custom !== true) errors.push(...custom);
+      if (cfg.validate) {
+        const r = cfg.validate(value, get());
+
+        if (r !== true) errors.push(...r);
       }
 
-      if (config.asyncValidate) {
-        const asyncResult = await config.asyncValidate(value, get());
-        if (asyncResult !== true) errors.push(...asyncResult);
+      if (cfg.asyncValidate) {
+        const r = await cfg.asyncValidate(value, get());
+
+        if (r !== true) errors.push(...r);
       }
 
       return errors.length ? errors : true;
     };
 
-    const validateDependents = async (changedField: string) => {
-      for (const fieldName in normalizedShape) {
-        const config = normalizedShape[fieldName];
-
-        if (config.dependsOn?.includes(changedField)) {
-          const value = get()[fieldName];
-          const result = await validateField(fieldName, value);
-
-          set({ [`v${capitalize(fieldName)}`]: result });
-        }
-      }
-    };
-
     const validateForm = () => {
-      const current = get();
+      const s = get();
 
-      const isValid = Object.keys(normalizedShape).every((fieldName) => {
-        const config = normalizedShape[fieldName];
-        const value = current[fieldName];
-        const validation = current[`v${capitalize(fieldName)}`];
+      let valid = true;
 
-        if (!config.schema) return validation === true;
+      if (schema) {
+        const result = schema.safeParse(s.values);
 
-        const acceptsUndefined = config.schema.safeParse(undefined).success;
+        valid = result.success;
+      } else {
+        valid = Object.keys(shape).every((k) => !s.errors[k as keyof Shape]?.length);
+      }
 
-        const hasValue =
-          typeof value === 'string'
-            ? value.trim().length > 0
-            : value !== undefined && value !== null;
-
-        if (acceptsUndefined && !hasValue) return true;
-
-        return validation === true;
+      set({
+        isFormValid: valid,
+        isDirty: Object.values(s.dirty).some(Boolean),
       });
-
-      set({ isFormValid: isValid });
     };
 
-    const updateDirty = (fieldName: string, value: any) => {
-      const defaultValue = getDefaultValue(normalizedShape[fieldName]);
-      const isDirtyField = value !== defaultValue;
+    return {
+      values: defaults as Values<Shape>,
+      errors: {},
+      touched: {},
+      dirty: {},
 
-      const dirtyFields = {
-        ...get().dirtyFields,
-        [fieldName]: isDirtyField,
-      };
+      isFormValid: false,
+      isDirty: false,
 
-      const isDirty = Object.values(dirtyFields).some(Boolean);
-
-      set({ dirtyFields, isDirty });
-    };
-
-    /* ================= SETTERS ================= */
-
-    for (const fieldName in normalizedShape) {
-      baseState[`set${capitalize(fieldName)}`] = async (value: any) => {
-        set({ [fieldName]: value });
-
-        updateDirty(fieldName, value);
+      set: async (key, value) => {
+        set((s: any) => ({
+          values: { ...s.values, [key]: value },
+          dirty: { ...s.dirty, [key]: true },
+        }));
 
         if (mode === 'onChange') {
-          const result = await validateField(fieldName, value);
+          const r = await validateField(key as string, value);
 
-          set({ [`v${capitalize(fieldName)}`]: result });
-
-          await validateDependents(fieldName);
+          set((s: any) => ({
+            errors: {
+              ...s.errors,
+              [key]: r === true ? undefined : r,
+            },
+          }));
 
           validateForm();
         }
-      };
+      },
 
-      baseState[`blur${capitalize(fieldName)}`] = async () => {
-        set({ [`t${capitalize(fieldName)}`]: true });
+      blur: async (key) => {
+        set((s: any) => ({
+          touched: { ...s.touched, [key]: true },
+        }));
 
         if (mode === 'onBlur') {
-          const value = get()[fieldName];
-          const result = await validateField(fieldName, value);
+          const v = get().values[key];
 
-          set({ [`v${capitalize(fieldName)}`]: result });
+          const r = await validateField(key as string, v);
 
-          await validateDependents(fieldName);
+          set((s: any) => ({
+            errors: {
+              ...s.errors,
+              [key]: r === true ? undefined : r,
+            },
+          }));
 
           validateForm();
         }
-      };
+      },
 
-      baseState[`reset${capitalize(fieldName)}`] = () => {
-        const defaultValue = getDefaultValue(normalizedShape[fieldName]);
+      validate: async () => {
+        const vals = get().values;
 
-        set({
-          [fieldName]: defaultValue,
-          [`v${capitalize(fieldName)}`]: [],
-          [`t${capitalize(fieldName)}`]: false,
-        });
+        const errors: Record<string, string[]> = {};
 
-        updateDirty(fieldName, defaultValue);
+        for (const k in shape) {
+          const r = await validateField(k, vals[k]);
+
+          if (r !== true) errors[k] = r;
+        }
+
+        set({ errors });
 
         validateForm();
-      };
-    }
 
-    /* ================= INTERNAL METHODS ================= */
+        return get().isFormValid;
+      },
 
-    baseState.validateAllFields = async () => {
-      for (const fieldName in normalizedShape) {
-        const value = get()[fieldName];
-        const result = await validateField(fieldName, value);
+      reset: () =>
+        set({
+          values: defaults,
+          errors: {},
+          touched: {},
+          dirty: {},
+          isDirty: false,
+          isFormValid: false,
+        }),
 
-        set({ [`v${capitalize(fieldName)}`]: result });
-      }
+      getValues: () => get().values,
 
-      validateForm();
-
-      return get().isFormValid;
+      setValues: (v) =>
+        set((s: any) => ({
+          values: { ...s.values, ...v },
+        })),
     };
-
-    baseState.validateForm = validateForm;
-
-    baseState.getValues = () => {
-      const values: any = {};
-
-      for (const fieldName in normalizedShape) {
-        values[fieldName] = get()[fieldName];
-      }
-
-      return values;
-    };
-
-    baseState.setValues = (values: any) => {
-      for (const key in values) {
-        if (normalizedShape[key]) {
-          baseState[`set${capitalize(key)}`](values[key]);
-        }
-      }
-    };
-
-    baseState.reset = () => {
-      for (const fieldName in normalizedShape) {
-        baseState[`reset${capitalize(fieldName)}`]();
-      }
-    };
-
-    baseState.clearErrors = () => {
-      for (const fieldName in normalizedShape) {
-        set({ [`v${capitalize(fieldName)}`]: [] });
-      }
-    };
-
-    return baseState;
   };
 
-  return persistEnabled
-    ? create<ZustandFactoryReturn<T>>()(persist(initializer, { name: 'zustand-form' }))
-    : create<ZustandFactoryReturn<T>>()(initializer);
+  return opts?.persist
+    ? create<Store<Shape>>()(persist(initializer, { name: 'zustand-form' }))
+    : create<Store<Shape>>()(initializer);
 }
-
-/* ============================================================ */
-
-const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);

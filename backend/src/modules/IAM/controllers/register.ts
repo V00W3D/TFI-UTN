@@ -1,7 +1,8 @@
-import { controller } from '@tools/controller';
-import { RegisterSchema } from '@shared/contracts/RegisterSchema';
+import { conductor } from '@tools/conductor';
+import { RegisterContract } from '@shared/contracts/RegisterContract';
 import { registerService } from '../services/register';
 
-export const registerController = controller(RegisterSchema, async (input) => {
+export default conductor(RegisterContract, async (input) => {
   await registerService(input);
+  return;
 });

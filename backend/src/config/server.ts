@@ -4,17 +4,31 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+
 import { BACKEND_HOST, BACKEND_PORT, BACKEND_URL } from '@env';
-import { authMiddleware } from '@config/authmiddleware';
-import IAMRoutes from '@modules/IAM';
+
+import { initConductor } from '@tools/conductor';
+
 const app = express();
+const router = express.Router();
+
+/* =========================
+   INIT CONDUCTOR
+========================= */
+
+initConductor(router);
+
+/* =========================
+   LOAD ROUTES
+========================= */
+
+await import('@modules/IAM');
 
 /* =========================
    MIDDLEWARE
 ========================= */
 
 app.use(express.json());
-
 app.use(cookieParser());
 
 app.use(
@@ -30,7 +44,6 @@ app.use(
 );
 
 app.use(helmet());
-
 app.use(morgan('dev'));
 
 /* =========================
@@ -41,13 +54,11 @@ app.get('/', (_req: Request, res: Response) => {
   return res.json({ '~': ':D' });
 });
 
-app.use(IAMRoutes);
-
 /* =========================
-   TRPC ROUTER
+   MOUNT ROUTER
 ========================= */
 
-app.use(authMiddleware);
+app.use(router);
 
 /* =========================
    SERVER START
@@ -58,7 +69,6 @@ export const start = () => {
     if (err) throw err;
 
     console.log(`[EXPRESS] '${BACKEND_URL}'`);
-    console.log(`[TRPC] '${BACKEND_URL}/trpc'`);
   });
 };
 

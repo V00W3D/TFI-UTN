@@ -1,8 +1,9 @@
-import type { RegisterInput } from '@shared/contracts/RegisterSchema';
+import { z } from 'zod';
+import type { RegisterContract } from '@shared/contracts/RegisterContract';
 import { prisma } from '@tools/db';
 import argon2 from 'argon2';
 
-export const registerService = async (input: RegisterInput) => {
+export const registerService = async (input: z.infer<typeof RegisterContract.I>) => {
   const { name, sname, lname, sex, username, email, phone } = input;
 
   const password = await argon2.hash(input.password, {

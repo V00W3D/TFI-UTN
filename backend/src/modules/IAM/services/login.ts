@@ -1,9 +1,10 @@
+import { z } from 'zod';
 import { prisma } from '@tools/db';
-import type { LoginInput } from '@shared/contracts/LoginSchema';
+import type { LoginContract } from '@shared/contracts/LoginContract';
 import { ERR } from '@tools/ErrorTools';
 import argon2 from 'argon2';
 
-export const loginService = async (input: LoginInput) => {
+export const loginService = async (input: z.infer<typeof LoginContract.I>) => {
   const { identity, password } = input;
 
   const user = await prisma.user.findFirst({

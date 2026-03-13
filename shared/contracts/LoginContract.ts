@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { CORE } from '../CoreSchema';
-import { createContract } from '../../backend/src/tools/ContractFactory';
+import { ContractFactory } from '../ContractFactory';
 
 /* ============================================================
-   INPUT SCHEMA
+INPUT SCHEMA
 ============================================================ */
 
 export const LoginInputSchema = z.object({
@@ -12,7 +12,7 @@ export const LoginInputSchema = z.object({
 });
 
 /* ============================================================
-   SUCCESS SCHEMA
+SUCCESS SCHEMA
 ============================================================ */
 
 export const LoginSuccessSchema = z.object({
@@ -24,15 +24,17 @@ export const LoginSuccessSchema = z.object({
 });
 
 /* ============================================================
-   CONTRACT
+CONTRACT
 ============================================================ */
 
-export const LoginSchema = createContract(
-  LoginInputSchema,
-  LoginSuccessSchema,
-); /* ============================================================
-   TYPES
-============================================================ */
-
-export type LoginInput = z.infer<typeof LoginInputSchema>;
-export type LoginOutput = z.infer<typeof LoginSchema.O>;
+export const LoginContract = ContractFactory({
+  method: 'POST',
+  path: '/iam/login',
+  access: 'public',
+  summary: 'Authenticate user',
+  description: 'Validates user credentials and returns session data',
+  tags: ['IAM', 'Auth'],
+  cache: 'no-store',
+  input: LoginInputSchema,
+  success: LoginSuccessSchema,
+});

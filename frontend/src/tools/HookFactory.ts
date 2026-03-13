@@ -1,107 +1,97 @@
 import { useState, useCallback } from 'react';
-import axios, { type Method, type AxiosError } from 'axios';
-import type { Contract } from '@shared/ContractFactory';
+import axios from 'axios';
 import { z } from 'zod';
+import type { Contract } from '@shared/CoreSchema';
 import { BACKEND_URL } from '@env';
 
-/* ============================================================
-   AXIOS INSTANCE
-============================================================ */
+/* ================= AXIOS ================= */
 
 export const api = axios.create({
   baseURL: BACKEND_URL,
   withCredentials: true,
 });
-/* ============================================================
-   HOOK FACTORY
-============================================================ */
 
-export function createHook<TInput extends z.ZodTypeAny, TOutput extends z.ZodTypeAny>(
-  endpoint: string,
-  method: Method,
-  contract: Contract<TInput, TOutput>,
+/* ================= TYPE HELPERS ================= */
+
+type OutputOf<T extends z.ZodTypeAny> = z.infer<T>;
+
+type SuccessOf<T extends z.ZodTypeAny> =
+  Extract<OutputOf<T>, { ok: true }> extends { data: infer D } ? D : never;
+
+type ErrorOf<T extends z.ZodTypeAny> = Extract<OutputOf<T>, { ok: false }>;
+
+/* ================= FACTORY ================= */
+
+export function createHook<TInput extends z.ZodTypeAny, TSuccess extends z.ZodTypeAny>(
+  contract: Contract<TInput, TSuccess>,
 ) {
   type Input = z.infer<TInput>;
-  type Output = z.infer<Contract<TInput, TOutput>['O']>;
-  type ErrorType = z.infer<Contract<TInput, TOutput>['E']>;
+  type Output = z.infer<typeof contract.O>;
+  type Success = SuccessOf<typeof contract.O>;
+  type ErrorType = ErrorOf<typeof contract.O>;
 
   return function useApiHook() {
-    const [response, setResponse] = useState<Output | null>(null);
+    const [data, setData] = useState<Success | null>(null);
     const [error, setError] = useState<ErrorType | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [isError, setIsError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const execute = useCallback(
-      async (options?: {
-        body?: Input;
-        params?: Record<string, any>;
-        headers?: Record<string, string>;
-      }) => {
-        setIsLoading(true);
-        setIsSuccess(false);
-        setIsError(false);
+      async (opts?: { body?: Input; params?: any; headers?: Record<string, string> }) => {
+        setLoading(true);
         setError(null);
 
         try {
-          const axiosResponse = await api.request({
-            url: endpoint,
-            method,
-            data: options?.body,
-            params: options?.params,
-            headers: options?.headers,
+          const body = opts?.body ? contract.I.parse(opts.body) : undefined;
+
+          const res = await api.request({
+            url: contract.path,
+            method: contract.method,
+            data: body,
+            params: opts?.params,
+            headers: opts?.headers,
           });
 
-          const parsed = contract.O.safeParse(axiosResponse.data);
+          const parsed = contract.O.parse(res.data) as Output;
 
-          if (!parsed.success) {
-            throw new Error('Invalid server response shape');
+          if (parsed.ok) {
+            setData(parsed.data);
+            return parsed.data;
           }
 
-          setResponse(parsed.data);
-          setIsSuccess(true);
-
-          return parsed.data;
+          setError(parsed);
+          throw parsed;
         } catch (err) {
-          let formattedError: ErrorType | null = null;
-
-          if (axios.isAxiosError(err)) {
-            const axiosError = err as AxiosError;
-
-            if (axiosError.response?.data) {
-              const parsedError = contract.E.safeParse(axiosError.response.data);
-
-              if (parsedError.success) {
-                formattedError = parsedError.data;
-              }
-            }
+          if (err && typeof err === 'object' && 'ok' in err) {
+            const typed = err as ErrorType;
+            setError(typed);
+            throw typed;
           }
 
-          if (!formattedError) {
-            formattedError = {
-              ok: false,
-              message: 'Unexpected error',
-            } as ErrorType;
-          }
+          const fallback = {
+            ok: false,
+            error: { code: 'INTERNAL_ERROR' },
+          } as unknown as ErrorType;
 
-          setError(formattedError);
-          setIsError(true);
-
-          throw formattedError;
+          setError(fallback);
+          throw fallback;
         } finally {
-          setIsLoading(false);
+          setLoading(false);
         }
       },
-      [endpoint, method, contract],
+
+      [contract],
     );
 
-    return {
-      execute,
-      response,
-      error,
-      isLoading,
-      isSuccess,
-      isError,
+    const hook = execute as typeof execute & {
+      data: Success | null;
+      error: ErrorType | null;
+      loading: boolean;
     };
+
+    hook.data = data;
+    hook.error = error;
+    hook.loading = loading;
+
+    return hook;
   };
 }
