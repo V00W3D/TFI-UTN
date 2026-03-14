@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { CORE } from '../CoreSchema';
-import { ContractFactory } from '../ContractFactory';
+import { Contract } from '../ContractFactory';
 
 /* ============================================================
 INPUT SCHEMA
@@ -41,14 +41,7 @@ export const RegisterSuccessSchema = z.void();
 CONTRACT
 ============================================================ */
 
-export const RegisterContract = ContractFactory({
-  method: 'POST',
-  path: '/iam/register',
-  access: 'public',
-  summary: 'Register new user',
-  description: 'Creates a new user account in the system',
-  tags: ['IAM', 'Auth'],
-  cache: 'no-store',
-  input: RegisterInputSchema,
-  success: RegisterSuccessSchema,
-});
+export const RegisterContract = Contract.follow('public', 'POST', 'IAM', 'register')
+  .IO(RegisterInputSchema, RegisterSuccessSchema)
+  .doc('Register new user', 'Creates a new user account in the system')
+  .build();

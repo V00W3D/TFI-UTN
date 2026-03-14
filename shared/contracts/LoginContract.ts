@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { CORE } from '../CoreSchema';
-import { ContractFactory } from '../ContractFactory';
+import { Contract } from '../ContractFactory';
 
 /* ============================================================
 INPUT SCHEMA
@@ -27,14 +27,7 @@ export const LoginSuccessSchema = z.object({
 CONTRACT
 ============================================================ */
 
-export const LoginContract = ContractFactory({
-  method: 'POST',
-  path: '/iam/login',
-  access: 'public',
-  summary: 'Authenticate user',
-  description: 'Validates user credentials and returns session data',
-  tags: ['IAM', 'Auth'],
-  cache: 'no-store',
-  input: LoginInputSchema,
-  success: LoginSuccessSchema,
-});
+export const LoginContract = Contract.follow('public', 'POST', 'IAM', 'login')
+  .IO(LoginInputSchema, LoginSuccessSchema)
+  .doc('Session initializer', 'Lets an existing user have access to the app')
+  .build();

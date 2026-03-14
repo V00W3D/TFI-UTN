@@ -9,7 +9,7 @@ const LoginPage = () => {
   const form = useLoginStore();
   const login = LoginHook();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isValid = await form.validate();

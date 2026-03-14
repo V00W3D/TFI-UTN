@@ -4,94 +4,109 @@ import { z } from 'zod';
 import type { Contract } from '@shared/CoreSchema';
 import { BACKEND_URL } from '@env';
 
-/* ================= AXIOS ================= */
+/* ============================================================
+AXIOS
+============================================================ */
 
 export const api = axios.create({
   baseURL: BACKEND_URL,
   withCredentials: true,
 });
 
-/* ================= TYPE HELPERS ================= */
+/* ============================================================
+TYPE HELPERS
+============================================================ */
 
-type OutputOf<T extends z.ZodTypeAny> = z.infer<T>;
+type SuccessOf<T> = Extract<T, { ok: true }> extends { data: infer D } ? D : never;
 
-type SuccessOf<T extends z.ZodTypeAny> =
-  Extract<OutputOf<T>, { ok: true }> extends { data: infer D } ? D : never;
+type ErrorOf<T> = Extract<T, { ok: false }>;
 
-type ErrorOf<T extends z.ZodTypeAny> = Extract<OutputOf<T>, { ok: false }>;
+type RequestOptions<I> = {
+  body?: I;
+  params?: Record<string, string | number | boolean>;
+  headers?: Record<string, string>;
+};
 
-/* ================= FACTORY ================= */
+/* ============================================================
+HOOK FACTORY
+============================================================ */
 
-export function createHook<TInput extends z.ZodTypeAny, TSuccess extends z.ZodTypeAny>(
-  contract: Contract<TInput, TSuccess>,
+export function createHook<TContract extends Contract<z.ZodTypeAny, z.ZodTypeAny>>(
+  contract: TContract,
 ) {
-  type Input = z.infer<TInput>;
-  type Output = z.infer<typeof contract.O>;
-  type Success = SuccessOf<typeof contract.O>;
-  type ErrorType = ErrorOf<typeof contract.O>;
+  type Input = z.input<TContract['I']>;
+
+  type Output = z.output<TContract['O']>;
+
+  type Success = SuccessOf<Output>;
+
+  type ErrorType = ErrorOf<Output>;
 
   return function useApiHook() {
     const [data, setData] = useState<Success | null>(null);
+
     const [error, setError] = useState<ErrorType | null>(null);
-    const [loading, setLoading] = useState(false);
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     const execute = useCallback(
-      async (opts?: { body?: Input; params?: any; headers?: Record<string, string> }) => {
+      async (opts?: RequestOptions<Input>): Promise<Success> => {
         setLoading(true);
         setError(null);
 
         try {
-          const body = opts?.body ? contract.I.parse(opts.body) : undefined;
+          const body = opts?.body !== undefined ? contract.I.parse(opts.body) : undefined;
 
           const res = await api.request({
-            url: contract.path,
             method: contract.method,
+            url: contract.path,
             data: body,
             params: opts?.params,
             headers: opts?.headers,
+            timeout: contract.timeout,
           });
 
-          const parsed = contract.O.parse(res.data) as Output;
+          const parsed = contract.O.parse(res.data);
 
           if (parsed.ok) {
             setData(parsed.data);
+
             return parsed.data;
           }
 
           setError(parsed);
+
           throw parsed;
-        } catch (err) {
-          if (err && typeof err === 'object' && 'ok' in err) {
-            const typed = err as ErrorType;
+        } catch (error) {
+          if (typeof error === 'object' && error !== null && 'ok' in error) {
+            const typed = error as ErrorType;
+
             setError(typed);
+
             throw typed;
           }
 
-          const fallback = {
+          const fallback: ErrorType = {
             ok: false,
-            error: { code: 'INTERNAL_ERROR' },
-          } as unknown as ErrorType;
+            error: {
+              code: 'INTERNAL_ERROR',
+            },
+          };
 
           setError(fallback);
+
           throw fallback;
         } finally {
           setLoading(false);
         }
       },
-
       [contract],
     );
 
-    const hook = execute as typeof execute & {
-      data: Success | null;
-      error: ErrorType | null;
-      loading: boolean;
-    };
-
-    hook.data = data;
-    hook.error = error;
-    hook.loading = loading;
-
-    return hook;
+    return Object.assign(execute, {
+      data,
+      error,
+      loading,
+    });
   };
 }
