@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { readonly, z } from 'zod';
 import { CORE } from '../CoreSchema';
-import { Contract } from '../ContractFactory';
+import { createContract } from '../ContractFactory';
 
 /* ============================================================
 INPUT SCHEMA
@@ -27,7 +27,7 @@ export const LoginSuccessSchema = z.object({
 CONTRACT
 ============================================================ */
 
-export const LoginContract = Contract.follow('public', 'POST', '/iam/login')
+export const LoginContract = createContract('public', 'POST', '/iam/login')
   .IO(LoginInputSchema, LoginSuccessSchema)
   .doc('Session initializer', 'Lets an existing user have access to the app')
   .build();

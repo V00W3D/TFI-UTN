@@ -13,17 +13,33 @@ type FieldConfig<T = any> = {
   dependsOn?: string[];
 };
 
-type ExtractShape<T> = T extends { I: infer I }
-  ? I extends z.ZodReadonly<z.ZodObject<infer Shape>>
+/* ============================================================
+   CONTRACT SUPPORT
+============================================================ */
+
+type ContractLike = {
+  __requestSchema: z.ZodObject<any>;
+};
+
+/* ============================================================
+   TYPE EXTRACTION
+============================================================ */
+
+type ExtractShape<T> = T extends ContractLike
+  ? T['__requestSchema'] extends z.ZodObject<infer Shape>
     ? Shape
-    : I extends z.ZodObject<infer Shape>
+    : never
+  : T extends { I: infer I }
+    ? I extends z.ZodReadonly<z.ZodObject<infer Shape>>
       ? Shape
-      : never
-  : T extends z.ZodObject<infer Shape>
-    ? Shape
-    : T extends Record<string, FieldConfig<any>>
-      ? { [K in keyof T]: T[K]['schema'] }
-      : never;
+      : I extends z.ZodObject<infer Shape>
+        ? Shape
+        : never
+    : T extends z.ZodObject<infer Shape>
+      ? Shape
+      : T extends Record<string, FieldConfig<any>>
+        ? { [K in keyof T]: T[K]['schema'] }
+        : never;
 
 type Values<T> = { [K in keyof T]: z.infer<T[K]> };
 
@@ -46,7 +62,9 @@ type Store<T> = {
   setValues: (v: Partial<Values<T>>) => void;
 };
 
-/* ========================================================= */
+/* ============================================================
+   NORMALIZER
+============================================================ */
 
 function normalize(input: any): {
   shape: Record<string, FieldConfig>;
@@ -54,7 +72,15 @@ function normalize(input: any): {
 } {
   let schema: z.ZodObject<any> | null = null;
 
-  if (input?.I) input = input.I;
+  /* contract support */
+
+  if (input?.__requestSchema) {
+    input = input.__requestSchema;
+  }
+
+  if (input?.I) {
+    input = input.I;
+  }
 
   if (input instanceof z.ZodReadonly) {
     input = input.unwrap();
@@ -66,7 +92,9 @@ function normalize(input: any): {
     const shape: Record<string, FieldConfig> = {};
 
     for (const key in input.shape) {
-      shape[key] = { schema: input.shape[key] };
+      shape[key] = {
+        schema: input.shape[key],
+      };
     }
 
     return { shape, schema };
@@ -75,13 +103,16 @@ function normalize(input: any): {
   return { shape: input, schema };
 }
 
-/* ========================================================= */
+/* ============================================================
+   FACTORY
+============================================================ */
 
 export function ZustandFactory<
   TInput extends
     | Record<string, FieldConfig>
     | z.ZodObject<any>
-    | { I: z.ZodObject<any> | z.ZodReadonly<z.ZodObject<any>> },
+    | { I: z.ZodObject<any> | z.ZodReadonly<z.ZodObject<any>> }
+    | ContractLike,
 >(input: TInput, opts?: { persist?: boolean; mode?: ValidationMode }) {
   type Shape = ExtractShape<TInput>;
 
@@ -114,7 +145,7 @@ export function ZustandFactory<
         const r = cfg.schema.safeParse(value);
 
         if (!r.success) {
-          errors.push(...r.error.issues.map((i: z.ZodIssue) => i.message));
+          errors.push(...r.error.issues.map((i) => i.message));
         }
       }
 
@@ -240,6 +271,10 @@ export function ZustandFactory<
   };
 
   return opts?.persist
-    ? create<Store<Shape>>()(persist(initializer, { name: 'zustand-form' }))
+    ? create<Store<Shape>>()(
+        persist(initializer, {
+          name: 'zustand-form',
+        }),
+      )
     : create<Store<Shape>>()(initializer);
 }

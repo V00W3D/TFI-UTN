@@ -1,109 +1,223 @@
 import { z } from 'zod';
 import { createPublicErrorSchema } from '@tools/ErrorTools';
 
+/* ============================================================
+BASE TYPES
+============================================================ */
+
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
 type AccessLevel = 'public' | 'auth' | 'role' | 'internal';
-type Endpoint = `/${string}/${string}`;
 
-type HttpStatus = 200 | 201 | 204 | 400 | 401 | 403 | 404 | 409 | 422 | 500;
+type Segment = `${Lowercase<string>}`;
 
-const success = <T extends z.ZodType>(data: T) => z.object({ data });
+export type EndpointPattern = `/${Segment}/${Segment}`;
 
-const error = <T extends z.ZodType>() => {
-  const E = createPublicErrorSchema<T>();
-  return z.object({ error: E });
+type ExtractModule<E extends EndpointPattern> = E extends `/${infer M}/${string}` ? M : never;
+
+type ExtractAction<E extends EndpointPattern> = E extends `/${string}/${infer A}` ? A : never;
+
+/* ============================================================
+REQUEST / RESPONSE INFERENCE
+============================================================ */
+
+type InferInput<T extends z.ZodTypeAny> = z.input<T>;
+type InferOutput<T extends z.ZodTypeAny> = z.output<T>;
+
+/* ============================================================
+STANDARD API RESPONSE (NEW)
+============================================================ */
+
+type ApiSuccess<T> = {
+  ok: true;
+  data: T;
 };
 
-declare global {
-  var __contract_endpoint_registry__: Set<string> | undefined;
-}
+type ApiError<E> = {
+  ok: false;
+  error: E;
+};
 
-const endpointRegistry =
-  globalThis.__contract_endpoint_registry__ ??
-  (globalThis.__contract_endpoint_registry__ = new Set<string>());
+export type ApiResponse<S, E> = ApiSuccess<S> | ApiError<E>;
 
-export type Contract<I extends z.ZodType, O extends z.ZodType> = Readonly<{
-  access: AccessLevel;
-  method: HttpMethod;
-  endpoint: Endpoint;
-  module: string;
-  action: string;
-  summary: string;
-  description: string;
-  deprecated: boolean;
-  __request: z.input<I>;
-  __response: z.output<O>;
+/* ============================================================
+CONTRACT TYPE HELPER
+============================================================ */
+
+type ContractTypeHelper<I extends z.ZodTypeAny, O extends z.ZodTypeAny> = Readonly<{
+  request: InferInput<I>;
+  response: ApiResponse<InferOutput<O>, z.infer<ReturnType<typeof createPublicErrorSchema>>>;
+
+  success: InferOutput<O>;
+  error: z.infer<ReturnType<typeof createPublicErrorSchema>>;
+
+  requestSchema: I;
+  responseSchema: O;
 }>;
 
-const createBuilder = (access: AccessLevel, method: HttpMethod, endpoint: Endpoint) => {
-  if (endpointRegistry.has(endpoint)) {
-    throw new Error(`Duplicate endpoint detected: ${endpoint}`);
-  }
+/* ============================================================
+CONTRACT TYPE
+============================================================ */
 
-  endpointRegistry.add(endpoint);
+export type Contract<
+  A extends AccessLevel,
+  M extends HttpMethod,
+  E extends EndpointPattern,
+  S extends string,
+  D extends string,
+  I extends z.ZodTypeAny,
+  O extends z.ZodTypeAny,
+> = Readonly<{
+  __id: `${M} ${E}`;
 
-  const [, module, action] = endpoint.split('/');
+  __access: A;
+  __method: M;
+  __endpoint: E;
+
+  __module: ExtractModule<E>;
+  __action: ExtractAction<E>;
+
+  __summary: S;
+  __description: D;
+
+  __deprecated: boolean;
+
+  __requestSchema: I;
+  __responseSchema: O;
+
+  /* phantom types */
+
+  __request: InferInput<I>;
+
+  __response: ApiResponse<InferOutput<O>, z.infer<ReturnType<typeof createPublicErrorSchema>>>;
+
+  $type: ContractTypeHelper<I, O>;
+}>;
+
+/* ============================================================
+GENERIC CONTRACT TYPE
+============================================================ */
+
+export type ContractAny = Contract<
+  AccessLevel,
+  HttpMethod,
+  EndpointPattern,
+  string,
+  string,
+  z.ZodTypeAny,
+  z.ZodTypeAny
+>;
+
+/* ============================================================
+CONTRACT BUILDER
+============================================================ */
+
+const errorSchema = createPublicErrorSchema();
+
+const success = <T extends z.ZodTypeAny>(data: T) => z.object({ data }).strict();
+
+export function createContract<
+  A extends AccessLevel,
+  M extends HttpMethod,
+  E extends EndpointPattern,
+>(access: A, method: M, endpoint: E) {
+  type Module = ExtractModule<E>;
+  type Action = ExtractAction<E>;
 
   return {
-    IO: <I extends z.ZodType, O extends z.ZodType>(input: I, output: O) => {
-      const responseSchema = z.union([success(output), error<I>()]);
+    IO<I extends z.ZodTypeAny, O extends z.ZodTypeAny>(input: I, output: O) {
+      const responseSchema = z.union([success(output), z.object({ error: errorSchema }).strict()]);
 
-      const contract = {
-        access,
-        method,
-        endpoint,
-        module,
-        action,
-        summary: '',
-        description: '',
-        deprecated: false,
-        __request: undefined!,
-        __response: undefined!,
-      };
+      let deprecated = false;
 
-      const api = {
-        doc: (title: string, description: string = '') => {
-          contract.summary = title;
-          contract.description = description;
-          return api;
+      return {
+        doc<S extends string, D extends string>(summary: S, description: D) {
+          const builder = {
+            deprecated() {
+              deprecated = true;
+              return builder;
+            },
+
+            build(): Contract<A, M, E, S, D, I, typeof output> {
+              const contract = {
+                __id: `${method} ${endpoint}`,
+
+                __access: access,
+                __method: method,
+                __endpoint: endpoint,
+
+                __module: endpoint.slice(1, endpoint.indexOf('/', 1)) as Module,
+
+                __action: endpoint.slice(endpoint.indexOf('/', 1) + 1) as Action,
+
+                __summary: summary,
+                __description: description,
+                __deprecated: deprecated,
+
+                __requestSchema: input,
+                __responseSchema: output,
+
+                /* phantom */
+
+                __request: undefined as unknown as InferInput<I>,
+
+                __response: undefined as unknown as ApiResponse<
+                  InferOutput<O>,
+                  z.infer<ReturnType<typeof createPublicErrorSchema>>
+                >,
+
+                $type: undefined as unknown as ContractTypeHelper<I, typeof output>,
+              } satisfies Contract<A, M, E, S, D, I, typeof output>;
+
+              return Object.freeze(contract);
+            },
+          };
+
+          return builder;
         },
-
-        deprecated: () => {
-          contract.deprecated = true;
-          return api;
-        },
-
-        build: (): Contract<I, typeof responseSchema> => Object.freeze(contract),
       };
-
-      return api;
     },
   };
-};
+}
 
-export const Contract = {
-  follow: (access: AccessLevel, method: HttpMethod, endpoint: Endpoint) =>
-    createBuilder(access, method, endpoint),
-};
+/* ============================================================
+CONTRACT COLLECTION
+============================================================ */
 
-export type InferRequest<T extends Contract<z.ZodType, z.ZodType>> = T['__request'];
+export function defineContracts<
+  const T extends readonly Contract<
+    AccessLevel,
+    HttpMethod,
+    EndpointPattern,
+    string,
+    string,
+    z.ZodTypeAny,
+    z.ZodTypeAny
+  >[],
+>(...contracts: T): T {
+  return Object.freeze(contracts) as T;
+}
 
-export type InferResponse<T extends Contract<z.ZodType, z.ZodType>> = T['__response'];
+/* ============================================================
+TYPE HELPERS
+============================================================ */
 
-type HandlerResult<R> = {
-  status: HttpStatus;
-  body: R;
-};
+export type InferRequest<T extends ContractAny> = T['__request'];
 
-export const createHandler = <C extends Contract<z.ZodType, z.ZodType>>(
-  contract: C,
-  handler: (input: InferRequest<C>) => Promise<HandlerResult<InferResponse<C>>>,
-) => {
-  return async (
-    req: { body: InferRequest<C> },
-    res: { status: (s: number) => { json: (b: InferResponse<C>) => number } },
-  ) => {
-    const result = await handler(req.body);
-    return res.status(result.status).json(result.body);
-  };
-};
+export type InferResponse<T extends ContractAny> = T['__response'];
+
+export type InferSuccess<T extends ContractAny> = T['$type']['success'];
+
+export type InferError<T extends ContractAny> = T['$type']['error'];
+
+/* ============================================================
+TYPE GUARD
+============================================================ */
+
+export function isContract(value: unknown): value is ContractAny {
+  if (typeof value !== 'object' || value === null) return false;
+
+  const v = value as Record<string, unknown>;
+
+  return '__endpoint' in v && '__method' in v;
+}
