@@ -1,29 +1,22 @@
 import './AuthPages.css';
 import { useLoginStore } from '@modules/IAM/IAMStore';
-import { LoginHook } from '@modules/IAM/IAMHooks';
+import { api } from '@tools/api';
 
 import IdentityFieldComponent from '@modules/IAM/components/Login/IdentityField';
 import LPasswordFieldComponent from '@modules/IAM/components/Login/PasswordField';
 
 const LoginPage = () => {
   const form = useLoginStore();
-  const login = LoginHook();
+  const login = api.IAM.login;
 
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit: React.ReactEventHandler = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isValid = await form.validate();
     if (!isValid) return;
 
-    try {
-      const result = await login({
-        body: form.getValues(),
-      });
-
-      console.log(result);
-    } catch {
-      console.log(login.error);
-    }
+    const result = await login.call(form.getValues());
+    console.log(result);
   };
 
   return (
@@ -36,9 +29,9 @@ const LoginPage = () => {
           <button
             type="submit"
             className="auth-button"
-            disabled={!form.isFormValid || login.loading}
+            disabled={!form.isFormValid || login.isLoading}
           >
-            {login.loading ? 'Entrando...' : 'Entrar'}
+            {login.isLoading ? 'Entrando...' : 'Entrar'}
           </button>
 
           {login.error && <p className="auth-error">{login.error.error.code}</p>}

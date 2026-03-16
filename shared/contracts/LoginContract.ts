@@ -27,7 +27,7 @@ export const LoginSuccessSchema = z.object({
 CONTRACT
 ============================================================ */
 
-export const LoginContract = Contract.follow('public', 'POST', 'IAM', 'login')
+export const LoginContract = Contract.follow('public', 'POST', '/iam/login')
   .IO(LoginInputSchema, LoginSuccessSchema)
   .doc('Session initializer', 'Lets an existing user have access to the app')
   .build();
