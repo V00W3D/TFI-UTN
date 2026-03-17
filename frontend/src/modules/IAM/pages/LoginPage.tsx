@@ -1,6 +1,6 @@
 import './AuthPages.css';
 import { useLoginStore } from '@modules/IAM/IAMStore';
-import { api } from '@shared/apiclient';
+import { api } from '@tools/api';
 
 import IdentityFieldComponent from '@modules/IAM/components/Login/IdentityField';
 import LPasswordFieldComponent from '@modules/IAM/components/Login/PasswordField';

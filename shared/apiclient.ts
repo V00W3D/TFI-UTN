@@ -1,57 +1,30 @@
-import { z } from 'zod';
-import { createPublicErrorSchema } from '@tools/ErrorTools';
-import { type ContractAny } from './ContractFactory';
-import { BACKEND_URL } from '../backend/src/env';
-import { contracts } from 'contracts';
+import {
+  type ContractAny,
+  type ApiResponse,
+  type ApiSuccess,
+  type ApiFailure,
+  isApiSuccess,
+  isApiFailure,
+} from './ContractFactory';
 
 /* ============================================================
-BASE TYPES
+   CLIENT OPTIONS
 ============================================================ */
-
-type CredentialsMode = 'include';
 
 export type ClientOptions = Readonly<{
   baseURL: string;
-  credentials?: CredentialsMode;
+  credentials?: 'include' | 'same-origin' | 'omit';
 }>;
 
 /* ============================================================
-UTILS
+   RE-EXPORTS FOR CONSUMERS
 ============================================================ */
 
-function encodeQuery(input: Record<string, unknown>) {
-  const params = new URLSearchParams();
-
-  for (const [k, v] of Object.entries(input)) {
-    if (v === undefined || v === null) continue;
-    params.append(k, String(v));
-  }
-
-  return params.toString();
-}
-
-function isQueryMethod(method: string): method is 'GET' | 'DELETE' {
-  return method === 'GET' || method === 'DELETE';
-}
+export type { ApiResponse, ApiSuccess, ApiFailure };
+export { isApiSuccess, isApiFailure };
 
 /* ============================================================
-API RESPONSE TYPES
-============================================================ */
-
-export type ApiSuccess<T> = {
-  ok: true;
-  data: T;
-};
-
-export type ApiError<E> = {
-  ok: false;
-  error: E;
-};
-
-export type ApiResponse<S, E> = ApiSuccess<S> | ApiError<E>;
-
-/* ============================================================
-CLIENT ENDPOINT TYPE
+   CLIENT ENDPOINT
 ============================================================ */
 
 export type ClientEndpoint<C extends ContractAny> = {
@@ -60,17 +33,36 @@ export type ClientEndpoint<C extends ContractAny> = {
   readonly $contract: C;
   readonly $path: C['__endpoint'];
   readonly $method: C['__method'];
-
   readonly $isFetching: boolean;
   readonly $error: Error | null;
   readonly $data: C['$type']['response'] | null;
 };
 
 /* ============================================================
-ENDPOINT FACTORY
+   UTILS
 ============================================================ */
 
-function createEndpoint<C extends ContractAny>(contract: C, options: ClientOptions) {
+function encodeQuery(input: Record<string, unknown>): string {
+  const params = new URLSearchParams();
+  for (const [k, v] of Object.entries(input)) {
+    if (v === undefined || v === null) continue;
+    params.append(k, String(v));
+  }
+  return params.toString();
+}
+
+function isQueryMethod(method: string): method is 'GET' | 'DELETE' {
+  return method === 'GET' || method === 'DELETE';
+}
+
+/* ============================================================
+   ENDPOINT FACTORY
+============================================================ */
+
+function createEndpoint<C extends ContractAny>(
+  contract: C,
+  options: ClientOptions,
+): ClientEndpoint<C> {
   const state = {
     isFetching: false,
     error: null as Error | null,
@@ -82,21 +74,18 @@ function createEndpoint<C extends ContractAny>(contract: C, options: ClientOptio
     state.error = null;
 
     try {
-      const validatedInput = contract.__requestSchema.parse(input);
+      const validatedInput = contract.__requestSchema.parse(input) as Record<string, unknown>;
 
       let url = options.baseURL + contract.__endpoint;
 
       const init: RequestInit = {
         method: contract.__method,
         credentials: options.credentials ?? 'include',
-        headers: {
-          'content-type': 'application/json',
-        },
+        headers: { 'content-type': 'application/json' },
       };
 
       if (isQueryMethod(contract.__method)) {
-        const query = encodeQuery(validatedInput as Record<string, unknown>);
-
+        const query = encodeQuery(validatedInput);
         if (query) url += `?${query}`;
       } else {
         init.body = JSON.stringify(validatedInput);
@@ -112,14 +101,13 @@ function createEndpoint<C extends ContractAny>(contract: C, options: ClientOptio
 
       const json: unknown = await res.json();
 
-      const validated = contract.__responseSchema.parse(json) as C['$type']['response'];
+      // Use the full union schema (success | error) built inside the contract.
+      const validated = contract.__fullResponseSchema.parse(json) as C['$type']['response'];
 
       state.data = validated;
-
       return validated;
     } catch (err) {
       state.error = err instanceof Error ? err : new Error('Unknown API error');
-
       throw state.error;
     } finally {
       state.isFetching = false;
@@ -130,98 +118,73 @@ function createEndpoint<C extends ContractAny>(contract: C, options: ClientOptio
     $contract: contract,
     $path: contract.__endpoint,
     $method: contract.__method,
-
     get $isFetching() {
       return state.isFetching;
     },
-
     get $error() {
       return state.error;
     },
-
     get $data() {
       return state.data;
     },
-  });
+  }) as unknown as ClientEndpoint<C>;
 }
 
 /* ============================================================
-API INSTANCE
+   DERIVED MAPPED TYPES
 ============================================================ */
 
 type ContractsArray = readonly ContractAny[];
 
-type Modules<T extends ContractsArray> = T[number]['__module'];
+type ModulesOf<T extends ContractsArray> = T[number]['__module'];
 
-type Actions<T extends ContractsArray, M extends Modules<T>> = Extract<
+type ActionsOf<T extends ContractsArray, M extends ModulesOf<T>> = Extract<
   T[number],
   { __module: M }
 >['__action'];
 
-type ContractOf<T extends ContractsArray, M extends Modules<T>, A extends Actions<T, M>> = Extract<
-  T[number],
-  { __module: M; __action: A }
+type ContractOf<
+  T extends ContractsArray,
+  M extends ModulesOf<T>,
+  A extends ActionsOf<T, M>,
+> = Extract<T[number], { __module: M; __action: A }>;
+
+export type ApiClient<T extends ContractsArray> = Readonly<
+  {
+    readonly [M in ModulesOf<T>]: Readonly<{
+      readonly [A in ActionsOf<T, M>]: ClientEndpoint<ContractOf<T, M, A>>;
+    }>;
+  } & {
+    readonly $modules: ReadonlyArray<ModulesOf<T>>;
+    readonly $contracts: T;
+  }
 >;
+
+/* ============================================================
+   INSTANCE FACTORY
+============================================================ */
 
 export function ApiInstance<const T extends readonly ContractAny[]>(
   contracts: T,
   options: ClientOptions,
-) {
-  type Modules = T[number]['__module'];
-
-  type Actions<M extends Modules> = Extract<T[number], { __module: M }>['__action'];
-
-  type ContractOf<M extends Modules, A extends Actions<M>> = Extract<
-    T[number],
-    { __module: M; __action: A }
-  >;
-
-  type ApiClient = Readonly<
-    {
-      [M in Modules]: Readonly<{
-        [A in Actions<M>]: ClientEndpoint<ContractOf<M, A>>;
-      }>;
-    } & {
-      $modules: readonly Modules[];
-      $contracts: T;
-    }
-  >;
-
-  // 🔥 CAMBIO CLAVE: usar Partial sin forzar Record genérico
-  const api: Partial<{
-    [M in Modules]: {
-      [A: string]: unknown;
-    };
-  }> = {};
-
-  const modules: Modules[] = [];
+): ApiClient<T> {
+  const api: Record<string, Record<string, unknown>> = {};
+  const modules: Array<ModulesOf<T>> = [];
 
   for (const contract of contracts) {
-    const module = contract.__module as Modules;
+    const mod = contract.__module as ModulesOf<T>;
     const action = contract.__action;
 
-    if (!modules.includes(module)) modules.push(module);
-
-    if (!api[module]) {
-      api[module] = {} as any;
-    }
-
-    (api[module] as any)[action] = createEndpoint(contract, options);
+    if (!modules.includes(mod)) modules.push(mod);
+    if (!api[mod]) api[mod] = {};
+    api[mod]![action] = createEndpoint(contract, options);
   }
 
   const client = {
-    ...(api as object),
-    $modules: Object.freeze(modules),
+    ...api,
+    $modules: Object.freeze(modules) as ReadonlyArray<ModulesOf<T>>,
     $contracts: contracts,
   };
 
-  return Object.freeze(client) as ApiClient;
+  return Object.freeze(client) as unknown as ApiClient<T>;
 }
-
-/* ============================================================
-INSTANCE
-============================================================ */
-export const api = ApiInstance(contracts, {
-  baseURL: BACKEND_URL,
-  credentials: 'include',
-});

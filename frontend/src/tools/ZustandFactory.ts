@@ -1,253 +1,214 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { StateCreator } from 'zustand';
 import { z } from 'zod';
 
 type ValidationResult = true | string[];
 type ValidationMode = 'onChange' | 'onBlur' | 'onSubmit';
 
-type FieldConfig<T = any> = {
-  schema?: z.ZodTypeAny;
-  validate?: (value: T, state: any) => ValidationResult;
-  asyncValidate?: (value: T, state: any) => Promise<ValidationResult>;
-  defaultValue?: T;
-  dependsOn?: string[];
+type AnySchema = {
+  safeParse(data: unknown): {
+    success: boolean;
+    data?: unknown;
+    error?: { issues: { message: string; path: (string | number)[] }[] };
+  };
 };
 
-/* ============================================================
-   CONTRACT SUPPORT
-============================================================ */
+type FieldConfig<T = unknown> = {
+  schema?: AnySchema;
+  validate?: (value: T, state: unknown) => ValidationResult;
+  asyncValidate?: (value: T, state: unknown) => Promise<ValidationResult>;
+  defaultValue?: T;
+};
 
 type ContractLike = {
-  __requestSchema: z.ZodObject<any>;
+  __requestSchema: z.ZodObject<z.ZodRawShape>;
 };
-
-/* ============================================================
-   TYPE EXTRACTION
-============================================================ */
 
 type ExtractShape<T> = T extends ContractLike
-  ? T['__requestSchema'] extends z.ZodObject<infer Shape>
-    ? Shape
+  ? T['__requestSchema'] extends z.ZodObject<infer S>
+    ? S
     : never
-  : T extends { I: infer I }
-    ? I extends z.ZodReadonly<z.ZodObject<infer Shape>>
-      ? Shape
-      : I extends z.ZodObject<infer Shape>
-        ? Shape
-        : never
-    : T extends z.ZodObject<infer Shape>
-      ? Shape
-      : T extends Record<string, FieldConfig<any>>
-        ? { [K in keyof T]: T[K]['schema'] }
+  : T extends z.ZodReadonly<z.ZodObject<infer S>>
+    ? S
+    : T extends z.ZodObject<infer S>
+      ? S
+      : T extends Record<string, FieldConfig>
+        ? {
+            [K in keyof T]: NonNullable<T[K]['schema']> extends z.ZodTypeAny
+              ? NonNullable<T[K]['schema']>
+              : z.ZodString;
+          }
         : never;
 
-type Values<T> = { [K in keyof T]: z.infer<T[K]> };
+type Values<S extends z.ZodRawShape> = { [K in keyof S]: z.infer<S[K]> };
 
-type Store<T> = {
-  values: Values<T>;
-  errors: Partial<Record<keyof T, string[]>>;
-  touched: Partial<Record<keyof T, boolean>>;
-  dirty: Partial<Record<keyof T, boolean>>;
-
+type Store<S extends z.ZodRawShape> = {
+  values: Values<S>;
+  errors: Partial<Record<keyof S, string[]>>;
+  touched: Partial<Record<keyof S, boolean>>;
+  dirty: Partial<Record<keyof S, boolean>>;
   isFormValid: boolean;
   isDirty: boolean;
-
-  set: <K extends keyof T>(key: K, value: Values<T>[K]) => Promise<void>;
-  blur: <K extends keyof T>(key: K) => Promise<void>;
-
+  set: <K extends keyof S>(key: K, value: Values<S>[K]) => Promise<void>;
+  blur: <K extends keyof S>(key: K) => Promise<void>;
   validate: () => Promise<boolean>;
   reset: () => void;
-
-  getValues: () => Values<T>;
-  setValues: (v: Partial<Values<T>>) => void;
+  getValues: () => Values<S>;
+  setValues: (v: Partial<Values<S>>) => void;
 };
 
-/* ============================================================
-   NORMALIZER
-============================================================ */
-
-function normalize(input: any): {
-  shape: Record<string, FieldConfig>;
-  schema: z.ZodObject<any> | null;
-} {
-  let schema: z.ZodObject<any> | null = null;
-
-  /* contract support */
-
-  if (input?.__requestSchema) {
-    input = input.__requestSchema;
+function fieldDefault(schema: AnySchema): unknown {
+  const raw = schema as Record<string, unknown>;
+  const def = raw['_def'];
+  if (def !== null && typeof def === 'object') {
+    const fn = (def as Record<string, unknown>)['defaultValue'];
+    if (typeof fn === 'function') return (fn as () => unknown)();
   }
-
-  if (input?.I) {
-    input = input.I;
+  for (const candidate of [undefined, false, 0, '', [], {}]) {
+    const r = schema.safeParse(candidate);
+    if (r.success) return r.data !== undefined ? r.data : candidate;
   }
-
-  if (input instanceof z.ZodReadonly) {
-    input = input.unwrap();
-  }
-
-  if (input instanceof z.ZodObject) {
-    schema = input;
-
-    const shape: Record<string, FieldConfig> = {};
-
-    for (const key in input.shape) {
-      shape[key] = {
-        schema: input.shape[key],
-      };
-    }
-
-    return { shape, schema };
-  }
-
-  return { shape: input, schema };
+  return '';
 }
 
-/* ============================================================
-   FACTORY
-============================================================ */
+function isZodObjectLike(
+  v: unknown,
+): v is { shape: Record<string, AnySchema>; safeParse: AnySchema['safeParse'] } {
+  return (
+    typeof v === 'object' &&
+    v !== null &&
+    'shape' in v &&
+    typeof (v as Record<string, unknown>)['shape'] === 'object' &&
+    (v as Record<string, unknown>)['shape'] !== null
+  );
+}
+
+function isZodReadonlyLike(v: unknown): v is { unwrap(): unknown } {
+  return (
+    typeof v === 'object' &&
+    v !== null &&
+    'unwrap' in v &&
+    typeof (v as Record<string, unknown>)['unwrap'] === 'function'
+  );
+}
+
+function normalize(input: unknown): {
+  shape: Record<string, FieldConfig>;
+  schema: z.ZodObject<z.ZodRawShape> | null;
+} {
+  let v = input;
+
+  if (v !== null && typeof v === 'object' && '__requestSchema' in v)
+    v = (v as ContractLike).__requestSchema;
+
+  if (v !== null && typeof v === 'object' && 'I' in v) v = (v as { I: unknown }).I;
+
+  if (isZodReadonlyLike(v)) v = v.unwrap();
+
+  if (isZodObjectLike(v)) {
+    const shape: Record<string, FieldConfig> = {};
+    for (const key in v.shape) shape[key] = { schema: v.shape[key] };
+    return { shape, schema: v as unknown as z.ZodObject<z.ZodRawShape> };
+  }
+
+  return { shape: v as Record<string, FieldConfig>, schema: null };
+}
 
 export function ZustandFactory<
   TInput extends
     | Record<string, FieldConfig>
-    | z.ZodObject<any>
-    | { I: z.ZodObject<any> | z.ZodReadonly<z.ZodObject<any>> }
+    | z.ZodObject<z.ZodRawShape>
+    | z.ZodReadonly<z.ZodObject<z.ZodRawShape>>
     | ContractLike,
->(input: TInput, opts?: { persist?: boolean; mode?: ValidationMode }) {
+>(input: TInput, opts?: { persist?: boolean; persistKey?: string; mode?: ValidationMode }) {
   type Shape = ExtractShape<TInput>;
 
   const { shape, schema } = normalize(input);
-
   const mode = opts?.mode ?? 'onChange';
 
-  const initializer = (set: any, get: any): Store<Shape> => {
-    const defaults = Object.fromEntries(
-      Object.entries(shape).map(([k, cfg]) => {
-        const field = cfg as FieldConfig;
+  const defaults = Object.fromEntries(
+    Object.entries(shape).map(([k, cfg]) => {
+      const field = cfg as FieldConfig;
+      if (field.defaultValue !== undefined) return [k, field.defaultValue];
+      if (field.schema) return [k, fieldDefault(field.schema)];
+      return [k, ''];
+    }),
+  ) as Values<Shape>;
 
-        if (field.defaultValue !== undefined) return [k, field.defaultValue];
+  const validateField = async (
+    key: string,
+    value: unknown,
+    getState: () => Store<Shape>,
+  ): Promise<string[] | true> => {
+    const cfg = shape[key] as FieldConfig;
+    const errors: string[] = [];
 
-        const t = (field.schema as any)?._def?.typeName;
+    if (cfg.schema) {
+      const r = cfg.schema.safeParse(value);
+      if (!r.success) errors.push(...(r.error?.issues.map((i) => i.message) ?? []));
+    }
 
-        if (t === 'ZodNumber') return [k, 0];
-        if (t === 'ZodBoolean') return [k, false];
+    if (cfg.validate) {
+      const r = cfg.validate(value, getState());
+      if (r !== true) errors.push(...r);
+    }
 
-        return [k, ''];
-      }),
-    );
+    if (cfg.asyncValidate) {
+      const r = await cfg.asyncValidate(value, getState());
+      if (r !== true) errors.push(...r);
+    }
 
-    const validateField = async (key: string, value: any) => {
-      const cfg = shape[key] as FieldConfig;
+    return errors.length ? errors : true;
+  };
 
-      const errors: string[] = [];
-
-      if (cfg.schema) {
-        const r = cfg.schema.safeParse(value);
-
-        if (!r.success) {
-          errors.push(...r.error.issues.map((i) => i.message));
-        }
-      }
-
-      if (cfg.validate) {
-        const r = cfg.validate(value, get());
-
-        if (r !== true) errors.push(...r);
-      }
-
-      if (cfg.asyncValidate) {
-        const r = await cfg.asyncValidate(value, get());
-
-        if (r !== true) errors.push(...r);
-      }
-
-      return errors.length ? errors : true;
-    };
-
-    const validateForm = () => {
+  const initializer: StateCreator<Store<Shape>> = (set, get) => {
+    const checkForm = () => {
       const s = get();
-
-      let valid = true;
-
-      if (schema) {
-        const result = schema.safeParse(s.values);
-
-        valid = result.success;
-      } else {
-        valid = Object.keys(shape).every((k) => !s.errors[k as keyof Shape]?.length);
-      }
-
-      set({
-        isFormValid: valid,
-        isDirty: Object.values(s.dirty).some(Boolean),
-      });
+      const valid = schema
+        ? schema.safeParse(s.values).success
+        : Object.keys(shape).every((k) => !s.errors[k as keyof Shape]?.length);
+      set({ isFormValid: valid, isDirty: Object.values(s.dirty).some(Boolean) });
     };
 
     return {
-      values: defaults as Values<Shape>,
+      values: defaults,
       errors: {},
       touched: {},
       dirty: {},
-
       isFormValid: false,
       isDirty: false,
 
       set: async (key, value) => {
-        set((s: any) => ({
+        set((s) => ({
           values: { ...s.values, [key]: value },
           dirty: { ...s.dirty, [key]: true },
         }));
-
         if (mode === 'onChange') {
-          const r = await validateField(key as string, value);
-
-          set((s: any) => ({
-            errors: {
-              ...s.errors,
-              [key]: r === true ? undefined : r,
-            },
-          }));
-
-          validateForm();
+          const r = await validateField(key as string, value, get);
+          set((s) => ({ errors: { ...s.errors, [key]: r === true ? undefined : r } }));
+          checkForm();
         }
       },
 
       blur: async (key) => {
-        set((s: any) => ({
-          touched: { ...s.touched, [key]: true },
-        }));
-
+        set((s) => ({ touched: { ...s.touched, [key]: true } }));
         if (mode === 'onBlur') {
-          const v = get().values[key];
-
-          const r = await validateField(key as string, v);
-
-          set((s: any) => ({
-            errors: {
-              ...s.errors,
-              [key]: r === true ? undefined : r,
-            },
-          }));
-
-          validateForm();
+          const r = await validateField(key as string, get().values[key], get);
+          set((s) => ({ errors: { ...s.errors, [key]: r === true ? undefined : r } }));
+          checkForm();
         }
       },
 
       validate: async () => {
         const vals = get().values;
-
-        const errors: Record<string, string[]> = {};
-
+        const errors: Partial<Record<keyof Shape, string[]>> = {};
         for (const k in shape) {
-          const r = await validateField(k, vals[k]);
-
-          if (r !== true) errors[k] = r;
+          const r = await validateField(k, vals[k as keyof Shape], get);
+          if (r !== true) errors[k as keyof Shape] = r;
         }
-
         set({ errors });
-
-        validateForm();
-
+        checkForm();
         return get().isFormValid;
       },
 
@@ -263,18 +224,11 @@ export function ZustandFactory<
 
       getValues: () => get().values,
 
-      setValues: (v) =>
-        set((s: any) => ({
-          values: { ...s.values, ...v },
-        })),
+      setValues: (v) => set((s) => ({ values: { ...s.values, ...v } })),
     };
   };
 
   return opts?.persist
-    ? create<Store<Shape>>()(
-        persist(initializer, {
-          name: 'zustand-form',
-        }),
-      )
+    ? create<Store<Shape>>()(persist(initializer, { name: opts.persistKey ?? 'zustand-form' }))
     : create<Store<Shape>>()(initializer);
 }
