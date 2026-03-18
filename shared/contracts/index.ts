@@ -1,5 +1,7 @@
 import { LoginContract } from './LoginContract';
 import { RegisterContract } from './RegisterContract';
-import { defineContracts } from '../ContractFactory';
+import { collectContracts } from 'SDKFactory/Contracts';
 
-export const contracts = defineContracts(LoginContract, RegisterContract);
+const IAMContracts = [LoginContract, RegisterContract] as const;
+
+export const contracts = collectContracts(IAMContracts);

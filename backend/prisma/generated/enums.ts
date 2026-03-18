@@ -9,13 +9,44 @@
 * 🟢 You can import this file directly.
 */
 
-export const Role = {
-  CUSTOMER: 'CUSTOMER',
-  CASHIER: 'CASHIER',
-  ADMIN: 'ADMIN'
+export const CustomerTier = {
+  REGULAR: 'REGULAR',
+  VIP: 'VIP',
+  PREMIUM: 'PREMIUM'
 } as const
 
-export type Role = (typeof Role)[keyof typeof Role]
+export type CustomerTier = (typeof CustomerTier)[keyof typeof CustomerTier]
+
+
+export const StaffPost = {
+  COOK: 'COOK',
+  CASHIER: 'CASHIER',
+  WAITER: 'WAITER',
+  BARISTA: 'BARISTA',
+  CLEANER: 'CLEANER',
+  DELIVERY: 'DELIVERY'
+} as const
+
+export type StaffPost = (typeof StaffPost)[keyof typeof StaffPost]
+
+
+export const AuthorityRank = {
+  SUPERVISOR: 'SUPERVISOR',
+  MANAGER: 'MANAGER',
+  DIRECTOR: 'DIRECTOR',
+  OWNER: 'OWNER'
+} as const
+
+export type AuthorityRank = (typeof AuthorityRank)[keyof typeof AuthorityRank]
+
+
+export const UserRole = {
+  CUSTOMER: 'CUSTOMER',
+  STAFF: 'STAFF',
+  AUTHORITY: 'AUTHORITY'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
 export const Sex = {

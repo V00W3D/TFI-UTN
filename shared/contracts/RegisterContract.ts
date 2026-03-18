@@ -1,6 +1,16 @@
 import { z } from 'zod';
-import { CORE } from '../CoreSchema';
-import { createContract } from '../ContractFactory';
+import { defineEndpoint } from 'SDKFactory/Contracts';
+import {
+  cpasswordField,
+  emailField,
+  lnameField,
+  nameField,
+  passwordField,
+  phoneField,
+  sexField,
+  snameField,
+  usernameField,
+} from 'SDKFactory';
 
 /* ============================================================
 INPUT SCHEMA
@@ -8,18 +18,15 @@ INPUT SCHEMA
 
 export const RegisterInputSchema = z
   .object({
-    name: CORE.name,
-    sname: CORE.name.nullable(),
-    lname: CORE.name,
-    sex: CORE.sex,
-
-    username: CORE.username,
-
-    password: CORE.password,
-    cpassword: CORE.cpassword,
-
-    email: CORE.email,
-    phone: CORE.phone,
+    name: nameField.schema,
+    sname: snameField.schema,
+    lname: lnameField.schema,
+    sex: sexField.schema,
+    username: usernameField.schema,
+    password: passwordField.schema,
+    cpassword: cpasswordField.schema,
+    email: emailField.schema,
+    phone: phoneField.schema,
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.cpassword) {
@@ -41,7 +48,7 @@ export const RegisterSuccessSchema = z.void();
 CONTRACT
 ============================================================ */
 
-export const RegisterContract = createContract('public', 'POST', '/iam/register')
+export const RegisterContract = defineEndpoint('public', 'POST', '/iam/register')
   .IO(RegisterInputSchema, RegisterSuccessSchema)
   .doc('Register new user', 'Creates a new user account in the system')
   .build();

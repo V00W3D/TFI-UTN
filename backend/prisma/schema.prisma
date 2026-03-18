@@ -7,6 +7,10 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─────────────────────────────────────────────
+// USER — identidad base compartida por todos
+// ─────────────────────────────────────────────
+
 model User {
   id String @id @default(uuid())
 
@@ -21,16 +25,81 @@ model User {
   email String  @unique @db.VarChar(128)
   phone String? @unique @db.VarChar(15)
 
-  role Role @default(CUSTOMER)
+  // Discriminador de alto nivel — determina qué perfil tiene este usuario
+  role UserRole @default(CUSTOMER)
+
+  // Solo uno de estos perfiles debería estar poblado según `role`
+  customer  CustomerProfile?
+  staff     StaffProfile?
+  authority AuthorityProfile?
 
   createdat DateTime @default(now())
   updatedat DateTime @updatedAt
 }
 
-enum Role {
-  CUSTOMER
-  CASHIER
-  ADMIN
+// ─────────────────────────────────────────────
+// CUSTOMER — clientes del restaurante
+// Discriminador: `tier` (nivel de fidelidad)
+// ─────────────────────────────────────────────
+
+model CustomerProfile {
+  userId String      @id
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tier   CustomerTier @default(REGULAR)
+}
+
+enum CustomerTier {
+  REGULAR  // cliente común
+  VIP      // cliente frecuente con beneficios
+  PREMIUM  // cliente de membresía especial
+}
+
+// ─────────────────────────────────────────────
+// STAFF — trabajadores de cocina y salón
+// Discriminador: `post` (puesto de trabajo)
+// ─────────────────────────────────────────────
+
+model StaffProfile {
+  userId String    @id
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   StaffPost
+}
+
+enum StaffPost {
+  COOK      // cocinero
+  CASHIER   // cajero
+  WAITER    // mozo / mesero
+  BARISTA   // barista / bartender
+  CLEANER   // personal de limpieza
+  DELIVERY  // repartidor
+}
+
+// ─────────────────────────────────────────────
+// AUTHORITY — personal directivo y de gestión
+// Discriminador: `rank` (jerarquía de autoridad)
+// ─────────────────────────────────────────────
+
+model AuthorityProfile {
+  userId String        @id
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rank   AuthorityRank
+}
+
+enum AuthorityRank {
+  SUPERVISOR  // supervisión de turno / piso
+  MANAGER     // gerente general
+  DIRECTOR    // director de área / operaciones
+  OWNER       // dueño del negocio
+}
+
+// ─────────────────────────────────────────────
+// ENUMS GLOBALES
+// ─────────────────────────────────────────────
+
+enum UserRole {
+  CUSTOMER   // tiene CustomerProfile
+  STAFF      // tiene StaffProfile
+  AUTHORITY  // tiene AuthorityProfile
 }
 
 enum Sex {

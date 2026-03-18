@@ -1,33 +1,53 @@
-import { readonly, z } from 'zod';
-import { CORE } from '../CoreSchema';
-import { createContract } from '../ContractFactory';
+import { z } from 'zod';
+import { defineField } from 'SDKFactory/FieldDef';
+import {
+  identityField,
+  usernameField,
+  emailField,
+  phoneField,
+  userRoleField,
+} from 'SDKFactory/MyFields';
+import { defineEndpoint } from 'SDKFactory/Contracts';
 
 /* ============================================================
-INPUT SCHEMA
+   LOCAL FIELD — login password
+   A relaxed variant: non-empty check only.
+   Strength rules are enforced at registration; here we just
+   verify the field isn't blank before sending to the server.
 ============================================================ */
 
-export const LoginInputSchema = z.object({
-  identity: CORE.identity,
-  password: z.string().trim().min(1, 'La contraseña es obligatoria'),
+const loginPasswordField = defineField({
+  label: 'Contraseña',
+  min: { value: 1 },
+  rules: ['La contraseña es obligatoria.'],
 });
 
 /* ============================================================
-SUCCESS SCHEMA
+   INPUT SCHEMA
+============================================================ */
+
+export const LoginInputSchema = z.object({
+  identity: identityField.schema,
+  password: loginPasswordField.schema,
+});
+
+/* ============================================================
+   SUCCESS SCHEMA
 ============================================================ */
 
 export const LoginSuccessSchema = z.object({
   id: z.uuid(),
-  username: CORE.username,
-  email: CORE.email,
-  phone: CORE.phone,
-  role: z.string(),
+  username: usernameField.schema,
+  email: emailField.schema,
+  phone: phoneField.schema,
+  role: userRoleField.schema,
 });
 
 /* ============================================================
-CONTRACT
+   CONTRACT
 ============================================================ */
 
-export const LoginContract = createContract('public', 'POST', '/iam/login')
+export const LoginContract = defineEndpoint('public', 'POST', '/iam/login')
   .IO(LoginInputSchema, LoginSuccessSchema)
   .doc('Session initializer', 'Lets an existing user have access to the app')
   .build();
