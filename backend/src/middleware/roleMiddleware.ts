@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { ERR } from '@tools/ErrorTools';
+import { ERR } from '@shared/ErrorCodes';
 
 export const roleMiddleware =
   (roles: string[]) => (req: Request, _res: Response, next: NextFunction) => {

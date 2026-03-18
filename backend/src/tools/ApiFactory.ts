@@ -6,7 +6,7 @@ import chalk from 'chalk';
 import { Router as ExpressRouter } from 'express';
 import type { Router, Request, Response, NextFunction } from 'express';
 
-import { PrismaClient } from '@config/db/prisma/generated/client';
+import { PrismaClient } from 'prisma/generated/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 import { BACKEND_URL, BACKEND_HOST, BACKEND_PORT, DATABASE_URL, BUN_MODE } from '@env';

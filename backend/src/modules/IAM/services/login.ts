@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { prisma } from '@tools/ApiFactory';
 import type { LoginContract } from '@shared/contracts/LoginContract';
-import { ERR } from '@tools/ErrorTools';
+import { ERR } from '@shared/ErrorCodes';
 import argon2 from 'argon2';
 
 export const loginService = async (input: z.infer<typeof LoginContract.__requestSchema>) => {

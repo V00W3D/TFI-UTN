@@ -5,7 +5,6 @@ import App from './App';
 import FloatingMenu from '@modules/GENERAL/FloatingMenu';
 import { useAppStore } from './appStore';
 import './index.css';
-import { TRPCProvider } from '@tools/trpcClient';
 
 const Root = () => {
   const { mode } = useAppStore();
@@ -33,8 +32,6 @@ const Root = () => {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <TRPCProvider>
-      <Root />
-    </TRPCProvider>
+    <Root />
   </StrictMode>,
 );

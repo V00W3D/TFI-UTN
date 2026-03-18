@@ -1,6 +1,6 @@
 import type { RouteObject } from 'react-router-dom';
 
-import CoreLayout from './layouts/CoreLayout';
+import CoreLayout from './layouts/CustomerLayout';
 import LandingPage from './pages/LandingPage';
 
 export const CORERoutes: RouteObject = {

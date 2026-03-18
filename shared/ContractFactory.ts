@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { type ErrorCode, createPublicErrorSchema } from '@tools/ErrorTools';
+import { type ErrorCode, createPublicErrorSchema } from './ErrorCodes';
 
 /* ============================================================
    PRIMITIVES

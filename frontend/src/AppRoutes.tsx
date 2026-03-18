@@ -4,7 +4,7 @@ import { useRoutes } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 
 import { IAMRoutes } from '@modules/IAM/IAMRoutes';
-import { CORERoutes } from '@modules/CORE/CORERoutes';
+import { CORERoutes } from '@modules/CUSTOMER/CUSTOMERRoutes';
 
 export default function AppRoutes() {
   const routes: RouteObject[] = [

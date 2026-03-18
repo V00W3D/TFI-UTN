@@ -45,7 +45,6 @@
     "paths": {
       "@env": ["src/env.ts"],
       "@shared/*": ["../shared/*"],
-      "@config/*": ["src/config/*"],
       "@middleware/*": ["src/middleware/*"],
       "@tools/*": ["src/tools/*"],
       "@modules/*": ["src/modules/*"]

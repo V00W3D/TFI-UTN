@@ -1,8 +1,8 @@
-import { useLoginStore, useRegisterStore } from '@modules/IAM/IAMStore';
 import { FieldFactory } from '@tools/FieldFactory';
+import { sdk } from '@tools/sdk';
 
-const RegisterField = FieldFactory(useRegisterStore);
-const LoginField = FieldFactory(useLoginStore);
+const RegisterField = FieldFactory(sdk.iam.register.$form);
+const LoginField = FieldFactory(sdk.iam.login.$form);
 
 export const NameField = RegisterField('name');
 export const SNameField = RegisterField('sname');

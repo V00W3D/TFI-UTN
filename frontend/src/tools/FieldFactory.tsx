@@ -5,7 +5,6 @@ import 'react-phone-number-input/style.css';
 
 import { renderAuthField, type FieldType, type FieldOption } from './IFieldFactory/RenderField';
 
-import type { ZustandFactoryReturn } from './ZustandFactory';
 import { useFieldAddons, type FieldAddon } from './IFieldFactory/addons';
 
 /* =========================================================
@@ -29,12 +28,27 @@ interface FieldProps {
   addons?: FieldAddon[];
 }
 
+type ZustandStore<T extends Record<string, any>> = {
+  values: T;
+  errors: Partial<Record<keyof T, string[]>>;
+  touched: Partial<Record<keyof T, boolean>>;
+  dirty: Partial<Record<keyof T, boolean>>;
+  isFormValid: boolean;
+  isDirty: boolean;
+  set: <K extends keyof T>(key: K, value: T[K]) => Promise<void>;
+  blur: <K extends keyof T>(key: K) => Promise<void>;
+  validate: () => Promise<boolean>;
+  reset: () => void;
+  getValues: () => T;
+  setValues: (v: Partial<T>) => void;
+};
+
 /* =========================================================
    FACTORY
 ========================================================= */
 
 export function FieldFactory<T extends Record<string, any>>(
-  useStore: UseBoundStore<StoreApi<ZustandFactoryReturn<T>>>,
+  useStore: UseBoundStore<StoreApi<ZustandStore<T>>>,
 ) {
   return function bindField<K extends keyof T & string>(name: K) {
     return function Field({
@@ -49,20 +63,19 @@ export function FieldFactory<T extends Record<string, any>>(
 
       /* ===================== STORE ===================== */
 
-      const value = useStore((s) => s[name]);
-      const validation = useStore((s) => s[`v${capitalize(name)}` as keyof typeof s]);
-      const touched = useStore((s) => s[`t${capitalize(name)}` as keyof typeof s]) as boolean;
+      const value = useStore((s) => s.values[name]);
+      const validation = useStore((s) => {
+        const errs = s.errors[name];
+        return errs && errs.length > 0 ? errs : true;
+      });
+      const touched = useStore((s) => s.touched[name] ?? false) as boolean;
 
-      const setValue = useStore((s) => s[`set${capitalize(name)}` as keyof typeof s]) as (
-        value: any,
-      ) => void;
+      const storeSet = useStore((s) => s.set);
+      const storeBlur = useStore((s) => s.blur);
+      const reset = useStore((s) => s.reset);
 
-      const blur = useStore((s) => s[`blur${capitalize(name)}` as keyof typeof s]) as () => void;
-
-      // 👇 NUEVO: reset dinámico para rubber
-      const reset = useStore((s) => s[`reset${capitalize(name)}` as keyof typeof s]) as
-        | (() => void)
-        | undefined;
+      const setValue = (val: any) => storeSet(name, val);
+      const blur = () => storeBlur(name);
 
       /* ===================== CONTROL PARSING ===================== */
 
@@ -87,7 +100,7 @@ export function FieldFactory<T extends Record<string, any>>(
         renderHint,
         renderRules,
         renderError,
-        renderStrength, // 👈 nuevo
+        renderStrength,
       } = useFieldAddons({
         addons,
         context: {
@@ -96,7 +109,7 @@ export function FieldFactory<T extends Record<string, any>>(
           value,
           touched,
           validation,
-          reset, // 👈 PASAMOS RESET
+          reset,
         },
       });
 
@@ -147,7 +160,3 @@ export function FieldFactory<T extends Record<string, any>>(
     };
   };
 }
-
-/* ========================================================= */
-
-const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);

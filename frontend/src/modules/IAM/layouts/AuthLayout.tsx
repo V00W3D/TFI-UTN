@@ -7,6 +7,7 @@ const AuthLayout = () => {
       <nav className="auth-navbar bg">
         <NavLink
           to="/iam/login"
+          replace
           className={({ isActive }) => (isActive ? 'auth-link auth-link-active' : 'auth-link')}
         >
           Iniciar Sesión
@@ -14,9 +15,10 @@ const AuthLayout = () => {
 
         <NavLink
           to="/iam/register"
+          replace
           className={({ isActive }) => (isActive ? 'auth-link auth-link-active' : 'auth-link')}
         >
-          Crear Cuenta
+          Crear cuenta
         </NavLink>
       </nav>
 

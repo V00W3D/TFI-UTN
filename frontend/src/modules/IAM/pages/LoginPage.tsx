@@ -1,22 +1,40 @@
 import './AuthPages.css';
-import { useLoginStore } from '@modules/IAM/IAMStore';
-import { api } from '@tools/api';
+import { sdk } from '@tools/sdk';
 
 import IdentityFieldComponent from '@modules/IAM/components/Login/IdentityField';
 import LPasswordFieldComponent from '@modules/IAM/components/Login/PasswordField';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import type React from 'react';
 
 const LoginPage = () => {
-  const form = useLoginStore();
-  const login = api.iam.login;
+  const form = sdk.iam.login.$form();
+  const { data, error, isFetching } = sdk.iam.login.$use();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    sdk.iam.login.$reset();
+  }, []);
+
+  useEffect(() => {
+    if (data && !error) {
+      navigate('/', { replace: true });
+    }
+  }, [data, error]);
 
   const handleSubmit: React.ReactEventHandler = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (isFetching) return;
+
     const isValid = await form.validate();
     if (!isValid) return;
 
-    const result = await login(form.getValues());
-    console.log(result);
+    try {
+      await sdk.iam.login(form.getValues());
+    } catch {
+      // el error ya queda en el store, el render lo muestra
+    }
   };
 
   return (
@@ -26,17 +44,12 @@ const LoginPage = () => {
           <IdentityFieldComponent />
           <LPasswordFieldComponent />
 
-          <button
-            type="submit"
-            className="auth-button"
-            disabled={!form.isFormValid || login.$isFetching}
-          >
-            {login.$isFetching ? 'Entrando...' : 'Entrar'}
+          <button type="submit" className="auth-button" disabled={!form.isFormValid || isFetching}>
+            {isFetching ? 'Entrando...' : 'Entrar'}
           </button>
 
-          {login.$error && <p className="auth-error">{login.$data?.data}</p>}
-
-          {login.$data && <p className="auth-success">Login exitoso</p>}
+          {error && <p className="auth-error">{error.message}</p>}
+          {data && <p className="auth-success">Login exitoso</p>}
         </form>
       </div>
     </div>
