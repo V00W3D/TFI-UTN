@@ -1,0 +1,32 @@
+{
+  "name": "tfi-utn",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:backend": "bun --cwd apps/backend dev",
+    "dev:frontend": "bun --cwd apps/frontend dev",
+    "build:backend": "bun --cwd apps/backend build",
+    "build:frontend": "bun --cwd apps/frontend build",
+    "typecheck": "tsc --noEmit -p tsconfig.base.json",
+    "typecheck:backend": "tsc --noEmit -p apps/backend/tsconfig.json",
+    "typecheck:frontend": "tsc --noEmit -p apps/frontend/tsconfig.json",
+    "lint": "eslint . --fix",
+    "format": "prettier . --write",
+    "check": "prettier . --check"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "eslint": "^10.0.3",
+    "@eslint/js": "^10.0.1",
+    "typescript-eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  // ─────────────────────────────────────────────────────────────
+  //  FRONTEND — raíz de Project References.
+  //
+  //  Este archivo NO compila nada por sí mismo.
+  //  Es el punto de entrada para "tsc -b" y para el editor.
+  //
+  //  "tsc -b" compila los dos proyectos referenciados:
+  //    1. tsconfig.app.json  → código React de la app
+  //    2. tsconfig.node.json → vite.config.ts (corre en Node)
+  //
+  //  Por qué dos proyectos separados:
+  //    - tsconfig.app.json tiene lib: DOM (browser)
+  //    - tsconfig.node.json NO tiene DOM (es Node puro)
+  //    vite.config.ts necesita tipos de Node, no del browser.
+  //
+  //  Este archivo NO extiende tsconfig.base.json porque no
+  //  tiene compilerOptions propias — nada que extender.
+  // ─────────────────────────────────────────────────────────────
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
+}

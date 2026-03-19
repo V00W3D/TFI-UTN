@@ -1,0 +1,29 @@
+{
+  // ─────────────────────────────────────────────────────────────
+  //  FRONTEND NODE — solo para vite.config.ts
+  //
+  //  vite.config.ts corre en Node, no en el browser.
+  //  Necesita tipos de Node pero NO tipos de DOM.
+  //  Por eso vive en un proyecto separado del código React.
+  //
+  //  CAMBIOS vs el tsconfig anterior:
+  //   - Eliminado: include ../backend/**/* (era un hack para ver shared)
+  //     Ya no es necesario — vite.config.ts no necesita ver el backend.
+  //   - Agregado: composite: true (requerido por Project References)
+  // ─────────────────────────────────────────────────────────────
+  "extends": "../../tsconfig.base.json",
+
+  "compilerOptions": {
+    // ── Build info para Project References ───────────────────────
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "composite": true,
+    "noEmit": true,
+
+    // ── Ambiente Node (sin DOM) ──────────────────────────────────
+    "lib": ["ESNext"],
+    "types": ["node"]
+  },
+
+  // Solo incluye vite.config.ts — nada más necesita este contexto.
+  "include": ["vite.config.ts"]
+}

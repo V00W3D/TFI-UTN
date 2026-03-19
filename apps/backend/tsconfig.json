@@ -1,0 +1,46 @@
+{
+  // ─────────────────────────────────────────────────────────────
+  //  BACKEND — extiende tsconfig.base.json del root.
+  //
+  //  Solo declaramos lo que es DIFERENTE o ADICIONAL al base.
+  //  Todo lo demás (strict, moduleResolution, etc.) se hereda.
+  //
+  //  CAMBIOS vs el tsconfig anterior:
+  //   - moduleResolution: "node" → heredamos "bundler" del base
+  //     (necesario para que TypeScript resuelva @app/sdk, etc.)
+  //   - Eliminado: paths @shared/* (ahora es @app/sdk workspace)
+  //   - Eliminado: include ../frontend/**/* (era un hack para ver shared)
+  //   - Eliminado: rootDirs (innecesario con workspaces)
+  //   - Los paths locales (@env, @tools, @modules, @middleware)
+  //     se mantienen porque apuntan a carpetas dentro de src/
+  // ─────────────────────────────────────────────────────────────
+  "extends": "../../tsconfig.base.json",
+
+  "compilerOptions": {
+    // ── Ambiente Node/Bun ────────────────────────────────────────
+    "lib": ["ESNext"],
+    "types": ["bun", "node"],
+
+    // ── Emit ────────────────────────────────────────────────────
+    // noEmit: true durante typecheck (tsc --noEmit)
+    // Para el build real usamos: bun build src/index.ts --outdir dist
+    "noEmit": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": false,
+
+    // ── Paths locales (dentro de src/) ───────────────────────────
+    // @app/sdk y @app/contracts se resuelven via workspace — NO van acá.
+    // Solo van los aliases que apuntan a carpetas dentro de este proyecto.
+    "baseUrl": ".",
+    "paths": {
+      "@env": ["src/env.ts"],
+      "@middleware/*": ["src/middleware/*"],
+      "@tools/*": ["src/tools/*"],
+      "@modules/*": ["src/modules/*"]
+    }
+  },
+
+  "include": ["src", "prisma"],
+  "exclude": ["dist", "node_modules"]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@app/sdk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "default": "./index.ts"
+    },
+    "./ApiServer": {
+      "types": "./ApiServer.ts",
+      "default": "./ApiServer.ts"
+    },
+    "./ApiClient": {
+      "types": "./ApiClient.ts",
+      "default": "./ApiClient.ts"
+    }
+  },
+  "dependencies": {
+    "zod": "^4.0.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
+  }
+}

@@ -1,0 +1,1 @@
+export { IAMRouter } from './IAMController';

@@ -1,0 +1,48 @@
+{
+  // ─────────────────────────────────────────────────────────────
+  //  FRONTEND APP — todo el código React en src/
+  //
+  //  Hereda del base y agrega:
+  //   - lib: DOM (APIs del browser)
+  //   - jsx: react-jsx
+  //   - types: vite/client (importaciones de assets, env vars)
+  //
+  //  CAMBIOS vs el tsconfig anterior:
+  //   - Eliminado: paths @shared/* (ahora es @app/sdk workspace)
+  //   - Eliminado: include ../shared/**/* (era un hack para ver shared)
+  //   - Eliminado: rootDirs (innecesario con workspaces)
+  //   - Los paths locales (@env, @store, @tools, @modules) se mantienen
+  //     porque apuntan a carpetas dentro de src/
+  //   - Agregado: composite: true (requerido por Project References)
+  // ─────────────────────────────────────────────────────────────
+  "extends": "../../tsconfig.base.json",
+
+  "compilerOptions": {
+    // ── Build info para Project References ───────────────────────
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "composite": true,
+    "noEmit": true,
+
+    // ── Ambiente browser ─────────────────────────────────────────
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["vite/client", "node"],
+    "useDefineForClassFields": true,
+
+    // ── React ────────────────────────────────────────────────────
+    "jsx": "react-jsx",
+
+    // ── Paths locales (dentro de src/) ───────────────────────────
+    // @app/sdk y @app/contracts se resuelven via workspace — NO van acá.
+    "baseUrl": ".",
+    "paths": {
+      "@store": ["src/appStore.ts"],
+      "@env": ["src/env.ts"],
+      "@tools/*": ["src/tools/*"],
+      "@modules/*": ["src/modules/*"]
+    }
+  },
+
+  // Solo incluye el código de esta app.
+  // @app/sdk y @app/contracts se resuelven via node_modules (workspace symlinks).
+  "include": ["src"]
+}

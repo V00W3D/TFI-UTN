@@ -1,0 +1,16 @@
+{
+  "name": "@app/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "default": "./index.ts"
+    }
+  },
+  "dependencies": {
+    "@app/sdk": "workspace:*",
+    "zod": "^4.0.0"
+  }
+}
