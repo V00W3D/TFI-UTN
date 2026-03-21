@@ -1,4 +1,4 @@
-import { CORE_RULES } from '@shared/CoreSchema';
+import { emailField } from '@app/sdk';
 import { EmailField } from '../IAMField';
 
 const EmailFieldComponent = () => {
@@ -12,8 +12,7 @@ const EmailFieldComponent = () => {
           text: 'Tu correo electrónico',
         },
         { type: 'rubber' },
-        { type: 'validation' },
-        { type: 'rules', rules: CORE_RULES.email },
+        { type: 'rules', rules: emailField.rules },
       ]}
       control="email"
     />

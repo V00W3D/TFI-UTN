@@ -16,7 +16,6 @@
 import { z } from 'zod';
 import type { Router, Request, Response, NextFunction } from 'express';
 import type { AnyContract, InferRequest, InferSuccess } from './Contracts';
-import { getFullResponseSchema } from './Contracts';
 import { AppError, ERR, httpStatusFrom, type PublicErrorEnvelope } from './ErrorCodes';
 
 //#region ADAPTER_TYPES

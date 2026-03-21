@@ -160,10 +160,11 @@ function buildEndpoint<C extends AnyContract>(
     data: null,
   }));
 
-  const formStore = createFormStore(
-    contract.__requestSchema as z.ZodObject<RequestShapeOf<C>>,
-    config.formMode,
-  );
+  // después
+  const formStore =
+    contract.__requestSchema instanceof z.ZodObject
+      ? createFormStore(contract.__requestSchema as z.ZodObject<RequestShapeOf<C>>, config.formMode)
+      : createFormStore(z.object({}) as z.ZodObject<RequestShapeOf<C>>, config.formMode);
 
   async function executeRequest(input: TRequest): Promise<TResponse> {
     requestStore.setState({ isFetching: true, error: null });

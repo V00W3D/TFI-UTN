@@ -8,25 +8,24 @@ export type FieldAddon =
   | { type: 'icon'; src: string }
   | { type: 'passwordToggle' }
   | { type: 'hint'; text: string }
-  | { type: 'rules'; rules: string[] }
-  | { type: 'validation' }
-  | { type: 'rubber' } // 👈 NUEVO
-  | { type: 'strength' }; // 👈 NUEVO
+  | { type: 'rules'; rules: readonly string[] }
+  | { type: 'rubber' }
+  | { type: 'strength' };
 
 interface AddonsProps {
   addons?: FieldAddon[];
   context: {
     type: string;
     fieldMode: 'login' | 'register';
-    value: any;
-    touched: boolean;
-    validation: any;
-    reset?: () => void; // 👈 necesario para rubber
+    value: unknown;
+    errors: string[];
+    isValid: boolean;
+    reset?: () => void;
   };
 }
 
 /* =========================================================
-   FACTORY
+   HOOK
 ========================================================= */
 
 export function useFieldAddons({ addons = [], context }: AddonsProps) {
@@ -46,33 +45,25 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
     | Extract<FieldAddon, { type: 'rules' }>
     | undefined;
 
-  const enableValidation = addons.some((a) => a.type === 'validation');
-
   const [isVisible, setIsVisible] = useState(false);
   const [isHelpVisible, setIsHelpVisible] = useState(false);
+
+  // Se activa en el primer onChange, no en blur
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   const isRegister = context.fieldMode === 'register';
 
   /* =========================================================
-     VALIDATION LOGIC
+     VALIDATION STATE
   ========================================================= */
 
-  let error = false;
-  let success = false;
-  let errors: string[] = [];
+  const hasValue =
+    typeof context.value === 'string' ? context.value.trim().length > 0 : Boolean(context.value);
 
-  if (enableValidation) {
-    const hasValue =
-      typeof context.value === 'string' ? context.value.trim().length > 0 : Boolean(context.value);
+  const showError = hasInteracted && context.errors.length > 0;
+  const showSuccess = hasInteracted && hasValue && context.isValid;
 
-    const isValid = context.validation === true;
-    errors = Array.isArray(context.validation) ? context.validation : [];
-
-    error = context.touched && errors.length > 0;
-    success = context.touched && hasValue && isValid;
-  }
-
-  const stateClass = error ? 'auth-field--error' : success ? 'auth-field--success' : '';
+  const stateClass = showError ? 'auth-field--error' : showSuccess ? 'auth-field--success' : '';
 
   /* =========================================================
      RENDERERS
@@ -80,7 +71,6 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
 
   const renderLeftSlot = () => {
     if (!icon) return null;
-
     return (
       <div className="auth-field__slot-left">
         <div className="auth-field__slot-box-left">
@@ -89,8 +79,6 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
       </div>
     );
   };
-
-  /* ================= RIGHT SLOT (rubber + toggle) ================= */
 
   const renderRightSlot = () => {
     const showPasswordToggle = passwordToggle && context.type === 'password';
@@ -105,7 +93,6 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
             <img src="/rubber-icon.png" alt="reset" className="w-6 h-6 object-contain" />
           </button>
         )}
-
         {showPasswordToggle && (
           <button
             type="button"
@@ -123,11 +110,8 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
     );
   };
 
-  /* ================= LABEL ACTION ================= */
-
   const renderLabelAction = () => {
     if (!isRegister || !rules) return null;
-
     return (
       <button
         type="button"
@@ -139,19 +123,13 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
     );
   };
 
-  /* ================= HINT ================= */
-
   const renderHint = () => {
-    if (!isRegister || !hint || error || isHelpVisible) return null;
-
+    if (!isRegister || !hint || showError || isHelpVisible) return null;
     return <span className="auth-field__hint">{hint.text}</span>;
   };
 
-  /* ================= RULES ================= */
-
   const renderRules = () => {
     if (!isRegister || !rules || !isHelpVisible) return null;
-
     return (
       <div className="auth-field__rules-container">
         <ul className="auth-field__rules">
@@ -166,14 +144,11 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
     );
   };
 
-  /* ================= ERRORS ================= */
-
   const renderError = () => {
-    if (!enableValidation || !error) return null;
-
+    if (!showError) return null;
     return (
       <div className="auth-field__messages">
-        {errors.map((msg, i) => (
+        {context.errors.map((msg, i) => (
           <span key={i} className="auth-field__message auth-field__message--error">
             {msg}
           </span>
@@ -182,38 +157,28 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
     );
   };
 
-  /* ================= PASSWORD STRENGTH ================= */
-
   const renderStrength = () => {
     if (!strength || context.type !== 'password') return null;
     if (!isRegister || !context.value) return null;
 
-    const PASSWORD_MIN = 8;
-
-    const HAS_UPPER = /[A-Z]/;
-    const HAS_LOWER = /[a-z]/;
-    const HAS_NUMBER = /[0-9]/;
-    const HAS_SYMBOL = /[^A-Za-z0-9]/;
+    const val = String(context.value);
 
     let score = 0;
-
-    if (context.value.length >= PASSWORD_MIN) score++;
-    if (HAS_UPPER.test(context.value)) score++;
-    if (HAS_LOWER.test(context.value)) score++;
-    if (HAS_NUMBER.test(context.value)) score++;
-    if (HAS_SYMBOL.test(context.value)) score++;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[a-z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
 
     const labels = ['', 'muy débil', 'débil', 'decente', 'segura', 'muy segura'];
-
     const colors = [
       '',
       'bg-red-500',
-      'bg-orange-500',
+      'bg-orange-400',
       'bg-yellow-400',
-      'bg-green-500',
+      'bg-blue-400',
       'bg-rgb-soft animate-rgb-soft',
     ];
-
     const width = `${(score / 5) * 100}%`;
 
     return (
@@ -224,30 +189,24 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
             style={{ width }}
           />
         </div>
-
         {score > 0 && (
           <span className="text-xs text-(--text-secondary)">
             Fuerza: <span className="font-semibold">{labels[score]}</span>
           </span>
         )}
-
-        <style>
-          {`
-            @keyframes rgbShift {
-              0% { background-color: #22c55e; }
-              33% { background-color: #3b82f6; }
-              66% { background-color: #a855f7; }
-              100% { background-color: #22c55e; }
-            }
-            .bg-rgb-soft { background-color: #22c55e; }
-            .animate-rgb-soft { animation: rgbShift 3s linear infinite; }
-          `}
-        </style>
+        <style>{`
+          @keyframes rgbShift {
+            0%   { background-color: #3b82f6; }
+            33%  { background-color: #8b5cf6; }
+            66%  { background-color: #06b6d4; }
+            100% { background-color: #3b82f6; }
+          }
+          .bg-rgb-soft { background-color: #3b82f6; }
+          .animate-rgb-soft { animation: rgbShift 3s linear infinite; }
+        `}</style>
       </div>
     );
   };
-
-  /* ================= RESOLVED TYPE ================= */
 
   const resolvedType =
     passwordToggle && context.type === 'password'
@@ -259,6 +218,8 @@ export function useFieldAddons({ addons = [], context }: AddonsProps) {
   return {
     resolvedType,
     stateClass,
+    hasInteracted,
+    setHasInteracted,
     renderLeftSlot,
     renderRightSlot,
     renderLabelAction,

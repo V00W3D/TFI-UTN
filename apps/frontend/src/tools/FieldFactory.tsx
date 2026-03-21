@@ -1,11 +1,12 @@
 import { useId } from 'react';
 import type { UseBoundStore, StoreApi } from 'zustand';
+import type { ChangeEvent, FocusEvent } from 'react';
 import './AuthField.css';
 import 'react-phone-number-input/style.css';
 
 import { renderAuthField, type FieldType, type FieldOption } from './IFieldFactory/RenderField';
-
 import { useFieldAddons, type FieldAddon } from './IFieldFactory/addons';
+import type { FormState, AnyContract, RequestShapeOf } from '@app/sdk';
 
 /* =========================================================
    TYPES
@@ -28,34 +29,19 @@ interface FieldProps {
   addons?: FieldAddon[];
 }
 
-type ZustandStore<T extends Record<string, any>> = {
-  values: T;
-  errors: Partial<Record<keyof T, string[]>>;
-  touched: Partial<Record<keyof T, boolean>>;
-  dirty: Partial<Record<keyof T, boolean>>;
-  isFormValid: boolean;
-  isDirty: boolean;
-  set: <K extends keyof T>(key: K, value: T[K]) => Promise<void>;
-  blur: <K extends keyof T>(key: K) => Promise<void>;
-  validate: () => Promise<boolean>;
-  reset: () => void;
-  getValues: () => T;
-  setValues: (v: Partial<T>) => void;
-};
-
 /* =========================================================
    FACTORY
 ========================================================= */
 
-export function FieldFactory<T extends Record<string, any>>(
-  useStore: UseBoundStore<StoreApi<ZustandStore<T>>>,
+export function FieldFactory<C extends AnyContract>(
+  $form: UseBoundStore<StoreApi<FormState<RequestShapeOf<C>>>>,
 ) {
-  return function bindField<K extends keyof T & string>(name: K) {
+  return function bindField<K extends keyof RequestShapeOf<C> & string>(name: K) {
     return function Field({
       label,
       control = 'text',
-      placeholder,
-      required,
+      placeholder = '',
+      required = false,
       fieldMode = 'register',
       addons = [],
     }: FieldProps) {
@@ -63,37 +49,29 @@ export function FieldFactory<T extends Record<string, any>>(
 
       /* ===================== STORE ===================== */
 
-      const value = useStore((s) => s.values[name]);
-      const validation = useStore((s) => {
-        const errs = s.errors[name];
-        return errs && errs.length > 0 ? errs : true;
-      });
-      const touched = useStore((s) => s.touched[name] ?? false) as boolean;
+      const value = $form((s) => s.values[name]);
+      const rawErrors = $form((s) => s.errors[name]);
+      const errors = (rawErrors ?? []) as string[];
+      const isValid = !rawErrors?.length && $form((s) => s.isFormValid);
+      const reset = $form((s) => s.reset);
+      const storeSet = $form((s) => s.set);
+      const storeBlur = $form((s) => s.blur);
 
-      const storeSet = useStore((s) => s.set);
-      const storeBlur = useStore((s) => s.blur);
-      const reset = useStore((s) => s.reset);
-
-      const setValue = (val: any) => storeSet(name, val);
+      const setValue = (val: unknown) => storeSet(name, val as never);
       const blur = () => storeBlur(name);
 
       /* ===================== CONTROL PARSING ===================== */
 
-      let type: FieldType = 'text';
-      let options: FieldOption[] | undefined;
-
-      if (Array.isArray(control)) {
-        type = control[0] as FieldType;
-        options = control[1];
-      } else {
-        type = control as FieldType;
-      }
+      const type: FieldType = Array.isArray(control) ? (control[0] as FieldType) : control;
+      const options: FieldOption[] | undefined = Array.isArray(control) ? control[1] : undefined;
 
       /* ===================== ADDONS ===================== */
 
       const {
         resolvedType,
         stateClass,
+        hasInteracted,
+        setHasInteracted,
         renderLeftSlot,
         renderRightSlot,
         renderLabelAction,
@@ -103,14 +81,7 @@ export function FieldFactory<T extends Record<string, any>>(
         renderStrength,
       } = useFieldAddons({
         addons,
-        context: {
-          type,
-          fieldMode,
-          value,
-          touched,
-          validation,
-          reset,
-        },
+        context: { type, fieldMode, value, errors, isValid, reset },
       });
 
       /* ===================== RENDER ===================== */
@@ -122,12 +93,10 @@ export function FieldFactory<T extends Record<string, any>>(
               {label}
               {required && <span className="auth-field__required">*</span>}
             </label>
-
             {renderLabelAction()}
           </div>
           <div className="auth-field__input-wrapper">
             {renderLeftSlot()}
-
             {renderAuthField({
               type,
               inputId,
@@ -137,18 +106,18 @@ export function FieldFactory<T extends Record<string, any>>(
               resolvedType,
               options,
               inputProps: {
-                value,
-                onChange: (e: any) => {
-                  if (e?.target?.value !== undefined) {
-                    setValue(e.target.value);
-                  } else {
-                    setValue(e);
-                  }
+                value: value as string | boolean,
+                onChange: (
+                  e:
+                    | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+                    | { target: { value: string | boolean } },
+                ) => {
+                  if (!hasInteracted) setHasInteracted(true);
+                  setValue(e.target.value);
                 },
-                onBlur: blur,
+                onBlur: (_e: FocusEvent<HTMLElement>) => blur(),
               },
             })}
-
             {renderRightSlot()}
           </div>
           {renderError()}

@@ -1,0 +1,185 @@
+@import 'tailwindcss';
+
+@layer components {
+  /* =============================================
+     TOKENS
+     Todas las medidas derivan de estas 2 variables.
+     Cambiar aquí propaga en todo el sidebar.
+  ============================================= */
+
+  .sidebar {
+    --sb-row-h: 48px; /* alto fijo de cada fila */
+    --sb-icon-sz: 32px; /* cuadrado del icono/avatar */
+    --sb-pad-x: 12px; /* padding horizontal lateral */
+    --sb-width-c: 56px; /* ancho colapsado  */
+    --sb-width-e: 200px; /* ancho expandido  */
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 50;
+
+    display: flex;
+    flex-direction: column;
+
+    width: var(--sb-width-c);
+    padding: 8px 0;
+
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+    box-shadow: 1px 0 8px hsl(0 0% 0% / 0.05);
+
+    transition: width 0.22s ease;
+    overflow: hidden;
+  }
+
+  .sidebar--expanded {
+    width: var(--sb-width-e);
+  }
+
+  /* =============================================
+     ESTRUCTURA
+  ============================================= */
+
+  .sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0;
+  }
+
+  .sidebar__footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* =============================================
+     FILA — unidad atómica de altura fija
+  ============================================= */
+
+  .sidebar__row {
+    display: flex;
+    align-items: center;
+    height: var(--sb-row-h);
+    padding: 0 var(--sb-pad-x);
+    gap: 10px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: background-color 0.12s ease;
+    flex-shrink: 0;
+  }
+
+  .sidebar__row:hover {
+    background-color: var(--surface-soft);
+  }
+
+  .sidebar__row--brand {
+    cursor: default;
+    margin-bottom: 2px;
+  }
+
+  .sidebar__row--brand:hover {
+    background-color: transparent;
+  }
+
+  .sidebar__row--toggle {
+    cursor: pointer;
+    margin-top: 2px;
+  }
+
+  /* =============================================
+     CELDA DE ICONO — cuadrado fijo, siempre centrado
+  ============================================= */
+
+  .sidebar__icon-cell {
+    flex-shrink: 0;
+    width: var(--sb-icon-sz);
+    height: var(--sb-icon-sz);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 5px;
+    background-color: var(--surface-muted);
+    border: 1px solid var(--border);
+  }
+
+  .sidebar__icon-cell--toggle {
+    background-color: transparent;
+    border-color: transparent;
+  }
+
+  /* =============================================
+     ICONOS — tamaño fijo dentro de la celda
+  ============================================= */
+
+  .sidebar__icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .sidebar__icon--avatar {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+
+  /* =============================================
+     LABELS — solo visibles en expandido
+  ============================================= */
+
+  .sidebar__label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 1;
+  }
+
+  .sidebar__label--brand {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* =============================================
+     SEPARADOR
+  ============================================= */
+
+  .sidebar__divider {
+    height: 1px;
+    margin: 4px var(--sb-pad-x);
+    background-color: var(--border);
+    flex-shrink: 0;
+  }
+
+  /* =============================================
+     CHEVRON DE EXPAND
+  ============================================= */
+
+  .sidebar__chevron {
+    font-size: 18px;
+    line-height: 1;
+    color: var(--text-muted);
+    display: block;
+    transition: transform 0.22s ease;
+    user-select: none;
+  }
+
+  .sidebar__chevron--flipped {
+    transform: rotate(180deg);
+  }
+}

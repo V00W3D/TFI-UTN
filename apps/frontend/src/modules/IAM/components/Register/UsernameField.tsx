@@ -1,20 +1,17 @@
-import { CORE_RULES } from '@shared/CoreSchema';
+import { usernameField } from '@app/sdk';
 import { UsernameField } from '../IAMField';
 
-const UsernameFieldComponent = () => {
-  return (
-    <UsernameField
-      placeholder="ju4n_"
-      label="Nombre de usuario"
-      addons={[
-        { type: 'icon', src: '/user-icon.png' },
-        { type: 'hint', text: 'Como te identificarás en QART.' },
-        { type: 'validation' },
-        { type: 'rules', rules: CORE_RULES.username },
-        { type: 'rubber' },
-      ]}
-    />
-  );
-};
+const UsernameFieldComponent = () => (
+  <UsernameField
+    placeholder="ju4n_"
+    label="Nombre de usuario"
+    addons={[
+      { type: 'icon', src: '/user-icon.png' },
+      { type: 'hint', text: 'Como te identificarás en QART.' },
+      { type: 'rules', rules: usernameField.rules },
+      { type: 'rubber' },
+    ]}
+  />
+);
 
 export default UsernameFieldComponent;

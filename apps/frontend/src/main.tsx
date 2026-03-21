@@ -2,11 +2,11 @@ import { StrictMode, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import FloatingMenu from '@modules/GENERAL/FloatingMenu';
+import FloatingMenu from '@modules/SideBarMenu';
 import { useAppStore } from './appStore';
 import './index.css';
 
-const Root = () => {
+export const Root = () => {
   const { mode } = useAppStore();
 
   useEffect(() => {

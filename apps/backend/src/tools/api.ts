@@ -59,7 +59,7 @@ export const api = createServerApi(contracts, {
     host: BACKEND_HOST,
     port: BACKEND_PORT,
     // BUN_MODE is a plain string from the env — cast to the narrower union the SDK expects.
-    mode: BUN_MODE as 'dev' | 'prod',
+    mode: BUN_MODE,
   },
 });
 
