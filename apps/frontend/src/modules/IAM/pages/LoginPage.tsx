@@ -1,15 +1,11 @@
 import './AuthPages.css';
-import { sdk } from '@tools/sdk';
-
-import IdentityFieldComponent from '@modules/IAM/components/Login/IdentityField';
-import LPasswordFieldComponent from '@modules/IAM/components/Login/PasswordField';
+import { sdk, form } from '@tools/sdk';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import type React from 'react';
 
 const LoginPage = () => {
-  const form = sdk.iam.login.$form();
-  const { data, error, isFetching } = sdk.iam.login.$use();
+  const { fields, submit } = form.iam.login;
+  const { data, error, isFetching, isFormValid } = sdk.iam.login.$use();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,35 +16,42 @@ const LoginPage = () => {
     if (data && !error) {
       navigate('/', { replace: true });
     }
-  }, [data, error]);
-
-  const handleSubmit: React.ReactEventHandler = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (isFetching) return;
-
-    const isValid = await form.validate();
-    if (!isValid) return;
-
-    try {
-      await sdk.iam.login(form.getValues());
-    } catch {
-      // el error ya queda en el store, el render lo muestra
-    }
-  };
+  }, [data, error, navigate]);
 
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
-        <form onSubmit={handleSubmit} className="auth-form">
-          <IdentityFieldComponent />
-          <LPasswordFieldComponent />
+        <form
+          onSubmit={submit(async (values) => {
+            if (isFetching) return;
+            try {
+              await sdk.iam.login(values);
+            } catch {
+              // el error ya queda en el store
+            }
+          })}
+          className="auth-form"
+        >
+          <fields.identity
+            label="Usuario o Email"
+            required
+            fieldMode="login"
+            addons={[{ type: 'rubber' }]}
+          />
 
-          <button type="submit" className="auth-button" disabled={!form.isFormValid || isFetching}>
+          <fields.password
+            label="Contraseña"
+            required
+            fieldMode="login"
+            control="password"
+            addons={[{ type: 'passwordToggle' }, { type: 'rubber' }]}
+          />
+
+          <button type="submit" className="auth-button" disabled={isFetching || !isFormValid}>
             {isFetching ? 'Entrando...' : 'Entrar'}
           </button>
 
-          {error && <p className="auth-error">{error.message}</p>}
+          {error && <p className="auth-error">{error.code.toString()}</p>}
           {data && <p className="auth-success">Login exitoso</p>}
         </form>
       </div>

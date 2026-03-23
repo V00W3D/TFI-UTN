@@ -16,10 +16,6 @@ import {
 
 const RegisterPage = () => {
   const { fields, submit } = form.iam.register;
-  // isFormValid y error ahora vienen del SDK — completamente tipados.
-  // error.code → literal union del contrato
-  // error.params → ('name' | 'sname' | 'email' | ...)[]
-  // isFormValid → sincronizado automáticamente con el formStore interno
   const { data, error, isFetching, isFormValid } = sdk.iam.register.$use();
   const navigate = useNavigate();
 
@@ -41,8 +37,8 @@ const RegisterPage = () => {
             if (isFetching) return;
             try {
               await sdk.iam.register(values);
-            } catch (e) {
-              console.error(e);
+            } catch {
+              //
             }
           })}
           className="auth-form"
@@ -80,9 +76,6 @@ const RegisterPage = () => {
             ]}
             addons={[{ type: 'rules', rules: sexField.rules }]}
           />
-
-          <h3 className="auth-section-title">Credenciales</h3>
-
           <fields.username
             label="Usuario"
             required
@@ -112,9 +105,6 @@ const RegisterPage = () => {
               { type: 'rules', rules: cpasswordField.rules },
             ]}
           />
-
-          <h3 className="auth-section-title">Contacto</h3>
-
           <fields.email
             label="Email"
             required
@@ -133,7 +123,7 @@ const RegisterPage = () => {
             {isFetching ? 'Creando cuenta...' : 'Crear Cuenta'}
           </button>
 
-          {error && <p className="auth-error">{error.code}</p>}
+          {error && <p className="auth-error">{`${error.code.toString()}`}</p>}
           {data && <p className="auth-success">Registro exitoso</p>}
         </form>
       </div>

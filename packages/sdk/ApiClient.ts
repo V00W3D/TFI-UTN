@@ -182,8 +182,10 @@ const buildEndpoint = <C extends AnyContract>(
   const executeRequest = async (input: C['__phantomRequest']): Promise<TResponse> => {
     requestStore.setState({ isFetching: true, error: null });
     try {
-      const rawParsed = contract.__requestSchema.parse(input) as Record<string, unknown>;
-      const payload = coerceEmptyStrings(rawParsed);
+      // Coercionar ANTES de parsear: '' -> null para que ZodNullable acepte campos vacios.
+      // El schema recibe null (valor valido) en lugar de '' (valor invalido).
+      const coerced = coerceEmptyStrings(input as Record<string, unknown>);
+      const payload = contract.__requestSchema.parse(coerced) as Record<string, unknown>;
 
       let url = config.baseURL + contract.__path;
       const init: RequestInit = {
