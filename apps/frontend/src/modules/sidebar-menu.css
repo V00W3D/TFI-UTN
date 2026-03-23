@@ -182,4 +182,24 @@
   .sidebar__chevron--flipped {
     transform: rotate(180deg);
   }
+
+  /* =============================================
+     TOGGLE MODE ICON — vive dentro de sidebar__icon-cell
+  ============================================= */
+
+  .sidebar__toggle-icon {
+    font-size: 14px;
+    line-height: 1;
+    display: block;
+    user-select: none;
+    transition: color 0.2s ease;
+
+    /* Light mode: usa el latón/champagne del design system */
+    color: var(--color-accent-dark);
+  }
+
+  .dark .sidebar__toggle-icon {
+    /* Dark mode: latón más brillante */
+    color: var(--color-accent);
+  }
 }

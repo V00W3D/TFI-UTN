@@ -1,14 +1,21 @@
 @import 'tailwindcss';
 
-/* ================= AUTH FIELD ================= */
+/* =========================================================
+   AUTH FIELD
+   Solo vive acá lo que Tailwind v4 no puede expresar inline:
+   - Selectores de estado padre→hijo  (.auth-field--error .child)
+   - Pseudo-elementos (::placeholder)
+   - Variantes compuestas de data-attribute
+   - Animaciones @keyframes
+   - Estilos de librerías externas (PhoneInput)
+========================================================= */
+
+/* ── Base ── */
 .auth-field {
   @apply flex flex-col gap-3 w-full;
 }
 
-/* LABEL */
-.auth-field__label-row {
-  @apply flex items-center justify-between;
-}
+/* ── Label — estado cambia por clase del padre ── */
 .auth-field__label {
   @apply text-sm font-semibold transition-colors duration-200 text-(--text-secondary);
 }
@@ -18,19 +25,10 @@
 .auth-field--success .auth-field__label {
   @apply text-(--color-success);
 }
-.auth-field__required {
-  @apply ml-1 text-(--color-error);
-}
-.auth-field__help-btn {
-  @apply text-xs font-medium transition-colors duration-200 cursor-pointer bg-transparent border-none text-(--text-muted);
-}
-.auth-field__help-btn:hover {
-  @apply text-(--color-primary);
-}
 
-/* INPUT WRAPPER */
+/* ── Input wrapper ── */
 .auth-field__input-wrapper {
-  @apply flex items-end transition-colors duration-200 border-b border-(--border);
+  @apply flex items-end border-b border-(--border) transition-colors duration-200;
 }
 .auth-field__input-wrapper:focus-within {
   @apply border-(--color-primary);
@@ -42,19 +40,19 @@
   @apply border-(--color-success);
 }
 
-/* SLOTS */
-.auth-field__slot-left,
-.auth-field__slot-right {
-  @apply flex items-end;
+/* ── Input ── */
+.auth-field__input {
+  @apply flex-1 bg-transparent px-3 py-2 outline-none border-none
+         text-(--text-primary)
+         disabled:opacity-50 disabled:cursor-not-allowed;
 }
-.auth-field__slot-right {
-  @apply flex items-center gap-2 shrink-0;
+.auth-field__input::placeholder {
+  color: var(--text-muted);
 }
+
+/* ── Left slot: icon tint changes with field state ── */
 .auth-field__slot-box-left {
-  @apply flex items-center justify-center h-10 w-10 shrink-0 transition-colors duration-200 text-(--text-muted);
-}
-.dark .auth-field__slot-box-left {
-  @apply text-(--color-primary) invert;
+  @apply dark:text-(--color-primary) dark:[filter:invert(1)];
 }
 .auth-field--error .auth-field__slot-box-left {
   @apply text-(--color-error);
@@ -63,77 +61,22 @@
   @apply text-(--color-success);
 }
 
-/* SLOT BUTTON (rubber + toggle) */
-.auth-field__slot-btn {
-  @apply flex items-center justify-center h-10 w-10 shrink-0 transition-colors duration-200 cursor-pointer text-(--text-muted) bg-transparent border-none;
-}
-.auth-field__slot-btn:hover {
-  @apply bg-(--surface-soft);
-}
-.dark .auth-field__slot-btn {
-  @apply text-(--color-primary) invert;
-}
-.auth-field__slot-btn img {
-  @apply pointer-events-none;
-}
-
-/* INPUT */
-.auth-field__input {
-  @apply flex-1 bg-transparent px-3 py-2 outline-none border-none disabled:opacity-50 disabled:cursor-not-allowed text-(--text-primary);
-}
-.auth-field__input::placeholder {
-  @apply text-(--text-muted);
-}
-
-/* MESSAGES */
-.auth-field__messages {
-  @apply flex flex-col gap-1 text-xs animate-[fadeIn_.15s_ease];
-}
-.auth-field__message--error {
-  @apply text-(--color-error-dark);
-}
-.auth-field__message--warning {
-  @apply text-(--color-warning);
-}
-.auth-field__message--info {
-  @apply text-(--text-muted);
-}
-.auth-field__hint {
-  @apply text-xs text-(--text-muted);
-}
-
-/* RULES */
-.auth-field__rules-container {
-  @apply mt-2 p-3 border border-(--border) bg-(--surface-soft) animate-[fadeIn_.15s_ease];
-}
-.auth-field__rules {
-  @apply space-y-2;
-}
-.auth-field__rule {
-  @apply flex items-start gap-2 text-xs leading-relaxed text-(--text-secondary);
-}
-.auth-field__rule-dot {
-  @apply mt-1 h-1.5 w-1.5 rounded-full shrink-0 bg-(--color-primary-muted);
-}
-.auth-field__rule-text {
-  @apply flex-1;
-}
-
-/* RADIO */
+/* ── Radio group ── */
 .auth-field__radio-group {
   @apply flex gap-3 w-full;
 }
 .auth-field__radio-option {
   @apply flex-1 cursor-pointer;
 }
-.auth-field__radio-input {
-  @apply hidden;
-}
+
 .auth-field__radio-card {
-  @apply flex flex-col items-center justify-center gap-2 p-3 transition-all duration-300 border border-(--border) bg-(--surface-soft);
+  @apply flex flex-col items-center justify-center gap-2 p-3
+         border border-(--border) bg-(--surface-soft)
+         transition-all duration-300;
 }
 .auth-field__radio-card:hover {
   @apply border-(--color-primary-muted);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
 }
 .auth-field__radio-card--checked {
   transform: scale(1.02);
@@ -141,29 +84,27 @@
 .auth-field__radio-option:active .auth-field__radio-card {
   transform: scale(0.98);
 }
+
 .auth-field__radio-circle {
-  @apply flex items-center justify-center w-4 h-4 rounded-full border-2 border-(--border-strong);
+  @apply flex items-center justify-center size-4 rounded-full border-2 border-(--border-strong);
   transition:
     border-color 0.2s ease,
     background-color 0.2s ease;
 }
 .auth-field__radio-dot {
-  @apply w-2 h-2 rounded-full;
+  @apply size-2 rounded-full;
   transform: scale(0);
   transition: transform 0.2s ease;
 }
 .auth-field__radio-card--checked .auth-field__radio-dot {
   transform: scale(1);
 }
-.auth-field__radio-icon {
-  @apply w-6 h-6 object-contain transition-all duration-300;
-}
+
 .auth-field__radio-label {
   @apply text-xs font-medium transition-colors duration-300 text-(--text-secondary);
 }
-.auth-field__radio-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
+
+/* ── Radio checked states — default (MALE / neutral) ── */
 .auth-field__radio-option[data-value] .auth-field__radio-card--checked {
   @apply border-(--color-primary) bg-(--color-primary-soft);
 }
@@ -177,7 +118,7 @@
   @apply text-(--color-primary-dark);
 }
 
-/* FEMALE */
+/* ── Radio: FEMALE ── */
 .auth-field__radio-option[data-value='FEMALE'] .auth-field__radio-card--checked {
   border-color: hsl(330 78% 62%);
   background-color: hsl(330 90% 95%);
@@ -187,8 +128,18 @@
   .auth-field__radio-label {
   color: hsl(330 70% 38%);
 }
+.auth-field__radio-option[data-value='FEMALE']
+  .auth-field__radio-card--checked
+  .auth-field__radio-circle {
+  border-color: hsl(330 78% 62%);
+}
+.auth-field__radio-option[data-value='FEMALE']
+  .auth-field__radio-card--checked
+  .auth-field__radio-dot {
+  background-color: hsl(330 78% 62%);
+}
 
-/* OTHER */
+/* ── Radio: OTHER ── */
 .auth-field__radio-option[data-value='OTHER'] .auth-field__radio-card--checked {
   border-color: hsl(270 72% 58%);
   background-color: hsl(270 85% 96%);
@@ -198,8 +149,18 @@
   .auth-field__radio-label {
   color: hsl(270 60% 38%);
 }
+.auth-field__radio-option[data-value='OTHER']
+  .auth-field__radio-card--checked
+  .auth-field__radio-circle {
+  border-color: hsl(270 72% 58%);
+}
+.auth-field__radio-option[data-value='OTHER']
+  .auth-field__radio-card--checked
+  .auth-field__radio-dot {
+  background-color: hsl(270 72% 58%);
+}
 
-/* PHONE INPUT */
+/* ── PhoneInput (external library) ── */
 .auth-field__input-wrapper .PhoneInput {
   @apply w-full flex items-center bg-transparent;
 }
@@ -219,7 +180,7 @@
   @apply bg-(--surface) text-(--text-primary);
 }
 
-/* ANIMATION */
+/* ── Animations ── */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -228,5 +189,20 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes rgbShift {
+  0% {
+    background-color: hsl(220 90% 56%);
+  }
+  33% {
+    background-color: hsl(270 72% 58%);
+  }
+  66% {
+    background-color: hsl(190 80% 48%);
+  }
+  100% {
+    background-color: hsl(220 90% 56%);
   }
 }

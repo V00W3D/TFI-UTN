@@ -4,38 +4,36 @@ import { z } from 'zod';
 import { resolveFieldDefault } from './FieldDef';
 
 //#region PUBLIC_TYPES
-// ─────────────────────────────────────────────────────────────
-//  All types declared up-front.
-// ─────────────────────────────────────────────────────────────
-
 /**
  * @public
- * @summary Controls when per-field validation is triggered.
- * - `'onChange'` — every keystroke.
- * - `'onBlur'`   — when the field loses focus.
- * - `'onSubmit'` — only when `validate()` is called explicitly.
+ * @summary Controla cuándo se dispara la validación por campo.
+ * - `'onChange'` — en cada keystroke.
+ * - `'onBlur'`   — al perder el foco.
+ * - `'onSubmit'` — solo al llamar `validate()` explícitamente.
  */
 export type ValidationTrigger = 'onChange' | 'onBlur' | 'onSubmit';
 
-/** @public Maps each key of a Zod raw shape to its inferred output type. */
+/** @public Mapea cada clave del shape Zod a su tipo inferido de salida. */
 export type FieldValues<TShape extends z.ZodRawShape> = {
   [K in keyof TShape]: z.infer<TShape[K]>;
 };
 
-/** @public Per-field error map — `undefined` means the field is error-free. */
+/** @public Mapa de errores por campo — `undefined` significa campo sin errores. */
 export type FieldErrors<TShape extends z.ZodRawShape> = Partial<Record<keyof TShape, string[]>>;
 
-/** @public Per-field boolean flag map. */
+/** @public Mapa de flags booleanos por campo. */
 export type FieldFlags<TShape extends z.ZodRawShape> = Partial<Record<keyof TShape, boolean>>;
 
 /**
  * @public
- * @summary Reactive form state derived from a Zod object schema.
+ * @summary Estado reactivo del formulario derivado de un schema Zod.
  * @remarks
- * The form layer ALWAYS uses `''` (empty string) as the "empty" state.
- * `null` and `undefined` never appear in form state — they are produced
- * by ApiClient only when converting `''` before a fetch request.
- * This prevents browser warnings about controlled/uncontrolled inputs.
+ * La capa de formulario SIEMPRE usa `''` como estado vacío.
+ * `null` y `undefined` solo aparecen en el payload HTTP — nunca en el store.
+ * Esto previene warnings de inputs controlados/no-controlados en React.
+ *
+ * **Campos opcionales:** el store convierte `''` → `undefined` antes de validar
+ * con Zod, por lo que `z.string().optional()` funciona correctamente con inputs vacíos.
  */
 export type FormState<TShape extends z.ZodRawShape> = {
   values: FieldValues<TShape>;
@@ -45,101 +43,146 @@ export type FormState<TShape extends z.ZodRawShape> = {
   isFormValid: boolean;
   isDirty: boolean;
   /**
-   * Sets a field value and validates if `triggerMode === 'onChange'`.
-   * The value is stored as-is — no coercion to null happens here.
+   * Establece el valor de un campo y valida si `triggerMode === 'onChange'`.
+   * El valor se guarda tal cual — la coerción a null ocurre en ApiClient antes del fetch.
    */
   set: <K extends keyof TShape>(key: K, value: FieldValues<TShape>[K]) => Promise<void>;
-  /** Marks a field as touched. Validates if `triggerMode === 'onBlur'`. */
+  /** Marca un campo como tocado. Valida si `triggerMode === 'onBlur'`. */
   blur: <K extends keyof TShape>(key: K) => Promise<void>;
-  /** Validates all fields. Returns `true` when the full schema passes. */
+  /** Valida todos los campos. Retorna `true` cuando el schema completo pasa. */
   validate: () => Promise<boolean>;
-  /** Resets all fields to initial defaults and clears all state. */
+  /** Resetea todos los campos a sus defaults y limpia todo el estado. */
   reset: () => void;
-  /** Point-in-time snapshot of all current field values. */
+  /** Snapshot puntual de todos los valores actuales. */
   getValues: () => FieldValues<TShape>;
-  /** Merges partial values without triggering validation. */
+  /** Fusiona valores parciales sin disparar validación. */
   setValues: (partial: Partial<FieldValues<TShape>>) => void;
 };
 //#endregion
 
 //#region INTERNAL_HELPERS
-// ─────────────────────────────────────────────────────────────
-//  Zod v4 uses $ZodType internally, which does not extend the
-//  public ZodType. The only way to call .safeParseAsync() on a
-//  value from TShape[K] is to cast via unknown — this is an
-//  inescapable Zod v4 internal/public type gap, not a design choice.
-// ─────────────────────────────────────────────────────────────
+/**
+ * @internal
+ * Castea un valor de TShape[K] al tipo público `z.ZodType`.
+ * Cast inevitable — brecha interna/pública de Zod v4.
+ */
+const asZodType = (schema: z.ZodRawShape[string]): z.ZodType => schema as unknown as z.ZodType;
 
 /**
  * @internal
- * Casts a value from TShape[K] to the public `z.ZodType`.
- * This is the single unavoidable cast in the entire file — Zod v4 internal/public gap.
+ * Determina si un schema Zod es nullable (`z.string().nullable()`).
+ * Un campo nullable acepta `null` — NO `undefined`.
  */
-function asZodType(schema: z.ZodRawShape[string]): z.ZodType {
-  return schema as unknown as z.ZodType;
-}
+const isNullableSchema = (schema: z.ZodRawShape[string]): boolean =>
+  asZodType(schema) instanceof z.ZodNullable;
 
 /**
  * @internal
- * Validates a single field value. Returns error messages or `undefined` when valid.
+ * Determina si un schema Zod es optional (`z.string().optional()` o `z.ZodDefault`).
+ * Un campo optional acepta `undefined` — NO `null`.
  */
-async function validateField(
+const isOptionalSchema = (schema: z.ZodRawShape[string]): boolean => {
+  const zodSchema = asZodType(schema);
+  return zodSchema instanceof z.ZodOptional || zodSchema instanceof z.ZodDefault;
+};
+
+/**
+ * @internal
+ * Coerciona el valor de un campo para validación con Zod.
+ *
+ * El browser siempre entrega `''` para inputs vacíos — nunca `null` ni `undefined`.
+ * Zod no acepta `''` como valor vacío válido, por lo que hay que convertirlo
+ * al tipo que cada schema espera antes de validar:
+ *
+ * - `ZodNullable`  → `''` se convierte en `null`    (`z.string().nullable()`)
+ * - `ZodOptional`  → `''` se convierte en `undefined` (`z.string().optional()`)
+ * - `ZodDefault`   → `''` se convierte en `undefined` (Zod aplica el default internamente)
+ * - Cualquier otro → el valor se pasa tal cual
+ *
+ * `coerceEmptyStrings` en `ApiClient` hace la misma conversión `''` → `null`
+ * antes del fetch HTTP — este helper replica esa lógica en la capa de validación.
+ */
+const coerceForValidation = (schema: z.ZodRawShape[string], value: unknown): unknown => {
+  if (value !== '') return value;
+  if (isNullableSchema(schema)) return null;
+  if (isOptionalSchema(schema)) return undefined;
+  return value;
+};
+
+/**
+ * @internal
+ * Valida un único valor de campo. Retorna mensajes de error o `undefined` si es válido.
+ */
+const validateField = async (
   schema: z.ZodRawShape[string],
   value: unknown,
-): Promise<string[] | undefined> {
-  const result = await asZodType(schema).safeParseAsync(value);
+): Promise<string[] | undefined> => {
+  const result = await asZodType(schema).safeParseAsync(coerceForValidation(schema, value));
   if (result.success) return undefined;
   const messages = result.error.issues.map((i) => i.message);
   return messages.length > 0 ? messages : undefined;
-}
+};
+
+/**
+ * @internal
+ * Coerciona todos los valores del formulario para validación del schema completo.
+ * Idéntica lógica que `coerceForValidation` pero para el objeto entero.
+ */
+const coerceValuesForParse = <TShape extends z.ZodRawShape>(
+  shape: TShape,
+  values: FieldValues<TShape>,
+): Record<string, unknown> => {
+  const result: Record<string, unknown> = {};
+  for (const key of Object.keys(shape)) {
+    result[key] = coerceForValidation(shape[key]!, (values as Record<string, unknown>)[key]);
+  }
+  return result;
+};
 //#endregion
 
 //#region FORM_STORE_BUILDER
 /**
  * @public
- * @summary Builds a reactive Zustand form store from a Zod object schema.
+ * @summary Construye un store Zustand reactivo de formulario a partir de un schema Zod.
  * @remarks
- * - Called internally by `createClientApi` for every contract.
- * - Exposed at `CallableEndpoint.$form`, consumed by `FieldFactory`.
- * - All field values use `''` as the empty state — never `null` or `undefined`.
- * @param schema      - Zod object schema describing the form fields.
- * @param triggerMode - When per-field validation is triggered.
+ * - Llamado internamente por `createClientApi` para cada contrato.
+ * - Expuesto en `CallableEndpoint.$form`, consumido por `FormFactory`.
+ * - Todos los valores de campo usan `''` como estado vacío — nunca `null` o `undefined`.
+ * - Los campos opcionales (`z.string().optional()`) se coercionan a `undefined`
+ *   antes de validar, por lo que el store funciona correctamente con inputs vacíos.
+ * @param schema      - Schema Zod del objeto que describe los campos del formulario.
+ * @param triggerMode - Cuándo se dispara la validación por campo.
  */
-export function createFormStore<TShape extends z.ZodRawShape>(
+export const createFormStore = <TShape extends z.ZodRawShape>(
   schema: z.ZodObject<TShape>,
   triggerMode: ValidationTrigger,
-): UseBoundStore<StoreApi<FormState<TShape>>> {
+): UseBoundStore<StoreApi<FormState<TShape>>> => {
   const shape: TShape = schema.shape;
   const keys = Object.keys(shape) as (keyof TShape & string)[];
-
-  // ── Non-null assertions on shape[key] are safe here ───────────
-  // Object.keys(shape) returns exactly the keys that exist in shape.
-  // noUncheckedIndexedAccess widens shape[key] to T | undefined, but
-  // we know statically it is always T — the ! asserts that invariant.
 
   const defaults = Object.fromEntries(
     keys.map((key) => [key, resolveFieldDefault(asZodType(shape[key]!))]),
   ) as FieldValues<TShape>;
 
   return create<FormState<TShape>>()((setState, getState) => {
-    function recompute(): void {
+    const recompute = (): void => {
       const s = getState();
       setState({
-        isFormValid: schema.safeParse(s.values).success,
+        isFormValid: schema.safeParse(coerceValuesForParse(shape, s.values)).success,
         isDirty: Object.values(s.dirty).some(Boolean),
       });
-    }
+    };
 
-    function applyErrors(key: keyof TShape, errs: string[] | undefined): void {
+    const applyErrors = (key: keyof TShape, errs: string[] | undefined): void => {
       setState((prev) => ({ errors: { ...prev.errors, [key]: errs } }));
-    }
+    };
 
-    const initial: FormState<TShape> = {
+    return {
       values: defaults,
       errors: {},
       touched: {},
       dirty: {},
-      isFormValid: false,
+      isFormValid: schema.safeParse(coerceValuesForParse(shape, defaults)).success,
       isDirty: false,
 
       set: async (key, value) => {
@@ -180,15 +223,13 @@ export function createFormStore<TShape extends z.ZodRawShape>(
           touched: {},
           dirty: {},
           isDirty: false,
-          isFormValid: false,
+          isFormValid: schema.safeParse(coerceValuesForParse(shape, defaults)).success,
         }),
 
       getValues: () => getState().values,
 
       setValues: (partial) => setState((prev) => ({ values: { ...prev.values, ...partial } })),
     };
-
-    return initial;
   });
-}
+};
 //#endregion

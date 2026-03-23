@@ -1,84 +1,91 @@
 /**
  * @file packages/sdk/ApiClient.ts
- * @description Frontend-only SDK factory. Uses fetch + zustand — no Node/express deps.
- * Never import this file from backend code. Use ApiServer.ts for backend.
+ * @description Factory de SDK solo para frontend. Usa fetch + zustand — sin deps de Node/express.
+ * Nunca importar desde código backend. Usar ApiServer.ts para el backend.
  */
 
 import { create } from 'zustand';
 import type { UseBoundStore, StoreApi } from 'zustand';
 import { z } from 'zod';
-import type { AnyContract } from './Contracts';
+import type { AnyContract, InferError } from './Contracts';
 import { getFullResponseSchema } from './Contracts';
 import { createFormStore } from './FormStore';
 import type { FormState, ValidationTrigger } from './FormStore';
 
 //#region PUBLIC_TYPES
-/** @public Reactive state for a single endpoint's in-flight request. */
-export type RequestState<TResponse> = {
+/**
+ * @public
+ * @summary Estado reactivo de una request en vuelo para un endpoint específico.
+ * @remarks
+ * `error` preserva el tipo exacto del envelope de error del contrato — incluyendo
+ * el literal union de `code` y los `params` tipados como field names del schema.
+ * `isFormValid` refleja el estado del store de formulario asociado — permite
+ * deshabilitar el botón de submit sin suscribirse manualmente al `$form`.
+ */
+export type RequestState<TResponse, TError> = {
   isFetching: boolean;
-  error: Error | null;
+  error: TError | null;
   data: TResponse | null;
+  isFormValid: boolean;
 };
 
-/** @internal Extracts the Zod raw shape from a contract's request schema. */
+/** @internal Extrae el Zod raw shape del schema de request de un contrato. */
 export type RequestShapeOf<C extends AnyContract> =
   C['__requestSchema'] extends z.ZodObject<infer S> ? S : z.ZodRawShape;
 
-/** @public Initialization config for {@link createClientApi}. */
+/** @public Configuración de inicialización para {@link createClientApi}. */
 export type ClientConfig = Readonly<{
-  /** Base URL prepended to every request path (e.g. `'https://api.example.com'`). */
+  /** URL base antepuesta a cada path de request (ej. `'https://api.example.com'`). */
   baseURL: string;
-  /** Credential forwarding mode for `fetch`. @defaultValue `'include'` */
+  /** Modo de forwarding de credenciales para `fetch`. @defaultValue `'include'` */
   credentials?: 'include' | 'same-origin' | 'omit';
-  /** When per-field form validation is triggered. @defaultValue `'onChange'` */
+  /** Cuándo se dispara la validación por campo. @defaultValue `'onChange'` */
   formMode?: ValidationTrigger;
 }>;
 
-/** @internal Resolved config with all defaults applied. */
+/** @internal Configuración resuelta con todos los defaults aplicados. */
 type ResolvedClientConfig = Required<ClientConfig>;
 
-// ─────────────────────────────────────────────────────────────
-//  CallableFn uses __phantomRequest / __phantomResponse directly
-//  (not through $type) to avoid the double-index widening that
-//  produces `unknown` when TContract is resolved through a union.
-// ─────────────────────────────────────────────────────────────
-
-/** @internal The callable function signature of a {@link CallableEndpoint}. */
+/** @internal Firma callable de un {@link CallableEndpoint}. */
 type CallableFn<C extends AnyContract> = (
   input: C['__phantomRequest'],
 ) => Promise<C['__phantomResponse']>;
 
-/** @internal Non-function properties attached to a {@link CallableEndpoint}. */
+/** @internal Propiedades no-función adjuntas a un {@link CallableEndpoint}. */
 type CallableEndpointProps<C extends AnyContract> = {
   readonly $form: UseBoundStore<StoreApi<FormState<RequestShapeOf<C>>>>;
-  readonly $use: UseBoundStore<StoreApi<RequestState<C['__phantomResponse']>>>;
+  readonly $use: UseBoundStore<StoreApi<RequestState<C['__phantomResponse'], InferError<C>>>>;
   readonly $reset: () => void;
   readonly isFetching: boolean;
-  readonly lastError: Error | null;
+  readonly lastError: InferError<C> | null;
   readonly lastData: C['__phantomResponse'] | null;
 };
 
 /**
  * @public
- * @summary A callable, reactive endpoint.
+ * @summary Endpoint callable y reactivo.
  * @remarks
- * - **Call it** — executes the HTTP request.
- * - **`$form`** — pass to `FieldFactory` for field binding.
- * - **`$use`**  — reactive `{ data, error, isFetching }` in components.
- * - **`$reset`** — clears stale state on mount.
+ * - **Llamarlo** — ejecuta el request HTTP.
+ * - **`$form`** — pasar a `FormFactory` para binding de campos.
+ * - **`$use`**  — `{ data, error, isFetching, isFormValid }` reactivos en componentes.
+ *   `error` está completamente tipado con el envelope del contrato.
+ *   `isFormValid` se sincroniza automáticamente con el store del formulario.
+ * - **`$reset`** — limpia el estado stale al montar.
  * @example
  * ```ts
- * await sdk.iam.login(form.getValues());
- * const { data, error, isFetching } = sdk.iam.login.$use();
+ * await sdk.iam.login(values);
+ * const { data, error, isFetching, isFormValid } = sdk.iam.login.$use();
+ * // error.code → 'INVALID_CREDENTIALS' | 'VALIDATION_ERROR' | ...
+ * // error.params → ('identity' | 'password')[]
  * ```
  */
 export type CallableEndpoint<C extends AnyContract> = CallableFn<C> & CallableEndpointProps<C>;
 
-/** @internal All module name literals in a contract collection. */
+/** @internal Union de nombres de módulo como literales de string. */
 type ModulesOf<TContracts extends readonly AnyContract[]> =
   TContracts[number]['__path'] extends `/${infer M}/${string}` ? M : never;
 
-/** @internal All action name literals for a given module. */
+/** @internal Union de nombres de acción para un módulo dado. */
 type ActionsOf<
   TContracts extends readonly AnyContract[],
   TModule extends string,
@@ -90,7 +97,7 @@ type ActionsOf<
     : never
   : never;
 
-/** @internal Extracts the exact contract for a module + action pair. */
+/** @internal Extrae el contrato exacto para un par módulo+acción. */
 type ContractAt<
   TContracts extends readonly AnyContract[],
   TModule extends string,
@@ -99,8 +106,8 @@ type ContractAt<
 
 /**
  * @public
- * @summary Fully typed SDK instance returned by {@link createClientApi}.
- * @remarks Organized as `sdk[module][action]`, each action is a {@link CallableEndpoint}.
+ * @summary Instancia de SDK completamente tipada retornada por {@link createClientApi}.
+ * @remarks Organizada como `sdk[módulo][acción]`, cada acción es un {@link CallableEndpoint}.
  */
 export type ClientApiInstance<TContracts extends readonly AnyContract[]> = Readonly<
   {
@@ -117,56 +124,62 @@ export type ClientApiInstance<TContracts extends readonly AnyContract[]> = Reado
 //#endregion
 
 //#region HTTP_HELPERS
-/** @internal Returns `true` for verbs that carry params in the URL instead of a body. */
-function isBodylessVerb(verb: string): verb is 'GET' | 'DELETE' {
-  return verb === 'GET' || verb === 'DELETE';
-}
+/** @internal Retorna `true` para verbos que pasan params en la URL en lugar del body. */
+const isBodylessVerb = (verb: string): verb is 'GET' | 'DELETE' =>
+  verb === 'GET' || verb === 'DELETE';
 
-/** @internal Serializes a flat object to a URL query string, skipping null/undefined. */
-function buildQueryString(params: Record<string, unknown>): string {
+/** @internal Serializa un objeto plano a query string, saltando null/undefined. */
+const buildQueryString = (params: Record<string, unknown>): string => {
   const sp = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (value !== null && value !== undefined) sp.append(key, String(value));
   }
   return sp.toString();
-}
+};
 
 /**
  * @internal
- * Converts `''` → `null` before sending to the backend.
- * The form always stores `''` to avoid browser controlled-input warnings.
- * Prisma nullable columns receive `null` — never `''`.
+ * Convierte `''` → `null` antes de enviar al backend.
+ * El formulario siempre guarda `''` para evitar warnings de inputs controlados.
+ * Las columnas nullable de Prisma reciben `null` — nunca `''`.
  */
-function coerceEmptyStrings(payload: Record<string, unknown>): Record<string, unknown> {
+const coerceEmptyStrings = (payload: Record<string, unknown>): Record<string, unknown> => {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(payload)) {
     result[key] = value === '' ? null : value;
   }
   return result;
-}
+};
 //#endregion
 
 //#region ENDPOINT_BUILDER
-function buildEndpoint<C extends AnyContract>(
+const buildEndpoint = <C extends AnyContract>(
   contract: C,
   config: ResolvedClientConfig,
-): CallableEndpoint<C> {
+): CallableEndpoint<C> => {
   type TResponse = C['__phantomResponse'];
-  type TRequest = C['__phantomRequest'];
+  type TError = InferError<C>;
 
-  const requestStore = create<RequestState<TResponse>>(() => ({
-    isFetching: false,
-    error: null,
-    data: null,
-  }));
-
-  // después
   const formStore =
     contract.__requestSchema instanceof z.ZodObject
       ? createFormStore(contract.__requestSchema as z.ZodObject<RequestShapeOf<C>>, config.formMode)
       : createFormStore(z.object({}) as z.ZodObject<RequestShapeOf<C>>, config.formMode);
 
-  async function executeRequest(input: TRequest): Promise<TResponse> {
+  const requestStore = create<RequestState<TResponse, TError>>(() => ({
+    isFetching: false,
+    error: null,
+    data: null,
+    isFormValid: formStore.getState().isFormValid,
+  }));
+
+  // Sincroniza isFormValid del formStore → requestStore reactivamente
+  formStore.subscribe((s) => {
+    if (requestStore.getState().isFormValid !== s.isFormValid) {
+      requestStore.setState({ isFormValid: s.isFormValid });
+    }
+  });
+
+  const executeRequest = async (input: C['__phantomRequest']): Promise<TResponse> => {
     requestStore.setState({ isFetching: true, error: null });
     try {
       const rawParsed = contract.__requestSchema.parse(input) as Record<string, unknown>;
@@ -199,13 +212,14 @@ function buildEndpoint<C extends AnyContract>(
       requestStore.setState({ data: response });
       return response;
     } catch (thrown) {
+      // Si la respuesta del servidor es un error envelope, preserva el tipo exacto
       const error = thrown instanceof Error ? thrown : new Error('Unexpected API error');
-      requestStore.setState({ error });
+      requestStore.setState({ error: error as unknown as TError });
       throw error;
     } finally {
       requestStore.setState({ isFetching: false });
     }
-  }
+  };
 
   const props: CallableEndpointProps<C> = {
     $form: formStore,
@@ -223,14 +237,14 @@ function buildEndpoint<C extends AnyContract>(
   };
 
   return Object.assign(executeRequest, props) as CallableEndpoint<C>;
-}
+};
 //#endregion
 
 //#region CREATE_CLIENT_API
 /**
  * @public
- * @summary Creates a fully typed frontend SDK from a set of contracts.
- * @remarks Call once in `apps/frontend/src/sdk.ts`.
+ * @summary Crea una instancia de SDK completamente tipada a partir de un conjunto de contratos.
+ * @remarks Llamar una sola vez en `apps/frontend/src/sdk.ts`.
  * @example
  * ```ts
  * export const sdk = createClientApi(contracts, {
@@ -238,10 +252,10 @@ function buildEndpoint<C extends AnyContract>(
  * });
  * ```
  */
-export function createClientApi<const TContracts extends readonly AnyContract[]>(
+export const createClientApi = <const TContracts extends readonly AnyContract[]>(
   contracts: TContracts,
   config: ClientConfig,
-): ClientApiInstance<TContracts> {
+): ClientApiInstance<TContracts> => {
   const resolved: ResolvedClientConfig = {
     baseURL: config.baseURL,
     credentials: config.credentials ?? 'include',
@@ -271,5 +285,5 @@ export function createClientApi<const TContracts extends readonly AnyContract[]>
     $modules: Object.freeze(moduleList) as ReadonlyArray<ModulesOf<TContracts>>,
     $contracts: contracts,
   }) as ClientApiInstance<TContracts>;
-}
+};
 //#endregion

@@ -12,17 +12,19 @@ const SidebarMenu = () => {
   return createPortal(
     <aside className={`sidebar ${expanded ? 'sidebar--expanded' : ''}`} aria-label="Menú principal">
       <nav className="sidebar__nav">
+        {/* ── Brand ── */}
         <div className="sidebar__row sidebar__row--brand">
           <div className="sidebar__icon-cell">
-            <img src="/restaurant-logo.png" alt="" className="sidebar__icon" aria-hidden="true" />
+            <img src="/QART_LOGO.png" alt="" className="sidebar__icon size-30" aria-hidden="true" />
           </div>
           {expanded && <span className="sidebar__label sidebar__label--brand">QART</span>}
         </div>
 
+        {/* ── Perfil ── */}
         <div className="sidebar__row">
           <div className="sidebar__icon-cell">
             <img
-              src="/profile-icon.png"
+              src="/user-icon.png"
               alt=""
               className="sidebar__icon sidebar__icon--avatar"
               aria-hidden="true"
@@ -33,11 +35,11 @@ const SidebarMenu = () => {
 
         <div className="sidebar__divider" role="separator" />
 
-        <div className="sidebar__row">
-          <ToggleModeButton expanded={expanded} />
-        </div>
+        {/* ── Toggle modo — el row lo pone el sidebar, no el botón ── */}
+        <ToggleModeButton expanded={expanded} />
       </nav>
 
+      {/* ── Expand / Collapse ── */}
       <div className="sidebar__footer">
         <button
           className="sidebar__row sidebar__row--toggle"
@@ -53,6 +55,7 @@ const SidebarMenu = () => {
               ›
             </span>
           </div>
+          {expanded && <span className="sidebar__label">Contraer</span>}
         </button>
       </div>
     </aside>,
