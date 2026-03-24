@@ -9,9 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@app/sdk": "workspace:*",
     "@app/contracts": "workspace:*",
+    "@app/sdk": "workspace:*",
     "@tanstack/react-query": "^5.90.21",
+    "framer-motion": "^12.38.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-phone-number-input": "^3.4.16",

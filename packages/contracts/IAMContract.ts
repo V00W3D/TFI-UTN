@@ -25,7 +25,6 @@ import {
 export const LoginInputSchema = z.object({
   identity: identityField.schema,
   password: defineField({ label: 'Contraseña', min: { value: 1 }, rules: [] }).schema,
-  rememberMe: z.boolean().optional(),
 });
 
 /**

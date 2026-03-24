@@ -1,11 +1,11 @@
 import type { RouteObject } from 'react-router-dom';
 
-import CoreLayout from './layouts/CustomerLayout';
+import CustomerLayout from './layouts/CustomerLayout';
 import LandingPage from './pages/LandingPage';
 
 export const CORERoutes: RouteObject = {
   path: '/',
-  element: <CoreLayout />,
+  element: <CustomerLayout />,
   children: [
     {
       index: true,

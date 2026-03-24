@@ -8,7 +8,7 @@ datasource db {
 }
 
 // ─────────────────────────────────────────────
-// USER — identidad base compartida por todos
+// USER
 // ─────────────────────────────────────────────
 
 model User {
@@ -25,21 +25,25 @@ model User {
   email String  @unique @db.VarChar(128)
   phone String? @unique @db.VarChar(15)
 
-  // Discriminador de alto nivel — determina qué perfil tiene este usuario
   role UserRole @default(CUSTOMER)
 
-  // Solo uno de estos perfiles debería estar poblado según `role`
   customer  CustomerProfile?
   staff     StaffProfile?
   authority AuthorityProfile?
+
+  plates   Plate[]
+  reviews  Review[]
+  stats    CreatorStats?
+
+  // 🔥 RELACIÓN INVERSA PARA TAGS
+  createdTags Tag[]
 
   createdat DateTime @default(now())
   updatedat DateTime @updatedAt
 }
 
 // ─────────────────────────────────────────────
-// CUSTOMER — clientes del restaurante
-// Discriminador: `tier` (nivel de fidelidad)
+// CUSTOMER
 // ─────────────────────────────────────────────
 
 model CustomerProfile {
@@ -49,14 +53,13 @@ model CustomerProfile {
 }
 
 enum CustomerTier {
-  REGULAR  // cliente común
-  VIP      // cliente frecuente con beneficios
-  PREMIUM  // cliente de membresía especial
+  REGULAR
+  VIP
+  PREMIUM
 }
 
 // ─────────────────────────────────────────────
-// STAFF — trabajadores de cocina y salón
-// Discriminador: `post` (puesto de trabajo)
+// STAFF
 // ─────────────────────────────────────────────
 
 model StaffProfile {
@@ -66,17 +69,16 @@ model StaffProfile {
 }
 
 enum StaffPost {
-  COOK      // cocinero
-  CASHIER   // cajero
-  WAITER    // mozo / mesero
-  BARISTA   // barista / bartender
-  CLEANER   // personal de limpieza
-  DELIVERY  // repartidor
+  COOK
+  CASHIER
+  WAITER
+  BARISTA
+  CLEANER
+  DELIVERY
 }
 
 // ─────────────────────────────────────────────
-// AUTHORITY — personal directivo y de gestión
-// Discriminador: `rank` (jerarquía de autoridad)
+// AUTHORITY
 // ─────────────────────────────────────────────
 
 model AuthorityProfile {
@@ -86,20 +88,180 @@ model AuthorityProfile {
 }
 
 enum AuthorityRank {
-  SUPERVISOR  // supervisión de turno / piso
-  MANAGER     // gerente general
-  DIRECTOR    // director de área / operaciones
-  OWNER       // dueño del negocio
+  SUPERVISOR
+  MANAGER
+  DIRECTOR
+  OWNER
 }
 
 // ─────────────────────────────────────────────
-// ENUMS GLOBALES
+// PLATE
 // ─────────────────────────────────────────────
 
+model Plate {
+  id String @id @default(uuid())
+
+  name        String  @db.VarChar(128)
+  description String?
+
+  source PlateSource
+  type   PlateType
+  flavor FlavorProfile
+
+  creatorId String?
+  creator   User? @relation(fields: [creatorId], references: [id])
+
+  avgRating    Float @default(0)
+  ratingsCount Int   @default(0)
+
+  isAvailable Boolean @default(true)
+
+  ingredients PlateIngredient[]
+  reviews     Review[]
+
+  // 🔥 RELACIÓN INVERSA PARA TAGS
+  tags PlateTag[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// INGREDIENT
+// ─────────────────────────────────────────────
+
+model Ingredient {
+  id String @id @default(uuid())
+
+  name String @unique @db.VarChar(64)
+
+  flavor FlavorProfile
+
+  isActive Boolean @default(true)
+
+  plates PlateIngredient[]
+}
+
+// ─────────────────────────────────────────────
+// PLATE - INGREDIENT
+// ─────────────────────────────────────────────
+
+model PlateIngredient {
+  plateId      String
+  ingredientId String
+
+  plate      Plate      @relation(fields: [plateId], references: [id], onDelete: Cascade)
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@id([plateId, ingredientId])
+}
+
+// ─────────────────────────────────────────────
+// REVIEW
+// ─────────────────────────────────────────────
+
+model Review {
+  id String @id @default(uuid())
+
+  userId  String
+  plateId String
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plate Plate @relation(fields: [plateId], references: [id], onDelete: Cascade)
+
+  rating Float
+  comment String? @db.VarChar(500)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, plateId])
+}
+
+// ─────────────────────────────────────────────
+// CREATOR STATS
+// ─────────────────────────────────────────────
+
+model CreatorStats {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  totalPlates     Int   @default(0)
+  totalOrders     Int   @default(0)
+  avgRating       Float @default(0)
+  reputationScore Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// TAG
+// ─────────────────────────────────────────────
+
+model Tag {
+  id String @id @default(uuid())
+
+  name String @unique @db.VarChar(32)
+
+  isApproved Boolean @default(false)
+  isActive   Boolean @default(true)
+
+  // 🔥 NUEVO
+  usageCount Int @default(0)
+
+  createdById String?
+  createdBy   User? @relation(fields: [createdById], references: [id])
+
+  plates PlateTag[]
+
+  createdAt DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────
+// PLATE - TAG
+// ─────────────────────────────────────────────
+
+model PlateTag {
+  plateId String
+  tagId   String
+
+  plate Plate @relation(fields: [plateId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([plateId, tagId])
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum PlateSource {
+  Q
+  C
+}
+
+enum PlateType {
+  STARTER
+  MAIN
+  DESSERT
+  SIDE
+  SNACK
+  DRINK
+}
+
+enum FlavorProfile {
+  SWEET
+  SALTY
+  ACID
+  BITTERSWEET
+  UMAMI
+  UNKNOWN
+}
+
 enum UserRole {
-  CUSTOMER   // tiene CustomerProfile
-  STAFF      // tiene StaffProfile
-  AUTHORITY  // tiene AuthorityProfile
+  CUSTOMER
+  STAFF
+  AUTHORITY
 }
 
 enum Sex {

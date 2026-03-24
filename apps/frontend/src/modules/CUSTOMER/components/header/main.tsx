@@ -1,7 +1,6 @@
 import Logo from './Logo';
 import Navbar from './Navbar';
 import SearchBar from './SearchBar';
-import ProfileCard from './ProfileCard';
 
 const Header = () => {
   return (
@@ -13,8 +12,6 @@ const Header = () => {
         </div>
 
         <SearchBar />
-
-        <ProfileCard />
       </div>
     </header>
   );
