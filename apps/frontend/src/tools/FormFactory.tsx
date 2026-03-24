@@ -1,98 +1,203 @@
 /**
  * @file FormFactory.tsx
  * @description Fábrica de formularios reactivos tipados sobre el SDK de contratos.
- * Deriva automáticamente campos, validación y envío desde contratos Zod — sin configuración manual.
+ * Genera automáticamente campos, validación, envío y UI a partir de contratos Zod.
  * @module FormFactory
  */
 
-import { useId, useState, useCallback, memo } from 'react';
+import { useId, useState, useCallback, useEffect, memo } from 'react';
 import { useStore } from 'zustand';
 import type { UseBoundStore, StoreApi } from 'zustand';
 import type { ChangeEvent, FocusEvent, ReactNode, FormEvent } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 import 'react-phone-number-input/style.css';
-import './FormFactory.css';
-import type { ClientApiInstance } from '@app/sdk/ApiClient';
+import type { NavigateOptions } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import type { ClientApiInstance, RequestState } from '@app/sdk/ApiClient';
 import type { FormState } from '@app/sdk';
 import type { AnyContract, RequestShapeOf } from '@app/sdk';
+import './FormFactoryStyles.css';
 
-//#region TIPOS_PRIMITIVOS
+// ─────────────────────────────────────────────────────────────────────────────
+// SECCIÓN 1 — TIPOS PÚBLICOS
+// Todo lo que el consumidor del módulo necesita conocer.
+// ─────────────────────────────────────────────────────────────────────────────
+
+//#region FIELD_TYPES
+
 /**
- * @summary Tipos de control de entrada disponibles para un campo.
- * @remarks Controles primitivos como string; select y radio requieren opciones.
+ * @summary Tipo de control visual de un campo.
+ * Determina qué elemento HTML se renderiza para capturar el valor.
  */
-export type FieldType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'phone'
-  | 'select'
-  | 'textarea'
-  | 'radio'
-  | 'checkbox';
+export type ControlType =
+  | 'text' // Texto libre
+  | 'email' // Dirección de correo
+  | 'password' // Contraseña (oculta por defecto)
+  | 'phone' // Teléfono con selector de país
+  | 'select' // Lista desplegable
+  | 'textarea' // Área de texto multilínea
+  | 'radio' // Selector de opción única con tarjetas
+  | 'checkbox'; // Casilla de verificación
 
 /**
  * @summary Opción individual para controles `select` o `radio`.
- * @property value - Valor enviado al store.
+ * @property value - Valor interno enviado al store.
  * @property label - Texto visible al usuario.
- * @property icon  - Ruta opcional a ícono decorativo.
+ * @property icon  - Ruta a imagen decorativa (opcional).
  */
-export interface FieldOption {
+export interface ControlOption {
   value: string;
   label: string;
   icon?: string;
 }
 
 /**
- * @summary Complementos opcionales que extienden el comportamiento de un campo.
- * @remarks Cada addon es un discriminated union con `type` como discriminante.
+ * @summary Control de entrada — texto simple o tuple `[tipo, opciones]`.
+ * @remarks
+ * - Primitivo: `'text'`, `'email'`, `'password'`, `'phone'`
+ * - Con opciones: `['select', [...opciones]]` o `['radio', [...opciones]]`
+ */
+export type InputControl =
+  | 'text'
+  | 'email'
+  | 'password'
+  | 'phone'
+  | ['select', ControlOption[]]
+  | ['radio', ControlOption[]];
+
+/**
+ * @summary Complementos que extienden el comportamiento visual de un campo.
+ * @remarks Cada complemento se identifica por su propiedad `type`.
+ * - `icon`            — ícono decorativo a la izquierda del input
+ * - `passwordToggle`  — botón para mostrar/ocultar contraseña
+ * - `hint`            — texto de ayuda debajo del campo
+ * - `rules`           — lista de reglas expandibles al hacer clic en `(?)`
+ * - `strength`        — indicador visual de fortaleza de contraseña
  */
 export type FieldAddon =
   | { type: 'icon'; src: string }
   | { type: 'passwordToggle' }
   | { type: 'hint'; text: string }
   | { type: 'rules'; rules: readonly string[] }
-  | { type: 'rubber' }
   | { type: 'strength' };
 
-/** @summary Control de un campo — primitivo o tuple `[tipo, opciones]`. */
-export type FieldControl =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'phone'
-  | ['select', FieldOption[]]
-  | ['radio', FieldOption[]];
-
-/** @summary Modo de operación del campo — afecta visibilidad de hints y reglas. */
-export type FieldMode = 'login' | 'register';
+/** @summary Modo del formulario — afecta qué complementos se muestran. */
+export type FormMode = 'login' | 'register';
 
 /**
  * @summary Props públicas de un campo generado por `FormFactory`.
- * @remarks Pasadas al componente `Field` producido por `buildField`.
+ * @remarks
+ * - `rubber` es obligatorio — todo campo debe poder limpiarse.
+ * - `addons` agrega comportamiento extra (ícono, toggle de contraseña, reglas, etc.).
  */
 export interface FieldProps {
-  /** Texto del label visible. */
+  /** Texto del label visible sobre el campo. */
   label: string;
-  /** Control de entrada. Por defecto: `'text'`. */
-  control?: FieldControl;
-  /** Placeholder del input. */
+  /** Tipo de control de entrada. Por defecto: `'text'`. */
+  control?: InputControl;
+  /** Placeholder del input cuando está vacío. */
   placeholder?: string;
-  /** Marca el campo como obligatorio con indicador visual. */
+  /** Muestra un asterisco y bloquea el submit si está vacío. */
   required?: boolean;
   /** Modo del formulario — controla hints y reglas. Por defecto: `'register'`. */
-  fieldMode?: FieldMode;
-  /** Lista de addons a aplicar. */
+  fieldMode?: FormMode;
+  /** Complementos opcionales: ícono, toggle, hint, reglas, fortaleza. */
   addons?: FieldAddon[];
 }
+
 //#endregion
 
-//#region TIPOS_INTERNOS
+//#region FORM_TYPES
+
+/**
+ * @summary Props del componente `Form` generado por `FormFactory`.
+ * @remarks
+ * `Form` encapsula automáticamente: reset al montar, seguimiento del estado,
+ * logging de respuestas, navegación al completar, submit con validación,
+ * layout visual, botón y mensajes de éxito/error.
+ */
+export interface FormProps {
+  /** Contenido del formulario — campos y secciones. */
+  children: ReactNode;
+  /** Texto del botón en estado normal. Por defecto: `'Enviar'`. */
+  buttonText?: string;
+  /** Texto del botón mientras se procesa la solicitud. Por defecto: `'Cargando...'`. */
+  loadingText?: string;
+  /** Ruta a la que navegar cuando el submit es exitoso. */
+  redirectTo?: string;
+  /** Opciones de navegación (ej. `{ replace: true }`). */
+  redirectOptions?: NavigateOptions;
+}
+
+/**
+ * @summary Map de campos tipados para un contrato específico del SDK.
+ * @remarks Cada clave corresponde a un campo del schema de request del contrato.
+ * Los componentes generados aceptan `FieldProps` y están vinculados al store.
+ */
+export type TypedFields<C extends AnyContract> = {
+  readonly [K in keyof RequestShapeOf<C> & string]: (props: FieldProps) => ReactNode;
+};
+
+/**
+ * @summary Instancia completa de formulario para un endpoint del SDK.
+ * @remarks
+ * - `fields` — componentes de campo listos para renderizar, uno por cada campo del schema.
+ * - `Form`   — componente que encapsula todo el formulario con layout y lógica.
+ * - `$form`  — store Zustand con acceso directo a `validate`, `getValues`, `reset`, etc.
+ * - `submit` — handler raw de `onSubmit`, para casos que requieren control total.
+ */
+export interface FormInstance<C extends AnyContract> {
+  /** Componentes de campo tipados — uno por clave del schema de request. */
+  readonly fields: TypedFields<C>;
+  /**
+   * Componente completo del formulario.
+   * @example
+   * ```tsx
+   * const { Form, fields } = form.iam.login;
+   * <Form buttonText="Entrar" loadingText="Entrando..." redirectTo="/" redirectOptions={{ replace: true }}>
+   *   <fields.identity label="Usuario o Email" required addons={[{ type: 'rules', rules: [...] }]} />
+   *   <fields.password label="Contraseña" required control="password" addons={[{ type: 'passwordToggle' }]} />
+   * </Form>
+   * ```
+   */
+  readonly Form: (props: FormProps) => ReactNode;
+  /** Store Zustand del formulario con acceso a `validate`, `getValues`, `reset`, etc. */
+  readonly $form: UseBoundStore<StoreApi<FormState<RequestShapeOf<C>>>>;
+  /**
+   * Handler raw de `onSubmit` — para control total del submit sin usar `Form`.
+   * @param onComplete - Callback ejecutado con los valores validados si el form es válido.
+   */
+  submit: (
+    onComplete: (values: FormState<RequestShapeOf<C>>['values']) => void,
+  ) => (e: FormEvent<HTMLFormElement>) => Promise<void>;
+}
+
+/**
+ * @summary API completa de formularios generada por `FormFactory`.
+ * @remarks Organizada como `form[módulo][acción]`, espejando `sdk[módulo][acción]`.
+ */
+export type FormFactoryInstance<TContracts extends readonly AnyContract[]> = {
+  readonly [TModule in SDKModules<TContracts>]: {
+    readonly [TAction in SDKActions<TContracts, TModule>]: FormInstance<
+      ContractFor<TContracts, TModule, TAction>
+    >;
+  };
+};
+
+//#endregion
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SECCIÓN 2 — TIPOS INTERNOS (no exportados)
+// Solo para uso dentro de este archivo.
+// ─────────────────────────────────────────────────────────────────────────────
+
+//#region INTERNAL_TYPES
+
 /** @internal Evento sintético para controles no-nativos (phone, checkbox). */
 type SyntheticEvent<V> = { target: { value: V } };
 
-/** @internal Handler unificado de onChange para todos los tipos de control. */
+/** @internal Handler de cambio unificado para cualquier tipo de control. */
 type ChangeHandler = (
   e:
     | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -100,30 +205,69 @@ type ChangeHandler = (
     | SyntheticEvent<boolean>,
 ) => void;
 
-/** @internal Props mínimas que recibe `FieldControl`. */
-interface InputProps {
+/** @internal Props mínimas del elemento de entrada nativo. */
+interface NativeInputProps {
   value: string | boolean;
   onChange: ChangeHandler;
   onBlur: (e: FocusEvent<HTMLElement>) => void;
 }
 
-/** @internal Props de `BoundField` — extiende las props públicas con binding al store. */
+/** @internal Props internas de `BoundField` — extiende las públicas con binding al store. */
 interface BoundFieldProps extends FieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   store: StoreApi<FormState<any>>;
   name: string;
 }
 
-/** @internal Store opaco — evita la constraint `ZodRawShape` en el loop de construcción. */
+/** @internal Store de formulario opaco — evita la constraint `ZodRawShape` en el loop. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyFormStore = UseBoundStore<StoreApi<FormState<any>>>;
+type FormStore = UseBoundStore<StoreApi<FormState<any>>>;
+
+/** @internal Endpoint opaco para el loop de construcción del wrapper `Form`. */
+type OpaqueEndpoint = {
+  $form: FormStore;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  $use: UseBoundStore<StoreApi<RequestState<any, any>>>;
+  $reset: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (input: any): Promise<any>;
+};
+
+/** @internal Extrae nombres de módulo del SDK como union de literales. */
+type SDKModules<TContracts extends readonly AnyContract[]> =
+  TContracts[number]['__path'] extends `/${infer M}/${string}` ? M : never;
+
+/** @internal Extrae nombres de acción para un módulo específico del SDK. */
+type SDKActions<
+  TContracts extends readonly AnyContract[],
+  TModule extends string,
+> = TContracts[number] extends infer C
+  ? C extends AnyContract
+    ? C['__path'] extends `/${TModule}/${infer A}`
+      ? A
+      : never
+    : never
+  : never;
+
+/** @internal Extrae el contrato exacto para un par módulo+acción. */
+type ContractFor<
+  TContracts extends readonly AnyContract[],
+  TModule extends string,
+  TAction extends string,
+> = Extract<TContracts[number], { __path: `/${TModule}/${TAction}` }>;
+
 //#endregion
 
-//#region CONSTANTES_Y_UTILIDADES
-/** @internal Etiquetas legibles por nivel de fortaleza (índice = score 0–5). */
+// ─────────────────────────────────────────────────────────────────────────────
+// SECCIÓN 3 — CONSTANTES Y UTILIDADES INTERNAS
+// ─────────────────────────────────────────────────────────────────────────────
+
+//#region CONSTANTS_AND_UTILS
+
+/** @internal Etiquetas de fortaleza de contraseña por nivel (0 = ninguna, 5 = máxima). */
 const STRENGTH_LABELS = ['', 'muy débil', 'débil', 'decente', 'segura', 'muy segura'] as const;
 
-/** @internal Clases Tailwind por nivel de fortaleza (índice = score 0–5). */
+/** @internal Clases Tailwind de color por nivel de fortaleza. */
 const STRENGTH_COLORS = [
   '',
   'bg-red-500',
@@ -133,64 +277,82 @@ const STRENGTH_COLORS = [
   'bg-[hsl(220_90%_56%)]',
 ] as const;
 
-/** @internal Calcula el score de fortaleza de una contraseña (0–5). */
-const calcStrength = (val: string): number =>
-  (val.length >= 8 ? 1 : 0) +
-  (/[A-Z]/.test(val) ? 1 : 0) +
-  (/[a-z]/.test(val) ? 1 : 0) +
-  (/[0-9]/.test(val) ? 1 : 0) +
-  (/[^A-Za-z0-9]/.test(val) ? 1 : 0);
+/** @internal Calcula el nivel de fortaleza de una contraseña (0–5). */
+const calculateStrength = (value: string): number =>
+  (value.length >= 8 ? 1 : 0) +
+  (/[A-Z]/.test(value) ? 1 : 0) +
+  (/[a-z]/.test(value) ? 1 : 0) +
+  (/[0-9]/.test(value) ? 1 : 0) +
+  (/[^A-Za-z0-9]/.test(value) ? 1 : 0);
 
 /**
- * @internal Parsea los addons a flags y referencias tipadas.
- * Función pura sin hooks — segura para llamar dentro del render sin restricciones.
+ * @internal Extrae los complementos del array de addons en un objeto con flags y referencias.
+ * Función pura — no llama hooks, segura para usar dentro de render.
  */
-const parseAddons = (addons: FieldAddon[]) => ({
+const extractAddons = (addons: FieldAddon[]) => ({
   iconAddon: addons.find((a): a is Extract<FieldAddon, { type: 'icon' }> => a.type === 'icon'),
   hintAddon: addons.find((a): a is Extract<FieldAddon, { type: 'hint' }> => a.type === 'hint'),
   rulesAddon: addons.find((a): a is Extract<FieldAddon, { type: 'rules' }> => a.type === 'rules'),
   hasPasswordToggle: addons.some((a) => a.type === 'passwordToggle'),
-  hasRubber: addons.some((a) => a.type === 'rubber'),
   hasStrength: addons.some((a) => a.type === 'strength'),
 });
+
 //#endregion
 
-//#region SUBCOMPONENTES_INTERNOS
+// ─────────────────────────────────────────────────────────────────────────────
+// SECCIÓN 4 — SUBCOMPONENTES INTERNOS
+// Piezas visuales reutilizables, todas memoizadas para evitar re-renders.
+// ─────────────────────────────────────────────────────────────────────────────
+
+//#region SUBCOMPONENTS
+
 /**
- * @internal Botón de slot (toggle de contraseña, borrador).
- * `memo` garantiza que no re-renderiza cuando el valor del campo cambia.
+ * @internal Botón de acción dentro del slot derecho de un campo.
+ * Usado para el toggle de contraseña y el botón de limpiar (rubber).
+ * `memo` evita re-renders cuando cambia el valor del campo pero no este botón.
  */
 const SlotButton = memo(
-  ({ onClick, src, alt }: { onClick: () => void; src: string; alt: string }) => (
+  ({ onClick, icon, description }: { onClick: () => void; icon: string; description: string }) => (
     <button type="button" onClick={onClick} className="ff-slot-btn">
-      <img src={src} alt={alt} className="size-6 object-contain pointer-events-none" />
+      <img
+        src={icon}
+        alt={description}
+        className="size-6 object-contain pointer-events-none ff-icon"
+      />
     </button>
   ),
 );
 
-/** @internal Indicador de fortaleza de contraseña. Memoizado por valor. */
-const FieldStrength = memo(({ value }: { value: string }) => {
-  const score = calcStrength(value);
-  if (!score) return null;
+/**
+ * @internal Barra de fortaleza de contraseña con etiqueta de nivel.
+ * Solo se muestra cuando el campo tiene valor. Memoizado por valor.
+ */
+const StrengthIndicator = memo(({ value }: { value: string }) => {
+  const level = calculateStrength(value);
+  if (!level) return null;
   return (
-    <div className="flex flex-col gap-1 mt-2">
-      <div className="w-full h-2 rounded overflow-hidden bg-(--border)">
+    <div className="ff-strength">
+      <div className="ff-strength-bar">
         <div
-          className={`h-full transition-all duration-300 ${STRENGTH_COLORS[score]} ${score === 5 ? 'animate-[rgbShift_3s_linear_infinite]' : ''}`}
-          style={{ width: `${(score / 5) * 100}%` }}
+          className={`ff-strength-fill ${STRENGTH_COLORS[level]} ${level === 5 ? 'animate-[ff-rgb-shift_3s_linear_infinite]' : ''}`}
+          style={{ width: `${(level / 5) * 100}%` }}
         />
       </div>
       <span className="text-xs text-(--text-secondary)">
-        {'Fuerza: '}
-        <span className="font-semibold">{STRENGTH_LABELS[score]}</span>
+        {'Fortaleza: '}
+        <span className="font-semibold">{STRENGTH_LABELS[level]}</span>
       </span>
     </div>
   );
 });
 
-/** @internal Lista de reglas de validación. Memoizada — las reglas son estáticas. */
-const FieldRules = memo(({ rules }: { rules: readonly string[] }) => (
-  <div className="ff-rules-container">
+/**
+ * @internal Lista de reglas de validación expandible.
+ * Se muestra al hacer clic en el botón `(?)` del label.
+ * Memoizada — las reglas son constantes entre renders.
+ */
+const RulesList = memo(({ rules }: { rules: readonly string[] }) => (
+  <div className="ff-rules">
     <ul className="space-y-2">
       {rules.map((rule, i) => (
         <li
@@ -205,11 +367,14 @@ const FieldRules = memo(({ rules }: { rules: readonly string[] }) => (
   </div>
 ));
 
-/** @internal Mensajes de error. Memoizado por referencia del array. */
-const FieldErrors = memo(({ errors }: { errors: string[] }) => (
-  <div className="flex flex-col gap-1 text-xs animate-[fadeIn_.15s_ease]">
+/**
+ * @internal Mensajes de error del campo.
+ * Memoizado — solo re-renderiza cuando cambia el array de errores.
+ */
+const ErrorMessages = memo(({ errors }: { errors: string[] }) => (
+  <div className="ff-errors">
     {errors.map((msg, i) => (
-      <span key={i} className="text-(--color-error)">
+      <span key={i} className="ff-error-msg">
         {msg}
       </span>
     ))}
@@ -217,11 +382,11 @@ const FieldErrors = memo(({ errors }: { errors: string[] }) => (
 ));
 
 /**
- * @internal Renderer del control de entrada según `FieldType`.
- * Memoizado — re-renderiza solo cuando cambian value, type o los handlers.
- * Normaliza eventos no-nativos (phone, checkbox) a `SyntheticEvent`.
+ * @internal Elemento de entrada nativo según el tipo de control.
+ * Memoizado — solo re-renderiza cuando cambian value, type o handlers.
+ * Normaliza los eventos de controles no-nativos (phone, checkbox) al mismo formato.
  */
-const FieldControl = memo(
+const NativeInput = memo(
   ({
     type,
     resolvedType,
@@ -232,14 +397,14 @@ const FieldControl = memo(
     options,
     inputProps,
   }: {
-    type: FieldType;
+    type: ControlType;
     resolvedType: string;
     inputId: string;
     name: string;
     required?: boolean;
     placeholder?: string;
-    options: FieldOption[];
-    inputProps: InputProps;
+    options: ControlOption[];
+    inputProps: NativeInputProps;
   }) => {
     switch (type) {
       case 'select':
@@ -277,29 +442,29 @@ const FieldControl = memo(
         return (
           <div className="ff-radio-group">
             {options.map((opt) => {
-              const checked = inputProps.value === opt.value;
+              const isSelected = inputProps.value === opt.value;
               return (
                 <label key={opt.value} className="ff-radio-option" data-value={opt.value}>
                   <input
                     type="radio"
                     name={name}
                     value={opt.value}
-                    checked={checked}
+                    checked={isSelected}
                     className="hidden"
                     onChange={inputProps.onChange as (e: ChangeEvent<HTMLInputElement>) => void}
                     onBlur={inputProps.onBlur}
                   />
                   <div
-                    className={`ff-radio-card${checked ? ' ff-radio-card--checked' : ''} ff-radio-card--${opt.value}`}
+                    className={`ff-radio-card${isSelected ? ' ff-radio-card--checked' : ''} ff-radio-card--${opt.value}`}
                   >
                     <div className="ff-radio-circle">
-                      {checked && <div className="ff-radio-dot" />}
+                      {isSelected && <div className="ff-radio-dot" />}
                     </div>
                     {opt.icon && (
                       <img
                         src={opt.icon}
                         alt={opt.label}
-                        className="size-6 object-contain transition-all duration-300"
+                        className="size-6 object-contain transition-all duration-300 ff-icon"
                       />
                     )}
                     <span className="ff-radio-label">{opt.label}</span>
@@ -353,24 +518,25 @@ const FieldControl = memo(
     }
   },
 );
+
 //#endregion
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SECCIÓN 5 — CAMPO VINCULADO AL STORE
+// El componente central que conecta el visual con el estado del formulario.
+// ─────────────────────────────────────────────────────────────────────────────
+
 //#region BOUND_FIELD
+
 /**
- * @internal Componente de campo estable y memoizado.
+ * @internal Componente de campo reactivo vinculado al store del formulario.
  * @remarks
- * **Garantías de hooks y re-renders:**
- *
- * - Orden fijo e incondicional: `useId` × 1, `useState` × 3, `useStore` × 6, `useCallback` × 4.
- * - Cada `useStore(store, selector)` suscribe a **un único valor primitivo**.
- *   `useStore` compara con `Object.is` — valores primitivos iguales nunca disparan re-renders.
- *   Este es el patrón correcto de Zustand para evitar el error "getSnapshot should be cached":
- *   el selector devuelve un primitivo estable, no un objeto nuevo en cada llamada.
- * - `useShallow` fue descartado porque su uso como argumento de `$form()` viola las reglas
- *   de hooks al llamar un hook dentro de otra función.
- * - `memo` en `BoundField` evita re-renders cuando el padre re-renderiza sin cambiar las props.
- * - `useCallback` estabiliza handlers — `FieldControl` y `SlotButton` (memoizados)
- *   no re-renderizan por cambios de estado local (`isVisible`, `isHelpVisible`, `hasInteracted`).
+ * **Por qué es estable (sin bugs de hooks):**
+ * El orden de hooks es fijo e incondicional en todo momento:
+ * `useId` × 1 → `useState` × 3 → `useStore` × 6 → `useCallback` × 4.
+ * Cada `useStore` devuelve un valor primitivo — `Object.is` nunca detecta
+ * cambio falso, por lo que no hay re-renders infinitos.
+ * `memo` evita re-renders cuando el campo padre cambia pero este campo no.
  */
 const BoundField = memo(
   ({
@@ -384,50 +550,52 @@ const BoundField = memo(
     addons = [],
   }: BoundFieldProps) => {
     const inputId = useId();
-    const [isVisible, setIsVisible] = useState(false);
-    const [isHelpVisible, setIsHelpVisible] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [rulesVisible, setRulesVisible] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
 
-    // Selectores atómicos — cada uno devuelve un primitivo, Object.is nunca falla.
+    // Selectores atómicos — cada uno devuelve un primitivo estable
     const value = useStore(store, (s) => s.values[name]);
     const rawErrors = useStore(store, (s) => s.errors[name]);
     const isFormValid = useStore(store, (s) => s.isFormValid);
-    const storeSet = useStore(store, (s) => s.set);
-    const storeBlur = useStore(store, (s) => s.blur);
-    const storeReset = useStore(store, (s) => s.reset);
+    const save = useStore(store, (s) => s.set);
+    const markBlur = useStore(store, (s) => s.blur);
+    const clear = useStore(store, (s) => s.reset);
 
     const errors = (rawErrors ?? []) as string[];
+    const type: ControlType = Array.isArray(control) ? (control[0] as ControlType) : control;
+    const options: ControlOption[] = Array.isArray(control) ? control[1] : [];
+    const { iconAddon, hintAddon, rulesAddon, hasPasswordToggle, hasStrength } =
+      extractAddons(addons);
 
-    const type: FieldType = Array.isArray(control) ? (control[0] as FieldType) : control;
-    const options: FieldOption[] = Array.isArray(control) ? control[1] : [];
-    const { iconAddon, hintAddon, rulesAddon, hasPasswordToggle, hasRubber, hasStrength } =
-      parseAddons(addons);
-
-    const isRegister = fieldMode === 'register';
+    const isRegisterMode = fieldMode === 'register';
     const hasValue = typeof value === 'string' ? value.trim().length > 0 : Boolean(value);
-    const isValid = !errors.length && isFormValid;
+    const isFieldValid = !errors.length && isFormValid;
     const showError = hasInteracted && errors.length > 0;
-    const showSuccess = hasInteracted && hasValue && isValid && !showError;
+    const showSuccess = hasInteracted && hasValue && isFieldValid && !showError;
     const stateClass = showError ? 'ff-field--error' : showSuccess ? 'ff-field--success' : '';
     const resolvedType =
-      hasPasswordToggle && type === 'password' ? (isVisible ? 'text' : 'password') : type;
+      hasPasswordToggle && type === 'password' ? (passwordVisible ? 'text' : 'password') : type;
 
-    const onChange = useCallback(
+    const handleChange = useCallback(
       (
         e:
           | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
           | SyntheticEvent<string | boolean>,
       ) => {
         setHasInteracted(true);
-        storeSet(name, e.target.value as never);
+        save(name, e.target.value as never);
       },
-      [storeSet, name],
+      [save, name],
     );
 
-    const onBlur = useCallback((_e: FocusEvent<HTMLElement>) => storeBlur(name), [storeBlur, name]);
-    const toggleVisible = useCallback(() => setIsVisible((p) => !p), []);
-    const toggleHelp = useCallback(() => setIsHelpVisible((p) => !p), []);
-    const handleReset = useCallback(() => storeReset(), [storeReset]);
+    const handleBlur = useCallback(
+      (_e: FocusEvent<HTMLElement>) => markBlur(name),
+      [markBlur, name],
+    );
+    const togglePassword = useCallback(() => setPasswordVisible((p) => !p), []);
+    const toggleRules = useCallback(() => setRulesVisible((p) => !p), []);
+    const handleClear = useCallback(() => clear(), [clear]);
 
     return (
       <div className={`ff-field ${stateClass}`}>
@@ -436,9 +604,9 @@ const BoundField = memo(
             {label}
             {required && <span className="ff-required">{'*'}</span>}
           </label>
-          {isRegister && rulesAddon && (
-            <button type="button" onClick={toggleHelp} className="ff-help-btn">
-              {isHelpVisible ? 'cerrar' : '(?)'}
+          {isRegisterMode && rulesAddon && (
+            <button type="button" onClick={toggleRules} className="ff-help-btn">
+              {rulesVisible ? 'cerrar' : '(?)'}
             </button>
           )}
         </div>
@@ -446,11 +614,15 @@ const BoundField = memo(
           {iconAddon && (
             <div className="ff-slot-left">
               <div className="ff-slot-icon">
-                <img src={iconAddon.src} alt="icon" className="size-5 object-contain" />
+                <img
+                  src={iconAddon.src}
+                  alt="ícono del campo"
+                  className="size-5 object-contain ff-icon"
+                />
               </div>
             </div>
           )}
-          <FieldControl
+          <NativeInput
             type={type}
             resolvedType={resolvedType}
             inputId={inputId}
@@ -458,170 +630,237 @@ const BoundField = memo(
             required={required}
             placeholder={placeholder}
             options={options}
-            inputProps={{ value: value as string | boolean, onChange, onBlur }}
+            inputProps={{
+              value: value as string | boolean,
+              onChange: handleChange,
+              onBlur: handleBlur,
+            }}
           />
-          {((hasPasswordToggle && type === 'password') || hasRubber) && (
-            <div className="ff-slot-right">
-              {hasRubber && (
-                <SlotButton onClick={handleReset} src="/rubber-icon.png" alt="Limpiar campo" />
-              )}
-              {hasPasswordToggle && type === 'password' && (
-                <SlotButton
-                  onClick={toggleVisible}
-                  src={isVisible ? '/open-eye.png' : '/closed-eye.png'}
-                  alt={isVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                />
-              )}
-            </div>
-          )}
+          <div className="ff-slot-right">
+            <SlotButton onClick={handleClear} icon="/rubber-icon.png" description="Limpiar campo" />
+            {hasPasswordToggle && type === 'password' && (
+              <SlotButton
+                onClick={togglePassword}
+                icon={passwordVisible ? '/open-eye.png' : '/closed-eye.png'}
+                description={passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+              />
+            )}
+          </div>
         </div>
-        {showError && <FieldErrors errors={errors} />}
-        {hasStrength && isRegister && type === 'password' && value && (
-          <FieldStrength value={String(value)} />
+        {showError && <ErrorMessages errors={errors} />}
+        {hasStrength && isRegisterMode && type === 'password' && value && (
+          <StrengthIndicator value={String(value)} />
         )}
-        {isRegister && hintAddon && !showError && !isHelpVisible && (
+        {isRegisterMode && hintAddon && !showError && !rulesVisible && (
           <span className="text-xs text-(--text-muted)">{hintAddon.text}</span>
         )}
-        {isRegister && rulesAddon && isHelpVisible && <FieldRules rules={rulesAddon.rules} />}
+        {isRegisterMode && rulesAddon && rulesVisible && <RulesList rules={rulesAddon.rules} />}
       </div>
     );
   },
 );
 
-/**
- * @internal
- * Produce un componente `Field` con `store` y `name` previnculados como props.
- * El tipo renderizado es siempre `BoundField` (memoizado) — React mantiene el mismo
- * nodo en el árbol y reutiliza estado entre renders del padre.
- */
-const buildField = (store: AnyFormStore, name: string) => (props: FieldProps) => (
+/** @internal Crea un wrapper de `BoundField` con store y nombre previnculados. */
+const createField = (store: FormStore, name: string) => (props: FieldProps) => (
   <BoundField {...props} store={store} name={name} />
 );
+
 //#endregion
 
-//#region TIPOS_FORM_FACTORY
-/**
- * @internal Extrae los nombres de módulo del SDK como union de strings literales.
- * @example `'iam' | 'menu' | 'orders'`
- */
-type ModulesOf<TContracts extends readonly AnyContract[]> =
-  TContracts[number]['__path'] extends `/${infer M}/${string}` ? M : never;
+// ─────────────────────────────────────────────────────────────────────────────
+// SECCIÓN 6 — CONSTRUCTOR DEL FORMULARIO COMPLETO
+// Genera el componente `Form` que encapsula toda la lógica repetida entre páginas.
+// ─────────────────────────────────────────────────────────────────────────────
+
+//#region FORM_BUILDER
 
 /**
- * @internal Extrae los nombres de acción para un módulo específico del SDK.
- * @example Para `'iam'`: `'login' | 'register'`
+ * @internal Construye el componente `Form` para un endpoint dado.
+ * Elimina la lógica repetida en cada página:
+ * reset al montar, logging, navegación al completar, submit con validación,
+ * layout visual (wrapper → card → form), botón y mensajes de feedback.
  */
-type ActionsOf<
-  TContracts extends readonly AnyContract[],
-  TModule extends string,
-> = TContracts[number] extends infer C
-  ? C extends AnyContract
-    ? C['__path'] extends `/${TModule}/${infer A}`
-      ? A
-      : never
-    : never
-  : never;
+const buildForm =
+  (endpoint: OpaqueEndpoint): ((props: FormProps) => ReactNode) =>
+  ({
+    children,
+    buttonText = 'Enviar',
+    loadingText = 'Cargando...',
+    redirectTo,
+    redirectOptions,
+  }: FormProps) => {
+    const navigate = useNavigate();
+    const { data, error, isFetching, isFormValid } = endpoint.$use();
+    const store = endpoint.$form;
 
-/** @internal Extrae el contrato exacto para un par módulo+acción. */
-type ContractAt<
-  TContracts extends readonly AnyContract[],
-  TModule extends string,
-  TAction extends string,
-> = Extract<TContracts[number], { __path: `/${TModule}/${TAction}` }>;
+    useEffect(() => {
+      endpoint.$reset();
+    }, []);
 
-/**
- * @summary Map de campos tipados para un contrato específico.
- * @remarks Cada clave corresponde a un campo del schema de request.
- */
-export type FormFields<C extends AnyContract> = {
-  readonly [K in keyof RequestShapeOf<C> & string]: (props: FieldProps) => ReactNode;
-};
+    useEffect(() => {
+      // eslint-disable-next-line no-console
+      if (data) console.log('[FormFactory] respuesta exitosa:', data);
+      // eslint-disable-next-line no-console
+      if (error) console.log('[FormFactory] error de servidor:', error);
+      if (data && !error && redirectTo) navigate(redirectTo, redirectOptions);
+      // redirectTo y redirectOptions son props estáticas pasadas al construir el componente —
+      // no cambian entre renders, omitirlas del array es correcto e intencional.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, error, navigate]);
 
-/**
- * @summary Instancia de formulario para un endpoint específico del SDK.
- * @remarks
- * - `fields` — map de componentes `Field` listos para renderizar.
- * - `$form`  — store Zustand (`validate`, `getValues`, `reset`, etc.).
- * - `submit` — handler `onSubmit` que valida antes de ejecutar el callback.
- */
-export interface FormInstance<C extends AnyContract> {
-  /** Componentes de campo tipados, uno por clave del schema de request. */
-  readonly fields: FormFields<C>;
-  /** Store Zustand del formulario. */
-  readonly $form: UseBoundStore<StoreApi<FormState<RequestShapeOf<C>>>>;
-  /**
-   * Handler para `onSubmit` del `<form>`.
-   * Previene el comportamiento por defecto, valida todos los campos
-   * y ejecuta `onSuccess` solo si la validación pasa.
-   * @param onSuccess - Callback con los valores validados.
-   */
-  submit: (
-    onSuccess: (values: FormState<RequestShapeOf<C>>['values']) => void,
-  ) => (e: FormEvent<HTMLFormElement>) => Promise<void>;
-}
+    const handleSubmit = useCallback(
+      async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (isFetching) return;
+        const isValid = await store.getState().validate();
+        if (!isValid) return;
+        try {
+          await endpoint(store.getState().getValues());
+        } catch {
+          // El error queda guardado en el requestStore — se muestra abajo en el JSX
+        }
+      },
+      [isFetching, store],
+    );
 
-/**
- * @summary API de formularios generada por `FormFactory` para el SDK completo.
- * @remarks Organizada como `form[módulo][acción]` — espeja `sdk[módulo][acción]`.
- */
-export type FormFactoryInstance<TContracts extends readonly AnyContract[]> = {
-  readonly [TModule in ModulesOf<TContracts>]: {
-    readonly [TAction in ActionsOf<TContracts, TModule>]: FormInstance<
-      ContractAt<TContracts, TModule, TAction>
-    >;
+    return (
+      <div className="w-full flex items-center justify-center px-6">
+        <div className="w-full max-w-3xl p-10 rounded-xl border shadow-lg bg-(--surface) border-(--border)">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+            {children}
+            <button
+              type="submit"
+              disabled={isFetching || !isFormValid}
+              className={[
+                'mt-4 py-3 rounded-md font-semibold transition-all duration-300',
+                'bg-(--color-primary) text-(--text-inverse)',
+                'hover:bg-(--color-primary-dark) hover:cursor-pointer',
+                'hover:[box-shadow:0_0_0_4px_var(--color-primary-glow)]',
+                'disabled:opacity-50 disabled:cursor-not-allowed',
+              ].join(' ')}
+            >
+              {isFetching ? loadingText : buttonText}
+            </button>
+            {error && (
+              <p className="text-sm text-center font-medium text-(--color-error)">
+                {(error as { code?: string }).code ?? 'Error desconocido'}
+              </p>
+            )}
+            {data && !error && (
+              <p className="text-sm text-center font-medium text-(--color-success)">
+                {'Operación exitosa'}
+              </p>
+            )}
+          </form>
+        </div>
+      </div>
+    );
   };
-};
+
 //#endregion
 
-//#region FORM_FACTORY
+// ─────────────────────────────────────────────────────────────────────────────
+// SECCIÓN 7 — API PÚBLICA
+// Todo lo que se exporta y usa desde fuera de este archivo.
+// ─────────────────────────────────────────────────────────────────────────────
+
+//#region PUBLIC_API
+
+/**
+ * @public
+ * @summary Agrupa campos dentro de un `<Form>` con un título de sección.
+ * @example
+ * ```tsx
+ * <Form ...>
+ *   <FormSection title="Información Personal">
+ *     <fields.name  label="Nombre"   required />
+ *     <fields.lname label="Apellido" required />
+ *   </FormSection>
+ * </Form>
+ * ```
+ */
+export const FormSection = ({ title, children }: { title: string; children: ReactNode }) => (
+  <div className="flex flex-col gap-8">
+    <h3
+      className="text-xs font-semibold uppercase text-center pb-3 border-b border-(--border) text-(--text-secondary) tracking-[0.12em]"
+      style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}
+    >
+      {title}
+    </h3>
+    {children}
+  </div>
+);
+
 /**
  * @public
  * @summary Crea una instancia de formularios reactivos para todos los endpoints del SDK.
  * @remarks
- * Recorre los contratos del SDK e instancia un `FormInstance` por cada endpoint.
- * La estructura resultante espeja `sdk[módulo][acción]` para máxima coherencia.
+ * Recorre los contratos del SDK y genera un `FormInstance` por cada endpoint.
+ * La estructura resultante espeja `sdk[módulo][acción]` — si usás `sdk.iam.login`,
+ * el formulario correspondiente es `form.iam.login`.
+ *
+ * Cada instancia expone:
+ * - `fields` — componentes de campo tipados y vinculados al store
+ * - `Form`   — componente completo con layout, submit, reset, logging y navegación
+ * - `$form`  — store Zustand con acceso directo para casos avanzados
+ * - `submit` — handler raw de onSubmit para control total
  *
  * @param sdk - Instancia del SDK creada con `createClientApi`.
- * @returns `FormFactoryInstance` — mapa tipado de formularios listos para usar.
+ * @returns Mapa tipado de formularios, uno por endpoint.
  *
  * @example
- * ```tsx
+ * ```ts
+ * // sdk.ts
  * export const sdk  = createClientApi(contracts, { baseURL: BACKEND_URL });
  * export const form = FormFactory(sdk);
  *
- * const { fields, submit } = form.iam.register;
- * <form onSubmit={submit(async (values) => { await sdk.iam.register(values); })}>
- *   <fields.name     label="Nombre"     required />
- *   <fields.email    label="Email"      control="email"    required />
- *   <fields.password label="Contraseña" control="password" required
- *     addons={[{ type: 'passwordToggle' }, { type: 'strength' }]} />
- *   <button type="submit">Registrarse</button>
- * </form>
+ * // LoginPage.tsx
+ * const { Form, fields } = form.iam.login;
+ * <Form buttonText="Entrar" loadingText="Entrando..." redirectTo="/" redirectOptions={{ replace: true }}>
+ *   <fields.identity label="Usuario o Email" required addons={[{ type: 'rules', rules: [...] }]} />
+ *   <fields.password label="Contraseña" required control="password" addons={[{ type: 'passwordToggle' }]} />
+ * </Form>
+ *
+ * // RegisterPage.tsx
+ * const { Form, fields } = form.iam.register;
+ * <Form buttonText="Crear Cuenta" loadingText="Creando..." redirectTo="/iam/login" redirectOptions={{ replace: true }}>
+ *   <FormSection title="Información Personal">
+ *     <fields.name  label="Nombre"   required fieldMode="register" addons={[{ type: 'rules', rules: nameField.rules }]} />
+ *     <fields.lname label="Apellido" required fieldMode="register" addons={[{ type: 'rules', rules: lnameField.rules }]} />
+ *   </FormSection>
+ * </Form>
  * ```
  */
 export const FormFactory = <const TContracts extends readonly AnyContract[]>(
   sdk: ClientApiInstance<TContracts>,
 ): FormFactoryInstance<TContracts> => {
   const result: Record<string, Record<string, FormInstance<AnyContract>>> = {};
+
   for (const moduleName of sdk.$modules) {
     result[moduleName] = {};
-    const mod = sdk[moduleName as ModulesOf<TContracts>] as Record<string, { $form: AnyFormStore }>;
-    for (const actionName of Object.keys(mod)) {
-      const $form = mod[actionName]!.$form;
+    const module = sdk[moduleName as SDKModules<TContracts>] as Record<string, OpaqueEndpoint>;
+
+    for (const actionName of Object.keys(module)) {
+      const endpoint = module[actionName]!;
+      const store = endpoint.$form;
       const fields = Object.fromEntries(
-        Object.keys($form.getState().values).map((key) => [key, buildField($form, key)]),
-      ) as FormFields<AnyContract>;
+        Object.keys(store.getState().values).map((key) => [key, createField(store, key)]),
+      ) as TypedFields<AnyContract>;
+
       result[moduleName]![actionName] = {
         fields,
-        $form: $form as UseBoundStore<StoreApi<FormState<RequestShapeOf<AnyContract>>>>,
-        submit: (onSuccess) => async (e) => {
+        $form: store as UseBoundStore<StoreApi<FormState<RequestShapeOf<AnyContract>>>>,
+        Form: buildForm(endpoint),
+        submit: (onComplete) => async (e) => {
           e.preventDefault();
-          const valid = await $form.getState().validate();
-          if (valid) onSuccess($form.getState().values);
+          const isValid = await store.getState().validate();
+          if (isValid) onComplete(store.getState().values);
         },
       };
     }
   }
+
   return result as FormFactoryInstance<TContracts>;
 };
+
 //#endregion

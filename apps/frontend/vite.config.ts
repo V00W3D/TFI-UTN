@@ -4,7 +4,22 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+
   resolve: {
     tsconfigPaths: true,
+  },
+
+  build: {
+    sourcemap: false,
+    minify: 'terser',
+    cssMinify: true,
+
+    rolldownOptions: {
+      output: {
+        entryFileNames: 'assets/[hash].js',
+        chunkFileNames: 'assets/[hash].js',
+        assetFileNames: 'assets/[hash].[ext]',
+      },
+    },
   },
 });

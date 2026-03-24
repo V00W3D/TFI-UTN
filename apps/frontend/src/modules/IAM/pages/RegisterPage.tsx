@@ -1,7 +1,5 @@
 import './AuthPages.css';
-import { sdk, form } from '@tools/sdk';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { form } from '@tools/sdk';
 import {
   nameField,
   snameField,
@@ -14,121 +12,84 @@ import {
   phoneField,
 } from '@app/sdk';
 
-const RegisterPage = () => {
-  const { fields, submit } = form.iam.register;
-  const { data, error, isFetching, isFormValid } = sdk.iam.register.$use();
-  const navigate = useNavigate();
+const { Form, fields } = form.iam.register;
 
-  useEffect(() => {
-    sdk.iam.register.$reset();
-  }, []);
-
-  useEffect(() => {
-    if (data && !error) {
-      navigate('/iam/login', { replace: true });
-    }
-  }, [data, error, navigate]);
-
-  return (
-    <div className="auth-wrapper">
-      <div className="auth-card">
-        <form
-          onSubmit={submit(async (values) => {
-            if (isFetching) return;
-            try {
-              await sdk.iam.register(values);
-            } catch {
-              //
-            }
-          })}
-          className="auth-form"
-        >
-          <h3 className="auth-section-title">Información Personal</h3>
-
-          <fields.name
-            label="Nombre"
-            required
-            fieldMode="register"
-            addons={[{ type: 'rubber' }, { type: 'rules', rules: nameField.rules }]}
-          />
-          <fields.sname
-            label="Segundo Nombre"
-            fieldMode="register"
-            addons={[{ type: 'rubber' }, { type: 'rules', rules: snameField.rules }]}
-          />
-          <fields.lname
-            label="Apellido"
-            required
-            fieldMode="register"
-            addons={[{ type: 'rubber' }, { type: 'rules', rules: lnameField.rules }]}
-          />
-          <fields.sex
-            label="Sexo"
-            required
-            fieldMode="register"
-            control={[
-              'radio',
-              [
-                { value: 'MALE', label: 'Masculino', icon: '/masculine-icon.png' },
-                { value: 'FEMALE', label: 'Femenino', icon: '/femenine-icon.png' },
-                { value: 'OTHER', label: 'Otro', icon: '/other-gender.png' },
-              ],
-            ]}
-            addons={[{ type: 'rules', rules: sexField.rules }]}
-          />
-          <fields.username
-            label="Usuario"
-            required
-            fieldMode="register"
-            addons={[{ type: 'rubber' }, { type: 'rules', rules: usernameField.rules }]}
-          />
-          <fields.password
-            label="Contraseña"
-            required
-            fieldMode="register"
-            control="password"
-            addons={[
-              { type: 'passwordToggle' },
-              { type: 'strength' },
-              { type: 'rubber' },
-              { type: 'rules', rules: passwordField.rules },
-            ]}
-          />
-          <fields.cpassword
-            label="Confirmar Contraseña"
-            required
-            fieldMode="register"
-            control="password"
-            addons={[
-              { type: 'passwordToggle' },
-              { type: 'rubber' },
-              { type: 'rules', rules: cpasswordField.rules },
-            ]}
-          />
-          <fields.email
-            label="Email"
-            required
-            fieldMode="register"
-            control="email"
-            addons={[{ type: 'rubber' }, { type: 'rules', rules: emailField.rules }]}
-          />
-          <fields.phone
-            label="Teléfono"
-            fieldMode="register"
-            control="phone"
-            addons={[{ type: 'rubber' }, { type: 'rules', rules: phoneField.rules }]}
-          />
-
-          <button type="submit" className="auth-button" disabled={isFetching || !isFormValid}>
-            {isFetching ? 'Creando cuenta...' : 'Crear Cuenta'}
-          </button>
-
-          {error && <p className="auth-error">{`${error.code.toString()}`}</p>}
-          {data && <p className="auth-success">Registro exitoso</p>}
-        </form>
-      </div>
-    </div>
-  );
-};
+const RegisterPage = () => (
+  <Form
+    buttonText="Crear Cuenta"
+    loadingText="Creando cuenta..."
+    redirectTo="/iam/login"
+    redirectOptions={{ replace: true }}
+  >
+    <fields.name
+      label="Nombre"
+      required
+      fieldMode="register"
+      addons={[{ type: 'rules', rules: nameField.rules }]}
+    />
+    <fields.sname
+      label="Segundo Nombre"
+      fieldMode="register"
+      addons={[{ type: 'rules', rules: snameField.rules }]}
+    />
+    <fields.lname
+      label="Apellido"
+      required
+      fieldMode="register"
+      addons={[{ type: 'rules', rules: lnameField.rules }]}
+    />
+    <fields.sex
+      label="Sexo"
+      required
+      fieldMode="register"
+      control={[
+        'radio',
+        [
+          { value: 'MALE', label: 'Masculino', icon: '/masculine-icon.png' },
+          { value: 'FEMALE', label: 'Femenino', icon: '/femenine-icon.png' },
+          { value: 'OTHER', label: 'Otro', icon: '/other-gender.png' },
+        ],
+      ]}
+      addons={[{ type: 'rules', rules: sexField.rules }]}
+    />
+    <fields.username
+      label="Usuario"
+      required
+      fieldMode="register"
+      addons={[{ type: 'rules', rules: usernameField.rules }]}
+    />
+    <fields.password
+      label="Contraseña"
+      required
+      fieldMode="register"
+      control="password"
+      addons={[
+        { type: 'passwordToggle' },
+        { type: 'strength' },
+        { type: 'rules', rules: passwordField.rules },
+      ]}
+    />
+    <fields.cpassword
+      label="Confirmar Contraseña"
+      required
+      fieldMode="register"
+      control="password"
+      addons={[{ type: 'passwordToggle' }, { type: 'rules', rules: cpasswordField.rules }]}
+    />
+    <fields.email
+      label="Email"
+      required
+      fieldMode="register"
+      control="email"
+      addons={[{ type: 'rules', rules: emailField.rules }]}
+    />
+    <fields.phone
+      label="Teléfono"
+      fieldMode="register"
+      control="phone"
+      addons={[{ type: 'rules', rules: phoneField.rules }]}
+    />
+  </Form>
+);
 
 export default RegisterPage;

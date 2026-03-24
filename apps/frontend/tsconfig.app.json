@@ -39,7 +39,8 @@
       "@env": ["src/env.ts"],
       "@tools/*": ["src/tools/*"],
       "@modules/*": ["src/modules/*"]
-    }
+    },
+    "sourceMap": false
   },
 
   // Solo incluye el código de esta app.

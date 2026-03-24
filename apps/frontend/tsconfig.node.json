@@ -21,7 +21,8 @@
 
     // ── Ambiente Node (sin DOM) ──────────────────────────────────
     "lib": ["ESNext"],
-    "types": ["node"]
+    "types": ["node"],
+    "sourceMap": false
   },
 
   // Solo incluye vite.config.ts — nada más necesita este contexto.
