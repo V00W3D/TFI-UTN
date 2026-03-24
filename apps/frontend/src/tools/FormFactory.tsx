@@ -87,9 +87,6 @@ export type FormMode = 'login' | 'register';
 
 /**
  * @summary Props públicas de un campo generado por `FormFactory`.
- * @remarks
- * - `rubber` es obligatorio — todo campo debe poder limpiarse.
- * - `addons` agrega comportamiento extra (ícono, toggle de contraseña, reglas, etc.).
  */
 export interface FieldProps {
   /** Texto del label visible sobre el campo. */
@@ -113,9 +110,8 @@ export interface FieldProps {
 /**
  * @summary Props del componente `Form` generado por `FormFactory`.
  * @remarks
- * `Form` encapsula automáticamente: reset al montar, seguimiento del estado,
- * logging de respuestas, navegación al completar, submit con validación,
- * layout visual, botón y mensajes de éxito/error.
+ * Usado principalmente por RegisterPage y otros formularios genéricos.
+ * LoginPage usa el handler `submit` raw directamente para mayor control.
  */
 export interface FormProps {
   /** Contenido del formulario — campos y secciones. */
@@ -132,8 +128,6 @@ export interface FormProps {
 
 /**
  * @summary Map de campos tipados para un contrato específico del SDK.
- * @remarks Cada clave corresponde a un campo del schema de request del contrato.
- * Los componentes generados aceptan `FieldProps` y están vinculados al store.
  */
 export type TypedFields<C extends AnyContract> = {
   readonly [K in keyof RequestShapeOf<C> & string]: (props: FieldProps) => ReactNode;
@@ -141,32 +135,31 @@ export type TypedFields<C extends AnyContract> = {
 
 /**
  * @summary Instancia completa de formulario para un endpoint del SDK.
- * @remarks
- * - `fields` — componentes de campo listos para renderizar, uno por cada campo del schema.
- * - `Form`   — componente que encapsula todo el formulario con layout y lógica.
- * - `$form`  — store Zustand con acceso directo a `validate`, `getValues`, `reset`, etc.
- * - `submit` — handler raw de `onSubmit`, para casos que requieren control total.
  */
 export interface FormInstance<C extends AnyContract> {
-  /** Componentes de campo tipados — uno por clave del schema de request. */
   readonly fields: TypedFields<C>;
   /**
    * Componente completo del formulario.
    * @example
    * ```tsx
-   * const { Form, fields } = form.iam.login;
-   * <Form buttonText="Entrar" loadingText="Entrando..." redirectTo="/" redirectOptions={{ replace: true }}>
-   *   <fields.identity label="Usuario o Email" required addons={[{ type: 'rules', rules: [...] }]} />
-   *   <fields.password label="Contraseña" required control="password" addons={[{ type: 'passwordToggle' }]} />
+   * const { Form, fields } = form.iam.register;
+   * <Form buttonText="Crear Cuenta" redirectTo="/iam/login" redirectOptions={{ replace: true }}>
+   *   <fields.name label="Nombre" required />
    * </Form>
    * ```
    */
   readonly Form: (props: FormProps) => ReactNode;
-  /** Store Zustand del formulario con acceso a `validate`, `getValues`, `reset`, etc. */
   readonly $form: UseBoundStore<StoreApi<FormState<RequestShapeOf<C>>>>;
   /**
    * Handler raw de `onSubmit` — para control total del submit sin usar `Form`.
    * @param onComplete - Callback ejecutado con los valores validados si el form es válido.
+   * @example
+   * ```tsx
+   * // LoginPage — inyectar rememberMe antes de llamar al SDK
+   * const handleSubmit = submit(async (values) => {
+   *   await sdk.iam.login({ ...values, rememberMe: rememberMeRef.current });
+   * });
+   * ```
    */
   submit: (
     onComplete: (values: FormState<RequestShapeOf<C>>['values']) => void,
@@ -175,7 +168,6 @@ export interface FormInstance<C extends AnyContract> {
 
 /**
  * @summary API completa de formularios generada por `FormFactory`.
- * @remarks Organizada como `form[módulo][acción]`, espejando `sdk[módulo][acción]`.
  */
 export type FormFactoryInstance<TContracts extends readonly AnyContract[]> = {
   readonly [TModule in SDKModules<TContracts>]: {
@@ -188,16 +180,13 @@ export type FormFactoryInstance<TContracts extends readonly AnyContract[]> = {
 //#endregion
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SECCIÓN 2 — TIPOS INTERNOS (no exportados)
-// Solo para uso dentro de este archivo.
+// SECCIÓN 2 — TIPOS INTERNOS
 // ─────────────────────────────────────────────────────────────────────────────
 
 //#region INTERNAL_TYPES
 
-/** @internal Evento sintético para controles no-nativos (phone, checkbox). */
 type SyntheticEvent<V> = { target: { value: V } };
 
-/** @internal Handler de cambio unificado para cualquier tipo de control. */
 type ChangeHandler = (
   e:
     | ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -205,25 +194,21 @@ type ChangeHandler = (
     | SyntheticEvent<boolean>,
 ) => void;
 
-/** @internal Props mínimas del elemento de entrada nativo. */
 interface NativeInputProps {
   value: string | boolean;
   onChange: ChangeHandler;
   onBlur: (e: FocusEvent<HTMLElement>) => void;
 }
 
-/** @internal Props internas de `BoundField` — extiende las públicas con binding al store. */
 interface BoundFieldProps extends FieldProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   store: StoreApi<FormState<any>>;
   name: string;
 }
 
-/** @internal Store de formulario opaco — evita la constraint `ZodRawShape` en el loop. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type FormStore = UseBoundStore<StoreApi<FormState<any>>>;
 
-/** @internal Endpoint opaco para el loop de construcción del wrapper `Form`. */
 type OpaqueEndpoint = {
   $form: FormStore;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -233,11 +218,9 @@ type OpaqueEndpoint = {
   (input: any): Promise<any>;
 };
 
-/** @internal Extrae nombres de módulo del SDK como union de literales. */
 type SDKModules<TContracts extends readonly AnyContract[]> =
   TContracts[number]['__path'] extends `/${infer M}/${string}` ? M : never;
 
-/** @internal Extrae nombres de acción para un módulo específico del SDK. */
 type SDKActions<
   TContracts extends readonly AnyContract[],
   TModule extends string,
@@ -249,7 +232,6 @@ type SDKActions<
     : never
   : never;
 
-/** @internal Extrae el contrato exacto para un par módulo+acción. */
 type ContractFor<
   TContracts extends readonly AnyContract[],
   TModule extends string,
@@ -264,10 +246,8 @@ type ContractFor<
 
 //#region CONSTANTS_AND_UTILS
 
-/** @internal Etiquetas de fortaleza de contraseña por nivel (0 = ninguna, 5 = máxima). */
 const STRENGTH_LABELS = ['', 'muy débil', 'débil', 'decente', 'segura', 'muy segura'] as const;
 
-/** @internal Clases Tailwind de color por nivel de fortaleza. */
 const STRENGTH_COLORS = [
   '',
   'bg-red-500',
@@ -277,7 +257,6 @@ const STRENGTH_COLORS = [
   'bg-[hsl(220_90%_56%)]',
 ] as const;
 
-/** @internal Calcula el nivel de fortaleza de una contraseña (0–5). */
 const calculateStrength = (value: string): number =>
   (value.length >= 8 ? 1 : 0) +
   (/[A-Z]/.test(value) ? 1 : 0) +
@@ -285,10 +264,6 @@ const calculateStrength = (value: string): number =>
   (/[0-9]/.test(value) ? 1 : 0) +
   (/[^A-Za-z0-9]/.test(value) ? 1 : 0);
 
-/**
- * @internal Extrae los complementos del array de addons en un objeto con flags y referencias.
- * Función pura — no llama hooks, segura para usar dentro de render.
- */
 const extractAddons = (addons: FieldAddon[]) => ({
   iconAddon: addons.find((a): a is Extract<FieldAddon, { type: 'icon' }> => a.type === 'icon'),
   hintAddon: addons.find((a): a is Extract<FieldAddon, { type: 'hint' }> => a.type === 'hint'),
@@ -301,16 +276,10 @@ const extractAddons = (addons: FieldAddon[]) => ({
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECCIÓN 4 — SUBCOMPONENTES INTERNOS
-// Piezas visuales reutilizables, todas memoizadas para evitar re-renders.
 // ─────────────────────────────────────────────────────────────────────────────
 
 //#region SUBCOMPONENTS
 
-/**
- * @internal Botón de acción dentro del slot derecho de un campo.
- * Usado para el toggle de contraseña y el botón de limpiar (rubber).
- * `memo` evita re-renders cuando cambia el valor del campo pero no este botón.
- */
 const SlotButton = memo(
   ({ onClick, icon, description }: { onClick: () => void; icon: string; description: string }) => (
     <button type="button" onClick={onClick} className="ff-slot-btn">
@@ -323,10 +292,6 @@ const SlotButton = memo(
   ),
 );
 
-/**
- * @internal Barra de fortaleza de contraseña con etiqueta de nivel.
- * Solo se muestra cuando el campo tiene valor. Memoizado por valor.
- */
 const StrengthIndicator = memo(({ value }: { value: string }) => {
   const level = calculateStrength(value);
   if (!level) return null;
@@ -346,11 +311,6 @@ const StrengthIndicator = memo(({ value }: { value: string }) => {
   );
 });
 
-/**
- * @internal Lista de reglas de validación expandible.
- * Se muestra al hacer clic en el botón `(?)` del label.
- * Memoizada — las reglas son constantes entre renders.
- */
 const RulesList = memo(({ rules }: { rules: readonly string[] }) => (
   <div className="ff-rules">
     <ul className="space-y-2">
@@ -367,10 +327,6 @@ const RulesList = memo(({ rules }: { rules: readonly string[] }) => (
   </div>
 ));
 
-/**
- * @internal Mensajes de error del campo.
- * Memoizado — solo re-renderiza cuando cambia el array de errores.
- */
 const ErrorMessages = memo(({ errors }: { errors: string[] }) => (
   <div className="ff-errors">
     {errors.map((msg, i) => (
@@ -381,11 +337,6 @@ const ErrorMessages = memo(({ errors }: { errors: string[] }) => (
   </div>
 ));
 
-/**
- * @internal Elemento de entrada nativo según el tipo de control.
- * Memoizado — solo re-renderiza cuando cambian value, type o handlers.
- * Normaliza los eventos de controles no-nativos (phone, checkbox) al mismo formato.
- */
 const NativeInput = memo(
   ({
     type,
@@ -523,21 +474,10 @@ const NativeInput = memo(
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECCIÓN 5 — CAMPO VINCULADO AL STORE
-// El componente central que conecta el visual con el estado del formulario.
 // ─────────────────────────────────────────────────────────────────────────────
 
 //#region BOUND_FIELD
 
-/**
- * @internal Componente de campo reactivo vinculado al store del formulario.
- * @remarks
- * **Por qué es estable (sin bugs de hooks):**
- * El orden de hooks es fijo e incondicional en todo momento:
- * `useId` × 1 → `useState` × 3 → `useStore` × 6 → `useCallback` × 4.
- * Cada `useStore` devuelve un valor primitivo — `Object.is` nunca detecta
- * cambio falso, por lo que no hay re-renders infinitos.
- * `memo` evita re-renders cuando el campo padre cambia pero este campo no.
- */
 const BoundField = memo(
   ({
     store,
@@ -554,7 +494,6 @@ const BoundField = memo(
     const [rulesVisible, setRulesVisible] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
 
-    // Selectores atómicos — cada uno devuelve un primitivo estable
     const value = useStore(store, (s) => s.values[name]);
     const rawErrors = useStore(store, (s) => s.errors[name]);
     const isFormValid = useStore(store, (s) => s.isFormValid);
@@ -588,7 +527,6 @@ const BoundField = memo(
       },
       [save, name],
     );
-
     const handleBlur = useCallback(
       (_e: FocusEvent<HTMLElement>) => markBlur(name),
       [markBlur, name],
@@ -660,7 +598,6 @@ const BoundField = memo(
   },
 );
 
-/** @internal Crea un wrapper de `BoundField` con store y nombre previnculados. */
 const createField = (store: FormStore, name: string) => (props: FieldProps) => (
   <BoundField {...props} store={store} name={name} />
 );
@@ -669,17 +606,12 @@ const createField = (store: FormStore, name: string) => (props: FieldProps) => (
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECCIÓN 6 — CONSTRUCTOR DEL FORMULARIO COMPLETO
-// Genera el componente `Form` que encapsula toda la lógica repetida entre páginas.
+// Usado por RegisterPage y otros formularios genéricos.
+// LoginPage usa el handler `submit` raw directamente.
 // ─────────────────────────────────────────────────────────────────────────────
 
 //#region FORM_BUILDER
 
-/**
- * @internal Construye el componente `Form` para un endpoint dado.
- * Elimina la lógica repetida en cada página:
- * reset al montar, logging, navegación al completar, submit con validación,
- * layout visual (wrapper → card → form), botón y mensajes de feedback.
- */
 const buildForm =
   (endpoint: OpaqueEndpoint): ((props: FormProps) => ReactNode) =>
   ({
@@ -703,8 +635,6 @@ const buildForm =
       // eslint-disable-next-line no-console
       if (error) console.log('[FormFactory] error de servidor:', error);
       if (data && !error && redirectTo) navigate(redirectTo, redirectOptions);
-      // redirectTo y redirectOptions son props estáticas pasadas al construir el componente —
-      // no cambian entre renders, omitirlas del array es correcto e intencional.
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, error, navigate]);
 
@@ -717,39 +647,28 @@ const buildForm =
         try {
           await endpoint(store.getState().getValues());
         } catch {
-          // El error queda guardado en el requestStore — se muestra abajo en el JSX
+          // El error queda guardado en el requestStore
         }
       },
       [isFetching, store],
     );
 
     return (
-      <div className="w-full flex items-center justify-center px-6">
-        <div className="w-full max-w-3xl p-10 rounded-xl border shadow-lg bg-(--surface) border-(--border)">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+      <div className="auth-wrapper">
+        {/* register-card para layout de columna única */}
+        <div className="auth-card register-card">
+          <form onSubmit={handleSubmit} className="auth-form">
             {children}
-            <button
-              type="submit"
-              disabled={isFetching || !isFormValid}
-              className={[
-                'mt-4 py-3 rounded-md font-semibold transition-all duration-300',
-                'bg-(--color-primary) text-(--text-inverse)',
-                'hover:bg-(--color-primary-dark) hover:cursor-pointer',
-                'hover:[box-shadow:0_0_0_4px_var(--color-primary-glow)]',
-                'disabled:opacity-50 disabled:cursor-not-allowed',
-              ].join(' ')}
-            >
+            <button type="submit" disabled={isFetching || !isFormValid} className="auth-button">
               {isFetching ? loadingText : buttonText}
             </button>
             {error && (
-              <p className="text-sm text-center font-medium text-(--color-error)">
+              <p className="auth-feedback auth-feedback--error">
                 {(error as { code?: string }).code ?? 'Error desconocido'}
               </p>
             )}
             {data && !error && (
-              <p className="text-sm text-center font-medium text-(--color-success)">
-                {'Operación exitosa'}
-              </p>
+              <p className="auth-feedback auth-feedback--success">Operación exitosa</p>
             )}
           </form>
         </div>
@@ -761,7 +680,6 @@ const buildForm =
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECCIÓN 7 — API PÚBLICA
-// Todo lo que se exporta y usa desde fuera de este archivo.
 // ─────────────────────────────────────────────────────────────────────────────
 
 //#region PUBLIC_API
@@ -769,20 +687,11 @@ const buildForm =
 /**
  * @public
  * @summary Agrupa campos dentro de un `<Form>` con un título de sección.
- * @example
- * ```tsx
- * <Form ...>
- *   <FormSection title="Información Personal">
- *     <fields.name  label="Nombre"   required />
- *     <fields.lname label="Apellido" required />
- *   </FormSection>
- * </Form>
- * ```
  */
 export const FormSection = ({ title, children }: { title: string; children: ReactNode }) => (
   <div className="flex flex-col gap-8">
     <h3
-      className="text-xs font-semibold uppercase text-center pb-3 border-b border-(--border) text-(--text-secondary) tracking-[0.12em]"
+      className="auth-section-title"
       style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}
     >
       {title}
@@ -794,42 +703,6 @@ export const FormSection = ({ title, children }: { title: string; children: Reac
 /**
  * @public
  * @summary Crea una instancia de formularios reactivos para todos los endpoints del SDK.
- * @remarks
- * Recorre los contratos del SDK y genera un `FormInstance` por cada endpoint.
- * La estructura resultante espeja `sdk[módulo][acción]` — si usás `sdk.iam.login`,
- * el formulario correspondiente es `form.iam.login`.
- *
- * Cada instancia expone:
- * - `fields` — componentes de campo tipados y vinculados al store
- * - `Form`   — componente completo con layout, submit, reset, logging y navegación
- * - `$form`  — store Zustand con acceso directo para casos avanzados
- * - `submit` — handler raw de onSubmit para control total
- *
- * @param sdk - Instancia del SDK creada con `createClientApi`.
- * @returns Mapa tipado de formularios, uno por endpoint.
- *
- * @example
- * ```ts
- * // sdk.ts
- * export const sdk  = createClientApi(contracts, { baseURL: BACKEND_URL });
- * export const form = FormFactory(sdk);
- *
- * // LoginPage.tsx
- * const { Form, fields } = form.iam.login;
- * <Form buttonText="Entrar" loadingText="Entrando..." redirectTo="/" redirectOptions={{ replace: true }}>
- *   <fields.identity label="Usuario o Email" required addons={[{ type: 'rules', rules: [...] }]} />
- *   <fields.password label="Contraseña" required control="password" addons={[{ type: 'passwordToggle' }]} />
- * </Form>
- *
- * // RegisterPage.tsx
- * const { Form, fields } = form.iam.register;
- * <Form buttonText="Crear Cuenta" loadingText="Creando..." redirectTo="/iam/login" redirectOptions={{ replace: true }}>
- *   <FormSection title="Información Personal">
- *     <fields.name  label="Nombre"   required fieldMode="register" addons={[{ type: 'rules', rules: nameField.rules }]} />
- *     <fields.lname label="Apellido" required fieldMode="register" addons={[{ type: 'rules', rules: lnameField.rules }]} />
- *   </FormSection>
- * </Form>
- * ```
  */
 export const FormFactory = <const TContracts extends readonly AnyContract[]>(
   sdk: ClientApiInstance<TContracts>,
