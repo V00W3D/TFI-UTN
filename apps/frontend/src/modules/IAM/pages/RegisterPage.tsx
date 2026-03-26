@@ -7,7 +7,7 @@ import './AuthPages.css';
 
 /**
  * @file RegisterPage.tsx
- * @description Symmetric Register page with stable grid.
+ * @description Sovereign V4 Symmetric Register.
  */
 const RegisterPage = () => {
   const { setModule } = useAppStore();
@@ -23,12 +23,12 @@ const RegisterPage = () => {
       <div className="auth-card auth-card--wide">
         <div className="auth-header">
           <h2 className="auth-title">Membresía</h2>
-          <p className="auth-subtitle">Únase al legado gastronómico</p>
+          <p className="auth-subtitle">Suscríbase a la Excelencia</p>
         </div>
 
         <Form buttonText="Finalizar Registro" onSuccess={() => navigate('/iam/login')}>
-          <div className="grid md:grid-cols-2 gap-x-12 gap-y-8 text-left">
-            <FormSection title="Perfil">
+          <div className="grid md:grid-cols-2 gap-x-[var(--p-12)] gap-y-[var(--p-8)] text-left">
+            <FormSection title="Perfil de Autor">
               <fields.name label="Nombre" placeholder="Tu nombre" required />
               <fields.lname label="Apellido" placeholder="Tu apellido" required />
               <fields.sex
@@ -45,9 +45,9 @@ const RegisterPage = () => {
               />
             </FormSection>
 
-            <FormSection title="Acceso">
-              <fields.username label="Usuario" required />
-              <fields.email label="Email" control="email" required />
+            <FormSection title="Credenciales">
+              <fields.username label="Socio ID" required />
+              <fields.email label="Email Personal" control="email" required />
               <fields.password label="Contraseña" control="password" required />
               <fields.phone label="Teléfono" control="phone" required />
             </FormSection>
@@ -55,9 +55,9 @@ const RegisterPage = () => {
         </Form>
 
         <div className="auth-footer">
-          ¿Ya es socio?{' '}
-          <button onClick={() => navigate('/iam/login')} className="font-bold underline">
-            Ingresar
+          ¿Ya tiene una cuenta?{' '}
+          <button onClick={() => navigate('/iam/login')} className="auth-link">
+            Iniciar Sesión
           </button>
         </div>
       </div>

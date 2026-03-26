@@ -1,53 +1,68 @@
-/* =========================================================
-   🍷 SYMMETRIC AUTH
-   ========================================================= */
+/* =============================================================================
+   🍷 QART — AUTH LAYOUT (V4 Sovereign)
+   ============================================================================= */
 
 .auth-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--s-8);
+  padding: var(--p-8);
+  background: var(--c-surface-soft);
 }
 
 .auth-card {
-  width: 100%;
-  max-width: 400px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: var(--s-12);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  width: min(100%, 450px);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  padding: var(--p-12);
 }
 
 .auth-card--wide {
-  max-width: 800px;
+  width: min(100%, 900px);
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: var(--s-12);
+  margin-bottom: var(--p-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--p-1);
 }
 
 .auth-title {
-  margin-bottom: var(--s-2);
+  font-size: var(--f-3xl);
+  color: var(--c-primary);
 }
 
 .auth-subtitle {
-  font-size: 0.75rem;
+  font-size: var(--f-xs);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--text-dim);
+  letter-spacing: 0.25em;
+  color: var(--c-text-dim);
+  font-weight: 800;
 }
 
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: var(--s-6);
+  gap: var(--p-6);
 }
 
 .auth-footer {
-  margin-top: var(--s-8);
+  margin-top: var(--p-8);
   text-align: center;
-  font-size: 0.8125rem;
-  color: var(--text-muted);
+  font-size: var(--f-sm);
+  color: var(--c-text-dim);
+}
+
+.auth-link {
+  color: var(--c-primary);
+  font-weight: 800;
+  border-bottom: 2px solid var(--c-border);
+  transition: all 0.3s;
+}
+
+.auth-link:hover {
+  border-color: var(--c-accent);
 }

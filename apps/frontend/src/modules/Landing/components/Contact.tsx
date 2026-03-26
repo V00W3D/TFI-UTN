@@ -1,45 +1,45 @@
 /**
  * @file Contact.tsx
- * @description Symmetric Footer.
+ * @description Sovereign V4 Footer.
  */
 const Contact = () => {
   return (
-    <footer id="contact" className="bg-surface py-24 border-t border-border">
-      <div className="l-container grid md:grid-cols-4 gap-12">
-        <div className="space-y-6 col-span-2">
+    <footer id="contact" className="bg-surface py-[var(--p-16)] border-t border-border">
+      <div className="container-sharp grid md:grid-cols-4 gap-[var(--p-12)]">
+        <div className="space-y-[var(--p-6)] col-span-2">
           <div className="flex items-center gap-3">
-            <img src="/QART_LOGO.png" alt="QART" className="size-6 object-contain" />
-            <span className="font-serif text-xl tracking-widest uppercase">QART</span>
+            <img src="/QART_LOGO.png" alt="QART" className="h-[var(--p-6)] w-auto object-contain" />
+            <span className="font-serif text-[var(--f-xl)] tracking-[0.2em] font-medium">QART</span>
           </div>
-          <p className="text-dim max-w-sm text-sm font-light leading-relaxed">
+          <p className="text-dim max-w-sm text-[var(--f-sm)] font-light leading-relaxed">
             Redefiniendo el estándar de la gastronomía de autor a través de la 
-            precisión tecnológica y la pasión artesana.
+            precisión tecnológica y la pasión artesana innegociable.
           </p>
-          <div className="flex gap-4 pt-2">
+          <div className="flex gap-6 pt-2">
              {['Instagram', 'Twitter', 'LinkedIn'].map(s => (
-               <a key={s} href="#" className="text-[9px] uppercase font-bold tracking-widest text-dim hover:text-primary">{s}</a>
+               <a key={s} href="#" className="text-[var(--f-xs)] uppercase font-black tracking-widest text-dim hover:text-primary transition-colors">{s}</a>
              ))}
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-[var(--p-4)]">
           <h4>Ubicación</h4>
-          <p className="text-dim text-xs font-light leading-loose">
+          <p className="text-dim text-[var(--f-sm)] font-light leading-loose">
             Avenida de la Ribera 4500,<br />
             Puerto Madero, Buenos Aires
           </p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-[var(--p-4)]">
           <h4>Reservas</h4>
-          <p className="text-dim text-xs font-light leading-loose">
+          <p className="text-dim text-[var(--f-sm)] font-light leading-loose">
             +(54) 11 4455 6677<br />
             reservas@qart.com
           </p>
         </div>
       </div>
-      <div className="l-container pt-16 text-center opacity-20">
-        <p className="text-[9px] uppercase tracking-[0.4em]">© 2026 QART GASTRONOMY · ALL RIGHTS RESERVED</p>
+      <div className="container-sharp pt-[var(--p-16)] text-center opacity-30">
+        <p className="text-[var(--f-xs)] uppercase tracking-[0.4em] font-bold">© 2026 QART GASTRONOMY · AUTHOR PRECISION</p>
       </div>
     </footer>
   );

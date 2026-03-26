@@ -2,31 +2,47 @@ import { motion } from 'framer-motion';
 
 /**
  * @file CraftSection.tsx
- * @description Symmetric Craft Section.
+ * @description Sovereign V4 Craft Section.
  */
 const CraftSection = () => {
   return (
-    <div className="l-section bg-surface-alt border-y border-border" id="reserve">
-      <div className="l-container l-grid-balanced">
-        <div className="l-image-wrap">
-          <img src="/chef.png" className="w-full grayscale" alt="Chef" />
-        </div>
-        <div className="space-y-8">
+    <div className="section-sharp border-y border-border" id="reserva">
+      <div className="container-sharp grid lg:grid-cols-2 gap-[var(--p-16)] items-center">
+        <motion.div 
+           className="img-frame lg:order-2"
+           initial={{ opacity: 0, scale: 0.95 }}
+           whileInView={{ opacity: 1, scale: 1 }}
+           viewport={{ once: true }}
+           transition={{ duration: 1 }}
+        >
+          <img src="/chef.png" className="w-full grayscale brightness-90 hover:grayscale-0 transition-all duration-1000" alt="QART Chef" />
+        </motion.div>
+        
+        <motion.div 
+          className="space-y-[var(--p-8)] lg:order-1"
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
           <h4>Personalización</h4>
-          <h2 className="leading-tight">Tu Visión, <br /><span className="italic">Nuestra Técnica</span></h2>
-          <div className="w-12 h-0.5 bg-accent" />
-          <p className="text-dim text-lg font-light leading-relaxed">
-            Personaliza cada detalle de tu experiencia. En QART, tú eres el co-autor de tu plato.
+          <h2>Diseño <br /><span className="italic">de Experiencia</span></h2>
+          <div className="w-[var(--p-12)] h-[1px] bg-accent" />
+          <p className="text-dim text-[var(--f-lg)] font-light leading-relaxed">
+            Co-cree su plato con la guía de nuestros expertos. En QART, la precisión de la 
+            técnica se encuentra con su visión personal.
           </p>
-          <ul className="space-y-3 opacity-60">
-            {['Origen', 'Precisión', 'Autor'].map(it => (
-              <li key={it} className="text-[10px] uppercase font-bold tracking-widest flex items-center gap-3">
-                <span className="w-4 h-px bg-accent" /> {it}
+          <ul className="grid grid-cols-2 gap-[var(--p-4)] opacity-70">
+            {['Origen Certificado', 'Técnica Al Vació', 'Emplatado Mínimo', 'Artesanía Pura'].map(it => (
+              <li key={it} className="text-[var(--f-xs)] uppercase font-extrabold tracking-widest flex items-center gap-3">
+                <span className="size-1 bg-accent" /> {it}
               </li>
             ))}
           </ul>
-          <button className="btn btn-primary">Diseñar mi plato</button>
-        </div>
+          <div className="pt-[var(--p-4)]">
+            <button className="btn-v4 px-[var(--p-12)]">Personalizar Reserva</button>
+          </div>
+        </motion.div>
       </div>
     </div>
   );

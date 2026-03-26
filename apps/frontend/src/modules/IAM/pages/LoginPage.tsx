@@ -6,7 +6,7 @@ import './AuthPages.css';
 
 /**
  * @file LoginPage.tsx
- * @description Symmetric Login page.
+ * @description Sovereign V4 Symmetric Login.
  */
 const LoginPage = () => {
   const { setModule, setUser } = useAppStore();
@@ -22,7 +22,7 @@ const LoginPage = () => {
       <div className="auth-card">
         <div className="auth-header">
           <h2 className="auth-title">Bienvenido</h2>
-          <p className="auth-subtitle">Acceda a Privilege QART</p>
+          <p className="auth-subtitle">Socio QART Privilege</p>
         </div>
 
         <Form 
@@ -33,15 +33,15 @@ const LoginPage = () => {
           }}
         >
           <div className="auth-form">
-            <fields.identity label="Usuario o Email" placeholder="victor_qart" required />
+            <fields.identity label="Identidad" placeholder="victor_qart" required />
             <fields.password label="Contraseña" control="password" required />
           </div>
         </Form>
 
         <div className="auth-footer">
-          ¿No tiene cuenta?{' '}
-          <button onClick={() => navigate('/iam/register')} className="font-bold underline">
-            Registrarse
+          ¿No es socio aún?{' '}
+          <button onClick={() => navigate('/iam/register')} className="auth-link">
+            Unirse al Legado
           </button>
         </div>
       </div>

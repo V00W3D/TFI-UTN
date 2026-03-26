@@ -1,78 +1,96 @@
 /* =============================================================================
-   🍷 SYMMETRIC FormFactory
+   🍷 QART — FORM FACTORY (Fluid Precision)
    ============================================================================= */
 
 .ff-field {
   display: flex;
   flex-direction: column;
-  gap: var(--s-1);
+  gap: var(--p-1);
+}
+
+.ff-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .ff-label {
-  font-size: 0.6875rem;
-  font-weight: 700;
+  font-size: var(--f-xs);
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--text-dim);
+  color: var(--c-text-dim);
 }
 
 .ff-input-wrapper {
   display: flex;
   align-items: center;
-  border-bottom: 2px solid var(--border);
-  transition: border-color 0.2s;
+  border-bottom: 2px solid var(--c-border);
+  background: transparent;
+  transition: border-color 0.3s var(--spring);
 }
 
 .ff-input-wrapper:focus-within {
-  border-color: var(--color-primary);
+  border-color: var(--c-primary);
 }
 
 .ff-input {
   flex: 1;
-  padding: var(--s-3) var(--s-1);
+  padding: var(--p-2) 4px;
   background: transparent;
   border: none;
-  border-radius: 0;
   outline: none;
-  font-size: 0.8125rem;
-  color: var(--text-main);
+  font-size: var(--f-base);
+  color: var(--c-text);
 }
 
 .ff-radio-group {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--s-2);
+  gap: var(--p-2);
+  margin-top: var(--p-1);
 }
 
 .ff-radio-card {
-  border: 1px solid var(--border);
-  padding: var(--s-4);
+  border: 1px solid var(--c-border);
+  padding: var(--p-4);
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s var(--spring);
+  background: var(--c-surface-soft);
 }
 
 .ff-radio-card:hover {
-  border-color: var(--color-accent);
+  border-color: var(--c-primary);
 }
 
 .ff-radio-card--checked {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: var(--text-on-primary) !important;
+  background: var(--c-primary);
+  border-color: var(--c-primary);
+  color: var(--c-text-on-p) !important;
 }
 
 .ff-radio-card--checked * {
-  color: var(--text-on-primary) !important;
+  color: var(--c-text-on-p) !important;
   filter: brightness(0) invert(1);
 }
 
 .ff-icon {
-  width: var(--s-4);
-  height: var(--s-4);
-  margin-bottom: var(--s-2);
+  width: var(--p-4);
+  height: var(--p-4);
+  margin: 0 auto var(--p-2) auto;
+  display: block;
 }
 
 .dark .ff-icon {
   filter: invert(1);
+}
+
+.ff-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: var(--f-lg);
+  color: var(--c-accent);
+  border-bottom: 1px solid var(--c-border);
+  padding-bottom: var(--p-2);
+  margin-bottom: var(--p-4);
 }

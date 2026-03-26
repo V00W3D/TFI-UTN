@@ -1,129 +1,170 @@
 @import 'tailwindcss';
 
-/* =========================================================
-   🍷 QART SYMMETRIC PERFECTION
-   Sharp · Precise · Balanced · Luxury
-   ========================================================= */
+/* =============================================================================
+   🍷 QART — THE SOVEREIGN DESIGN SYSTEM (V4)
+   Symmetry · Fluidity · Precision · Humanity
+   ============================================================================= */
 
-:root {
-  /* ── Spacing Grid (8px base) ──────────────────────────── */
-  --s-1: 0.25rem;  /* 4px */
-  --s-2: 0.5rem;   /* 8px */
-  --s-3: 0.75rem;  /* 12px */
-  --s-4: 1rem;     /* 16px */
-  --s-6: 1.5rem;   /* 24px */
-  --s-8: 2rem;     /* 32px */
-  --s-12: 3rem;    /* 48px */
-  --s-16: 4rem;    /* 64px */
-  --s-24: 6rem;    /* 96px */
+@layer base {
+  :root {
+    /* ── Fluid Typrography & Spacing (8px Base - 1.25 Ratio) ── */
+    --f-xs: clamp(0.625rem, 0.5rem + 0.4vw, 0.75rem);
+    --f-sm: clamp(0.75rem, 0.6rem + 0.5vw, 0.875rem);
+    --f-base: clamp(0.875rem, 0.7rem + 0.6vw, 1rem);
+    --f-lg: clamp(1rem, 0.8rem + 0.8vw, 1.25rem);
+    --f-xl: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    --f-2xl: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
+    --f-3xl: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+    --f-4xl: clamp(4rem, 3.2rem + 4vw, 7rem);
 
-  /* ── Color Palette ────────────────────────────────────── */
-  --primary-h: 340;
-  --primary-s: 48%;
-  --primary-l: 22%; /* Deeper */
+    /* ── Symmetric Spacing Scale (Fluid) ── */
+    --p-1: clamp(0.25rem, 0.2rem + 0.2vw, 0.5rem);
+    --p-2: clamp(0.5rem, 0.4rem + 0.4vw, 1rem);
+    --p-4: clamp(1rem, 0.8rem + 0.8vw, 2rem);
+    --p-8: clamp(2rem, 1.6rem + 1.6vw, 4rem);
+    --p-16: clamp(4rem, 3.2rem + 3.2vw, 8rem);
+    --p-24: clamp(6rem, 4.8rem + 4.8vw, 12rem);
 
-  --color-primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
-  --color-accent: hsl(42 42% 48%);
-  
-  --bg: hsl(30 20% 98%);
-  --surface: hsl(0 0% 100%);
-  --surface-alt: hsl(30 10% 95%);
-  --border: hsl(30 10% 88%);
+    /* ── Brand Colors — Author Gastronomy ── */
+    --c-primary: #3d0a22; /* Deep Plum */
+    --c-accent: #b8915e;  /* Aged Gold */
+    --c-surface: #ffffff;
+    --c-surface-soft: #fcfbf9;
+    --c-border: #e8e4db;
+    --c-text: #1a1518;
+    --c-text-dim: #544a4e;
+    --c-text-on-p: #ffffff;
 
-  --text-main: hsl(340 20% 10%);
-  --text-dim: hsl(340 10% 40%);
-  --text-muted: hsl(340 5% 65%);
-  --text-on-primary: hsl(0 0% 100%);
+    /* ── Transition Physics ── */
+    --spring: cubic-bezier(0.19, 1, 0.22, 1);
+  }
 
-  --radius: 0px;
+  .dark {
+    --c-primary: #944d6b;
+    --c-surface: #0a090a;
+    --c-surface-soft: #121012;
+    --c-border: #242024;
+    --c-text: #f0edf0;
+    --c-text-dim: #b8b0b4;
+    --bg-dark: #050505;
+  }
+
+  /* ── Symmetric Reset ── */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border-radius: 0 !important; /* The Sharp Constraint */
+  }
+
+  body {
+    background-color: var(--c-surface-soft);
+    color: var(--c-text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: var(--f-base);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    line-height: 1.1;
+    color: var(--c-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .dark h1, .dark h2, .dark h3 {
+    color: var(--c-text);
+  }
+
+  h1 { font-size: var(--f-4xl); }
+  h2 { font-size: var(--f-3xl); }
+  h3 { font-size: var(--f-xl); }
+  h4 { font-size: var(--f-xs); text-transform: uppercase; letter-spacing: 0.3em; color: var(--c-accent); font-weight: 800; }
 }
 
-.dark {
-  --bg: hsl(220 20% 4%);
-  --surface: hsl(220 15% 6%);
-  --surface-alt: hsl(220 12% 8%);
-  --border: hsl(220 10% 16%);
+@layer components {
+  /* ── Unified Layout Containers ── */
+  .container-sharp {
+    width: min(100%, 1400px);
+    margin: 0 auto;
+    padding: 0 var(--p-4);
+  }
 
-  --text-main: hsl(30 15% 92%);
-  --text-dim: hsl(30 10% 70%);
-  --text-muted: hsl(30 5% 45%);
+  .section-sharp {
+    padding: var(--p-16) 0;
+  }
 
-  --color-primary: hsl(var(--primary-h) 60% 65%);
+  /* ── The Master Button ── */
+  .btn-v4 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--p-2) var(--p-8);
+    background: var(--c-primary);
+    color: var(--c-text-on-p);
+    font-size: var(--f-xs);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    border: 1px solid var(--c-primary);
+    transition: all 0.4s var(--spring);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-v4:hover {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  }
+
+  .btn-v4--outline {
+    background: transparent;
+    color: var(--c-primary);
+  }
+
+  .btn-v4--outline:hover {
+    color: var(--c-text-on-p);
+  }
+
+  /* ── Symmetric Image Wrap ── */
+  .img-frame {
+    position: relative;
+    border: 1px solid var(--c-border);
+    padding: var(--p-1);
+    background: var(--c-surface);
+  }
+
+  .img-frame::after {
+    content: '';
+    position: absolute;
+    top: var(--p-2);
+    left: var(--p-2);
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--c-accent);
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ── The Perfect Card ── */
+  .card-v4 {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    padding: var(--p-8);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: all 0.4s var(--spring);
+  }
+
+  .card-v4:hover {
+    border-color: var(--c-accent);
+    transform: translateY(-5px);
+  }
 }
-
-/* =========================================================
-   🌍 GLOBAL RESET & TYPOGRAPHY
-   ========================================================= */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  border-radius: var(--radius) !important;
-}
-
-html {
-  scroll-behavior: smooth;
-  font-size: 16px; 
-}
-
-body {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  background-color: var(--bg);
-  color: var(--text-main);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ── Precise Typography Scale ───────────────────────────── */
-h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 400; line-height: 1.1; }
-h2 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.2; }
-h3 { font-size: 1.5rem; font-weight: 500; }
-h4 { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; }
-
-h1, h2, h3, h4 {
-  font-family: 'Cormorant Garamond', serif;
-  color: var(--color-primary);
-}
-
-.dark h1, .dark h2, .dark h3, .dark h4 {
-  color: var(--text-main);
-}
-
-/* 🌍 Shared Base Components ──────────────────────────────── */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--s-3) var(--s-8);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
-  border: none;
-}
-
-.btn-primary {
-  background-color: var(--color-primary);
-  color: var(--text-on-primary);
-}
-
-.btn-primary:hover {
-  background-color: var(--color-accent);
-}
-
-.btn-outline {
-  background-color: transparent;
-  border: 1px solid var(--border);
-  color: var(--text-main);
-}
-
-.btn-outline:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-/* ───────────────────────────────────────────────────────── */
