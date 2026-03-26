@@ -17,8 +17,9 @@ import {
   Injectable,
   ForbiddenException,
   UnauthorizedException,
+  type CanActivate,
+  type ExecutionContext,
 } from '@nestjs/common';
-import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import type { UserPayload } from './AuthGuard';
 
