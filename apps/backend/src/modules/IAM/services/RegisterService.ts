@@ -22,7 +22,9 @@ import type { Prisma } from '../../../../prisma/generated/client';
 export class RegisterService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async execute(input: InferRequest<typeof RegisterContract>): Promise<void> {
+  async execute(
+    input: InferRequest<typeof RegisterContract>,
+  ): Promise<void> {
     const { username, name, lname, sname, sex, email, phone, password } = input;
     const hashedPassword = await argon2.hash(password, { type: argon2.argon2id });
 

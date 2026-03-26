@@ -11,7 +11,12 @@
  * - PERT: 1
  * - Planning Poker: 2
  */
-import { Controller, Post, Body, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { SESSION_SECRET, REFRESH_SECRET, BUN_MODE } from '@env';
 import { LoginService } from '../services/LoginService';
@@ -34,13 +39,22 @@ export class LoginHandler {
   @Post('login')
   async handle(
     @Body() body: InferRequest<typeof LoginContract>,
-    @Res({ passthrough: true }) res: { cookie: (n: string, v: string, o: object) => void },
+    @Res({ passthrough: true })
+    res: { cookie: (n: string, v: string, o: object) => void },
   ) {
     const user = await this.loginService.execute(body);
     
     // Cookie Issue Logic
-    res.cookie('CupCake', jwt.sign(user, SESSION_SECRET, { expiresIn: '1h' }), { ...COOKIE_BASE, maxAge: ACCESS_TTL });
-    res.cookie('Cake', jwt.sign(user, REFRESH_SECRET, { expiresIn: '7d' }), { ...COOKIE_BASE, maxAge: REFRESH_TTL });
+    res.cookie(
+      'CupCake',
+      jwt.sign(user, SESSION_SECRET, { expiresIn: '1h' }),
+      { ...COOKIE_BASE, maxAge: ACCESS_TTL },
+    );
+    res.cookie(
+      'Cake',
+      jwt.sign(user, REFRESH_SECRET, { expiresIn: '7d' }),
+      { ...COOKIE_BASE, maxAge: REFRESH_TTL },
+    );
     
     return user;
   }

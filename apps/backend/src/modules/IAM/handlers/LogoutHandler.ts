@@ -16,7 +16,12 @@ import { Controller, Post, Res } from '@nestjs/common';
 @Controller('iam')
 export class LogoutHandler {
   @Post('logout')
-  async handle(@Res({ passthrough: true }) res: { clearCookie: (n: string, o: object) => void }) {
+  async handle(
+    @Res({ passthrough: true })
+    res: {
+      clearCookie: (n: string, o: object) => void;
+    },
+  ) {
     const opts = { httpOnly: true, secure: true, sameSite: 'strict' as const };
     res.clearCookie('CupCake', opts);
     res.clearCookie('Cake', opts);

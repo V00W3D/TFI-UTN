@@ -12,7 +12,12 @@
  * - PERT: 1
  * - Planning Poker: 2
  */
-import { Injectable, UnauthorizedException, ForbiddenException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import * as argon2 from 'argon2';
 import type { InferRequest, InferSuccess } from '@app/sdk';
 import type { LoginContract } from '@app/contracts';
@@ -25,7 +30,9 @@ const INTERNAL_ROLES = new Set(['STAFF', 'AUTHORITY'] as const);
 export class LoginService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async execute(input: InferRequest<typeof LoginContract>): Promise<InferSuccess<typeof LoginContract>> {
+  async execute(
+    input: InferRequest<typeof LoginContract>,
+  ): Promise<InferSuccess<typeof LoginContract>> {
     const found = await this.prisma.user.findFirst({
       where: {
         OR: [{ username: input.identity }, { email: input.identity }, { phone: input.identity }],
@@ -37,7 +44,9 @@ export class LoginService {
     if (!found || !isValid) throw new UnauthorizedException('Invalid credentials provided.');
 
     if (!INTERNAL_ROLES.has(found.role as 'STAFF' | 'AUTHORITY')) {
-      throw new ForbiddenException('Non-internal roles cannot authenticate in this system context.');
+      throw new ForbiddenException(
+        'Non-internal roles cannot authenticate in this system context.',
+      );
     }
 
     const row = await this.prisma.user.findUnique({

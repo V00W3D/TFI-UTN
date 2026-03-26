@@ -11,7 +11,11 @@
  * - PERT: 1
  * - Planning Poker: 1
  */
-import { Injectable, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import type { InferSuccess } from '@app/sdk';
 import type { MeContract } from '@app/contracts';
 import { PrismaService } from '../../../tools/prisma.service';
@@ -20,7 +24,9 @@ import { PrismaService } from '../../../tools/prisma.service';
 export class MeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async execute(userId: string | undefined): Promise<InferSuccess<typeof MeContract>> {
+  async execute(
+    userId: string | undefined,
+  ): Promise<InferSuccess<typeof MeContract>> {
     if (!userId) throw new UnauthorizedException('Missing strict user context identity.');
 
     const row = await this.prisma.user.findUnique({
