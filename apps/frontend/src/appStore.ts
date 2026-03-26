@@ -20,7 +20,7 @@ import type { z } from 'zod';
 import type { AuthUserSchema } from '@app/contracts'; // ajustá el path
 
 export type AppMode = 'dark' | 'light';
-export type AppModule = 'IAM' | 'POS' | 'ADMIN' | 'CORE';
+export type AppModule = 'IAM' | 'POS' | 'ADMIN' | 'CORE' | 'LANDING';
 
 export type AppUser = z.infer<typeof AuthUserSchema>;
 

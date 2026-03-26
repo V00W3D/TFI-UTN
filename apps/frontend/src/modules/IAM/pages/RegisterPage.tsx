@@ -1,112 +1,44 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppStore } from '../../../appStore';
+import { form } from '../../../tools/sdk';
+import './AuthPages.css';
+
 /**
  * @file RegisterPage.tsx
  * @author Victor
- * @description Automatically enforced JSDoc header according to context.md guidelines.
- * @param null
- * @returns null
- * @example null
- * @remarks This file is part of the QART monorepo architecture.
- *
- * Metrics:
- * - LOC: 50
- * - Experience Level: Junior
- * - Estimated Time: 30m
- * - FPA: 1
- * - PERT: 1
- * - Planning Poker: 1
+ * @description User registration page.
  */
-import './AuthPages.css';
-import { form } from '@tools/sdk';
-import {
-  nameField,
-  snameField,
-  lnameField,
-  sexField,
-  usernameField,
-  passwordField,
-  cpasswordField,
-  emailField,
-  phoneField,
-} from '@app/sdk';
+const RegisterPage = () => {
+  const { setModule } = useAppStore();
+  const navigate = useNavigate();
 
-const { Form, fields } = form.iam.register;
+  useEffect(() => {
+    setModule('IAM');
+  }, [setModule]);
 
-const RegisterPage = () => (
-  <Form
-    buttonText="Crear Cuenta"
-    loadingText="Creando cuenta..."
-    redirectTo="/iam/login"
-    redirectOptions={{ replace: true }}
-  >
-    <fields.name
-      label="Nombre"
-      required
-      fieldMode="register"
-      addons={[{ type: 'rules', rules: nameField.rules }]}
-    />
-    <fields.sname
-      label="Segundo Nombre"
-      fieldMode="register"
-      addons={[{ type: 'rules', rules: snameField.rules }]}
-    />
-    <fields.lname
-      label="Apellido"
-      required
-      fieldMode="register"
-      addons={[{ type: 'rules', rules: lnameField.rules }]}
-    />
-    <fields.sex
-      label="Sexo"
-      required
-      fieldMode="register"
-      control={[
-        'radio',
-        [
-          { value: 'MALE', label: 'Masculino', icon: '/masculine-icon.png' },
-          { value: 'FEMALE', label: 'Femenino', icon: '/femenine-icon.png' },
-          { value: 'OTHER', label: 'Otro', icon: '/other-gender.png' },
-        ],
-      ]}
-      addons={[{ type: 'rules', rules: sexField.rules }]}
-    />
-    <fields.username
-      label="Usuario"
-      required
-      fieldMode="register"
-      addons={[{ type: 'rules', rules: usernameField.rules }]}
-    />
-    <fields.password
-      label="Contraseña"
-      required
-      fieldMode="register"
-      control="password"
-      addons={[
-        { type: 'passwordToggle' },
-        { type: 'strength' },
-        { type: 'rules', rules: passwordField.rules },
-      ]}
-    />
-    <fields.cpassword
-      label="Confirmar Contraseña"
-      required
-      fieldMode="register"
-      control="password"
-      addons={[{ type: 'passwordToggle' }, { type: 'rules', rules: cpasswordField.rules }]}
-    />
-    <fields.email
-      label="Email"
-      required
-      fieldMode="register"
-      control="email"
-      addons={[{ type: 'rules', rules: emailField.rules }]}
-    />
-    <fields.phone
-      label="Teléfono"
-      fieldMode="register"
-      control="phone"
-      addons={[{ type: 'rules', rules: phoneField.rules }]}
-    />
-  </Form>
-);
+  return (
+    <div className="auth-page">
+      <div className="auth-card">
+        <h2 className="auth-title">Crear Cuenta</h2>
+        <p className="auth-subtitle">Únase a la experiencia QART</p>
+
+        <form.Register
+          onSuccess={() => {
+            navigate('/iam/login');
+          }}
+          className="auth-form"
+        />
+
+        <div className="auth-footer">
+          ¿Ya tiene una cuenta?{' '}
+          <button onClick={() => navigate('/iam/login')} className="auth-link">
+            Inicie sesión
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default RegisterPage;

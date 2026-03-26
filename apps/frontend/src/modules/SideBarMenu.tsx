@@ -1,30 +1,21 @@
-/**
- * @file SideBarMenu.tsx
- * @author Victor
- * @description Automatically enforced JSDoc header according to context.md guidelines.
- * @param null
- * @returns null
- * @example null
- * @remarks This file is part of the QART monorepo architecture.
- *
- * Metrics:
- * - LOC: 50
- * - Experience Level: Junior
- * - Estimated Time: 30m
- * - FPA: 1
- * - PERT: 1
- * - Planning Poker: 1
- */
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useAppStore } from '../appStore';
 import ToggleModeButton from './ToggleModeButton';
 import './sidebar-menu.css';
 
+/**
+ * @file SideBarMenu.tsx
+ * @author Victor
+ * @description Main application navigation.
+ * Portals to #portal-root and hides itself during the Landing experience.
+ */
 const SidebarMenu = () => {
+  const { module } = useAppStore();
   const [expanded, setExpanded] = useState(false);
-
   const portalRoot = document.getElementById('portal-root');
-  if (!portalRoot) return null;
+
+  if (!portalRoot || module === 'LANDING') return null;
 
   return createPortal(
     <aside className={`sidebar ${expanded ? 'sidebar--expanded' : ''}`} aria-label="Menú principal">
@@ -52,7 +43,7 @@ const SidebarMenu = () => {
 
         <div className="sidebar__divider" role="separator" />
 
-        {/* ── Toggle modo — el row lo pone el sidebar, no el botón ── */}
+        {/* ── Toggle modo ── */}
         <ToggleModeButton expanded={expanded} />
       </nav>
 
@@ -60,7 +51,7 @@ const SidebarMenu = () => {
       <div className="sidebar__footer">
         <button
           className="sidebar__row sidebar__row--toggle"
-          onClick={() => setExpanded((p) => !p)}
+          onClick={() => setExpanded((prev) => !prev)}
           aria-label={expanded ? 'Contraer menú' : 'Expandir menú'}
           aria-expanded={expanded}
         >

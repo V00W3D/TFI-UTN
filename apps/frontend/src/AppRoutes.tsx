@@ -21,9 +21,11 @@ import { useRoutes } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 
 import { IAMRoutes } from '@modules/IAM/IAMRoutes';
+import { LandingRoutes } from '@modules/Landing/LandingRoutes';
 
 export default function AppRoutes() {
   const routes: RouteObject[] = [
+    LandingRoutes,
     IAMRoutes,
     // POSRoutes,
     // AdminRoutes,

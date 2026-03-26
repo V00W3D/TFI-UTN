@@ -1,348 +1,122 @@
 # QART — System Context & Development Rules
 
-## 1. PURPOSE
+## 1. System Vision & Strategy
 
-QART is a modular web platform focused on a **realistic digital restaurant experience**.
+### Purpose
 
-The system allows users to:
+QART is a high-performance, modular platform designed for a **realistic digital restaurant experience**. It bridges the gap between a "MercadoLibre-style marketplace" and a premium food delivery platform, focusing on author gastronomy and human-centric UX.
 
-- order food
-- customize certain dishes
-- interact through reviews
-- experience a modern, intuitive food ordering flow
+### Core Pillars
 
-The goal is to simulate a **"MercadoLibre-style marketplace" for food**, combined with the UX simplicity of food delivery platforms.
-
----
-
-## 2. CORE FEATURES
-
-### Ordering System
-
-- Users can:
-  - order food for dine-in or takeaway
-  - choose payment method:
-    - credit card
-    - debit card
-    - bank transfer
-    - cash
-
-### Order Flow
-
-- Order lifecycle must include:
-  - created
-  - confirmed
-  - in preparation
-  - ready
-  - delivered
-
-- System must notify users when:
-  - order is accepted
-  - order is ready
+- **Craftable Dishes**: Layered customization (burgers, sandwiches) with strict validation.
+- **Order Lifecycle**: Real-time tracking from creation to delivery.
+- **Human-Centric UI**: Formal, professional, and narrative-driven aesthetic.
+- **SDK-First Architecture**: ~80% of business logic resides in a shared, typesafe SDK.
 
 ---
 
-### Craftable Dishes System (CORE FEATURE)
+## 2. Monorepo Architecture Map
 
-Certain dishes are customizable ("craftable"):
+### `/apps/backend` (Bun + Express + SDK)
 
-Initial scope:
+- `src/index.ts`: Entry point. Orchestrates the bootstrap via `api.init().start()`.
+- `src/env.ts`: Strict environment validation layer using Zod.
+- `src/tools/`: SDK-Express bridge.
+  - `api.ts`: Singleton for the Express `app` and SDK `api` instance.
+  - `db.ts`: Prisma PostgreSQL adapter and connection pool management.
+  - `ErrorTools.ts`: Normalized error pipeline (Zod -> Prisma -> SDK).
+- `src/middleware/`: Security guards.
+  - `auth.middleware.ts`: Dual-token rotation (CupCake/Cake).
+  - `role.middleware.ts`: RBAC (Role-Based Access Control).
+- `src/modules/`: Business domains (e.g., `IAM`).
+  - `handlers/`: SDK-typed endpoint definitions.
+  - `services/`: Functional business logic (no classes).
 
-- sandwiches
-- burgers
-- similar layered food
+### `/apps/frontend` (React + Vite + Tailwind v4)
 
-Users can:
+- Implements the same modular pattern as the backend.
+- Uses `@app/sdk/ApiClient` for typesafe communication.
 
-- select ingredients
-- build their own version of the dish
+### `/packages/contracts` (Zod)
 
-IMPORTANT:
+- Source of truth for all data shapes, enums, and API endpoints.
 
-- Crafting is LIMITED and structured
-- Avoid infinite or unrealistic combinations
-- System must validate ingredient combinations
+### `/packages/sdk` (Shared Core)
 
-Non-craftable dishes:
-
-- traditional meals (e.g. stews, pasta)
-- only minor variations allowed (optional)
-
----
-
-### Reviews System
-
-- Users can leave reviews on dishes
-
-- Rating system:
-  - decimal values (0–5)
-
-- Reviews can be:
-  - anonymous
-  - user-linked (optional)
-
-BUT:
-
-- authentication is REQUIRED to post
-
-NO heavy content filtering:
-
-- freedom of expression is allowed
+- `ApiServer.ts`: Factory for typesafe Express servers.
+- `ApiClient.ts`: Proxy-based API consumer for the frontend.
+- `ErrorCodes.ts`: Standardized error identifiers and AppError primitives.
 
 ---
 
-## 3. PRODUCT STRATEGY
+## 3. Backend Operational Flow
 
-Initial focus:
+### Initialization Flow
 
-- simple restaurant experience
-- strong UX
-- stable ordering system
+1. Load and validate `env.ts`.
+2. Configure Express `app` in `tools/api.ts` (Helmet, CORS, Cookies).
+3. Bind the `prismaAdapter` in `tools/db.ts` to ensure database health.
+4. Mount module routers (e.g., `IAMRouter`) into the SDK.
+5. SDK starts the listener in `index.ts`.
 
-Future vision:
+### Request/Response Lifecycle
 
-- evolve into SaaS restaurant platform
-- support real restaurants
-- scalable architecture
-
----
-
-## 4. TECH STACK (MANDATORY)
-
-### Backend
-
-- Framework: NestJS
-- Runtime: Bun
-- Database: Prisma (SQL)
-- Auth: JWT + Argon2
-- Architecture: Modular
-
-### Frontend
-
-- React + Vite
-- TailwindCSS v4 (QART Design System)
-
-### Shared
-
-- SDK (~80% logic)
-- Contracts (Zod)
+1. **Transport**: Raw Express request hits the listener.
+2. **Auth**: `authMiddleware` verifies/rotates CupCake/Cake cookies; populates `req.user`.
+3. **Guard**: `roleMiddleware` verifies RBAC requirements if defined.
+4. **Validation**: SDK validates `input` against the Zod contract.
+5. **Logic**: `Handler` calls `Service` (pure async function).
+6. **Persistence**: `Service` consumes `prisma` directly from `tools/db.ts`.
+7. **Error**: If anything throws, `ErrorTools.catch` normalizes it for the client.
 
 ---
 
-## 5. MONOREPO STRUCTURE
+## 4. Development Standards & Rules
 
-root/
-apps/
-frontend/
-src/
-modules/
-backend/
-src/
-modules/
-config/
-tools/
-prisma/
-packages/
-sdk/
-contracts/
+### Coding Philosophy
 
----
+- **Strict DRY**: Leverage the SDK and shared utilities to minimize boilerplate.
+- **Compactness**: Favor concise, functional code with early returns and guard clauses.
+- **Documentation**: Professional JSDoc in every file explaining the **"Why"** and **"How"**.
+- **Typing**: Zero `any` usage. Rely on SDK `InferRequest`/`InferSuccess` for contract safety.
 
-## 6. ARCHITECTURE RULES
+### Import Rules (Backend)
 
-- Strict modular structure: `src/modules/{MODULE}`
-- Modular structure is RECURSIVE (applies to Backend and Frontend).
-- Each module MUST be 100% granular (no monolithic controllers/services):
-  - `handlers/`: Individual classes for each endpoint/group (e.g. `LoginHandler.ts`). Use `@Controller` but name as `Handler`.
-  - `services/`: Specific logic classes mapping 1:1 to features (e.g. `LoginService.ts`).
-  - `contracts/`: Zod definitions ensuring cross-layer safety.
-  - `index.ts`: The only public export point, usually only exporting the `Module` class.
-- **Rule of Single Responsibility**: If a handler does more than one business action, split it.
-- **Strict Typing**: NO `any`, NO `undefined` leaks. Use `unknown` with type guards or explicit interfaces.
-- **Exception handling**: Always use framework-native exceptions (e.g. `UnauthorizedException`) instead of generic errors.
-- **Security**: Use NestJS `Guards` (e.g. `AuthGuard.ts`) for all protected routes, never custom express-like middleware logic in handlers.
+- **No Extensions**: Imports must NEVER include extensions like `.js` or `.ts`.
+- **Absolute Paths**: Use paths relative to `src` (e.g., `../../tools/api`) or workspace aliases.
+- **Workspace Aliases**: `@app/sdk` and `@app/contracts` are the only valid cross-package aliases.
 
-- No direct cross-module dependencies.
-- Use contracts for communication.
-- SDK is the central shared layer.
+### Module Structure (Canonical)
+
+Every module must reside in `src/modules/{Domain}` and follow this structure:
+
+- `handlers/`: Individual files per endpoint (e.g., `LoginHandler.ts`).
+- `services/`: Functional logic files (e.g., `LoginService.ts`).
+- `index.ts`: Exports the aggregated router via `api.router([...handlers])`.
+
+### Security: CupCake & Cake
+
+- **CupCake**: Access token (1h). Stored in HttpOnly, Secure, SameSite:Strict cookie.
+- **Cake**: Refresh token (7d). Used by `authMiddleware` to regenerate CupCake automatically.
+- **req.user**: Populated from JWT payload. No database query performed for "Me" requests.
 
 ---
 
-## 7. IMPORT RULES
+## 5. Metadata & Metrics Header
 
-- NEVER use `.js` extensions
-- `@/*` only for local `src`
-- Shared code via packages:
-  - `@qart/sdk`
-  - `@qart/contracts`
+Every source file must begin with a metadata block for tracking:
 
----
-
-## 8. API DESIGN
-
-- RESTful endpoints
-- Standard response:
-
-{
-data?: any,
-error?: {
-message: string,
-code: string
-}
-}
-(if data is != null, is taken as success, else, if error, then is a failure)
-
-- Required HTTP status codes:
-  200, 201, 400, 401, 404, 500
-
----
-
-## 9. REAL-TIME SYSTEM
-
-Use WebSockets (NestJS Gateway)
-
-Events:
-
-- order_created
-- order_updated
-- order_ready
-
-Purpose:
-
-- real-time order tracking
-- improved UX
-
----
-
-## 10. DOCUMENTATION RULES
-
-Each module MUST include:
-
-### doc.md
-
-- purpose
-- responsibilities
-- design decisions
-- interactions
-
-### tasks.md
-
-id:
-name:
-status:
-type:
-completion:
-area:
-timeline:
-responsible:
-
----
-
-## 11. CODE DOCUMENTATION
-
-All files MUST include JSDoc:
-
-@file
-@author Victor
-@description
-@param
-@returns
-@example
-@remarks
-
-Metrics MUST include:
-
-- LOC
-- Experience Level: Junior
-- Estimated Time
-- FPA
-- PERT
-- Planning Poker
-
----
-
-## 12. DESIGN SYSTEM
-
-- TailwindCSS v4
-- Style: Formal, Professional, Human
-
-Palette:
-
-- Primary: Deep Plum
-- Base: Cream
-- Dark: Obsidian
-- Accent: Aged Gold
-
-Typography:
-
-- Serif: Cormorant Garamond
-- Sans: Inter / Outfit
-
-UX:
-
-- immersive
-- narrative-driven
-- elegant
-
----
-
-## 13. TESTING
-
-- Required
-- Vitest
-- React Testing Library
-
----
-
-## 14. AUTH SYSTEM
-
-- Local only
-- JWT + COOKIES
-  (work with JWT INSIDE COOKIES in the entire project)
-- Argon2 (to hash principally)
-- Custom roles (extensible)
-
----
-
-## 15. DEVELOPMENT PRINCIPLES
-
-- DRY (strict)
-- Readability > cleverness
-- Modular > monolithic
-- Explicit > implicit
-- Everything must be explainable
-
----
-
-## 16. DEVELOPMENT BEHAVIOR (FOR AI)
-
-- Always follow module structure
-- Always generate doc.md and tasks.md
-- Never skip documentation
-- Never simplify architecture
-- Always explain WHY
-- Always reuse SDK and contracts
-- Everytime a change is done, make a commit to the github repository:
-
-https://github.com/V00W3D/QART.git
-
-## (with profesional description and naming of the commits themselves.)
-
-## 17. PRODUCT PHILOSOPHY
-
-QART is NOT a social network.
-
-QART is a **digital restaurant experience**.
-
-Focus on:
-
-- usability
-- customization
-- clarity
-- real-world applicability
-
-Avoid:
-
-- toxic interactions
-- ownership conflicts
-- unnecessary complexity
+```ts
+/**
+ * @file [Filename]
+ * @author Victor
+ * @description [Brief description of responsibility]
+ * @remarks [Design decisions / Architecture notes]
+ *
+ * Metrics:
+ * - LOC: [Number]
+ * - Experience Level: [Junior/Mid/Senior]
+ * - Estimated Time: [Interval]
+ * - FPA/PERT/Planning Poker: [Values]
+ */
+```
