@@ -20,6 +20,8 @@
     // ── Ambiente Node/Bun ────────────────────────────────────────
     "lib": ["ESNext"],
     "types": ["bun", "node"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     // ── Emit ────────────────────────────────────────────────────
     // noEmit: true durante typecheck (tsc --noEmit)

@@ -10,8 +10,11 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@app/sdk": "workspace:*",
     "@app/contracts": "workspace:*",
+    "@app/sdk": "workspace:*",
+    "@nestjs/common": "^11.1.17",
+    "@nestjs/core": "^11.1.17",
+    "@nestjs/platform-express": "^11.1.17",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
     "argon2": "^0.44.0",
@@ -25,6 +28,8 @@
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
     "pg": "^8.19.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
     "zod": "^4.0.0"
   },
   "devDependencies": {

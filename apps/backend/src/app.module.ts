@@ -1,5 +1,5 @@
 /**
- * @file index.ts
+ * @file app.module.ts
  * @author Victor
  * @description Automatically enforced JSDoc header according to context.md guidelines.
  * @param null
@@ -15,4 +15,13 @@
  * - PERT: 1
  * - Planning Poker: 1
  */
-export * from './IAMModule';
+import { Module } from '@nestjs/common';
+import { IAMModule } from './modules/IAM/IAMModule';
+import { PrismaService } from './tools/prisma.service';
+
+@Module({
+  imports: [IAMModule],
+  controllers: [],
+  providers: [PrismaService],
+})
+export class AppModule {}

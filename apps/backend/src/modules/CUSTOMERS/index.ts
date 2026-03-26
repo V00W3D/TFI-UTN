@@ -1,1 +1,0 @@
-export { CUSTOMERRouter } from './CUSTOMERController';
