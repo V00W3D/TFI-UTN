@@ -151,18 +151,20 @@ contracts/
 ## 6. ARCHITECTURE RULES
 
 - Strict modular structure: `src/modules/{MODULE}`
+- Modular structure is RECURSIVE (applies to Backend and Frontend).
+- Each module MUST be 100% granular (no monolithic controllers/services):
+  - `handlers/`: Individual classes for each endpoint/group (e.g. `LoginHandler.ts`). Use `@Controller` but name as `Handler`.
+  - `services/`: Specific logic classes mapping 1:1 to features (e.g. `LoginService.ts`).
+  - `contracts/`: Zod definitions ensuring cross-layer safety.
+  - `index.ts`: The only public export point, usually only exporting the `Module` class.
+- **Rule of Single Responsibility**: If a handler does more than one business action, split it.
+- **Strict Typing**: NO `any`, NO `undefined` leaks. Use `unknown` with type guards or explicit interfaces.
+- **Exception handling**: Always use framework-native exceptions (e.g. `UnauthorizedException`) instead of generic errors.
+- **Security**: Use NestJS `Guards` (e.g. `AuthGuard.ts`) for all protected routes, never custom express-like middleware logic in handlers.
 
-- Each module MUST include:
-  - handlers
-  - services
-  - contracts
-  - (frontend) components
-
-- No direct cross-module dependencies
-
-- Use contracts for communication
-
-- SDK is the central shared layer
+- No direct cross-module dependencies.
+- Use contracts for communication.
+- SDK is the central shared layer.
 
 ---
 

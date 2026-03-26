@@ -16,12 +16,20 @@
  * - Planning Poker: 1
  */
 import { Module } from '@nestjs/common';
-import { IAMController } from './IAMController';
-import { IAMService } from './IAMService';
 import { PrismaService } from '../../tools/prisma.service';
 
+import { LoginHandler } from './handlers/LoginHandler';
+import { RegisterHandler } from './handlers/RegisterHandler';
+import { LogoutHandler } from './handlers/LogoutHandler';
+import { MeHandler } from './handlers/MeHandler';
+
+import { LoginService } from './services/LoginService';
+import { RegisterService } from './services/RegisterService';
+import { MeService } from './services/MeService';
+
 @Module({
-  controllers: [IAMController],
-  providers: [IAMService, PrismaService],
+  controllers: [LoginHandler, RegisterHandler, LogoutHandler, MeHandler],
+  providers: [PrismaService, LoginService, RegisterService, MeService],
+  exports: [LoginService, MeService],
 })
 export class IAMModule {}
