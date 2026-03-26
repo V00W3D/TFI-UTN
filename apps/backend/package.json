@@ -5,6 +5,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "bun --watch src/index.ts",
+    "seed": "bun src/seed.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "start": "node dist/index.js"
   },

@@ -33,12 +33,11 @@
 
     // ── Paths locales (dentro de src/) ───────────────────────────
     // @app/sdk y @app/contracts se resuelven via workspace — NO van acá.
-    "baseUrl": ".",
     "paths": {
-      "@store": ["src/appStore.ts"],
-      "@env": ["src/env.ts"],
-      "@tools/*": ["src/tools/*"],
-      "@modules/*": ["src/modules/*"]
+      "@store": ["./src/appStore.ts"],
+      "@env": ["./src/env.ts"],
+      "@tools/*": ["./src/tools/*"],
+      "@modules/*": ["./src/modules/*"]
     },
     "sourceMap": false
   },

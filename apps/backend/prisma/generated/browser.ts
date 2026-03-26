@@ -37,3 +37,38 @@ export type StaffProfile = Prisma.StaffProfileModel
  * 
  */
 export type AuthorityProfile = Prisma.AuthorityProfileModel
+/**
+ * Model Plate
+ * 
+ */
+export type Plate = Prisma.PlateModel
+/**
+ * Model Ingredient
+ * 
+ */
+export type Ingredient = Prisma.IngredientModel
+/**
+ * Model PlateIngredient
+ * 
+ */
+export type PlateIngredient = Prisma.PlateIngredientModel
+/**
+ * Model Review
+ * 
+ */
+export type Review = Prisma.ReviewModel
+/**
+ * Model CreatorStats
+ * 
+ */
+export type CreatorStats = Prisma.CreatorStatsModel
+/**
+ * Model Tag
+ * 
+ */
+export type Tag = Prisma.TagModel
+/**
+ * Model PlateTag
+ * 
+ */
+export type PlateTag = Prisma.PlateTagModel

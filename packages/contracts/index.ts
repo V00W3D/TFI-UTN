@@ -10,13 +10,15 @@
 
 import { collectContracts } from '@app/sdk';
 import { IAMContract } from './IAMContract';
+import { CUSTOMERContract } from './CUSTOMERContract';
 // ─────────────────────────────────────────────────────────────
 //  NO type annotation — TypeScript must infer the exact tuple.
 //  A type annotation would widen to AnyContract[] and destroy
 //  all literal type information downstream.
 // ─────────────────────────────────────────────────────────────
-export const contracts = collectContracts(IAMContract);
+export const contracts = collectContracts(IAMContract, CUSTOMERContract);
 
 /** @public Explicit type export — safe for type-only imports. */
 export type AppContracts = typeof contracts;
 export * from './IAMContract';
+export * from './CUSTOMERContract';

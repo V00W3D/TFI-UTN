@@ -32,12 +32,11 @@
     // ── Paths locales (dentro de src/) ───────────────────────────
     // @app/sdk y @app/contracts se resuelven via workspace — NO van acá.
     // Solo van los aliases que apuntan a carpetas dentro de este proyecto.
-    "baseUrl": ".",
     "paths": {
-      "@env": ["src/env.ts"],
-      "@middleware/*": ["src/middleware/*"],
-      "@tools/*": ["src/tools/*"],
-      "@modules/*": ["src/modules/*"]
+      "@env": ["./src/env.ts"],
+      "@middleware/*": ["./src/middleware/*"],
+      "@tools/*": ["./src/tools/*"],
+      "@modules/*": ["./src/modules/*"]
     }
   },
 

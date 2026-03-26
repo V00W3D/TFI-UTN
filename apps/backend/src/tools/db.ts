@@ -7,7 +7,7 @@
  * The server will call `$connect()` before listening — if it fails, it exits.
  */
 
-import { PrismaClient } from 'prisma/generated/client';
+import { PrismaClient } from '../../prisma/generated/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { DATABASE_URL } from '@env';
 import type { DatabaseAdapter } from '@app/sdk/ApiServer';

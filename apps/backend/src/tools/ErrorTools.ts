@@ -1,4 +1,4 @@
-import { Prisma } from 'prisma/generated/client';
+import { Prisma } from '../../prisma/generated/client';
 import { z, ZodError } from 'zod';
 import { ERROR_CODES, AppError, ERR, type ErrorCode, type PublicErrorEnvelope } from '@app/sdk';
 

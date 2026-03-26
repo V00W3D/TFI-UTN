@@ -54,7 +54,14 @@ export const ModelName = {
   User: 'User',
   CustomerProfile: 'CustomerProfile',
   StaffProfile: 'StaffProfile',
-  AuthorityProfile: 'AuthorityProfile'
+  AuthorityProfile: 'AuthorityProfile',
+  Plate: 'Plate',
+  Ingredient: 'Ingredient',
+  PlateIngredient: 'PlateIngredient',
+  Review: 'Review',
+  CreatorStats: 'CreatorStats',
+  Tag: 'Tag',
+  PlateTag: 'PlateTag'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -113,6 +120,88 @@ export const AuthorityProfileScalarFieldEnum = {
 } as const
 
 export type AuthorityProfileScalarFieldEnum = (typeof AuthorityProfileScalarFieldEnum)[keyof typeof AuthorityProfileScalarFieldEnum]
+
+
+export const PlateScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  source: 'source',
+  type: 'type',
+  flavor: 'flavor',
+  creatorId: 'creatorId',
+  avgRating: 'avgRating',
+  ratingsCount: 'ratingsCount',
+  isAvailable: 'isAvailable',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlateScalarFieldEnum = (typeof PlateScalarFieldEnum)[keyof typeof PlateScalarFieldEnum]
+
+
+export const IngredientScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  flavor: 'flavor',
+  isActive: 'isActive'
+} as const
+
+export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
+
+
+export const PlateIngredientScalarFieldEnum = {
+  plateId: 'plateId',
+  ingredientId: 'ingredientId'
+} as const
+
+export type PlateIngredientScalarFieldEnum = (typeof PlateIngredientScalarFieldEnum)[keyof typeof PlateIngredientScalarFieldEnum]
+
+
+export const ReviewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  plateId: 'plateId',
+  rating: 'rating',
+  comment: 'comment',
+  createdAt: 'createdAt'
+} as const
+
+export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
+
+
+export const CreatorStatsScalarFieldEnum = {
+  userId: 'userId',
+  totalPlates: 'totalPlates',
+  totalOrders: 'totalOrders',
+  avgRating: 'avgRating',
+  reputationScore: 'reputationScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type CreatorStatsScalarFieldEnum = (typeof CreatorStatsScalarFieldEnum)[keyof typeof CreatorStatsScalarFieldEnum]
+
+
+export const TagScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isApproved: 'isApproved',
+  isActive: 'isActive',
+  usageCount: 'usageCount',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+} as const
+
+export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
+
+
+export const PlateTagScalarFieldEnum = {
+  plateId: 'plateId',
+  tagId: 'tagId'
+} as const
+
+export type PlateTagScalarFieldEnum = (typeof PlateTagScalarFieldEnum)[keyof typeof PlateTagScalarFieldEnum]
 
 
 export const SortOrder = {

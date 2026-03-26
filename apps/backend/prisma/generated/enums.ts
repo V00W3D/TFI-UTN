@@ -40,6 +40,38 @@ export const AuthorityRank = {
 export type AuthorityRank = (typeof AuthorityRank)[keyof typeof AuthorityRank]
 
 
+export const PlateSource = {
+  Q: 'Q',
+  C: 'C'
+} as const
+
+export type PlateSource = (typeof PlateSource)[keyof typeof PlateSource]
+
+
+export const PlateType = {
+  STARTER: 'STARTER',
+  MAIN: 'MAIN',
+  DESSERT: 'DESSERT',
+  SIDE: 'SIDE',
+  SNACK: 'SNACK',
+  DRINK: 'DRINK'
+} as const
+
+export type PlateType = (typeof PlateType)[keyof typeof PlateType]
+
+
+export const FlavorProfile = {
+  SWEET: 'SWEET',
+  SALTY: 'SALTY',
+  ACID: 'ACID',
+  BITTERSWEET: 'BITTERSWEET',
+  UMAMI: 'UMAMI',
+  UNKNOWN: 'UNKNOWN'
+} as const
+
+export type FlavorProfile = (typeof FlavorProfile)[keyof typeof FlavorProfile]
+
+
 export const UserRole = {
   CUSTOMER: 'CUSTOMER',
   STAFF: 'STAFF',
