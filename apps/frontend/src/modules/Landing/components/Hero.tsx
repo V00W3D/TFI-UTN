@@ -2,52 +2,31 @@ import { motion } from 'framer-motion';
 
 /**
  * @file Hero.tsx
- * @description Immersive hero section for the landing page.
+ * @description Symmetric Hero section.
  */
 const Hero = () => {
   return (
-    <section className="landing-hero bg-primary-dark">
-      <motion.img
-        src="/hero.png"
-        alt="Featured Gourmet Burger"
-        className="landing-hero__image"
-        initial={{ scale: 1.2, opacity: 0 }}
-        animate={{ scale: 1.05, opacity: 0.7 }}
-        transition={{ duration: 2, ease: 'easeOut' }}
+    <section className="l-hero">
+      <motion.img 
+        src="/hero.png" 
+        className="l-hero__bg"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.3 }}
+        transition={{ duration: 1 }}
       />
-      <div className="landing-hero__content">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.5 }}
-        >
-          <h1 className="landing-hero__title">
-            <span>Autor Gastronomía</span>
-            QART
-          </h1>
-        </motion.div>
-
-        <motion.p
-          className="text-2xl mb-12 opacity-80 font-light tracking-[0.2em] uppercase max-w-2xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1.5 }}
-        >
-          Donde la precisión se encuentra con la pasión.
+      <div className="l-hero__content l-container">
+        <motion.span className="l-hero__subtitle" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          Autor Gastronomía
+        </motion.span>
+        <motion.h1 className="l-hero__title" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
+          QART
+        </motion.h1>
+        <motion.p className="text-lg mb-10 opacity-60 font-light tracking-widest max-w-lg mx-auto" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          Donde la precisión se encuentra con la pasión culinaria.
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8, duration: 1 }}
-        >
-          <button
-            className="btn-luxury"
-            onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            Descubrir el Menú
-          </button>
-        </motion.div>
+        <button className="btn btn-primary" onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}>
+          Descubrir el Menú
+        </button>
       </div>
     </section>
   );

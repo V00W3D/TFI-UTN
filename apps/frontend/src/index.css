@@ -1,122 +1,129 @@
 @import 'tailwindcss';
 
 /* =========================================================
-   🍷 QART LUXURY DESIGN SYSTEM
-   Ciruela · Latón · Humo · Elegante · Social
+   🍷 QART SYMMETRIC PERFECTION
+   Sharp · Precise · Balanced · Luxury
    ========================================================= */
 
 :root {
-  /* ── Primario: Ciruela Profunda ────────────────────────── */
+  /* ── Spacing Grid (8px base) ──────────────────────────── */
+  --s-1: 0.25rem;  /* 4px */
+  --s-2: 0.5rem;   /* 8px */
+  --s-3: 0.75rem;  /* 12px */
+  --s-4: 1rem;     /* 16px */
+  --s-6: 1.5rem;   /* 24px */
+  --s-8: 2rem;     /* 32px */
+  --s-12: 3rem;    /* 48px */
+  --s-16: 4rem;    /* 64px */
+  --s-24: 6rem;    /* 96px */
+
+  /* ── Color Palette ────────────────────────────────────── */
   --primary-h: 340;
   --primary-s: 48%;
-  --primary-l: 28%;
+  --primary-l: 22%; /* Deeper */
 
   --color-primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
-  --color-primary-soft: hsl(var(--primary-h) 45% 94%);
-  --color-primary-muted: hsl(var(--primary-h) 25% 45%);
-  --color-primary-dark: hsl(var(--primary-h) 60% 18%);
-  --color-primary-glow: hsl(var(--primary-h) 60% 40% / 0.15);
-
-  /* ── Acento: Oro Envejecido / Champagne ───────────────── */
-  --color-accent: hsl(42 42% 54%);
-  --color-accent-soft: hsl(42 40% 90%);
-  --color-accent-dark: hsl(42 45% 38%);
-  --color-accent-glow: hsl(42 50% 50% / 0.2);
-
-  /* ── Superficies: Pergamino Premium / Obsidiana ───────── */
-  --bg: hsl(30 20% 97%);
-  --bg-gradient: radial-gradient(circle at top, hsl(30 20% 98%) 0%, hsl(30 15% 94%) 100%);
-
+  --color-accent: hsl(42 42% 48%);
+  
+  --bg: hsl(30 20% 98%);
   --surface: hsl(0 0% 100%);
-  --surface-soft: hsl(30 12% 95%);
-  --surface-muted: hsl(30 8% 90%);
-  --surface-elevated: hsl(0 0% 100%);
+  --surface-alt: hsl(30 10% 95%);
+  --border: hsl(30 10% 88%);
 
-  --border: hsl(30 10% 86%);
-  --border-strong: hsl(30 12% 75%);
+  --text-main: hsl(340 20% 10%);
+  --text-dim: hsl(340 10% 40%);
+  --text-muted: hsl(340 5% 65%);
+  --text-on-primary: hsl(0 0% 100%);
 
-  /* ── Tipografía ────────────────────────────────────────── */
-  --text-primary: hsl(340 20% 10%);
-  --text-secondary: hsl(340 10% 35%);
-  --text-muted: hsl(340 8% 55%);
-  --text-inverse: hsl(0 0% 98%);
-
-  /* ── Sombras & Efectos ─────────────────────────────────── */
-  --shadow-premium: 0 20px 50px -12px hsl(340 30% 10% / 0.12);
-  --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 0% / 0.05);
+  --radius: 0px;
 }
 
 .dark {
-  --color-primary: hsl(var(--primary-h) 55% 65%);
-  --color-primary-soft: hsl(var(--primary-h) 30% 12%);
-  --color-primary-muted: hsl(var(--primary-h) 25% 45%);
-  --color-primary-glow: hsl(var(--primary-h) 70% 60% / 0.18);
+  --bg: hsl(220 20% 4%);
+  --surface: hsl(220 15% 6%);
+  --surface-alt: hsl(220 12% 8%);
+  --border: hsl(220 10% 16%);
 
-  --color-accent: hsl(42 48% 65%);
-  --color-accent-soft: hsl(42 30% 14%);
-
-  --bg: hsl(220 12% 4%);
-  --bg-gradient: radial-gradient(circle at top, hsl(220 12% 6%) 0%, hsl(220 15% 3%) 100%);
-
-  --surface: hsl(220 10% 7%);
-  --surface-soft: hsl(220 10% 10%);
-  --surface-elevated: hsl(220 10% 13%);
-
-  --border: hsl(220 8% 16%);
-  --border-strong: hsl(220 8% 24%);
-
-  --text-primary: hsl(30 15% 94%);
-  --text-secondary: hsl(30 8% 70%);
+  --text-main: hsl(30 15% 92%);
+  --text-dim: hsl(30 10% 70%);
   --text-muted: hsl(30 5% 45%);
+
+  --color-primary: hsl(var(--primary-h) 60% 65%);
 }
 
 /* =========================================================
-   🌍 BASE GLOBAL
+   🌍 GLOBAL RESET & TYPOGRAPHY
    ========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border-radius: var(--radius) !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px; 
+}
 
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
-  background: var(--bg-gradient);
   background-color: var(--bg);
-  color: var(--text-primary);
+  color: var(--text-main);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.1;
+/* ── Precise Typography Scale ───────────────────────────── */
+h1 { font-size: clamp(3rem, 8vw, 5rem); font-weight: 400; line-height: 1.1; }
+h2 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 400; line-height: 1.2; }
+h3 { font-size: 1.5rem; font-weight: 500; }
+h4 { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; }
+
+h1, h2, h3, h4 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--color-primary);
 }
 
-/* ── Luxury Utilities ────────────────────────────────────── */
+.dark h1, .dark h2, .dark h3, .dark h4 {
+  color: var(--text-main);
+}
 
-.glass {
-  background: rgba(var(--surface), 0.05);
-  backdrop-filter: blur(20px) saturate(180%);
+/* 🌍 Shared Base Components ──────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--s-3) var(--s-8);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--text-on-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-accent);
+}
+
+.btn-outline {
+  background-color: transparent;
   border: 1px solid var(--border);
+  color: var(--text-main);
 }
 
-.text-glow {
-  text-shadow: 0 0 20px var(--color-primary-glow);
+.btn-outline:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-.gold-border {
-  border: 1px solid var(--color-accent);
-  box-shadow: 0 0 15px var(--color-accent-glow);
-}
-
-.premium-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-premium);
-  transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
-}
-
-.premium-card:hover {
-  transform: translateY(-8px) scale(1.01);
-}
+/* ───────────────────────────────────────────────────────── */

@@ -4,64 +4,47 @@ import { useAppStore } from '../../../appStore';
 
 /**
  * @file Navbar.tsx
- * @description Luxury navigation bar with glassmorphism and mode toggle.
+ * @description Symmetric navigation bar.
  */
 const Navbar = () => {
   const navigate = useNavigate();
   const { mode, setMode } = useAppStore();
-
   const toggleMode = () => setMode(mode === 'light' ? 'dark' : 'light');
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
+    <motion.nav 
+      initial={{ y: -50 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="fixed top-0 left-0 w-full z-50 px-8 py-6 flex justify-between items-center bg-bg/10 backdrop-blur-xl border-b border-white/5"
+      className="fixed top-0 left-0 w-full z-50 bg-surface border-b border-border shadow-sm"
     >
-      <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
-        <img src="/QART_LOGO.png" alt="QART Logo" className="size-10 object-contain" />
-        <span className="font-serif text-2xl tracking-widest text-accent">QART</span>
-      </div>
+      <div className="l-container py-3 flex justify-between items-center">
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+          <img src="/QART_LOGO.png" alt="QART" className="size-8 object-contain" />
+          <span className="font-serif text-xl tracking-[0.2em]">QART</span>
+        </div>
 
-      <div className="hidden md:flex items-center gap-12 text-sm uppercase tracking-[0.2em] font-medium opacity-80">
-        <a href="#menu" className="hover:text-accent transition-colors">
-          Carta
-        </a>
-        <a href="#story" className="hover:text-accent transition-colors">
-          Legado
-        </a>
-        <a href="#reserve" className="hover:text-accent transition-colors">
-          Reserva
-        </a>
-      </div>
+        <div className="hidden md:flex items-center gap-10 text-[10px] uppercase tracking-[0.25em] font-bold opacity-60">
+          <a href="#menu" className="hover:text-primary transition-colors">Carta</a>
+          <a href="#story" className="hover:text-primary transition-colors">Legado</a>
+          <a href="#reserve" className="hover:text-primary transition-colors">Reserva</a>
+        </div>
 
-      <div className="flex items-center gap-6">
-        <button
-          onClick={toggleMode}
-          className="p-2 rounded-full border border-white/10 hover:border-accent/40 transition-all group"
-          aria-label="Toggle Dark Mode"
-        >
-          {mode === 'light' ? (
-            <span className="text-xl group-hover:scale-110 block transition-transform">🌙</span>
-          ) : (
-            <span className="text-xl group-hover:scale-110 block transition-transform">☀️</span>
-          )}
-        </button>
-
-        <div className="flex gap-4">
-          <button
-            onClick={() => navigate('/iam/login')}
-            className="text-xs uppercase tracking-widest border-b border-transparent hover:border-accent pb-1 transition-all"
+        <div className="flex items-center gap-6">
+          <button 
+            onClick={toggleMode}
+            className="size-9 flex items-center justify-center border border-border hover:bg-surface-alt transition-all"
           >
-            Ingresar
+            {mode === 'light' ? '🌙' : '☀️'}
           </button>
-          <button
-            onClick={() => navigate('/iam/register')}
-            className="bg-accent text-inverse px-6 py-2 rounded-full text-xs uppercase tracking-widest font-bold hover:bg-white hover:text-primary transition-all shadow-lg"
-          >
-            Unirse
-          </button>
+
+          <div className="flex gap-4">
+            <button onClick={() => navigate('/iam/login')} className="text-[10px] uppercase tracking-widest font-bold opacity-70 hover:opacity-100">
+              Ingresar
+            </button>
+            <button onClick={() => navigate('/iam/register')} className="btn btn-primary !py-2 !px-5 text-[10px]">
+              Unirse
+            </button>
+          </div>
         </div>
       </div>
     </motion.nav>

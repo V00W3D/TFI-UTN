@@ -6,8 +6,7 @@ import './AuthPages.css';
 
 /**
  * @file LoginPage.tsx
- * @author Victor
- * @description Authentication entry point.
+ * @description Symmetric Login page.
  */
 const LoginPage = () => {
   const { setModule, setUser } = useAppStore();
@@ -21,35 +20,28 @@ const LoginPage = () => {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h2 className="auth-title">Bienvenido de Nuevo</h2>
-        <p className="auth-subtitle">Ingrese sus credenciales para continuar</p>
+        <div className="auth-header">
+          <h2 className="auth-title">Bienvenido</h2>
+          <p className="auth-subtitle">Acceda a Privilege QART</p>
+        </div>
 
-        <Form
-          buttonText="Iniciar Sesión"
-          onSuccess={(user) => {
-            setUser(user as any);
+        <Form 
+          buttonText="Iniciar Sesión" 
+          onSuccess={(res) => {
+            setUser(res.data);
             navigate('/');
           }}
         >
-          <fields.identity
-            label="Usuario o Email"
-            placeholder="ej. victor_qart"
-            required
-            addons={[{ type: 'icon', src: '/user-icon.png' }]}
-          />
-          <fields.password
-            label="Contraseña"
-            placeholder="••••••••"
-            control="password"
-            required
-            addons={[{ type: 'passwordToggle' }]}
-          />
+          <div className="auth-form">
+            <fields.identity label="Usuario o Email" placeholder="victor_qart" required />
+            <fields.password label="Contraseña" control="password" required />
+          </div>
         </Form>
 
         <div className="auth-footer">
-          ¿No tiene una cuenta?{' '}
-          <button onClick={() => navigate('/iam/register')} className="auth-link">
-            Regístrese
+          ¿No tiene cuenta?{' '}
+          <button onClick={() => navigate('/iam/register')} className="font-bold underline">
+            Registrarse
           </button>
         </div>
       </div>

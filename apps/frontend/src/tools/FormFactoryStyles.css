@@ -1,396 +1,78 @@
 /* =============================================================================
-   FormFactory — Estilos de componentes
-   Cubre todo lo que Tailwind no puede expresar directamente:
-   selectores padre→hijo, pseudo-elementos, librerías externas y @keyframes.
-============================================================================= */
-
-/* ── Campo ─────────────────────────────────────────────────────────────────── */
+   🍷 SYMMETRIC FormFactory
+   ============================================================================= */
 
 .ff-field {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  width: 100%;
-}
-
-/* ── Fila de label ──────────────────────────────────────────────────────────── */
-
-.ff-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  gap: var(--s-1);
 }
 
 .ff-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  transition: color 0.2s;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
 }
-
-.ff-field--error .ff-label {
-  color: var(--color-error);
-}
-.ff-field--success .ff-label {
-  color: var(--color-success);
-}
-
-.ff-required {
-  margin-left: 0.25rem;
-  color: var(--color-error);
-}
-
-.ff-help-btn {
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  transition: color 0.2s;
-}
-
-.ff-help-btn:hover {
-  color: var(--color-primary);
-}
-
-/* ── Input wrapper ──────────────────────────────────────────────────────────── */
-/* items-center alinea ícono e input verticalmente */
 
 .ff-input-wrapper {
   display: flex;
   align-items: center;
-  gap: 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
   transition: border-color 0.2s;
 }
 
 .ff-input-wrapper:focus-within {
   border-color: var(--color-primary);
 }
-.ff-field--error .ff-input-wrapper {
-  border-color: var(--color-error);
-}
-.ff-field--success .ff-input-wrapper {
-  border-color: var(--color-success);
-}
-
-/* ── Slots ──────────────────────────────────────────────────────────────────── */
-
-.ff-slot-left {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.ff-slot-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  flex-shrink: 0;
-  color: var(--text-muted);
-  transition: color 0.2s;
-}
-
-.ff-field--error .ff-slot-icon {
-  color: var(--color-error);
-}
-.ff-field--success .ff-slot-icon {
-  color: var(--color-success);
-}
-
-.ff-slot-right {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  flex-shrink: 0;
-  padding-right: 0.25rem;
-}
-
-.ff-slot-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  flex-shrink: 0;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  border-radius: 0.25rem;
-  transition: background-color 0.2s;
-}
-
-.ff-slot-btn:hover {
-  background-color: var(--surface-soft);
-}
-
-/* ── Input nativo ───────────────────────────────────────────────────────────── */
 
 .ff-input {
   flex: 1;
-  min-width: 0;
+  padding: var(--s-3) var(--s-1);
   background: transparent;
-  padding: 0.625rem 0.75rem;
-  outline: none;
   border: none;
-  font-size: 0.875rem;
-  color: var(--text-primary);
+  border-radius: 0;
+  outline: none;
+  font-size: 0.8125rem;
+  color: var(--text-main);
 }
-
-.ff-input::placeholder {
-  color: var(--text-muted);
-}
-.ff-input::selection {
-  background-color: var(--color-primary-soft);
-}
-.ff-input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* ── Lista de reglas ────────────────────────────────────────────────────────── */
-
-.ff-rules {
-  margin-top: 0.5rem;
-  padding: 0.75rem;
-  border: 1px solid var(--border);
-  background: var(--surface-soft);
-  animation: ff-fade-in 0.15s ease;
-}
-
-/* ── Mensajes de error ──────────────────────────────────────────────────────── */
-
-.ff-errors {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.75rem;
-  animation: ff-fade-in 0.15s ease;
-}
-
-.ff-error-msg {
-  color: var(--color-error);
-}
-
-/* ── Indicador de fortaleza ─────────────────────────────────────────────────── */
-
-.ff-strength {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-top: 0.5rem;
-}
-
-.ff-strength-bar {
-  width: 100%;
-  height: 0.5rem;
-  border-radius: 0.25rem;
-  overflow: hidden;
-  background-color: var(--border);
-}
-
-.ff-strength-fill {
-  height: 100%;
-  transition:
-    width 0.3s,
-    background-color 0.3s;
-}
-
-/* ── Radio ──────────────────────────────────────────────────────────────────── */
 
 .ff-radio-group {
-  display: flex;
-  gap: 0.75rem;
-  width: 100%;
-}
-
-.ff-radio-option {
-  flex: 1;
-  cursor: pointer;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-2);
 }
 
 .ff-radio-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
   border: 1px solid var(--border);
-  background: var(--surface-soft);
-  transition: all 0.3s;
+  padding: var(--s-4);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .ff-radio-card:hover {
-  border-color: var(--color-primary-muted);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+  border-color: var(--color-accent);
 }
 
 .ff-radio-card--checked {
-  transform: scale(1.02);
-}
-.ff-radio-option:active .ff-radio-card {
-  transform: scale(0.98);
-}
-
-.ff-radio-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  border: 2px solid var(--border-strong);
-  transition: border-color 0.2s;
-}
-
-.ff-radio-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  transform: scale(0);
-  transition: transform 0.2s;
-}
-
-.ff-radio-card--checked .ff-radio-dot {
-  transform: scale(1);
-}
-
-.ff-radio-label {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: color 0.3s;
-}
-
-/* Radio seleccionado — color primario del design system */
-.ff-radio-option[data-value] .ff-radio-card--checked {
-  border-color: var(--color-primary);
-  background: var(--color-primary-soft);
-}
-.ff-radio-option[data-value] .ff-radio-card--checked .ff-radio-circle {
-  border-color: var(--color-primary);
-}
-.ff-radio-option[data-value] .ff-radio-card--checked .ff-radio-dot {
   background: var(--color-primary);
-}
-.ff-radio-option[data-value] .ff-radio-card--checked .ff-radio-label {
-  color: var(--color-primary-dark);
-}
-
-/* Radio seleccionado — FEMALE (rosa) */
-.ff-radio-option[data-value='FEMALE'] .ff-radio-card--checked {
-  border-color: hsl(330 78% 62%);
-  background: hsl(330 90% 95%);
-}
-.ff-radio-option[data-value='FEMALE'] .ff-radio-card--checked .ff-radio-label {
-  color: hsl(330 70% 38%);
-}
-.ff-radio-option[data-value='FEMALE'] .ff-radio-card--checked .ff-radio-circle {
-  border-color: hsl(330 78% 62%);
-}
-.ff-radio-option[data-value='FEMALE'] .ff-radio-card--checked .ff-radio-dot {
-  background: hsl(330 78% 62%);
+  border-color: var(--color-primary);
+  color: var(--text-on-primary) !important;
 }
 
-/* Radio seleccionado — OTHER (violeta) */
-.ff-radio-option[data-value='OTHER'] .ff-radio-card--checked {
-  border-color: hsl(270 72% 58%);
-  background: hsl(270 85% 96%);
+.ff-radio-card--checked * {
+  color: var(--text-on-primary) !important;
+  filter: brightness(0) invert(1);
 }
-.ff-radio-option[data-value='OTHER'] .ff-radio-card--checked .ff-radio-label {
-  color: hsl(270 60% 38%);
-}
-.ff-radio-option[data-value='OTHER'] .ff-radio-card--checked .ff-radio-circle {
-  border-color: hsl(270 72% 58%);
-}
-.ff-radio-option[data-value='OTHER'] .ff-radio-card--checked .ff-radio-dot {
-  background: hsl(270 72% 58%);
-}
-
-/* ── PhoneInput (librería externa) ──────────────────────────────────────────── */
-
-.ff-input-wrapper .PhoneInput {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  background: transparent;
-}
-
-.ff-input-wrapper .PhoneInputCountry {
-  margin-left: 0.75rem;
-  display: flex;
-  align-items: center;
-}
-
-.ff-input-wrapper .PhoneInputCountrySelect {
-  background: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  color: var(--text-secondary);
-}
-
-.ff-input-wrapper .PhoneInputCountrySelect:hover {
-  color: var(--color-primary);
-}
-
-.ff-input-wrapper .PhoneInputInput {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 0.625rem 0.75rem;
-  font-size: 0.875rem;
-  color: var(--text-primary);
-}
-
-.ff-input-wrapper .PhoneInputInput::placeholder {
-  color: var(--text-muted);
-}
-
-.PhoneInputCountrySelect option {
-  background: var(--surface);
-  color: var(--text-primary);
-}
-
-/* ── Íconos — invert solo en modo oscuro ────────────────────────────────────── */
-/* Aplica filter:invert cuando el ancestro tiene la clase .dark               */
 
 .ff-icon {
-  filter: none;
+  width: var(--s-4);
+  height: var(--s-4);
+  margin-bottom: var(--s-2);
 }
+
 .dark .ff-icon {
   filter: invert(1);
-}
-
-/* ── Animaciones ────────────────────────────────────────────────────────────── */
-
-@keyframes ff-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(-2px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes ff-rgb-shift {
-  0% {
-    background-color: hsl(220 90% 56%);
-  }
-  33% {
-    background-color: hsl(270 72% 58%);
-  }
-  66% {
-    background-color: hsl(190 80% 48%);
-  }
-  100% {
-    background-color: hsl(220 90% 56%);
-  }
 }

@@ -1,130 +1,114 @@
 /* =========================================================
-   🍷 LUXURY LANDING STYLES
+   🍷 SYMMETRIC LANDING
    ========================================================= */
 
-.landing-hero {
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
+.l-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--s-6);
+}
+
+.l-section {
+  padding: var(--s-24) 0;
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+
+.l-hero {
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  background-color: var(--color-primary);
 }
 
-.landing-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 60%, var(--bg) 100%);
-  z-index: 5;
-}
-
-.landing-hero__image {
+.l-hero__bg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.5) contrast(1.1);
-  transform: scale(1.05);
-  transition: transform 10s linear;
+  opacity: 0.35;
+  filter: grayscale(0.5);
 }
 
-.landing-hero:hover .landing-hero__image {
-  transform: scale(1.15);
-}
-
-.landing-hero__content {
+.l-hero__content {
   position: relative;
   z-index: 10;
-  text-align: center;
+  max-width: 800px;
 }
 
-.landing-hero__title {
-  font-size: clamp(4rem, 15vw, 9rem);
-  color: var(--text-inverse);
-  margin-bottom: 2rem;
-  letter-spacing: -0.04em;
-}
-
-.landing-hero__title span {
-  display: block;
+.l-hero__subtitle {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.12em;
+  font-size: 0.75rem;
+  letter-spacing: 0.6em;
   text-transform: uppercase;
-  letter-spacing: 0.8em;
   color: var(--color-accent);
-  margin-bottom: 1rem;
-  text-indent: 0.8em;
+  margin-bottom: var(--s-4);
+  display: block;
 }
 
-.gastro-grid {
+.l-hero__title {
+  color: var(--text-on-primary);
+  margin-bottom: var(--s-8);
+}
+
+/* ── Story / Craft Grid ──────────────────────────────────── */
+
+.l-grid-balanced {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(1, 1fr);
+  gap: var(--s-12);
+  align-items: center;
 }
 
-.card-luxury {
+@media (min-width: 768px) {
+  .l-grid-balanced {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s-24);
+  }
+}
+
+.l-image-wrap {
   position: relative;
-  padding: 3rem 2rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-  overflow: hidden;
+  border: 1.5px solid var(--border);
+  padding: var(--s-2);
 }
 
-.card-luxury:hover {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-.card-luxury:hover * {
-  color: var(--text-inverse) !important;
-}
-
-.card-luxury::before {
+.l-image-wrap::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--color-accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.5s ease;
-}
-
-.card-luxury:hover::before {
-  transform: scaleX(1);
-}
-
-.btn-luxury {
-  position: relative;
-  padding: 1.25rem 3.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.3em;
-  background: var(--color-primary);
-  color: var(--text-inverse);
-  transition: all 0.4s ease;
-  overflow: hidden;
-  border-radius: 2px;
-}
-
-.btn-luxury:hover {
-  background: var(--color-accent);
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px var(--color-accent-glow);
-}
-
-.craft-deco {
-  position: absolute;
-  font-family: 'Cormorant Garamond';
-  font-size: 20rem;
-  opacity: 0.03;
-  top: -5rem;
-  right: -5rem;
+  top: var(--s-4);
+  left: var(--s-4);
+  right: -var(--s-4);
+  bottom: -var(--s-4);
+  border: 1px solid var(--color-accent);
+  opacity: 0.3;
   pointer-events: none;
+}
+
+/* ── Menu Grid ───────────────────────────────────────────── */
+
+.l-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--s-8);
+}
+
+.l-card {
+  border: 1px solid var(--border);
+  padding: var(--s-8);
+  background: var(--surface);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.l-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
 }

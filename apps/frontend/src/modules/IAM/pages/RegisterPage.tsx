@@ -7,8 +7,7 @@ import './AuthPages.css';
 
 /**
  * @file RegisterPage.tsx
- * @author Victor
- * @description User registration page.
+ * @description Symmetric Register page with stable grid.
  */
 const RegisterPage = () => {
   const { setModule } = useAppStore();
@@ -21,58 +20,44 @@ const RegisterPage = () => {
 
   return (
     <div className="auth-page">
-      <div className="auth-card register-card-wide">
-        <h2 className="auth-title">Crear Cuenta</h2>
-        <p className="auth-subtitle">Únase a la experiencia QART</p>
+      <div className="auth-card auth-card--wide">
+        <div className="auth-header">
+          <h2 className="auth-title">Membresía</h2>
+          <p className="auth-subtitle">Únase al legado gastronómico</p>
+        </div>
 
         <Form buttonText="Finalizar Registro" onSuccess={() => navigate('/iam/login')}>
-          <div className="grid md:grid-cols-2 gap-x-12">
-            <FormSection title="Datos Personales">
+          <div className="grid md:grid-cols-2 gap-x-12 gap-y-8 text-left">
+            <FormSection title="Perfil">
               <fields.name label="Nombre" placeholder="Tu nombre" required />
               <fields.lname label="Apellido" placeholder="Tu apellido" required />
               <fields.sex
-                label="Sexo"
+                label="Género"
                 control={[
                   'radio',
                   [
-                    { value: 'MALE', label: 'Hombre', icon: '/male-icon.png' },
-                    { value: 'FEMALE', label: 'Mujer', icon: '/female-icon.png' },
-                    { value: 'OTHER', label: 'Otro', icon: '/other-icon.png' },
+                    { value: 'MALE', label: 'H', icon: '/m.png' },
+                    { value: 'FEMALE', label: 'M', icon: '/f.png' },
+                    { value: 'OTHER', label: '?', icon: '/o.png' },
                   ],
                 ]}
                 required
               />
             </FormSection>
 
-            <FormSection title="Cuenta y Seguridad">
-              <fields.username label="Usuario" placeholder="victor_qart" required />
-              <fields.email
-                label="Email"
-                placeholder="victor@example.com"
-                control="email"
-                required
-              />
+            <FormSection title="Acceso">
+              <fields.username label="Usuario" required />
+              <fields.email label="Email" control="email" required />
+              <fields.password label="Contraseña" control="password" required />
               <fields.phone label="Teléfono" control="phone" required />
-              <fields.password
-                label="Contraseña"
-                control="password"
-                required
-                addons={[{ type: 'passwordToggle' }, { type: 'strength' }]}
-              />
-              <fields.cpassword
-                label="Confirmar Contraseña"
-                control="password"
-                required
-                addons={[{ type: 'passwordToggle' }]}
-              />
             </FormSection>
           </div>
         </Form>
 
         <div className="auth-footer">
-          ¿Ya tiene una cuenta?{' '}
-          <button onClick={() => navigate('/iam/login')} className="auth-link">
-            Inicie sesión
+          ¿Ya es socio?{' '}
+          <button onClick={() => navigate('/iam/login')} className="font-bold underline">
+            Ingresar
           </button>
         </div>
       </div>
