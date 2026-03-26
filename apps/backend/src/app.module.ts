@@ -16,8 +16,8 @@
  * - Planning Poker: 1
  */
 import { Module } from '@nestjs/common';
-import { IAMModule } from './modules/IAM/IAMModule';
-import { PrismaService } from './tools/prisma.service';
+import { IAMModule } from '@modules/IAM';
+import { PrismaService } from '@tools/prisma.service';
 
 @Module({
   imports: [IAMModule],

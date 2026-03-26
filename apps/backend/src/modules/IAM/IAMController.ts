@@ -15,7 +15,7 @@
  * - Planning Poker: 2
  */
 import { Controller, Post, Get, Body, Req, Res } from '@nestjs/common';
-import type { Request, Response } from 'express';
+
 import * as jwt from 'jsonwebtoken';
 import { SESSION_SECRET, REFRESH_SECRET, BUN_MODE } from '@env';
 import { IAMService } from './IAMService';
@@ -35,7 +35,7 @@ const REFRESH_TTL = 1000 * 60 * 60 * 24 * 7;
 export class IAMController {
   constructor(private readonly iamService: IAMService) {}
 
-  private issueTokens(res: Response, user: object): void {
+  private issueTokens(res: any, user: object): void {
     res.cookie('CupCake', jwt.sign(user, SESSION_SECRET, { expiresIn: '1h' }), {
       ...COOKIE_BASE,
       maxAge: ACCESS_TTL,
@@ -49,7 +49,7 @@ export class IAMController {
   @Post('login')
   async login(
     @Body() body: InferRequest<typeof LoginContract>,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: true }) res: any,
   ) {
     const user = await this.iamService.login(body);
     this.issueTokens(res, user);
@@ -63,7 +63,7 @@ export class IAMController {
   }
 
   @Post('logout')
-  async logout(@Res({ passthrough: true }) res: Response) {
+  async logout(@Res({ passthrough: true }) res: any) {
     const opts = { httpOnly: true, secure: true, sameSite: 'strict' as const };
     res.clearCookie('CupCake', opts);
     res.clearCookie('Cake', opts);
@@ -71,7 +71,7 @@ export class IAMController {
   }
 
   @Get('me')
-  async me(@Req() req: Request) {
+  async me(@Req() req: any) {
     const user = req.user as { id?: string } | undefined;
     return this.iamService.getMe(user?.id as string);
   }
