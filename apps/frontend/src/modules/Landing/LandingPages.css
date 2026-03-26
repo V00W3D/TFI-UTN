@@ -1,98 +1,130 @@
 /* =========================================================
-   🍷 LANDING STYLES
-   Efectos premium para la página de inicio
+   🍷 LUXURY LANDING STYLES
    ========================================================= */
 
 .landing-hero {
-  position: relative;
   height: 100vh;
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  background-color: var(--bg);
+}
+
+.landing-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, var(--bg) 100%);
+  z-index: 5;
 }
 
 .landing-hero__image {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.6) contrast(1.1);
-  opacity: 0.9;
+  filter: brightness(0.5) contrast(1.1);
+  transform: scale(1.05);
+  transition: transform 10s linear;
+}
+
+.landing-hero:hover .landing-hero__image {
+  transform: scale(1.15);
 }
 
 .landing-hero__content {
   position: relative;
   z-index: 10;
   text-align: center;
-  max-width: 800px;
-  padding: 2rem;
-  color: var(--text-inverse);
 }
 
 .landing-hero__title {
-  font-size: clamp(3rem, 10vw, 6rem);
-  line-height: 0.9;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  font-size: clamp(4rem, 15vw, 9rem);
+  color: var(--text-inverse);
+  margin-bottom: 2rem;
+  letter-spacing: -0.04em;
 }
 
 .landing-hero__title span {
   display: block;
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.25em;
+  font-size: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.4em;
+  letter-spacing: 0.8em;
   color: var(--color-accent);
   margin-bottom: 1rem;
+  text-indent: 0.8em;
 }
 
-.section-glass {
-  background: rgba(var(--primary-h), 45%, 32%, 0.03);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--border);
-  border-radius: 2rem;
+.gastro-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
 }
 
-.text-gradient {
-  background: linear-gradient(to right, var(--color-primary), var(--color-accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.btn-premium {
-  padding: 1rem 2.5rem;
-  border-radius: 99px;
-  background: var(--color-primary);
-  color: var(--text-inverse);
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
-}
-
-.btn-premium:hover {
-  background: transparent;
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.card-gastro {
-  border-radius: 1.5rem;
-  overflow: hidden;
+.card-luxury {
+  position: relative;
+  padding: 3rem 2rem;
   background: var(--surface);
   border: 1px solid var(--border);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  overflow: hidden;
 }
 
-.card-gastro:hover {
-  transform: translateY(-10px);
-  border-color: var(--color-accent);
-  box-shadow: var(--shadow-lg);
+.card-luxury:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.card-luxury:hover * {
+  color: var(--text-inverse) !important;
+}
+
+.card-luxury::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease;
+}
+
+.card-luxury:hover::before {
+  transform: scaleX(1);
+}
+
+.btn-luxury {
+  position: relative;
+  padding: 1.25rem 3.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  transition: all 0.4s ease;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.btn-luxury:hover {
+  background: var(--color-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px var(--color-accent-glow);
+}
+
+.craft-deco {
+  position: absolute;
+  font-family: 'Cormorant Garamond';
+  font-size: 20rem;
+  opacity: 0.03;
+  top: -5rem;
+  right: -5rem;
+  pointer-events: none;
 }

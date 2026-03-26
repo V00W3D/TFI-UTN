@@ -6,27 +6,45 @@ import { motion } from 'framer-motion';
  */
 const Story = () => {
   return (
-    <div className="grid md:grid-cols-2 gap-16 items-center">
-      <div>
-        <h2 className="text-5xl mb-8 leading-tight">
+    <div className="grid md:grid-cols-2 gap-24 items-center relative py-12">
+      <div className="craft-deco">Q</div>
+      <motion.div
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1 }}
+      >
+        <h2 className="text-6xl mb-10 leading-none tracking-tight">
           Nuestra Filosofía: <br />
-          <span className="text-accent italic">El Arte en cada Capa</span>
+          <span className="text-accent italic font-serif">El Arte en cada Capa</span>
         </h2>
-        <p className="text-secondary leading-relaxed text-lg mb-6">
+        <div className="w-24 h-px bg-accent mb-10" />
+        <p className="text-secondary leading-loose text-xl mb-8 font-light">
           En QART, no solo preparamos comida. Esculpimos sabores. Nuestra cocina se basa en la
           precisión de la técnica clásica fusionada con la libertad de la gastronomía de autor.
         </p>
-        <p className="text-secondary leading-relaxed text-lg">
+        <p className="text-secondary leading-loose text-xl font-light">
           Cada ingrediente es seleccionado por su origen y carácter, permitiendo que cada plato
           cuente una historia única de frescura y sofisticación.
         </p>
-      </div>
-      <div className="relative">
-        <div className="card-gastro p-4 bg-white">
-          <img src="/ambiance.png" alt="Restaurante Ambiance" className="rounded-xl w-full" />
+      </motion.div>
+
+      <motion.div
+        className="relative"
+        initial={{ opacity: 0, x: 50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, delay: 0.3 }}
+      >
+        <div className="p-2 gold-border rounded-none bg-bg relative z-10">
+          <img
+            src="/ambiance.png"
+            alt="Restaurante Ambiance"
+            className="w-full grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
+          />
         </div>
-        <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-primary/10 rounded-full blur-3xl -z-10" />
-      </div>
+        <div className="absolute -top-12 -right-12 w-full h-full border border-primary/10 -z-10" />
+      </motion.div>
     </div>
   );
 };

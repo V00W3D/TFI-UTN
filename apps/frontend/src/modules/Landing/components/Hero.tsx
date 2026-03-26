@@ -6,32 +6,47 @@ import { motion } from 'framer-motion';
  */
 const Hero = () => {
   return (
-    <section className="landing-hero">
-      <img src="/hero.png" alt="Featured Gourmet Burger" className="landing-hero__image" />
+    <section className="landing-hero bg-primary-dark">
+      <motion.img
+        src="/hero.png"
+        alt="Featured Gourmet Burger"
+        className="landing-hero__image"
+        initial={{ scale: 1.2, opacity: 0 }}
+        animate={{ scale: 1.05, opacity: 0.7 }}
+        transition={{ duration: 2, ease: 'easeOut' }}
+      />
       <div className="landing-hero__content">
-        <motion.h1
-          className="landing-hero__title h1"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: 'easeOut' }}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.5 }}
         >
-          <span>Autor Gastronomía</span>
-          QART
-        </motion.h1>
+          <h1 className="landing-hero__title">
+            <span>Autor Gastronomía</span>
+            QART
+          </h1>
+        </motion.div>
+
         <motion.p
-          className="text-xl mb-10 opacity-90 font-light tracking-wide"
+          className="text-2xl mb-12 opacity-80 font-light tracking-[0.2em] uppercase max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 1 }}
+          transition={{ delay: 1, duration: 1.5 }}
         >
-          Experiencias culinarias diseñadas para los sentidos.
+          Donde la precisión se encuentra con la pasión.
         </motion.p>
+
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.8, duration: 1 }}
         >
-          <button className="btn-premium">Reservar Mesa</button>
+          <button
+            className="btn-luxury"
+            onClick={() => document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' })}
+          >
+            Descubrir el Menú
+          </button>
         </motion.div>
       </div>
     </section>

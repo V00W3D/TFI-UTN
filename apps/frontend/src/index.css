@@ -1,132 +1,85 @@
 @import 'tailwindcss';
 
 /* =========================================================
-   🍷 QART DESIGN SYSTEM
+   🍷 QART LUXURY DESIGN SYSTEM
    Ciruela · Latón · Humo · Elegante · Social
-========================================================= */
-/* =========================================================
-   🌅 LIGHT MODE
-========================================================= */
+   ========================================================= */
 
 :root {
-  /* ── Primario: Ciruela / Vino seco ─────────────────────── */
+  /* ── Primario: Ciruela Profunda ────────────────────────── */
   --primary-h: 340;
-  --primary-s: 45%;
-  --primary-l: 32%;
+  --primary-s: 48%;
+  --primary-l: 28%;
 
   --color-primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
-  --color-primary-soft: hsl(var(--primary-h) 40% 92%);
-  --color-primary-muted: hsl(var(--primary-h) 25% 55%);
-  --color-primary-dark: hsl(var(--primary-h) 50% 22%);
-  --color-primary-glow: hsl(var(--primary-h) 55% 45% / 0.18);
+  --color-primary-soft: hsl(var(--primary-h) 45% 94%);
+  --color-primary-muted: hsl(var(--primary-h) 25% 45%);
+  --color-primary-dark: hsl(var(--primary-h) 60% 18%);
+  --color-primary-glow: hsl(var(--primary-h) 60% 40% / 0.15);
 
-  /* ── Acento: Latón / Champagne ─────────────────────────── */
-  --color-accent: hsl(42 38% 52%);
-  --color-accent-soft: hsl(42 35% 88%);
-  --color-accent-dark: hsl(42 40% 36%);
+  /* ── Acento: Oro Envejecido / Champagne ───────────────── */
+  --color-accent: hsl(42 42% 54%);
+  --color-accent-soft: hsl(42 40% 90%);
+  --color-accent-dark: hsl(42 45% 38%);
+  --color-accent-glow: hsl(42 50% 50% / 0.2);
 
-  /* ── Estados ───────────────────────────────────────────── */
-  --color-error: hsl(0 68% 48%);
-  --color-error-soft: hsl(0 60% 93%);
-  --color-success: hsl(158 55% 38%);
-  --color-success-soft: hsl(158 50% 92%);
-  --color-warning: hsl(38 80% 48%);
-  --color-info: hsl(210 65% 48%);
-
-  /* ── Superficies: Pergamino / Humo cálido ──────────────── */
-  --bg: hsl(30 18% 96%);
-  --bg-gradient: linear-gradient(160deg, hsl(30 18% 97%) 0%, hsl(28 14% 93%) 100%);
+  /* ── Superficies: Pergamino Premium / Obsidiana ───────── */
+  --bg: hsl(30 20% 97%);
+  --bg-gradient: radial-gradient(circle at top, hsl(30 20% 98%) 0%, hsl(30 15% 94%) 100%);
 
   --surface: hsl(0 0% 100%);
-  --surface-soft: hsl(30 12% 94%);
-  --surface-muted: hsl(30 9% 89%);
+  --surface-soft: hsl(30 12% 95%);
+  --surface-muted: hsl(30 8% 90%);
   --surface-elevated: hsl(0 0% 100%);
 
-  --border: hsl(30 10% 84%);
-  --border-strong: hsl(30 12% 72%);
+  --border: hsl(30 10% 86%);
+  --border-strong: hsl(30 12% 75%);
 
   /* ── Tipografía ────────────────────────────────────────── */
-  --text-primary: hsl(340 15% 12%);
-  --text-secondary: hsl(340 8% 38%);
-  --text-muted: hsl(340 6% 56%);
+  --text-primary: hsl(340 20% 10%);
+  --text-secondary: hsl(340 10% 35%);
+  --text-muted: hsl(340 8% 55%);
   --text-inverse: hsl(0 0% 98%);
 
-  /* ── Sombras ───────────────────────────────────────────── */
-  --shadow-sm: 0 1px 4px hsl(340 20% 10% / 0.06);
-  --shadow-md: 0 4px 16px hsl(340 20% 10% / 0.09);
-  --shadow-lg: 0 10px 32px hsl(340 20% 10% / 0.13);
-
-  /* ── Botones ───────────────────────────────────────────── */
-  --button-default: var(--surface-elevated);
-  --button-default-text: var(--text-primary);
-  --button-active: var(--color-primary);
-  --button-active-text: var(--text-inverse);
-
-  /* ── Floating ──────────────────────────────────────────── */
-  --floating-bg: var(--surface-elevated);
-  --floating-border: var(--border);
-  --floating-shadow: var(--shadow-lg);
+  /* ── Sombras & Efectos ─────────────────────────────────── */
+  --shadow-premium: 0 20px 50px -12px hsl(340 30% 10% / 0.12);
+  --shadow-inner: inset 0 2px 4px 0 hsl(0 0% 0% / 0.05);
 }
 
-/* =========================================================
-   🌙 DARK MODE — Obsidiana cálida
-========================================================= */
-
 .dark {
-  --color-primary: hsl(var(--primary-h) 50% 68%);
-  --color-primary-soft: hsl(var(--primary-h) 35% 16%);
-  --color-primary-muted: hsl(var(--primary-h) 30% 48%);
-  --color-primary-dark: hsl(var(--primary-h) 55% 50%);
-  --color-primary-glow: hsl(var(--primary-h) 60% 60% / 0.22);
+  --color-primary: hsl(var(--primary-h) 55% 65%);
+  --color-primary-soft: hsl(var(--primary-h) 30% 12%);
+  --color-primary-muted: hsl(var(--primary-h) 25% 45%);
+  --color-primary-glow: hsl(var(--primary-h) 70% 60% / 0.18);
 
-  --color-accent: hsl(42 45% 62%);
-  --color-accent-soft: hsl(42 30% 16%);
-  --color-accent-dark: hsl(42 40% 48%);
+  --color-accent: hsl(42 48% 65%);
+  --color-accent-soft: hsl(42 30% 14%);
 
-  --color-error: hsl(0 72% 62%);
-  --color-error-soft: hsl(0 45% 16%);
-  --color-success: hsl(158 60% 52%);
-  --color-success-soft: hsl(158 40% 14%);
+  --bg: hsl(220 12% 4%);
+  --bg-gradient: radial-gradient(circle at top, hsl(220 12% 6%) 0%, hsl(220 15% 3%) 100%);
 
-  --bg: hsl(20 8% 6%);
-  --bg-gradient: linear-gradient(160deg, hsl(20 8% 7%) 0%, hsl(20 10% 4%) 100%);
+  --surface: hsl(220 10% 7%);
+  --surface-soft: hsl(220 10% 10%);
+  --surface-elevated: hsl(220 10% 13%);
 
-  --surface: hsl(20 7% 9%);
-  --surface-soft: hsl(20 6% 12%);
-  --surface-muted: hsl(20 5% 15%);
-  --surface-elevated: hsl(20 5% 18%);
+  --border: hsl(220 8% 16%);
+  --border-strong: hsl(220 8% 24%);
 
-  --border: hsl(20 5% 22%);
-  --border-strong: hsl(20 5% 30%);
-
-  --text-primary: hsl(30 12% 93%);
-  --text-secondary: hsl(30 6% 65%);
+  --text-primary: hsl(30 15% 94%);
+  --text-secondary: hsl(30 8% 70%);
   --text-muted: hsl(30 5% 45%);
-  --text-inverse: hsl(20 10% 7%);
-
-  --shadow-sm: 0 1px 4px hsl(0 0% 0% / 0.35);
-  --shadow-md: 0 4px 16px hsl(0 0% 0% / 0.45);
-  --shadow-lg: 0 10px 32px hsl(0 0% 0% / 0.55);
 }
 
 /* =========================================================
    🌍 BASE GLOBAL
-========================================================= */
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+   ========================================================= */
 
 body {
   font-family: 'DM Sans', system-ui, sans-serif;
   background: var(--bg-gradient);
   background-color: var(--bg);
   color: var(--text-primary);
-  transition:
-    background 0.35s ease,
-    color 0.35s ease;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -136,31 +89,34 @@ h3,
 h4 {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-weight: 500;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
 }
 
-/* ── Utilities ───────────────────────────────────────────── */
-.text-primary {
-  color: var(--color-primary);
+/* ── Luxury Utilities ────────────────────────────────────── */
+
+.glass {
+  background: rgba(var(--surface), 0.05);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border);
 }
-.text-accent {
-  color: var(--color-accent);
+
+.text-glow {
+  text-shadow: 0 0 20px var(--color-primary-glow);
 }
-.text-error {
-  color: var(--color-error);
+
+.gold-border {
+  border: 1px solid var(--color-accent);
+  box-shadow: 0 0 15px var(--color-accent-glow);
 }
-.text-success {
-  color: var(--color-success);
+
+.premium-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-premium);
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
 }
-.bg-surface {
-  background-color: var(--surface);
-}
-.bg-elevated {
-  background-color: var(--surface-elevated);
-}
-.border-default {
-  border-color: var(--border);
-}
-.shadow-elevated {
-  box-shadow: var(--shadow-md);
+
+.premium-card:hover {
+  transform: translateY(-8px) scale(1.01);
 }

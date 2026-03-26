@@ -1,52 +1,56 @@
 /**
  * @file Contact.tsx
- * @description Footer and contact section for the landing page.
+ * @description Minimalist luxury footer with contact information and brand identity.
  */
 const Contact = () => {
   return (
-    <footer className="bg-surface py-20 border-t border-border">
-      <div className="container mx-auto px-6 grid md:grid-cols-4 gap-12">
-        <div className="col-span-2 space-y-6">
-          <h3 className="text-3xl font-serif">QART</h3>
-          <p className="text-secondary max-w-sm">
-            Elevando la gastronomía cotidiana a una forma de expresión artística. Visítenos y
-            redescubra el sabor.
+    <footer id="contact" className="bg-bg py-32 border-t border-border">
+      <div className="container mx-auto px-6 grid md:grid-cols-4 gap-16">
+        <div className="space-y-8 col-span-2">
+          <div className="flex items-center gap-4">
+            <img src="/QART_LOGO.png" alt="QART" className="size-12 object-contain" />
+            <span className="font-serif text-3xl tracking-widest text-accent">QART</span>
+          </div>
+          <p className="text-secondary max-w-sm text-lg font-light leading-relaxed">
+            Redefiniendo el estándar de la gastronomía de autor a través de la tecnología y la
+            pasión artesana.
           </p>
-          <div className="flex gap-6 mt-8">
-            <a href="#" className="hover:text-accent transition-colors">
-              Instagram
-            </a>
-            <a href="#" className="hover:text-accent transition-colors">
-              Facebook
-            </a>
-            <a href="#" className="hover:text-accent transition-colors">
-              Twitter
-            </a>
+          <div className="flex gap-6 pt-4">
+            {['Instagram', 'Twitter', 'LinkedIn'].map((social) => (
+              <a
+                key={social}
+                href="#"
+                className="text-[10px] uppercase tracking-[0.3em] font-bold text-accent hover:text-primary transition-colors"
+              >
+                {social}
+              </a>
+            ))}
           </div>
         </div>
-        <div>
-          <h4 className="font-bold mb-6 text-xs uppercase tracking-widest text-accent">
-            Ubicación
-          </h4>
-          <address className="not-italic text-secondary space-y-2">
-            Av. Gourmet 1234
+
+        <div className="space-y-8">
+          <h4 className="text-xs uppercase tracking-[0.3em] font-bold text-primary">Ubicación</h4>
+          <p className="text-secondary font-light">
+            Avenida de la Ribera 4500,
             <br />
-            San Miguel de Tucumán
-            <br />
-            Argentina
-          </address>
+            Puerto Madero, Buenos Aires
+          </p>
         </div>
-        <div>
-          <h4 className="font-bold mb-6 text-xs uppercase tracking-widest text-accent">Horarios</h4>
-          <ul className="text-secondary space-y-2">
-            <li>Mar - Jue: 19:00 - 00:00</li>
-            <li>Vie - Dom: 12:00 - 01:00</li>
-            <li>Lunes: Cerrado</li>
-          </ul>
+
+        <div className="space-y-8">
+          <h4 className="text-xs uppercase tracking-[0.3em] font-bold text-primary">Reservas</h4>
+          <p className="text-secondary font-light">
+            +(54) 11 4455 6677
+            <br />
+            reservas@qart.com
+          </p>
         </div>
       </div>
-      <div className="container mx-auto px-6 mt-20 pt-8 border-t border-border/50 text-center text-xs text-muted">
-        © 2026 QART Restaurant System. Desarrollado por Victor.
+
+      <div className="container mx-auto px-6 pt-32 text-center">
+        <p className="text-[10px] uppercase tracking-[0.5em] opacity-30">
+          © 2026 QART GASTRONOMY · ALL RIGHTS RESERVED
+        </p>
       </div>
     </footer>
   );

@@ -1,43 +1,53 @@
-@import 'tailwindcss';
+/* =========================================================
+   🍷 LUXURY AUTH STYLES
+   ========================================================= */
 
-/* =============================================================================
-   AuthPages.css
-   CSS de las páginas de autenticación: Login y Register.
-   Separado de FormFactoryStyles.css (que cubre los campos del factory).
-   Usa las variables del design system definidas en index.css.
-============================================================================= */
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   WRAPPER & CARD BASE
-   Compartidos por LoginPage y RegisterPage.
-───────────────────────────────────────────────────────────────────────────── */
-
-.auth-wrapper {
-  width: 100%;
+.auth-page {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2.5rem 1.5rem;
-  min-height: 100vh;
+  background: var(--bg-gradient);
+  padding: 2rem;
 }
 
 .auth-card {
   width: 100%;
-  max-width: 56rem; /* 896px — igual que max-w-3xl pero explícito */
+  max-width: 450px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 1rem;
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
+  box-shadow: var(--shadow-premium);
+  padding: 4rem 3rem;
+  border-radius: 4px;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   REGISTER CARD
-   Layout de una sola columna, padding generoso.
-───────────────────────────────────────────────────────────────────────────── */
+.register-card-wide {
+  max-width: 900px;
+}
 
-.register-card {
-  padding: 2.5rem;
+.auth-title {
+  font-size: 3.5rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--color-primary);
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+}
+
+.auth-section-title {
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  color: var(--color-accent);
 }
 
 .auth-form {
@@ -46,492 +56,59 @@
   gap: 2rem;
 }
 
-/* Título de sección (FormSection) */
-.auth-section-title {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  text-align: center;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0;
-  border-bottom: 1px solid var(--border);
-  color: var(--text-secondary);
-  font-family: 'Cormorant Garamond', Georgia, serif;
-}
-
-/* Botón de submit compartido */
 .auth-button {
-  margin-top: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background-color 0.25s ease,
-    box-shadow 0.25s ease,
-    opacity 0.2s;
+  margin-top: 1rem;
+  padding: 1.25rem;
   background: var(--color-primary);
   color: var(--text-inverse);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.75rem;
+  transition: all 0.4s ease;
+  border-radius: 2px;
 }
 
 .auth-button:hover:not(:disabled) {
-  background: var(--color-primary-dark);
-  box-shadow: 0 0 0 4px var(--color-primary-glow);
+  background: var(--color-accent);
+  box-shadow: 0 10px 20px var(--color-accent-glow);
+  transform: translateY(-2px);
 }
 
 .auth-button:disabled {
-  opacity: 0.45;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Feedback de servidor (error / success) */
-.auth-feedback {
-  font-size: 0.8125rem;
+.auth-footer {
+  margin-top: 3rem;
   text-align: center;
-  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.auth-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.auth-link:hover {
+  border-color: var(--color-primary);
+}
+
+.auth-feedback {
+  text-align: center;
+  font-size: 0.875rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .auth-feedback--error {
   color: var(--color-error);
 }
+
 .auth-feedback--success {
   color: var(--color-success);
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   LOGIN WRAPPER — Contenedor horizontal: card normal + QR flotante
-   Layout estilo Steam: el QR vive FUERA del card, pegado a su derecha.
-───────────────────────────────────────────────────────────────────────────── */
-
-/*
- * Reemplaza .auth-wrapper para LoginPage — maneja el eje horizontal
- * que contiene el card de credenciales y el panel QR flotante.
- */
-.login-wrapper {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2.5rem 1.5rem;
-  min-height: 100vh;
-}
-
-/* Fila horizontal: [card credenciales] [QR flotante] */
-.login-layout {
-  display: flex;
-  align-items: stretch;
-  gap: 1rem;
-  width: 100%;
-  max-width: 46rem; /* ~736px: card ~480px + gap + QR ~240px */
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   LOGIN CARD — Card normal de credenciales (sin split interno)
-───────────────────────────────────────────────────────────────────────────── */
-
-.login-card {
-  flex: 1;
-  min-width: 0;
-  /* auth-card base ya pone background, border, border-radius, shadow */
-}
-
-.login-credentials {
-  padding: 2.75rem 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.login-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-
-.login-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 1.875rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  letter-spacing: 0.01em;
-  margin: 0;
-  line-height: 1.2;
-}
-
-.login-subtitle {
-  font-size: 0.8125rem;
-  color: var(--text-muted);
-  margin: 0;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.login-submit {
-  width: 100%;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   RECUÉRDAME
-───────────────────────────────────────────────────────────────────────────── */
-
-.login-remember {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  user-select: none;
-  width: fit-content;
-}
-
-/* Input nativo oculto */
-.login-remember__native {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Checkbox custom */
-.login-remember__box {
-  position: relative;
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  border-radius: 4px;
-  border: 1.5px solid var(--border-strong);
-  background: var(--surface);
-  transition:
-    background 0.15s,
-    border-color 0.15s;
-}
-
-.login-remember__native:checked + .login-remember__box {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-}
-
-/* Checkmark */
-.login-remember__native:checked + .login-remember__box::after {
-  content: '';
-  position: absolute;
-  top: 1px;
-  left: 4px;
-  width: 5px;
-  height: 9px;
-  border: 2px solid var(--text-inverse);
-  border-top: none;
-  border-left: none;
-  transform: rotate(45deg);
-}
-
-/* Focus ring accesible */
-.login-remember__native:focus-visible + .login-remember__box {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.login-remember__text {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  line-height: 1;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   LINKS DE SOPORTE (olvidé contraseña / contáctanos)
-───────────────────────────────────────────────────────────────────────────── */
-
-.login-support {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.375rem 0.5rem;
-}
-
-.login-support__link {
-  font-size: 0.775rem;
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: text-decoration 0.15s;
-}
-
-.login-support__link:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.login-support__link--soft {
-  color: var(--text-muted);
-}
-
-.login-support__link--soft:hover {
-  color: var(--text-secondary);
-}
-
-.login-support__dot {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--text-muted);
-  flex-shrink: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   QR LOGIN PANEL — Card flotante a la derecha del login card
-   Independiente del card de credenciales — estilo Steam.
-───────────────────────────────────────────────────────────────────────────── */
-
-/*
- * El panel QR es su propio card flotante, separado del auth-card de credenciales.
- * Se alinea verticalmente con él dentro de .login-layout.
- */
-.qrl-panel {
-  width: 220px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  /* Animación de entrada suave */
-  animation: qrl-slide-in 0.3s ease;
-}
-
-@keyframes qrl-slide-in {
-  from {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Franja de acento en el top del card QR */
-.qrl-panel::before {
-  content: '';
-  display: block;
-  height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
-  flex-shrink: 0;
-}
-
-/* Contenido del panel QR */
-.qrl-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  padding: 1.75rem 1.25rem;
-  text-align: center;
-}
-
-/* Encabezado QR */
-.qrl-header {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.qrl-title {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-primary);
-  margin: 0;
-  letter-spacing: 0.01em;
-  line-height: 1.3;
-}
-
-.qrl-subtitle {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  margin: 0;
-  line-height: 1.45;
-}
-
-.qrl-brand {
-  font-weight: 600;
-  color: var(--color-accent);
-  letter-spacing: 0.05em;
-}
-
-/* Canvas — zona del QR */
-.qrl-canvas {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 188px;
-}
-
-/* Placeholder de estados (loading / expired / error) */
-.qrl-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  width: 160px;
-  height: 160px;
-  border-radius: 10px;
-  border: 1.5px dashed var(--border-strong);
-}
-
-.qrl-state-label {
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-}
-
-/* Wrapper del QR listo (con ring de countdown) */
-.qrl-qr-wrap {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px; /* espacio para el ring que sobresale 12px */
-}
-
-.qrl-qr-frame {
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  z-index: 1;
-  transition: box-shadow 0.2s;
-}
-
-.qrl-qr-frame:hover {
-  box-shadow: var(--shadow-md);
-}
-
-/* Timer debajo del QR */
-.qrl-timer {
-  position: absolute;
-  bottom: -0.125rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.65rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-muted);
-  background: var(--surface);
-  padding: 0.125rem 0.45rem;
-  border-radius: 100px;
-  border: 1px solid var(--border);
-  white-space: nowrap;
-  z-index: 2;
-}
-
-/* Spinner de carga */
-.qrl-spinner {
-  width: 30px;
-  height: 30px;
-  border: 2.5px solid var(--border);
-  border-top-color: var(--color-primary);
-  border-radius: 50%;
-  animation: qrl-spin 0.7s linear infinite;
-}
-
-@keyframes qrl-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Botón "Generar nuevo código" */
-.qrl-refresh {
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--color-primary);
-  background: transparent;
-  border: 1px solid var(--color-primary-muted);
-  border-radius: 6px;
-  padding: 0.375rem 0.875rem;
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    color 0.15s,
-    border-color 0.15s;
-  width: 100%;
-}
-
-.qrl-refresh:hover {
-  background: var(--color-primary);
-  color: var(--text-inverse);
-  border-color: var(--color-primary);
-}
-
-/* Pasos de instrucción */
-.qrl-steps {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  counter-reset: qrl-step;
-  width: 100%;
-}
-
-.qrl-steps li {
-  counter-increment: qrl-step;
-  font-size: 0.69rem;
-  color: var(--text-muted);
-  display: flex;
-  align-items: baseline;
-  gap: 0.375rem;
-  text-align: left;
-  line-height: 1.4;
-}
-
-.qrl-steps li::before {
-  content: counter(qrl-step);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1rem;
-  height: 1rem;
-  border-radius: 50%;
-  background: var(--color-primary-soft);
-  color: var(--color-primary-dark);
-  font-size: 0.58rem;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   RESPONSIVE — QR se apila debajo del card en mobile
-───────────────────────────────────────────────────────────────────────────── */
-
-@media (max-width: 680px) {
-  .login-layout {
-    flex-direction: column;
-    max-width: 28rem;
-  }
-
-  .qrl-panel {
-    width: 100%;
-    animation: none;
-  }
-
-  .qrl-panel::before {
-    height: 2px;
-  }
-
-  .login-credentials {
-    padding: 2rem 1.5rem;
-  }
 }

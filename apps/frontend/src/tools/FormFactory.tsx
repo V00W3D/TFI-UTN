@@ -124,6 +124,8 @@ export interface FormProps {
   redirectTo?: string;
   /** Opciones de navegación (ej. `{ replace: true }`). */
   redirectOptions?: NavigateOptions;
+  /** Callback ejecutado tras un envío exitoso del servidor. */
+  onSuccess?: (data: unknown) => void;
 }
 
 /**
@@ -620,6 +622,7 @@ const buildForm =
     loadingText = 'Cargando...',
     redirectTo,
     redirectOptions,
+    onSuccess,
   }: FormProps) => {
     const navigate = useNavigate();
     const { data, error, isFetching, isFormValid } = endpoint.$use();
@@ -634,7 +637,10 @@ const buildForm =
       if (data) console.log('[FormFactory] respuesta exitosa:', data);
       // eslint-disable-next-line no-console
       if (error) console.log('[FormFactory] error de servidor:', error);
-      if (data && !error && redirectTo) navigate(redirectTo, redirectOptions);
+      if (data && !error) {
+        if (onSuccess) onSuccess(data);
+        if (redirectTo) navigate(redirectTo, redirectOptions);
+      }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, error, navigate]);
 

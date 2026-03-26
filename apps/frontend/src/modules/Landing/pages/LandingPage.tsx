@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAppStore } from '../../../appStore';
+import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Story from '../components/Story';
 import FeaturedDish from '../components/FeaturedDish';
@@ -23,9 +24,11 @@ const LandingPage = () => {
 
   return (
     <main className="min-h-screen bg-bg overflow-x-hidden">
+      <Navbar />
       <Hero />
 
       <motion.section
+        id="story"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -36,6 +39,7 @@ const LandingPage = () => {
       </motion.section>
 
       <motion.section
+        id="menu"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
