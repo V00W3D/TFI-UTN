@@ -1,28 +1,23 @@
-/**
- * @file apps/backend/src/db.ts
- * @description Prisma client + DatabaseAdapter for startup health check.
- *
- * Import `prisma` for queries in repositories.
- * Import `prismaAdapter` and pass it to `api.init({ db: [prismaAdapter] })`.
- * The server will call `$connect()` before listening — if it fails, it exits.
- */
-
 import { PrismaClient } from '../../prisma/generated/client';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { DATABASE_URL } from '@env';
-import type { DatabaseAdapter } from '@app/sdk/ApiServer';
-
-const adapter = new PrismaPg({ connectionString: DATABASE_URL });
-
-export const prisma = new PrismaClient({ adapter });
+import { DATABASE_URL } from '../env';
 
 /**
- * @public Adapter passed to `api.init({ db: [prismaAdapter] })`.
- * The SDK calls `connect()` before starting the HTTP server —
- * if Prisma can't connect, the server exits with code 1.
+ * @description Prisma Client Global Singleton.
+ * Uses the @prisma/adapter-pg to optimize connection management within the Bun environment.
  */
-export const prismaAdapter: DatabaseAdapter = {
+export const prisma = new PrismaClient({
+  adapter: new PrismaPg({ connectionString: DATABASE_URL }),
+});
+
+/**
+ * @description SDK Database Adapter.
+ * Encapsulates Prisma's connection lifecycle for the SDK's initialization flow.
+ * Ensures the database is reachable before the HTTP server starts listening.
+ */
+export const prismaAdapter = {
   name: 'prisma',
-  url: DATABASE_URL,
+  instance: prisma,
   connect: () => prisma.$connect(),
+  disconnect: () => prisma.$disconnect(),
 };
