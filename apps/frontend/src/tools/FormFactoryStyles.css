@@ -1,11 +1,12 @@
 /* =============================================================================
-   🍷 QART — FORM FACTORY (Fluid Precision)
+   FormFactory — Definitive Luxury Styles
    ============================================================================= */
 
 .ff-field {
   display: flex;
   flex-direction: column;
-  gap: var(--p-1);
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .ff-label-row {
@@ -15,70 +16,78 @@
 }
 
 .ff-label {
-  font-size: var(--f-xs);
-  font-weight: 800;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--qart-text-muted);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--c-text-dim);
 }
 
 .ff-input-wrapper {
   display: flex;
   align-items: center;
-  border-bottom: 2px solid var(--c-border);
+  border-bottom: 1px solid var(--qart-border);
   background: transparent;
-  transition: border-color 0.3s var(--spring);
+  transition: border-color 0.3s ease;
 }
 
 .ff-input-wrapper:focus-within {
-  border-color: var(--c-primary);
+  border-color: var(--qart-accent);
 }
 
 .ff-input {
   flex: 1;
-  padding: var(--p-2) 4px;
+  padding: 0.75rem 0.25rem;
   background: transparent;
   border: none;
   outline: none;
-  font-size: var(--f-base);
-  color: var(--c-text);
+  font-size: 1rem;
+  color: var(--qart-text);
+  font-family: inherit;
+}
+
+.ff-input::placeholder {
+  color: var(--qart-text-muted);
+  opacity: 0.5;
 }
 
 .ff-radio-group {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--p-2);
-  margin-top: var(--p-1);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.25rem;
 }
 
 .ff-radio-card {
-  border: 1px solid var(--c-border);
-  padding: var(--p-4);
+  border: 1px solid var(--qart-border);
+  background: var(--qart-surface);
+  padding: 1rem;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s var(--spring);
-  background: var(--c-surface-soft);
+  transition: all 0.3s ease;
+  border-radius: 0.25rem; /* Subtle humanity */
 }
 
 .ff-radio-card:hover {
-  border-color: var(--c-primary);
+  border-color: var(--qart-accent);
 }
 
 .ff-radio-card--checked {
-  background: var(--c-primary);
-  border-color: var(--c-primary);
-  color: var(--c-text-on-p) !important;
+  background: var(--qart-accent);
+  border-color: var(--qart-accent);
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(196, 154, 98, 0.2);
 }
 
 .ff-radio-card--checked * {
-  color: var(--c-text-on-p) !important;
+  color: #fff !important;
   filter: brightness(0) invert(1);
 }
 
 .ff-icon {
-  width: var(--p-4);
-  height: var(--p-4);
-  margin: 0 auto var(--p-2) auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0 auto 0.5rem auto;
   display: block;
 }
 
@@ -86,11 +95,11 @@
   filter: invert(1);
 }
 
-.ff-section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: var(--f-lg);
-  color: var(--c-accent);
-  border-bottom: 1px solid var(--c-border);
-  padding-bottom: var(--p-2);
-  margin-bottom: var(--p-4);
+/* Auth Pages specific structural adjustments */
+.auth-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }

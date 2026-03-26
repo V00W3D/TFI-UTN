@@ -1,45 +1,65 @@
 /**
  * @file Contact.tsx
- * @description Sovereign V4 Footer.
+ * @description The clean, formal 4-column footer grid.
  */
 const Contact = () => {
   return (
-    <footer id="contact" className="bg-surface py-[var(--p-16)] border-t border-border">
-      <div className="container-sharp grid md:grid-cols-4 gap-[var(--p-12)]">
-        <div className="space-y-[var(--p-6)] col-span-2">
+    <footer id="contact" className="bg-qart-surface pt-20 pb-10 border-t border-qart-border">
+      <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 lg:gap-16">
+        
+        {/* BRAND COLUMN */}
+        <div className="sm:col-span-2 space-y-6">
           <div className="flex items-center gap-3">
-            <img src="/QART_LOGO.png" alt="QART" className="h-[var(--p-6)] w-auto object-contain" />
-            <span className="font-serif text-[var(--f-xl)] tracking-[0.2em] font-medium">QART</span>
+            <img src="/QART_LOGO.png" alt="QART" className="h-8 w-auto opacity-90" />
+            <span className="font-serif text-2xl tracking-[0.2em] text-qart-primary">QART</span>
           </div>
-          <p className="text-dim max-w-sm text-[var(--f-sm)] font-light leading-relaxed">
-            Redefiniendo el estándar de la gastronomía de autor a través de la 
-            precisión tecnológica y la pasión artesana innegociable.
+          <p className="text-qart-text-muted text-sm font-light leading-relaxed max-w-sm">
+            Estableciendo un nuevo estándar en la gastronomía de autor mediante la 
+            precisión innegociable, el respeto al ingrediente y la pasión humana artesana.
           </p>
           <div className="flex gap-6 pt-2">
              {['Instagram', 'Twitter', 'LinkedIn'].map(s => (
-               <a key={s} href="#" className="text-[var(--f-xs)] uppercase font-black tracking-widest text-dim hover:text-primary transition-colors">{s}</a>
+               <a 
+                 key={s} 
+                 href="#" 
+                 className="text-[10px] uppercase font-bold tracking-[0.2em] text-qart-text-muted hover:text-qart-accent transition-colors"
+               >
+                 {s}
+               </a>
              ))}
           </div>
         </div>
 
-        <div className="space-y-[var(--p-4)]">
-          <h4>Ubicación</h4>
-          <p className="text-dim text-[var(--f-sm)] font-light leading-loose">
+        {/* LOCATION */}
+        <div className="space-y-6">
+          <h4 className="text-xs uppercase font-bold tracking-[0.3em] text-qart-primary">La Casa</h4>
+          <p className="text-qart-text-muted text-sm font-light leading-loose">
             Avenida de la Ribera 4500,<br />
-            Puerto Madero, Buenos Aires
+            Puerto Madero, CABA<br />
+            Argentina
           </p>
         </div>
 
-        <div className="space-y-[var(--p-4)]">
-          <h4>Reservas</h4>
-          <p className="text-dim text-[var(--f-sm)] font-light leading-loose">
-            +(54) 11 4455 6677<br />
-            reservas@qart.com
+        {/* CONTACT */}
+        <div className="space-y-6">
+          <h4 className="text-xs uppercase font-bold tracking-[0.3em] text-qart-primary">Contacto</h4>
+          <p className="text-qart-text-muted text-sm font-light leading-loose flex flex-col">
+            <a href="tel:+541144556677" className="hover:text-qart-accent transition-colors">+(54) 11 4455 6677</a>
+            <a href="mailto:reservas@qart.com" className="hover:text-qart-accent transition-colors">reservas@qart.com</a>
           </p>
         </div>
+
       </div>
-      <div className="container-sharp pt-[var(--p-16)] text-center opacity-30">
-        <p className="text-[var(--f-xs)] uppercase tracking-[0.4em] font-bold">© 2026 QART GASTRONOMY · AUTHOR PRECISION</p>
+
+      {/* COPYRIGHT */}
+      <div className="max-w-7xl mx-auto px-6 mt-20 pt-8 border-t border-qart-border text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-qart-text-muted opacity-60">
+          © 2026 QART GASTRONOMY
+        </p>
+        <div className="flex gap-6">
+          <a href="#" className="text-[10px] uppercase tracking-widest text-qart-text-muted hover:text-qart-primary opacity-60">Legal</a>
+          <a href="#" className="text-[10px] uppercase tracking-widest text-qart-text-muted hover:text-qart-primary opacity-60">Privacidad</a>
+        </div>
       </div>
     </footer>
   );
