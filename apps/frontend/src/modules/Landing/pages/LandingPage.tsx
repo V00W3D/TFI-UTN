@@ -16,7 +16,7 @@ const LandingPage = () => {
   const { setModule } = useAppStore();
 
   useEffect(() => {
-    setModule('Landing');
+    setModule('LANDING');
   }, [setModule]);
 
   return (

@@ -19,6 +19,7 @@ import morgan from 'morgan';
 import app, { api } from './tools/api';
 import { prismaAdapter } from './tools/db';
 import { IAMRouter } from './modules/IAM';
+import { CUSTOMERSRouter } from './modules/CUSTOMERS';
 
 /**
  * @description Injects request-level logging.
@@ -29,13 +30,13 @@ app.use(morgan('dev'));
 /**
  * @description Orchestrates backend bootstrap.
  * 1. Initialize SDK with Express app context.
- * 2. Register all module routers (e.g., IAM).
+ * 2. Register all module routers (e.g., IAM, CUSTOMERS).
  * 3. Bind the database adapter for automated connection lifecycle.
  */
 api
   .init({
     app,
-    routers: [IAMRouter],
+    routers: [IAMRouter, CUSTOMERSRouter],
     db: [prismaAdapter],
   })
   .start();

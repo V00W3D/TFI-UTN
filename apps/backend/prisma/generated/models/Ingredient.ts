@@ -20,14 +20,34 @@ export type IngredientModel = runtime.Types.Result.DefaultSelection<Prisma.$Ingr
 
 export type AggregateIngredient = {
   _count: IngredientCountAggregateOutputType | null
+  _avg: IngredientAvgAggregateOutputType | null
+  _sum: IngredientSumAggregateOutputType | null
   _min: IngredientMinAggregateOutputType | null
   _max: IngredientMaxAggregateOutputType | null
+}
+
+export type IngredientAvgAggregateOutputType = {
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
+}
+
+export type IngredientSumAggregateOutputType = {
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
 }
 
 export type IngredientMinAggregateOutputType = {
   id: string | null
   name: string | null
   flavor: $Enums.FlavorProfile | null
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
   isActive: boolean | null
 }
 
@@ -35,6 +55,10 @@ export type IngredientMaxAggregateOutputType = {
   id: string | null
   name: string | null
   flavor: $Enums.FlavorProfile | null
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
   isActive: boolean | null
 }
 
@@ -42,15 +66,37 @@ export type IngredientCountAggregateOutputType = {
   id: number
   name: number
   flavor: number
+  calories: number
+  proteins: number
+  carbs: number
+  fats: number
   isActive: number
   _all: number
 }
 
 
+export type IngredientAvgAggregateInputType = {
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
+}
+
+export type IngredientSumAggregateInputType = {
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
+}
+
 export type IngredientMinAggregateInputType = {
   id?: true
   name?: true
   flavor?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
   isActive?: true
 }
 
@@ -58,6 +104,10 @@ export type IngredientMaxAggregateInputType = {
   id?: true
   name?: true
   flavor?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
   isActive?: true
 }
 
@@ -65,6 +115,10 @@ export type IngredientCountAggregateInputType = {
   id?: true
   name?: true
   flavor?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
   isActive?: true
   _all?: true
 }
@@ -107,6 +161,18 @@ export type IngredientAggregateArgs<ExtArgs extends runtime.Types.Extensions.Int
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: IngredientAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: IngredientSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: IngredientMinAggregateInputType
@@ -137,6 +203,8 @@ export type IngredientGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   _count?: IngredientCountAggregateInputType | true
+  _avg?: IngredientAvgAggregateInputType
+  _sum?: IngredientSumAggregateInputType
   _min?: IngredientMinAggregateInputType
   _max?: IngredientMaxAggregateInputType
 }
@@ -145,8 +213,14 @@ export type IngredientGroupByOutputType = {
   id: string
   name: string
   flavor: $Enums.FlavorProfile
+  calories: number
+  proteins: number
+  carbs: number
+  fats: number
   isActive: boolean
   _count: IngredientCountAggregateOutputType | null
+  _avg: IngredientAvgAggregateOutputType | null
+  _sum: IngredientSumAggregateOutputType | null
   _min: IngredientMinAggregateOutputType | null
   _max: IngredientMaxAggregateOutputType | null
 }
@@ -173,16 +247,26 @@ export type IngredientWhereInput = {
   id?: Prisma.StringFilter<"Ingredient"> | string
   name?: Prisma.StringFilter<"Ingredient"> | string
   flavor?: Prisma.EnumFlavorProfileFilter<"Ingredient"> | $Enums.FlavorProfile
+  calories?: Prisma.FloatFilter<"Ingredient"> | number
+  proteins?: Prisma.FloatFilter<"Ingredient"> | number
+  carbs?: Prisma.FloatFilter<"Ingredient"> | number
+  fats?: Prisma.FloatFilter<"Ingredient"> | number
   isActive?: Prisma.BoolFilter<"Ingredient"> | boolean
   plates?: Prisma.PlateIngredientListRelationFilter
+  dietItems?: Prisma.DietItemListRelationFilter
 }
 
 export type IngredientOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   plates?: Prisma.PlateIngredientOrderByRelationAggregateInput
+  dietItems?: Prisma.DietItemOrderByRelationAggregateInput
 }
 
 export type IngredientWhereUniqueInput = Prisma.AtLeast<{
@@ -192,18 +276,29 @@ export type IngredientWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.IngredientWhereInput[]
   NOT?: Prisma.IngredientWhereInput | Prisma.IngredientWhereInput[]
   flavor?: Prisma.EnumFlavorProfileFilter<"Ingredient"> | $Enums.FlavorProfile
+  calories?: Prisma.FloatFilter<"Ingredient"> | number
+  proteins?: Prisma.FloatFilter<"Ingredient"> | number
+  carbs?: Prisma.FloatFilter<"Ingredient"> | number
+  fats?: Prisma.FloatFilter<"Ingredient"> | number
   isActive?: Prisma.BoolFilter<"Ingredient"> | boolean
   plates?: Prisma.PlateIngredientListRelationFilter
+  dietItems?: Prisma.DietItemListRelationFilter
 }, "id" | "name">
 
 export type IngredientOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   _count?: Prisma.IngredientCountOrderByAggregateInput
+  _avg?: Prisma.IngredientAvgOrderByAggregateInput
   _max?: Prisma.IngredientMaxOrderByAggregateInput
   _min?: Prisma.IngredientMinOrderByAggregateInput
+  _sum?: Prisma.IngredientSumOrderByAggregateInput
 }
 
 export type IngredientScalarWhereWithAggregatesInput = {
@@ -213,6 +308,10 @@ export type IngredientScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Ingredient"> | string
   name?: Prisma.StringWithAggregatesFilter<"Ingredient"> | string
   flavor?: Prisma.EnumFlavorProfileWithAggregatesFilter<"Ingredient"> | $Enums.FlavorProfile
+  calories?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
+  proteins?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
+  carbs?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
+  fats?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
   isActive?: Prisma.BoolWithAggregatesFilter<"Ingredient"> | boolean
 }
 
@@ -220,38 +319,62 @@ export type IngredientCreateInput = {
   id?: string
   name: string
   flavor: $Enums.FlavorProfile
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isActive?: boolean
   plates?: Prisma.PlateIngredientCreateNestedManyWithoutIngredientInput
+  dietItems?: Prisma.DietItemCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientUncheckedCreateInput = {
   id?: string
   name: string
   flavor: $Enums.FlavorProfile
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isActive?: boolean
   plates?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutIngredientInput
+  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   plates?: Prisma.PlateIngredientUpdateManyWithoutIngredientNestedInput
+  dietItems?: Prisma.DietItemUpdateManyWithoutIngredientNestedInput
 }
 
 export type IngredientUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   plates?: Prisma.PlateIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutIngredientNestedInput
 }
 
 export type IngredientCreateManyInput = {
   id?: string
   name: string
   flavor: $Enums.FlavorProfile
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isActive?: boolean
 }
 
@@ -259,6 +382,10 @@ export type IngredientUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
@@ -266,20 +393,44 @@ export type IngredientUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type IngredientNullableScalarRelationFilter = {
+  is?: Prisma.IngredientWhereInput | null
+  isNot?: Prisma.IngredientWhereInput | null
 }
 
 export type IngredientCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+}
+
+export type IngredientAvgOrderByAggregateInput = {
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
 }
 
 export type IngredientMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
 }
 
@@ -287,12 +438,39 @@ export type IngredientMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+}
+
+export type IngredientSumOrderByAggregateInput = {
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
 }
 
 export type IngredientScalarRelationFilter = {
   is?: Prisma.IngredientWhereInput
   isNot?: Prisma.IngredientWhereInput
+}
+
+export type IngredientCreateNestedOneWithoutDietItemsInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutDietItemsInput, Prisma.IngredientUncheckedCreateWithoutDietItemsInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutDietItemsInput
+  connect?: Prisma.IngredientWhereUniqueInput
+}
+
+export type IngredientUpdateOneWithoutDietItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutDietItemsInput, Prisma.IngredientUncheckedCreateWithoutDietItemsInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutDietItemsInput
+  upsert?: Prisma.IngredientUpsertWithoutDietItemsInput
+  disconnect?: Prisma.IngredientWhereInput | boolean
+  delete?: Prisma.IngredientWhereInput | boolean
+  connect?: Prisma.IngredientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IngredientUpdateToOneWithWhereWithoutDietItemsInput, Prisma.IngredientUpdateWithoutDietItemsInput>, Prisma.IngredientUncheckedUpdateWithoutDietItemsInput>
 }
 
 export type IngredientCreateNestedOneWithoutPlatesInput = {
@@ -309,18 +487,92 @@ export type IngredientUpdateOneRequiredWithoutPlatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.IngredientUpdateToOneWithWhereWithoutPlatesInput, Prisma.IngredientUpdateWithoutPlatesInput>, Prisma.IngredientUncheckedUpdateWithoutPlatesInput>
 }
 
+export type IngredientCreateWithoutDietItemsInput = {
+  id?: string
+  name: string
+  flavor: $Enums.FlavorProfile
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  isActive?: boolean
+  plates?: Prisma.PlateIngredientCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientUncheckedCreateWithoutDietItemsInput = {
+  id?: string
+  name: string
+  flavor: $Enums.FlavorProfile
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  isActive?: boolean
+  plates?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientCreateOrConnectWithoutDietItemsInput = {
+  where: Prisma.IngredientWhereUniqueInput
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutDietItemsInput, Prisma.IngredientUncheckedCreateWithoutDietItemsInput>
+}
+
+export type IngredientUpsertWithoutDietItemsInput = {
+  update: Prisma.XOR<Prisma.IngredientUpdateWithoutDietItemsInput, Prisma.IngredientUncheckedUpdateWithoutDietItemsInput>
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutDietItemsInput, Prisma.IngredientUncheckedCreateWithoutDietItemsInput>
+  where?: Prisma.IngredientWhereInput
+}
+
+export type IngredientUpdateToOneWithWhereWithoutDietItemsInput = {
+  where?: Prisma.IngredientWhereInput
+  data: Prisma.XOR<Prisma.IngredientUpdateWithoutDietItemsInput, Prisma.IngredientUncheckedUpdateWithoutDietItemsInput>
+}
+
+export type IngredientUpdateWithoutDietItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plates?: Prisma.PlateIngredientUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientUncheckedUpdateWithoutDietItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plates?: Prisma.PlateIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+}
+
 export type IngredientCreateWithoutPlatesInput = {
   id?: string
   name: string
   flavor: $Enums.FlavorProfile
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isActive?: boolean
+  dietItems?: Prisma.DietItemCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientUncheckedCreateWithoutPlatesInput = {
   id?: string
   name: string
   flavor: $Enums.FlavorProfile
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isActive?: boolean
+  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientCreateOrConnectWithoutPlatesInput = {
@@ -343,14 +595,24 @@ export type IngredientUpdateWithoutPlatesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dietItems?: Prisma.DietItemUpdateManyWithoutIngredientNestedInput
 }
 
 export type IngredientUncheckedUpdateWithoutPlatesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutIngredientNestedInput
 }
 
 
@@ -360,10 +622,12 @@ export type IngredientUncheckedUpdateWithoutPlatesInput = {
 
 export type IngredientCountOutputType = {
   plates: number
+  dietItems: number
 }
 
 export type IngredientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   plates?: boolean | IngredientCountOutputTypeCountPlatesArgs
+  dietItems?: boolean | IngredientCountOutputTypeCountDietItemsArgs
 }
 
 /**
@@ -383,13 +647,25 @@ export type IngredientCountOutputTypeCountPlatesArgs<ExtArgs extends runtime.Typ
   where?: Prisma.PlateIngredientWhereInput
 }
 
+/**
+ * IngredientCountOutputType without action
+ */
+export type IngredientCountOutputTypeCountDietItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DietItemWhereInput
+}
+
 
 export type IngredientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   flavor?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isActive?: boolean
   plates?: boolean | Prisma.Ingredient$platesArgs<ExtArgs>
+  dietItems?: boolean | Prisma.Ingredient$dietItemsArgs<ExtArgs>
   _count?: boolean | Prisma.IngredientCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ingredient"]>
 
@@ -397,6 +673,10 @@ export type IngredientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   name?: boolean
   flavor?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isActive?: boolean
 }, ExtArgs["result"]["ingredient"]>
 
@@ -404,6 +684,10 @@ export type IngredientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   id?: boolean
   name?: boolean
   flavor?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isActive?: boolean
 }, ExtArgs["result"]["ingredient"]>
 
@@ -411,12 +695,17 @@ export type IngredientSelectScalar = {
   id?: boolean
   name?: boolean
   flavor?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isActive?: boolean
 }
 
-export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "flavor" | "isActive", ExtArgs["result"]["ingredient"]>
+export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "flavor" | "calories" | "proteins" | "carbs" | "fats" | "isActive", ExtArgs["result"]["ingredient"]>
 export type IngredientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   plates?: boolean | Prisma.Ingredient$platesArgs<ExtArgs>
+  dietItems?: boolean | Prisma.Ingredient$dietItemsArgs<ExtArgs>
   _count?: boolean | Prisma.IngredientCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type IngredientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -426,11 +715,16 @@ export type $IngredientPayload<ExtArgs extends runtime.Types.Extensions.Internal
   name: "Ingredient"
   objects: {
     plates: Prisma.$PlateIngredientPayload<ExtArgs>[]
+    dietItems: Prisma.$DietItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     flavor: $Enums.FlavorProfile
+    calories: number
+    proteins: number
+    carbs: number
+    fats: number
     isActive: boolean
   }, ExtArgs["result"]["ingredient"]>
   composites: {}
@@ -827,6 +1121,7 @@ readonly fields: IngredientFieldRefs;
 export interface Prisma__IngredientClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   plates<T extends Prisma.Ingredient$platesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ingredient$platesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateIngredientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dietItems<T extends Prisma.Ingredient$dietItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ingredient$dietItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DietItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -859,6 +1154,10 @@ export interface IngredientFieldRefs {
   readonly id: Prisma.FieldRef<"Ingredient", 'String'>
   readonly name: Prisma.FieldRef<"Ingredient", 'String'>
   readonly flavor: Prisma.FieldRef<"Ingredient", 'FlavorProfile'>
+  readonly calories: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly proteins: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly carbs: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly fats: Prisma.FieldRef<"Ingredient", 'Float'>
   readonly isActive: Prisma.FieldRef<"Ingredient", 'Boolean'>
 }
     
@@ -1274,6 +1573,30 @@ export type Ingredient$platesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.PlateIngredientScalarFieldEnum | Prisma.PlateIngredientScalarFieldEnum[]
+}
+
+/**
+ * Ingredient.dietItems
+ */
+export type Ingredient$dietItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DietItem
+   */
+  select?: Prisma.DietItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DietItem
+   */
+  omit?: Prisma.DietItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DietItemInclude<ExtArgs> | null
+  where?: Prisma.DietItemWhereInput
+  orderBy?: Prisma.DietItemOrderByWithRelationInput | Prisma.DietItemOrderByWithRelationInput[]
+  cursor?: Prisma.DietItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DietItemScalarFieldEnum | Prisma.DietItemScalarFieldEnum[]
 }
 
 /**

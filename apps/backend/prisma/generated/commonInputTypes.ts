@@ -195,25 +195,9 @@ export type EnumAuthorityRankWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumAuthorityRankFilter<$PrismaModel>
 }
 
-export type EnumPlateSourceFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateSource | Prisma.EnumPlateSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateSourceFilter<$PrismaModel> | $Enums.PlateSource
-}
-
-export type EnumPlateTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel> | $Enums.PlateType
-}
-
-export type EnumFlavorProfileFilter<$PrismaModel = never> = {
-  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
-  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel> | $Enums.FlavorProfile
+export type BoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
 }
 
 export type FloatFilter<$PrismaModel = never> = {
@@ -238,39 +222,12 @@ export type IntFilter<$PrismaModel = never> = {
   not?: Prisma.NestedIntFilter<$PrismaModel> | number
 }
 
-export type BoolFilter<$PrismaModel = never> = {
+export type BoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
-}
-
-export type EnumPlateSourceWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateSource | Prisma.EnumPlateSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateSourceWithAggregatesFilter<$PrismaModel> | $Enums.PlateSource
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumPlateSourceFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumPlateSourceFilter<$PrismaModel>
-}
-
-export type EnumPlateTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateTypeWithAggregatesFilter<$PrismaModel> | $Enums.PlateType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
-}
-
-export type EnumFlavorProfileWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
-  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumFlavorProfileWithAggregatesFilter<$PrismaModel> | $Enums.FlavorProfile
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
 export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -305,12 +262,55 @@ export type IntWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntFilter<$PrismaModel>
 }
 
-export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+export type EnumMealTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MealType | Prisma.EnumMealTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMealTypeFilter<$PrismaModel> | $Enums.MealType
+}
+
+export type EnumMealTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MealType | Prisma.EnumMealTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMealTypeWithAggregatesFilter<$PrismaModel> | $Enums.MealType
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedBoolFilter<$PrismaModel>
-  _max?: Prisma.NestedBoolFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMealTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMealTypeFilter<$PrismaModel>
+}
+
+export type EnumPlateTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel> | $Enums.PlateType
+}
+
+export type EnumFlavorProfileFilter<$PrismaModel = never> = {
+  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel> | $Enums.FlavorProfile
+}
+
+export type EnumPlateTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlateTypeWithAggregatesFilter<$PrismaModel> | $Enums.PlateType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
+}
+
+export type EnumFlavorProfileWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFlavorProfileWithAggregatesFilter<$PrismaModel> | $Enums.FlavorProfile
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -507,25 +507,9 @@ export type NestedEnumAuthorityRankWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumAuthorityRankFilter<$PrismaModel>
 }
 
-export type NestedEnumPlateSourceFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateSource | Prisma.EnumPlateSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateSourceFilter<$PrismaModel> | $Enums.PlateSource
-}
-
-export type NestedEnumPlateTypeFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel> | $Enums.PlateType
-}
-
-export type NestedEnumFlavorProfileFilter<$PrismaModel = never> = {
-  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
-  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel> | $Enums.FlavorProfile
+export type NestedBoolFilter<$PrismaModel = never> = {
+  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
 }
 
 export type NestedFloatFilter<$PrismaModel = never> = {
@@ -539,39 +523,12 @@ export type NestedFloatFilter<$PrismaModel = never> = {
   not?: Prisma.NestedFloatFilter<$PrismaModel> | number
 }
 
-export type NestedBoolFilter<$PrismaModel = never> = {
+export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
   equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolFilter<$PrismaModel> | boolean
-}
-
-export type NestedEnumPlateSourceWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateSource | Prisma.EnumPlateSourceFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateSource[] | Prisma.ListEnumPlateSourceFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateSourceWithAggregatesFilter<$PrismaModel> | $Enums.PlateSource
+  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumPlateSourceFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumPlateSourceFilter<$PrismaModel>
-}
-
-export type NestedEnumPlateTypeWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
-  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumPlateTypeWithAggregatesFilter<$PrismaModel> | $Enums.PlateType
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
-}
-
-export type NestedEnumFlavorProfileWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
-  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedEnumFlavorProfileWithAggregatesFilter<$PrismaModel> | $Enums.FlavorProfile
-  _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
+  _min?: Prisma.NestedBoolFilter<$PrismaModel>
+  _max?: Prisma.NestedBoolFilter<$PrismaModel>
 }
 
 export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -606,12 +563,55 @@ export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntFilter<$PrismaModel>
 }
 
-export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: boolean | Prisma.BooleanFieldRefInput<$PrismaModel>
-  not?: Prisma.NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+export type NestedEnumMealTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MealType | Prisma.EnumMealTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMealTypeFilter<$PrismaModel> | $Enums.MealType
+}
+
+export type NestedEnumMealTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MealType | Prisma.EnumMealTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MealType[] | Prisma.ListEnumMealTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMealTypeWithAggregatesFilter<$PrismaModel> | $Enums.MealType
   _count?: Prisma.NestedIntFilter<$PrismaModel>
-  _min?: Prisma.NestedBoolFilter<$PrismaModel>
-  _max?: Prisma.NestedBoolFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMealTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMealTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumPlateTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel> | $Enums.PlateType
+}
+
+export type NestedEnumFlavorProfileFilter<$PrismaModel = never> = {
+  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel> | $Enums.FlavorProfile
+}
+
+export type NestedEnumPlateTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PlateType | Prisma.EnumPlateTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PlateType[] | Prisma.ListEnumPlateTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPlateTypeWithAggregatesFilter<$PrismaModel> | $Enums.PlateType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPlateTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumFlavorProfileWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.FlavorProfile | Prisma.EnumFlavorProfileFieldRefInput<$PrismaModel>
+  in?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  notIn?: $Enums.FlavorProfile[] | Prisma.ListEnumFlavorProfileFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumFlavorProfileWithAggregatesFilter<$PrismaModel> | $Enums.FlavorProfile
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumFlavorProfileFilter<$PrismaModel>
 }
 
 

@@ -241,9 +241,9 @@ export type UserWhereInput = {
   customer?: Prisma.XOR<Prisma.CustomerProfileNullableScalarRelationFilter, Prisma.CustomerProfileWhereInput> | null
   staff?: Prisma.XOR<Prisma.StaffProfileNullableScalarRelationFilter, Prisma.StaffProfileWhereInput> | null
   authority?: Prisma.XOR<Prisma.AuthorityProfileNullableScalarRelationFilter, Prisma.AuthorityProfileWhereInput> | null
-  plates?: Prisma.PlateListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   stats?: Prisma.XOR<Prisma.CreatorStatsNullableScalarRelationFilter, Prisma.CreatorStatsWhereInput> | null
+  diets?: Prisma.DietListRelationFilter
   createdTags?: Prisma.TagListRelationFilter
 }
 
@@ -263,9 +263,9 @@ export type UserOrderByWithRelationInput = {
   customer?: Prisma.CustomerProfileOrderByWithRelationInput
   staff?: Prisma.StaffProfileOrderByWithRelationInput
   authority?: Prisma.AuthorityProfileOrderByWithRelationInput
-  plates?: Prisma.PlateOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   stats?: Prisma.CreatorStatsOrderByWithRelationInput
+  diets?: Prisma.DietOrderByRelationAggregateInput
   createdTags?: Prisma.TagOrderByRelationAggregateInput
 }
 
@@ -288,9 +288,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   customer?: Prisma.XOR<Prisma.CustomerProfileNullableScalarRelationFilter, Prisma.CustomerProfileWhereInput> | null
   staff?: Prisma.XOR<Prisma.StaffProfileNullableScalarRelationFilter, Prisma.StaffProfileWhereInput> | null
   authority?: Prisma.XOR<Prisma.AuthorityProfileNullableScalarRelationFilter, Prisma.AuthorityProfileWhereInput> | null
-  plates?: Prisma.PlateListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   stats?: Prisma.XOR<Prisma.CreatorStatsNullableScalarRelationFilter, Prisma.CreatorStatsWhereInput> | null
+  diets?: Prisma.DietListRelationFilter
   createdTags?: Prisma.TagListRelationFilter
 }, "id" | "username" | "email" | "phone">
 
@@ -346,9 +346,9 @@ export type UserCreateInput = {
   customer?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
 }
 
@@ -368,9 +368,9 @@ export type UserUncheckedCreateInput = {
   customer?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileUncheckedCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileUncheckedCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateUncheckedCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsUncheckedCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
@@ -390,9 +390,9 @@ export type UserUpdateInput = {
   customer?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -412,9 +412,9 @@ export type UserUncheckedUpdateInput = {
   customer?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUncheckedUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUncheckedUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUncheckedUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUncheckedUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -580,20 +580,18 @@ export type UserUpdateOneRequiredWithoutAuthorityNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthorityInput, Prisma.UserUpdateWithoutAuthorityInput>, Prisma.UserUncheckedUpdateWithoutAuthorityInput>
 }
 
-export type UserCreateNestedOneWithoutPlatesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPlatesInput, Prisma.UserUncheckedCreateWithoutPlatesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlatesInput
+export type UserCreateNestedOneWithoutDietsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDietsInput, Prisma.UserUncheckedCreateWithoutDietsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDietsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutPlatesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPlatesInput, Prisma.UserUncheckedCreateWithoutPlatesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlatesInput
-  upsert?: Prisma.UserUpsertWithoutPlatesInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
+export type UserUpdateOneRequiredWithoutDietsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDietsInput, Prisma.UserUncheckedCreateWithoutDietsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDietsInput
+  upsert?: Prisma.UserUpsertWithoutDietsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlatesInput, Prisma.UserUpdateWithoutPlatesInput>, Prisma.UserUncheckedUpdateWithoutPlatesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDietsInput, Prisma.UserUpdateWithoutDietsInput>, Prisma.UserUncheckedUpdateWithoutDietsInput>
 }
 
 export type UserCreateNestedOneWithoutReviewsInput = {
@@ -655,9 +653,9 @@ export type UserCreateWithoutCustomerInput = {
   updatedat?: Date | string
   staff?: Prisma.StaffProfileCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
 }
 
@@ -676,9 +674,9 @@ export type UserUncheckedCreateWithoutCustomerInput = {
   updatedat?: Date | string
   staff?: Prisma.StaffProfileUncheckedCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileUncheckedCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateUncheckedCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsUncheckedCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
@@ -713,9 +711,9 @@ export type UserUpdateWithoutCustomerInput = {
   updatedat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   staff?: Prisma.StaffProfileUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -734,9 +732,9 @@ export type UserUncheckedUpdateWithoutCustomerInput = {
   updatedat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   staff?: Prisma.StaffProfileUncheckedUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUncheckedUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUncheckedUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUncheckedUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -755,9 +753,9 @@ export type UserCreateWithoutStaffInput = {
   updatedat?: Date | string
   customer?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
 }
 
@@ -776,9 +774,9 @@ export type UserUncheckedCreateWithoutStaffInput = {
   updatedat?: Date | string
   customer?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileUncheckedCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateUncheckedCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsUncheckedCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
@@ -813,9 +811,9 @@ export type UserUpdateWithoutStaffInput = {
   updatedat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -834,9 +832,9 @@ export type UserUncheckedUpdateWithoutStaffInput = {
   updatedat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUncheckedUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUncheckedUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUncheckedUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -855,9 +853,9 @@ export type UserCreateWithoutAuthorityInput = {
   updatedat?: Date | string
   customer?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
 }
 
@@ -876,9 +874,9 @@ export type UserUncheckedCreateWithoutAuthorityInput = {
   updatedat?: Date | string
   customer?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileUncheckedCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateUncheckedCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsUncheckedCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
@@ -913,9 +911,9 @@ export type UserUpdateWithoutAuthorityInput = {
   updatedat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -934,13 +932,13 @@ export type UserUncheckedUpdateWithoutAuthorityInput = {
   updatedat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUncheckedUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUncheckedUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUncheckedUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
-export type UserCreateWithoutPlatesInput = {
+export type UserCreateWithoutDietsInput = {
   id?: string
   name: string
   sname?: string | null
@@ -961,7 +959,7 @@ export type UserCreateWithoutPlatesInput = {
   createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
 }
 
-export type UserUncheckedCreateWithoutPlatesInput = {
+export type UserUncheckedCreateWithoutDietsInput = {
   id?: string
   name: string
   sname?: string | null
@@ -982,23 +980,23 @@ export type UserUncheckedCreateWithoutPlatesInput = {
   createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
-export type UserCreateOrConnectWithoutPlatesInput = {
+export type UserCreateOrConnectWithoutDietsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPlatesInput, Prisma.UserUncheckedCreateWithoutPlatesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDietsInput, Prisma.UserUncheckedCreateWithoutDietsInput>
 }
 
-export type UserUpsertWithoutPlatesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPlatesInput, Prisma.UserUncheckedUpdateWithoutPlatesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPlatesInput, Prisma.UserUncheckedCreateWithoutPlatesInput>
+export type UserUpsertWithoutDietsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDietsInput, Prisma.UserUncheckedUpdateWithoutDietsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDietsInput, Prisma.UserUncheckedCreateWithoutDietsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutPlatesInput = {
+export type UserUpdateToOneWithWhereWithoutDietsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPlatesInput, Prisma.UserUncheckedUpdateWithoutPlatesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDietsInput, Prisma.UserUncheckedUpdateWithoutDietsInput>
 }
 
-export type UserUpdateWithoutPlatesInput = {
+export type UserUpdateWithoutDietsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1019,7 +1017,7 @@ export type UserUpdateWithoutPlatesInput = {
   createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
 }
 
-export type UserUncheckedUpdateWithoutPlatesInput = {
+export type UserUncheckedUpdateWithoutDietsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   sname?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1056,8 +1054,8 @@ export type UserCreateWithoutReviewsInput = {
   customer?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateCreateNestedManyWithoutCreatorInput
   stats?: Prisma.CreatorStatsCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
 }
 
@@ -1077,8 +1075,8 @@ export type UserUncheckedCreateWithoutReviewsInput = {
   customer?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileUncheckedCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileUncheckedCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateUncheckedCreateNestedManyWithoutCreatorInput
   stats?: Prisma.CreatorStatsUncheckedCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
@@ -1114,8 +1112,8 @@ export type UserUpdateWithoutReviewsInput = {
   customer?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUpdateManyWithoutCreatorNestedInput
   stats?: Prisma.CreatorStatsUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -1135,8 +1133,8 @@ export type UserUncheckedUpdateWithoutReviewsInput = {
   customer?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUncheckedUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUncheckedUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUncheckedUpdateManyWithoutCreatorNestedInput
   stats?: Prisma.CreatorStatsUncheckedUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -1156,8 +1154,8 @@ export type UserCreateWithoutStatsInput = {
   customer?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
+  diets?: Prisma.DietCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
 }
 
@@ -1177,8 +1175,8 @@ export type UserUncheckedCreateWithoutStatsInput = {
   customer?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileUncheckedCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileUncheckedCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateUncheckedCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutUserInput
   createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
@@ -1214,8 +1212,8 @@ export type UserUpdateWithoutStatsInput = {
   customer?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
+  diets?: Prisma.DietUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -1235,8 +1233,8 @@ export type UserUncheckedUpdateWithoutStatsInput = {
   customer?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUncheckedUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUncheckedUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUncheckedUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutUserNestedInput
   createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
@@ -1256,9 +1254,9 @@ export type UserCreateWithoutCreatedTagsInput = {
   customer?: Prisma.CustomerProfileCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedTagsInput = {
@@ -1277,9 +1275,9 @@ export type UserUncheckedCreateWithoutCreatedTagsInput = {
   customer?: Prisma.CustomerProfileUncheckedCreateNestedOneWithoutUserInput
   staff?: Prisma.StaffProfileUncheckedCreateNestedOneWithoutUserInput
   authority?: Prisma.AuthorityProfileUncheckedCreateNestedOneWithoutUserInput
-  plates?: Prisma.PlateUncheckedCreateNestedManyWithoutCreatorInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutUserInput
   stats?: Prisma.CreatorStatsUncheckedCreateNestedOneWithoutUserInput
+  diets?: Prisma.DietUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedTagsInput = {
@@ -1314,9 +1312,9 @@ export type UserUpdateWithoutCreatedTagsInput = {
   customer?: Prisma.CustomerProfileUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedTagsInput = {
@@ -1335,9 +1333,9 @@ export type UserUncheckedUpdateWithoutCreatedTagsInput = {
   customer?: Prisma.CustomerProfileUncheckedUpdateOneWithoutUserNestedInput
   staff?: Prisma.StaffProfileUncheckedUpdateOneWithoutUserNestedInput
   authority?: Prisma.AuthorityProfileUncheckedUpdateOneWithoutUserNestedInput
-  plates?: Prisma.PlateUncheckedUpdateManyWithoutCreatorNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutUserNestedInput
   stats?: Prisma.CreatorStatsUncheckedUpdateOneWithoutUserNestedInput
+  diets?: Prisma.DietUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1346,14 +1344,14 @@ export type UserUncheckedUpdateWithoutCreatedTagsInput = {
  */
 
 export type UserCountOutputType = {
-  plates: number
   reviews: number
+  diets: number
   createdTags: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  plates?: boolean | UserCountOutputTypeCountPlatesArgs
   reviews?: boolean | UserCountOutputTypeCountReviewsArgs
+  diets?: boolean | UserCountOutputTypeCountDietsArgs
   createdTags?: boolean | UserCountOutputTypeCountCreatedTagsArgs
 }
 
@@ -1370,15 +1368,15 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountPlatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PlateWhereInput
+export type UserCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ReviewWhereInput
+export type UserCountOutputTypeCountDietsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DietWhereInput
 }
 
 /**
@@ -1405,9 +1403,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   customer?: boolean | Prisma.User$customerArgs<ExtArgs>
   staff?: boolean | Prisma.User$staffArgs<ExtArgs>
   authority?: boolean | Prisma.User$authorityArgs<ExtArgs>
-  plates?: boolean | Prisma.User$platesArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   stats?: boolean | Prisma.User$statsArgs<ExtArgs>
+  diets?: boolean | Prisma.User$dietsArgs<ExtArgs>
   createdTags?: boolean | Prisma.User$createdTagsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1462,9 +1460,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   customer?: boolean | Prisma.User$customerArgs<ExtArgs>
   staff?: boolean | Prisma.User$staffArgs<ExtArgs>
   authority?: boolean | Prisma.User$authorityArgs<ExtArgs>
-  plates?: boolean | Prisma.User$platesArgs<ExtArgs>
   reviews?: boolean | Prisma.User$reviewsArgs<ExtArgs>
   stats?: boolean | Prisma.User$statsArgs<ExtArgs>
+  diets?: boolean | Prisma.User$dietsArgs<ExtArgs>
   createdTags?: boolean | Prisma.User$createdTagsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1477,9 +1475,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     customer: Prisma.$CustomerProfilePayload<ExtArgs> | null
     staff: Prisma.$StaffProfilePayload<ExtArgs> | null
     authority: Prisma.$AuthorityProfilePayload<ExtArgs> | null
-    plates: Prisma.$PlatePayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     stats: Prisma.$CreatorStatsPayload<ExtArgs> | null
+    diets: Prisma.$DietPayload<ExtArgs>[]
     createdTags: Prisma.$TagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1892,9 +1890,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   customer<T extends Prisma.User$customerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$customerArgs<ExtArgs>>): Prisma.Prisma__CustomerProfileClient<runtime.Types.Result.GetResult<Prisma.$CustomerProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   staff<T extends Prisma.User$staffArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$staffArgs<ExtArgs>>): Prisma.Prisma__StaffProfileClient<runtime.Types.Result.GetResult<Prisma.$StaffProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   authority<T extends Prisma.User$authorityArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authorityArgs<ExtArgs>>): Prisma.Prisma__AuthorityProfileClient<runtime.Types.Result.GetResult<Prisma.$AuthorityProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  plates<T extends Prisma.User$platesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$platesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.User$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stats<T extends Prisma.User$statsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$statsArgs<ExtArgs>>): Prisma.Prisma__CreatorStatsClient<runtime.Types.Result.GetResult<Prisma.$CreatorStatsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  diets<T extends Prisma.User$dietsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dietsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DietPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdTags<T extends Prisma.User$createdTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2387,30 +2385,6 @@ export type User$authorityArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.plates
- */
-export type User$platesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Plate
-   */
-  select?: Prisma.PlateSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Plate
-   */
-  omit?: Prisma.PlateOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PlateInclude<ExtArgs> | null
-  where?: Prisma.PlateWhereInput
-  orderBy?: Prisma.PlateOrderByWithRelationInput | Prisma.PlateOrderByWithRelationInput[]
-  cursor?: Prisma.PlateWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PlateScalarFieldEnum | Prisma.PlateScalarFieldEnum[]
-}
-
-/**
  * User.reviews
  */
 export type User$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2451,6 +2425,30 @@ export type User$statsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   include?: Prisma.CreatorStatsInclude<ExtArgs> | null
   where?: Prisma.CreatorStatsWhereInput
+}
+
+/**
+ * User.diets
+ */
+export type User$dietsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Diet
+   */
+  select?: Prisma.DietSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Diet
+   */
+  omit?: Prisma.DietOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DietInclude<ExtArgs> | null
+  where?: Prisma.DietWhereInput
+  orderBy?: Prisma.DietOrderByWithRelationInput | Prisma.DietOrderByWithRelationInput[]
+  cursor?: Prisma.DietWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DietScalarFieldEnum | Prisma.DietScalarFieldEnum[]
 }
 
 /**

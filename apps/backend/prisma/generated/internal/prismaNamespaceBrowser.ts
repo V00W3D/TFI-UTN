@@ -55,6 +55,8 @@ export const ModelName = {
   CustomerProfile: 'CustomerProfile',
   StaffProfile: 'StaffProfile',
   AuthorityProfile: 'AuthorityProfile',
+  Diet: 'Diet',
+  DietItem: 'DietItem',
   Plate: 'Plate',
   Ingredient: 'Ingredient',
   PlateIngredient: 'PlateIngredient',
@@ -122,16 +124,50 @@ export const AuthorityProfileScalarFieldEnum = {
 export type AuthorityProfileScalarFieldEnum = (typeof AuthorityProfileScalarFieldEnum)[keyof typeof AuthorityProfileScalarFieldEnum]
 
 
+export const DietScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  description: 'description',
+  isPublic: 'isPublic',
+  avgRating: 'avgRating',
+  ratingsCount: 'ratingsCount',
+  copiedFromId: 'copiedFromId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DietScalarFieldEnum = (typeof DietScalarFieldEnum)[keyof typeof DietScalarFieldEnum]
+
+
+export const DietItemScalarFieldEnum = {
+  id: 'id',
+  dietId: 'dietId',
+  mealType: 'mealType',
+  plateId: 'plateId',
+  ingredientId: 'ingredientId',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type DietItemScalarFieldEnum = (typeof DietItemScalarFieldEnum)[keyof typeof DietItemScalarFieldEnum]
+
+
 export const PlateScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  source: 'source',
+  price: 'price',
   type: 'type',
   flavor: 'flavor',
-  creatorId: 'creatorId',
   avgRating: 'avgRating',
   ratingsCount: 'ratingsCount',
+  recommendations: 'recommendations',
+  notRecommendations: 'notRecommendations',
+  calories: 'calories',
+  proteins: 'proteins',
+  carbs: 'carbs',
+  fats: 'fats',
   isAvailable: 'isAvailable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -144,6 +180,10 @@ export const IngredientScalarFieldEnum = {
   id: 'id',
   name: 'name',
   flavor: 'flavor',
+  calories: 'calories',
+  proteins: 'proteins',
+  carbs: 'carbs',
+  fats: 'fats',
   isActive: 'isActive'
 } as const
 

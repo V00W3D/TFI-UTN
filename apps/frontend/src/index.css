@@ -1,8 +1,8 @@
 @import 'tailwindcss';
 
 /* =============================================================================
-   🍷 QART DEFINITIVE LUXURY SYSTEM
-   Humanity · Elegance · Formal Mastery
+   🍔 QART "ENTERPRISE FAST CASUAL" DESIGN SYSTEM
+   Clean · Solid · High-Contrast
    ============================================================================= */
 
 @theme {
@@ -13,105 +13,80 @@
   --color-qart-border: var(--qart-border);
   --color-qart-text: var(--qart-text);
   --color-qart-text-muted: var(--qart-text-muted);
+  --color-qart-success: var(--qart-success);
+  --color-qart-error: var(--qart-error);
 }
 
 @layer base {
   :root {
-    /* ── The "Author" Palette: Light Mode (Warm Creams & Gold) ── */
-    --qart-primary: #3d1424; /* Deep, warm plum/bordeaux */
-    --qart-accent: #c49a62;  /* Aged, refined gold */
-    --qart-bg: #f9f8f6;      /* Off-white, creamy paper texture */
-    --qart-surface: #ffffff;
-    --qart-border: #e6e0d8;
+    /* ── The "Solid Enterprise" Palette (McDonalds/ShakeShack Vibe) ── */
+    --qart-primary: #121212; /* Solid Pitch Black */
+    --qart-accent: #E60000;  /* Vibrant Fast-Food Red */
+    --qart-bg: #F4F4F5;      /* Clean neutral gray */
+    --qart-surface: #FFFFFF; /* Pure white */
+    --qart-border: #D4D4D8;  /* Crisp gray border */
     
-    --qart-text: #2b1d22;
-    --qart-text-muted: #73676b;
+    --qart-text: #121212;
+    --qart-text-muted: #52525B;
+    
+    --qart-success: #16A34A; /* Solid Green */
+    --qart-error: #DC2626;   /* Solid Red */
 
-    /* Base Font Sizing */
     font-size: 16px;
   }
 
-  .dark {
-    /* ── The "Author" Palette: Dark Mode (Deep Bordeaux & Gold) ── */
-    --qart-primary: #ffffff; /* Contrast text mostly */
-    --qart-bg: #140b0e;      /* Very deep, near-black plum */
-    --qart-surface: #1e1115;
-    --qart-border: #3d242c;
-    
-    --qart-text: #f4f0f2;
-    --qart-text-muted: #a39599;
-  }
-
   body {
-    font-family: 'DM Sans', system-ui, sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     background-color: var(--qart-bg);
     color: var(--qart-text);
-    line-height: 1.6;
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
-  /* ── Golden Typography ── */
-  h1, h2, h3, h4, h5, h6, .font-serif {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
+  h1, h2, h3, h4, h5, h6, .font-display {
+    font-family: 'Outfit', 'Poppins', system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
   }
 }
 
 @layer utilities {
-  /* ── Immersive Glassmorphism ── */
+  /* ── Clean, Solid Components ── */
   .glass-header {
-    background: rgba(249, 248, 246, 0.85); /* Light mode bg */
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #FFFFFF;
     border-bottom: 1px solid var(--qart-border);
   }
 
-  .dark .glass-header {
-    background: rgba(20, 11, 14, 0.65); /* Dark mode bg */
+  /* ── Ultra-Tactile Enterprise Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-qart-accent text-white font-bold tracking-wide text-base rounded-lg transition-colors duration-200 cursor-pointer;
+    font-family: 'Outfit', 'Inter', sans-serif;
   }
-  
-  .glass-panel {
-    background: rgba(var(--qart-surface), 0.7);
-    backdrop-filter: blur(16px);
-    border: 1px solid var(--qart-border);
+  .btn-primary:hover:not(:disabled) {
+    @apply bg-[#CC0000]; 
   }
-
-  /* ── Premium Buttons ── */
-  .btn-gold {
-    @apply inline-flex items-center justify-center px-8 py-3 bg-[#c49a62] text-white font-medium tracking-[0.15em] text-sm uppercase transition-all duration-300;
-    border: 1px solid #c49a62;
-    box-shadow: 0 4px 14px rgba(196, 154, 98, 0.2);
-  }
-  .btn-gold:hover {
-    @apply bg-transparent text-[#c49a62];
-    box-shadow: 0 6px 20px rgba(196, 154, 98, 0.25);
-    transform: translateY(-1px);
+  .btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed;
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center px-8 py-3 bg-transparent border border-qart-border text-qart-text font-medium tracking-[0.15em] text-sm uppercase transition-all duration-300;
+    @apply inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-qart-border text-qart-primary font-bold tracking-wide text-base rounded-lg transition-colors duration-200 cursor-pointer;
+    font-family: 'Outfit', 'Inter', sans-serif;
   }
   .btn-outline:hover {
-    @apply border-qart-accent text-qart-accent;
+    @apply border-qart-primary bg-gray-50;
   }
 
-  /* ── Framing & Shadows ── */
-  .shadow-elegant {
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+  /* ── Subtle, Enterprise Cards ── */
+  .card-friendly {
+    @apply bg-qart-surface border border-qart-border rounded-xl transition-shadow duration-200;
   }
-  .dark .shadow-elegant {
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3);
+  .card-friendly:hover {
+    @apply shadow-md;
   }
-
-  .img-frame {
-    @apply relative border border-qart-border p-2 bg-qart-surface;
-  }
-  .img-frame::after {
-    content: '';
-    @apply absolute -inset-3 border border-qart-accent/30 pointer-events-none;
+  
+  .shadow-bouncy {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   }
 }

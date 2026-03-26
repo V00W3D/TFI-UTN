@@ -1,204 +1,124 @@
-/**
- * @file seed.ts
- * @author Victor
- * @description Automatically enforced JSDoc header according to context.md guidelines.
- * @param null
- * @returns null
- * @example null
- * @remarks This file is part of the QART monorepo architecture.
- *
- * Metrics:
- * - LOC: 50
- * - Experience Level: Junior
- * - Estimated Time: 30m
- * - FPA: 1
- * - PERT: 1
- * - Planning Poker: 1
- */
-import argon2 from 'argon2';
 import { prisma } from '@tools/db';
-import { PlateType, FlavorProfile } from '../prisma/generated/client';
 
-// ─────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────
-function pick<T>(arr: readonly T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)] as T;
-}
-
-const hash = (pwd: string) => argon2.hash(pwd, { type: argon2.argon2id });
-
-// ─────────────────────────────────────────────
-// DATA
-// ─────────────────────────────────────────────
-const NAMES = ['Juan', 'Pedro', 'Lucas', 'Mateo', 'Santi', 'Tomi'] as const;
-const LNAMES = ['Gomez', 'Perez', 'Diaz', 'Fernandez'] as const;
-
-const PLATE_NAMES = [
-  'Burger explosiva',
-  'Pizza volcánica',
-  'Helado nuclear',
-  'Papas del infierno',
-  'Wrap cósmico',
-  'Milanesa suprema',
-  'Tacos galácticos',
-  'Ensalada zen',
-  'Sandwich brutal',
-  'Brownie oscuro',
-] as const;
-
-const TYPES: readonly PlateType[] = ['MAIN', 'DESSERT', 'SNACK'];
-
-const FLAVORS: readonly FlavorProfile[] = ['SWEET', 'SALTY', 'UMAMI', 'ACID'];
-
-const INGREDIENTS = [
-  { name: 'Carne', flavor: 'UMAMI' as FlavorProfile },
-  { name: 'Queso', flavor: 'UMAMI' as FlavorProfile },
-  { name: 'Tomate', flavor: 'ACID' as FlavorProfile },
-  { name: 'Lechuga', flavor: 'UNKNOWN' as FlavorProfile },
-  { name: 'Chocolate', flavor: 'SWEET' as FlavorProfile },
-];
-
-const TAGS = ['Picante', 'Veggie', 'Fit', 'Dulce', 'Premium'] as const;
-
-// ─────────────────────────────────────────────
-// SEED
-// ─────────────────────────────────────────────
 async function main() {
-  console.log('🌱 Seeding...');
+  console.log('🌱 Starting Database Seeding...');
 
-  // ───────── USERS ─────────
-  const basePassword = await hash('123456');
-
-  const authority = await prisma.user.create({
-    data: {
-      username: 'admin',
-      name: 'Admin',
-      lname: 'Root',
-      sex: 'OTHER',
-      email: 'admin@test.com',
-      password: basePassword,
-      role: 'AUTHORITY',
-      authority: { create: { rank: 'OWNER' } },
+  // 1. Create Base Ingredients with Nutritional Values
+  const bun = await prisma.ingredient.upsert({
+    where: { name: 'Pan de Papa Artesanal' },
+    update: {},
+    create: {
+      name: 'Pan de Papa Artesanal',
+      flavor: 'SWEET',
+      calories: 150,
+      proteins: 5,
+      carbs: 28,
+      fats: 2,
     },
   });
 
-  await prisma.user.create({
-    data: {
-      username: 'staff',
-      name: 'Staff',
-      lname: 'Worker',
-      sex: 'OTHER',
-      email: 'staff@test.com',
-      password: basePassword,
-      role: 'STAFF',
-      staff: { create: { post: 'COOK' } },
+  const beef = await prisma.ingredient.upsert({
+    where: { name: 'Medallón Smashed 100g' },
+    update: {},
+    create: {
+      name: 'Medallón Smashed 100g',
+      flavor: 'UMAMI',
+      calories: 250,
+      proteins: 18,
+      carbs: 0,
+      fats: 20,
     },
   });
 
-  const creators: { id: string }[] = [];
+  const cheddar = await prisma.ingredient.upsert({
+    where: { name: 'Queso Cheddar Fundido' },
+    update: {},
+    create: {
+      name: 'Queso Cheddar Fundido',
+      flavor: 'SALTY',
+      calories: 120,
+      proteins: 7,
+      carbs: 1,
+      fats: 10,
+    },
+  });
 
-  for (let i = 0; i < 10; i++) {
-    const user = await prisma.user.create({
-      data: {
-        username: `creator${i}`,
-        name: pick(NAMES),
-        lname: pick(LNAMES),
-        sex: 'OTHER',
-        email: `creator${i}@test.com`,
-        password: basePassword,
-        role: 'CUSTOMER',
-        customer: { create: {} },
+  // 2. Create QART Signature Plates
+  await prisma.plate.create({
+    data: {
+      name: 'Double Smash QART',
+      description: 'Doble medallón smashed con costra perfecta y cuádruple cheddar derretido.',
+      price: 12.5,
+      type: 'MAIN',
+      flavor: 'UMAMI',
+      calories: 850,
+      proteins: 52,
+      carbs: 30,
+      fats: 58,
+      recommendations: 1250,
+      notRecommendations: 12,
+      avgRating: 4.8,
+      ratingsCount: 850,
+      ingredients: {
+        create: [
+          { ingredient: { connect: { id: bun.id } } },
+          { ingredient: { connect: { id: beef.id } } },
+          { ingredient: { connect: { id: cheddar.id } } },
+        ],
       },
-      select: { id: true },
-    });
+    },
+  });
 
-    creators.push(user);
-
-    await prisma.creatorStats.create({
-      data: { userId: user.id },
-    });
-  }
-
-  // ───────── INGREDIENTS ─────────
-  const ingredientRecords = await Promise.all(
-    INGREDIENTS.map((ing) =>
-      prisma.ingredient.upsert({
-        where: { name: ing.name },
-        update: {},
-        create: ing,
-      }),
-    ),
-  );
-
-  // ───────── TAGS ─────────
-  const tagRecords = await Promise.all(
-    TAGS.map((name) =>
-      prisma.tag.upsert({
-        where: { name },
-        update: {},
-        create: {
-          name,
-          isApproved: true,
-          createdById: authority.id,
-        },
-      }),
-    ),
-  );
-
-  // ───────── PLATES ─────────
-  for (let i = 0; i < 12; i++) {
-    const creator = creators[i % creators.length]!; // 🔥 assert seguro
-
-    const plate = await prisma.plate.create({
-      data: {
-        name: pick(PLATE_NAMES),
-        description: 'Plato generado automáticamente 🚀',
-        source: 'C',
-        type: pick(TYPES),
-        flavor: pick(FLAVORS),
-        creatorId: creator.id,
-        avgRating: Math.random() * 5,
-        ratingsCount: Math.floor(Math.random() * 50),
+  await prisma.plate.create({
+    data: {
+      name: 'Spicy Truffle Mushroom',
+      description: 'Medallón jugoso, hongos portobello, alioli de trufa blanca.',
+      price: 14.0,
+      type: 'MAIN',
+      flavor: 'UMAMI',
+      calories: 720,
+      proteins: 40,
+      carbs: 35,
+      fats: 45,
+      recommendations: 980,
+      notRecommendations: 45,
+      avgRating: 4.5,
+      ratingsCount: 600,
+      ingredients: {
+        create: [
+          { ingredient: { connect: { id: bun.id } } },
+          { ingredient: { connect: { id: beef.id } } },
+        ],
       },
-    });
+    },
+  });
 
-    // ingredientes
-    for (const ing of ingredientRecords.slice(0, 3)) {
-      await prisma.plateIngredient.create({
-        data: {
-          plateId: plate.id,
-          ingredientId: ing.id,
-        },
-      });
-    }
+  await prisma.plate.create({
+    data: {
+      name: 'The Vegan Crunch',
+      description: 'Not-Burger crujiente con aderezo ranch vegano.',
+      price: 11.8,
+      type: 'MAIN',
+      flavor: 'SALTY',
+      calories: 600,
+      proteins: 25,
+      carbs: 45,
+      fats: 30,
+      recommendations: 500,
+      notRecommendations: 8,
+      avgRating: 4.9,
+      ratingsCount: 410,
+    },
+  });
 
-    // tags
-    for (const tag of tagRecords.slice(0, 2)) {
-      await prisma.plateTag.create({
-        data: {
-          plateId: plate.id,
-          tagId: tag.id,
-        },
-      });
-
-      await prisma.tag.update({
-        where: { id: tag.id },
-        data: { usageCount: { increment: 1 } },
-      });
-    }
-
-    await prisma.creatorStats.update({
-      where: { userId: creator.id },
-      data: {
-        totalPlates: { increment: 1 },
-      },
-    });
-  }
-
-  console.log('✅ Seed completa');
+  console.log('✅ Seeding Complete!');
 }
 
 main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect());
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

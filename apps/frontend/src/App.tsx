@@ -6,18 +6,29 @@
  * @returns null
  * @example null
  * @remarks This file is part of the QART monorepo architecture.
- *
- * Metrics:
- * - LOC: 50
- * - Experience Level: Junior
- * - Estimated Time: 30m
- * - FPA: 1
- * - PERT: 1
- * - Planning Poker: 1
  */
+import { useEffect } from 'react';
 import AppRoutes from './AppRoutes';
+import { sdk } from './tools/sdk';
+import { useAppStore } from './appStore';
 
 const App = () => {
+  const setUser = useAppStore((s) => s.setUser);
+
+  useEffect(() => {
+    // Initial Session Hydration
+    sdk.iam
+      .me()
+      .then((res) => {
+        if ('data' in res) {
+          setUser(res.data);
+        } else {
+          setUser(null);
+        }
+      })
+      .catch(() => setUser(null));
+  }, [setUser]);
+
   return (
     <>
       <AppRoutes />

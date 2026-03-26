@@ -31,9 +31,9 @@ model User {
   staff     StaffProfile?
   authority AuthorityProfile?
 
-  plates   Plate[]
   reviews  Review[]
   stats    CreatorStats?
+  diets    Diet[]
 
   // 🔥 RELACIÓN INVERSA PARA TAGS
   createdTags Tag[]
@@ -95,6 +95,51 @@ enum AuthorityRank {
 }
 
 // ─────────────────────────────────────────────
+// NUTRITION: DIET & DIET ITEM
+// ─────────────────────────────────────────────
+
+model Diet {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String  @db.VarChar(128)
+  description String? @db.VarChar(500)
+  isPublic    Boolean @default(false)
+
+  avgRating    Float @default(0)
+  ratingsCount Int   @default(0)
+
+  // Track if they copied someone else's public diet
+  copiedFromId String?
+  copiedFrom   Diet?   @relation("DietCopies", fields: [copiedFromId], references: [id])
+  copies       Diet[]  @relation("DietCopies")
+
+  items DietItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DietItem {
+  id     String   @id @default(uuid())
+  dietId String
+  diet   Diet     @relation(fields: [dietId], references: [id], onDelete: Cascade)
+
+  mealType MealType
+
+  plateId      String?
+  ingredientId String?
+
+  plate      Plate?      @relation(fields: [plateId], references: [id])
+  ingredient Ingredient? @relation(fields: [ingredientId], references: [id])
+
+  reason String? @db.VarChar(255) // Por qué lo come
+
+  createdAt DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────
 // PLATE
 // ─────────────────────────────────────────────
 
@@ -104,20 +149,28 @@ model Plate {
   name        String  @db.VarChar(128)
   description String?
 
-  source PlateSource
+  price Float @default(0.0)
+
   type   PlateType
   flavor FlavorProfile
 
-  creatorId String?
-  creator   User? @relation(fields: [creatorId], references: [id])
-
   avgRating    Float @default(0)
   ratingsCount Int   @default(0)
+
+  recommendations    Int @default(0) // Likes
+  notRecommendations Int @default(0) // Dislikes
+
+  // Nutritional Macros
+  calories Float @default(0) // kcal
+  proteins Float @default(0) // grams
+  carbs    Float @default(0) // grams
+  fats     Float @default(0) // grams
 
   isAvailable Boolean @default(true)
 
   ingredients PlateIngredient[]
   reviews     Review[]
+  dietItems   DietItem[]
 
   // 🔥 RELACIÓN INVERSA PARA TAGS
   tags PlateTag[]
@@ -137,9 +190,16 @@ model Ingredient {
 
   flavor FlavorProfile
 
+  // Nutritional Macros (per 100g or serving)
+  calories Float @default(0)
+  proteins Float @default(0)
+  carbs    Float @default(0)
+  fats     Float @default(0)
+
   isActive Boolean @default(true)
 
-  plates PlateIngredient[]
+  plates    PlateIngredient[]
+  dietItems DietItem[]
 }
 
 // ─────────────────────────────────────────────
@@ -235,9 +295,11 @@ model PlateTag {
 // ENUMS
 // ─────────────────────────────────────────────
 
-enum PlateSource {
-  Q
-  C
+enum MealType {
+  BREAKFAST
+  LUNCH
+  SNACK
+  DINNER
 }
 
 enum PlateType {

@@ -18,7 +18,8 @@
 export * from './ErrorCodes';
 export * from './Contracts';
 export * from './FieldDef';
-export * from './MyFields';
+export * from './IAMFields';
+export * from './CUSTOMERFields';
 export * from './FormStore';
 
 // ─────────────────────────────────────────────────────────────

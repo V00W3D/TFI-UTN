@@ -694,8 +694,16 @@ const buildForm =
  * @public
  * @summary Agrupa campos dentro de un `<Form>` con un título de sección.
  */
-export const FormSection = ({ title, children }: { title: string; children: ReactNode }) => (
-  <div className="flex flex-col gap-8">
+export const FormSection = ({
+  title,
+  children,
+  className,
+}: {
+  title: string;
+  children: ReactNode;
+  className?: string;
+}) => (
+  <div className={`flex flex-col ${className || 'gap-8'}`}>
     <h3
       className="auth-section-title"
       style={{ fontFamily: 'var(--font-serif, "Cormorant Garamond", Georgia, serif)' }}

@@ -38,6 +38,16 @@ export type StaffProfile = Prisma.StaffProfileModel
  */
 export type AuthorityProfile = Prisma.AuthorityProfileModel
 /**
+ * Model Diet
+ * 
+ */
+export type Diet = Prisma.DietModel
+/**
+ * Model DietItem
+ * 
+ */
+export type DietItem = Prisma.DietItemModel
+/**
  * Model Plate
  * 
  */

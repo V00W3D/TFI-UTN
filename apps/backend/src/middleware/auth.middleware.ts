@@ -53,7 +53,18 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const decoded = jwt.verify(refresh!, REFRESH_SECRET) as TokenPayload;
     res.cookie(
       'CupCake',
-      jwt.sign({ id: decoded.id, role: decoded.role }, SESSION_SECRET, { expiresIn: '1h' }),
+      jwt.sign(
+        {
+          id: decoded.id,
+          role: decoded.role,
+          username: decoded.username,
+          email: decoded.email,
+          phone: decoded.phone,
+          profile: decoded.profile,
+        },
+        SESSION_SECRET,
+        { expiresIn: '1h' },
+      ),
       { ...COOKIE_BASE, maxAge: 3600000 },
     );
     mapUser(req, decoded);

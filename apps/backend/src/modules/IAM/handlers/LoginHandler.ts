@@ -14,7 +14,14 @@ const COOKIE_BASE = { httpOnly: true, secure: BUN_MODE === 'prod', sameSite: 'st
  */
 export const LoginHandler = api.handler('POST /iam/login')(async (input, { res }) => {
   const user = await loginService(input);
-  const payload = { id: user.id, role: user.role };
+  const payload = {
+    id: user.id,
+    role: user.role,
+    username: user.username,
+    email: user.email,
+    phone: user.phone,
+    profile: user.profile,
+  };
   res.cookie('CupCake', jwt.sign(payload, SESSION_SECRET, { expiresIn: '1h' }), {
     ...COOKIE_BASE,
     maxAge: 3600000,

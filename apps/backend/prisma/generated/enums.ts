@@ -40,12 +40,14 @@ export const AuthorityRank = {
 export type AuthorityRank = (typeof AuthorityRank)[keyof typeof AuthorityRank]
 
 
-export const PlateSource = {
-  Q: 'Q',
-  C: 'C'
+export const MealType = {
+  BREAKFAST: 'BREAKFAST',
+  LUNCH: 'LUNCH',
+  SNACK: 'SNACK',
+  DINNER: 'DINNER'
 } as const
 
-export type PlateSource = (typeof PlateSource)[keyof typeof PlateSource]
+export type MealType = (typeof MealType)[keyof typeof MealType]
 
 
 export const PlateType = {

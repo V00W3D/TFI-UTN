@@ -27,25 +27,44 @@ export type AggregatePlate = {
 }
 
 export type PlateAvgAggregateOutputType = {
+  price: number | null
   avgRating: number | null
   ratingsCount: number | null
+  recommendations: number | null
+  notRecommendations: number | null
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
 }
 
 export type PlateSumAggregateOutputType = {
+  price: number | null
   avgRating: number | null
   ratingsCount: number | null
+  recommendations: number | null
+  notRecommendations: number | null
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
 }
 
 export type PlateMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
-  source: $Enums.PlateSource | null
+  price: number | null
   type: $Enums.PlateType | null
   flavor: $Enums.FlavorProfile | null
-  creatorId: string | null
   avgRating: number | null
   ratingsCount: number | null
+  recommendations: number | null
+  notRecommendations: number | null
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
   isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -55,12 +74,17 @@ export type PlateMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
-  source: $Enums.PlateSource | null
+  price: number | null
   type: $Enums.PlateType | null
   flavor: $Enums.FlavorProfile | null
-  creatorId: string | null
   avgRating: number | null
   ratingsCount: number | null
+  recommendations: number | null
+  notRecommendations: number | null
+  calories: number | null
+  proteins: number | null
+  carbs: number | null
+  fats: number | null
   isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -70,12 +94,17 @@ export type PlateCountAggregateOutputType = {
   id: number
   name: number
   description: number
-  source: number
+  price: number
   type: number
   flavor: number
-  creatorId: number
   avgRating: number
   ratingsCount: number
+  recommendations: number
+  notRecommendations: number
+  calories: number
+  proteins: number
+  carbs: number
+  fats: number
   isAvailable: number
   createdAt: number
   updatedAt: number
@@ -84,25 +113,44 @@ export type PlateCountAggregateOutputType = {
 
 
 export type PlateAvgAggregateInputType = {
+  price?: true
   avgRating?: true
   ratingsCount?: true
+  recommendations?: true
+  notRecommendations?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
 }
 
 export type PlateSumAggregateInputType = {
+  price?: true
   avgRating?: true
   ratingsCount?: true
+  recommendations?: true
+  notRecommendations?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
 }
 
 export type PlateMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  source?: true
+  price?: true
   type?: true
   flavor?: true
-  creatorId?: true
   avgRating?: true
   ratingsCount?: true
+  recommendations?: true
+  notRecommendations?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -112,12 +160,17 @@ export type PlateMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  source?: true
+  price?: true
   type?: true
   flavor?: true
-  creatorId?: true
   avgRating?: true
   ratingsCount?: true
+  recommendations?: true
+  notRecommendations?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -127,12 +180,17 @@ export type PlateCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  source?: true
+  price?: true
   type?: true
   flavor?: true
-  creatorId?: true
   avgRating?: true
   ratingsCount?: true
+  recommendations?: true
+  notRecommendations?: true
+  calories?: true
+  proteins?: true
+  carbs?: true
+  fats?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -229,12 +287,17 @@ export type PlateGroupByOutputType = {
   id: string
   name: string
   description: string | null
-  source: $Enums.PlateSource
+  price: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
-  creatorId: string | null
   avgRating: number
   ratingsCount: number
+  recommendations: number
+  notRecommendations: number
+  calories: number
+  proteins: number
+  carbs: number
+  fats: number
   isAvailable: boolean
   createdAt: Date
   updatedAt: Date
@@ -267,18 +330,23 @@ export type PlateWhereInput = {
   id?: Prisma.StringFilter<"Plate"> | string
   name?: Prisma.StringFilter<"Plate"> | string
   description?: Prisma.StringNullableFilter<"Plate"> | string | null
-  source?: Prisma.EnumPlateSourceFilter<"Plate"> | $Enums.PlateSource
+  price?: Prisma.FloatFilter<"Plate"> | number
   type?: Prisma.EnumPlateTypeFilter<"Plate"> | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFilter<"Plate"> | $Enums.FlavorProfile
-  creatorId?: Prisma.StringNullableFilter<"Plate"> | string | null
   avgRating?: Prisma.FloatFilter<"Plate"> | number
   ratingsCount?: Prisma.IntFilter<"Plate"> | number
+  recommendations?: Prisma.IntFilter<"Plate"> | number
+  notRecommendations?: Prisma.IntFilter<"Plate"> | number
+  calories?: Prisma.FloatFilter<"Plate"> | number
+  proteins?: Prisma.FloatFilter<"Plate"> | number
+  carbs?: Prisma.FloatFilter<"Plate"> | number
+  fats?: Prisma.FloatFilter<"Plate"> | number
   isAvailable?: Prisma.BoolFilter<"Plate"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   ingredients?: Prisma.PlateIngredientListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
+  dietItems?: Prisma.DietItemListRelationFilter
   tags?: Prisma.PlateTagListRelationFilter
 }
 
@@ -286,18 +354,23 @@ export type PlateOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  source?: Prisma.SortOrder
+  price?: Prisma.SortOrder
   type?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
+  recommendations?: Prisma.SortOrder
+  notRecommendations?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  creator?: Prisma.UserOrderByWithRelationInput
   ingredients?: Prisma.PlateIngredientOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
+  dietItems?: Prisma.DietItemOrderByRelationAggregateInput
   tags?: Prisma.PlateTagOrderByRelationAggregateInput
 }
 
@@ -308,18 +381,23 @@ export type PlateWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PlateWhereInput | Prisma.PlateWhereInput[]
   name?: Prisma.StringFilter<"Plate"> | string
   description?: Prisma.StringNullableFilter<"Plate"> | string | null
-  source?: Prisma.EnumPlateSourceFilter<"Plate"> | $Enums.PlateSource
+  price?: Prisma.FloatFilter<"Plate"> | number
   type?: Prisma.EnumPlateTypeFilter<"Plate"> | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFilter<"Plate"> | $Enums.FlavorProfile
-  creatorId?: Prisma.StringNullableFilter<"Plate"> | string | null
   avgRating?: Prisma.FloatFilter<"Plate"> | number
   ratingsCount?: Prisma.IntFilter<"Plate"> | number
+  recommendations?: Prisma.IntFilter<"Plate"> | number
+  notRecommendations?: Prisma.IntFilter<"Plate"> | number
+  calories?: Prisma.FloatFilter<"Plate"> | number
+  proteins?: Prisma.FloatFilter<"Plate"> | number
+  carbs?: Prisma.FloatFilter<"Plate"> | number
+  fats?: Prisma.FloatFilter<"Plate"> | number
   isAvailable?: Prisma.BoolFilter<"Plate"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
-  creator?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   ingredients?: Prisma.PlateIngredientListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
+  dietItems?: Prisma.DietItemListRelationFilter
   tags?: Prisma.PlateTagListRelationFilter
 }, "id">
 
@@ -327,12 +405,17 @@ export type PlateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  source?: Prisma.SortOrder
+  price?: Prisma.SortOrder
   type?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrderInput | Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
+  recommendations?: Prisma.SortOrder
+  notRecommendations?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -350,12 +433,17 @@ export type PlateScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   name?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Plate"> | string | null
-  source?: Prisma.EnumPlateSourceWithAggregatesFilter<"Plate"> | $Enums.PlateSource
+  price?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
   type?: Prisma.EnumPlateTypeWithAggregatesFilter<"Plate"> | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileWithAggregatesFilter<"Plate"> | $Enums.FlavorProfile
-  creatorId?: Prisma.StringNullableWithAggregatesFilter<"Plate"> | string | null
   avgRating?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
   ratingsCount?: Prisma.IntWithAggregatesFilter<"Plate"> | number
+  recommendations?: Prisma.IntWithAggregatesFilter<"Plate"> | number
+  notRecommendations?: Prisma.IntWithAggregatesFilter<"Plate"> | number
+  calories?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  proteins?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  carbs?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  fats?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
   isAvailable?: Prisma.BoolWithAggregatesFilter<"Plate"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Plate"> | Date | string
@@ -365,17 +453,23 @@ export type PlateCreateInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator?: Prisma.UserCreateNestedOneWithoutPlatesInput
   ingredients?: Prisma.PlateIngredientCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
@@ -383,17 +477,23 @@ export type PlateUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
-  creatorId?: string | null
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
@@ -401,17 +501,23 @@ export type PlateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.UserUpdateOneWithoutPlatesNestedInput
   ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
+  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
@@ -419,17 +525,23 @@ export type PlateUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
+  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
 }
 
@@ -437,12 +549,17 @@ export type PlateCreateManyInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
-  creatorId?: string | null
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -452,11 +569,17 @@ export type PlateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -466,57 +589,74 @@ export type PlateUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PlateListRelationFilter = {
-  every?: Prisma.PlateWhereInput
-  some?: Prisma.PlateWhereInput
-  none?: Prisma.PlateWhereInput
-}
-
-export type PlateOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type PlateNullableScalarRelationFilter = {
+  is?: Prisma.PlateWhereInput | null
+  isNot?: Prisma.PlateWhereInput | null
 }
 
 export type PlateCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  price?: Prisma.SortOrder
   type?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
+  recommendations?: Prisma.SortOrder
+  notRecommendations?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type PlateAvgOrderByAggregateInput = {
+  price?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
+  recommendations?: Prisma.SortOrder
+  notRecommendations?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
 }
 
 export type PlateMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  price?: Prisma.SortOrder
   type?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
+  recommendations?: Prisma.SortOrder
+  notRecommendations?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -526,20 +666,32 @@ export type PlateMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  source?: Prisma.SortOrder
+  price?: Prisma.SortOrder
   type?: Prisma.SortOrder
   flavor?: Prisma.SortOrder
-  creatorId?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
+  recommendations?: Prisma.SortOrder
+  notRecommendations?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type PlateSumOrderByAggregateInput = {
+  price?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
+  recommendations?: Prisma.SortOrder
+  notRecommendations?: Prisma.SortOrder
+  calories?: Prisma.SortOrder
+  proteins?: Prisma.SortOrder
+  carbs?: Prisma.SortOrder
+  fats?: Prisma.SortOrder
 }
 
 export type PlateScalarRelationFilter = {
@@ -547,50 +699,20 @@ export type PlateScalarRelationFilter = {
   isNot?: Prisma.PlateWhereInput
 }
 
-export type PlateCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutCreatorInput, Prisma.PlateUncheckedCreateWithoutCreatorInput> | Prisma.PlateCreateWithoutCreatorInput[] | Prisma.PlateUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutCreatorInput | Prisma.PlateCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.PlateCreateManyCreatorInputEnvelope
-  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+export type PlateCreateNestedOneWithoutDietItemsInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutDietItemsInput
+  connect?: Prisma.PlateWhereUniqueInput
 }
 
-export type PlateUncheckedCreateNestedManyWithoutCreatorInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutCreatorInput, Prisma.PlateUncheckedCreateWithoutCreatorInput> | Prisma.PlateCreateWithoutCreatorInput[] | Prisma.PlateUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutCreatorInput | Prisma.PlateCreateOrConnectWithoutCreatorInput[]
-  createMany?: Prisma.PlateCreateManyCreatorInputEnvelope
-  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-}
-
-export type PlateUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutCreatorInput, Prisma.PlateUncheckedCreateWithoutCreatorInput> | Prisma.PlateCreateWithoutCreatorInput[] | Prisma.PlateUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutCreatorInput | Prisma.PlateCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.PlateUpsertWithWhereUniqueWithoutCreatorInput | Prisma.PlateUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.PlateCreateManyCreatorInputEnvelope
-  set?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  disconnect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  delete?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  update?: Prisma.PlateUpdateWithWhereUniqueWithoutCreatorInput | Prisma.PlateUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.PlateUpdateManyWithWhereWithoutCreatorInput | Prisma.PlateUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
-}
-
-export type PlateUncheckedUpdateManyWithoutCreatorNestedInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutCreatorInput, Prisma.PlateUncheckedCreateWithoutCreatorInput> | Prisma.PlateCreateWithoutCreatorInput[] | Prisma.PlateUncheckedCreateWithoutCreatorInput[]
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutCreatorInput | Prisma.PlateCreateOrConnectWithoutCreatorInput[]
-  upsert?: Prisma.PlateUpsertWithWhereUniqueWithoutCreatorInput | Prisma.PlateUpsertWithWhereUniqueWithoutCreatorInput[]
-  createMany?: Prisma.PlateCreateManyCreatorInputEnvelope
-  set?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  disconnect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  delete?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
-  update?: Prisma.PlateUpdateWithWhereUniqueWithoutCreatorInput | Prisma.PlateUpdateWithWhereUniqueWithoutCreatorInput[]
-  updateMany?: Prisma.PlateUpdateManyWithWhereWithoutCreatorInput | Prisma.PlateUpdateManyWithWhereWithoutCreatorInput[]
-  deleteMany?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
-}
-
-export type EnumPlateSourceFieldUpdateOperationsInput = {
-  set?: $Enums.PlateSource
+export type PlateUpdateOneWithoutDietItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutDietItemsInput
+  upsert?: Prisma.PlateUpsertWithoutDietItemsInput
+  disconnect?: Prisma.PlateWhereInput | boolean
+  delete?: Prisma.PlateWhereInput | boolean
+  connect?: Prisma.PlateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutDietItemsInput, Prisma.PlateUpdateWithoutDietItemsInput>, Prisma.PlateUncheckedUpdateWithoutDietItemsInput>
 }
 
 export type EnumPlateTypeFieldUpdateOperationsInput = {
@@ -599,26 +721,6 @@ export type EnumPlateTypeFieldUpdateOperationsInput = {
 
 export type EnumFlavorProfileFieldUpdateOperationsInput = {
   set?: $Enums.FlavorProfile
-}
-
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
 }
 
 export type PlateCreateNestedOneWithoutIngredientsInput = {
@@ -663,15 +765,21 @@ export type PlateUpdateOneRequiredWithoutTagsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutTagsInput, Prisma.PlateUpdateWithoutTagsInput>, Prisma.PlateUncheckedUpdateWithoutTagsInput>
 }
 
-export type PlateCreateWithoutCreatorInput = {
+export type PlateCreateWithoutDietItemsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -680,15 +788,21 @@ export type PlateCreateWithoutCreatorInput = {
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
-export type PlateUncheckedCreateWithoutCreatorInput = {
+export type PlateUncheckedCreateWithoutDietItemsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -697,64 +811,88 @@ export type PlateUncheckedCreateWithoutCreatorInput = {
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
-export type PlateCreateOrConnectWithoutCreatorInput = {
+export type PlateCreateOrConnectWithoutDietItemsInput = {
   where: Prisma.PlateWhereUniqueInput
-  create: Prisma.XOR<Prisma.PlateCreateWithoutCreatorInput, Prisma.PlateUncheckedCreateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
 }
 
-export type PlateCreateManyCreatorInputEnvelope = {
-  data: Prisma.PlateCreateManyCreatorInput | Prisma.PlateCreateManyCreatorInput[]
-  skipDuplicates?: boolean
+export type PlateUpsertWithoutDietItemsInput = {
+  update: Prisma.XOR<Prisma.PlateUpdateWithoutDietItemsInput, Prisma.PlateUncheckedUpdateWithoutDietItemsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
+  where?: Prisma.PlateWhereInput
 }
 
-export type PlateUpsertWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.PlateWhereUniqueInput
-  update: Prisma.XOR<Prisma.PlateUpdateWithoutCreatorInput, Prisma.PlateUncheckedUpdateWithoutCreatorInput>
-  create: Prisma.XOR<Prisma.PlateCreateWithoutCreatorInput, Prisma.PlateUncheckedCreateWithoutCreatorInput>
+export type PlateUpdateToOneWithWhereWithoutDietItemsInput = {
+  where?: Prisma.PlateWhereInput
+  data: Prisma.XOR<Prisma.PlateUpdateWithoutDietItemsInput, Prisma.PlateUncheckedUpdateWithoutDietItemsInput>
 }
 
-export type PlateUpdateWithWhereUniqueWithoutCreatorInput = {
-  where: Prisma.PlateWhereUniqueInput
-  data: Prisma.XOR<Prisma.PlateUpdateWithoutCreatorInput, Prisma.PlateUncheckedUpdateWithoutCreatorInput>
+export type PlateUpdateWithoutDietItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
+  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
-export type PlateUpdateManyWithWhereWithoutCreatorInput = {
-  where: Prisma.PlateScalarWhereInput
-  data: Prisma.XOR<Prisma.PlateUpdateManyMutationInput, Prisma.PlateUncheckedUpdateManyWithoutCreatorInput>
-}
-
-export type PlateScalarWhereInput = {
-  AND?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
-  OR?: Prisma.PlateScalarWhereInput[]
-  NOT?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
-  id?: Prisma.StringFilter<"Plate"> | string
-  name?: Prisma.StringFilter<"Plate"> | string
-  description?: Prisma.StringNullableFilter<"Plate"> | string | null
-  source?: Prisma.EnumPlateSourceFilter<"Plate"> | $Enums.PlateSource
-  type?: Prisma.EnumPlateTypeFilter<"Plate"> | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFilter<"Plate"> | $Enums.FlavorProfile
-  creatorId?: Prisma.StringNullableFilter<"Plate"> | string | null
-  avgRating?: Prisma.FloatFilter<"Plate"> | number
-  ratingsCount?: Prisma.IntFilter<"Plate"> | number
-  isAvailable?: Prisma.BoolFilter<"Plate"> | boolean
-  createdAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
+export type PlateUncheckedUpdateWithoutDietItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
+  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateCreateWithoutIngredientsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator?: Prisma.UserCreateNestedOneWithoutPlatesInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
@@ -762,16 +900,22 @@ export type PlateUncheckedCreateWithoutIngredientsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
-  creatorId?: string | null
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
@@ -795,16 +939,22 @@ export type PlateUpdateWithoutIngredientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.UserUpdateOneWithoutPlatesNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
+  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
@@ -812,16 +962,22 @@ export type PlateUncheckedUpdateWithoutIngredientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
+  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
 }
 
@@ -829,16 +985,22 @@ export type PlateCreateWithoutReviewsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator?: Prisma.UserCreateNestedOneWithoutPlatesInput
   ingredients?: Prisma.PlateIngredientCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
@@ -846,16 +1008,22 @@ export type PlateUncheckedCreateWithoutReviewsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
-  creatorId?: string | null
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
@@ -879,16 +1047,22 @@ export type PlateUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.UserUpdateOneWithoutPlatesNestedInput
   ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
+  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
@@ -896,16 +1070,22 @@ export type PlateUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
+  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
 }
 
@@ -913,34 +1093,46 @@ export type PlateCreateWithoutTagsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  creator?: Prisma.UserCreateNestedOneWithoutPlatesInput
   ingredients?: Prisma.PlateIngredientCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
 }
 
 export type PlateUncheckedCreateWithoutTagsInput = {
   id?: string
   name: string
   description?: string | null
-  source: $Enums.PlateSource
+  price?: number
   type: $Enums.PlateType
   flavor: $Enums.FlavorProfile
-  creatorId?: string | null
   avgRating?: number
   ratingsCount?: number
+  recommendations?: number
+  notRecommendations?: number
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   ingredients?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
+  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
 }
 
 export type PlateCreateOrConnectWithoutTagsInput = {
@@ -963,96 +1155,46 @@ export type PlateUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  creator?: Prisma.UserUpdateOneWithoutPlatesNestedInput
   ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
+  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
   type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
   flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  creatorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
-}
-
-export type PlateCreateManyCreatorInput = {
-  id?: string
-  name: string
-  description?: string | null
-  source: $Enums.PlateSource
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
-  avgRating?: number
-  ratingsCount?: number
-  isAvailable?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type PlateUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
-  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
-  tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
-}
-
-export type PlateUncheckedUpdateWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
-  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
-  tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
-}
-
-export type PlateUncheckedUpdateManyWithoutCreatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.EnumPlateSourceFieldUpdateOperationsInput | $Enums.PlateSource
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
-  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
 }
 
 
@@ -1063,12 +1205,14 @@ export type PlateUncheckedUpdateManyWithoutCreatorInput = {
 export type PlateCountOutputType = {
   ingredients: number
   reviews: number
+  dietItems: number
   tags: number
 }
 
 export type PlateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ingredients?: boolean | PlateCountOutputTypeCountIngredientsArgs
   reviews?: boolean | PlateCountOutputTypeCountReviewsArgs
+  dietItems?: boolean | PlateCountOutputTypeCountDietItemsArgs
   tags?: boolean | PlateCountOutputTypeCountTagsArgs
 }
 
@@ -1099,6 +1243,13 @@ export type PlateCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.E
 /**
  * PlateCountOutputType without action
  */
+export type PlateCountOutputTypeCountDietItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DietItemWhereInput
+}
+
+/**
+ * PlateCountOutputType without action
+ */
 export type PlateCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PlateTagWhereInput
 }
@@ -1108,18 +1259,23 @@ export type PlateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   name?: boolean
   description?: boolean
-  source?: boolean
+  price?: boolean
   type?: boolean
   flavor?: boolean
-  creatorId?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
+  recommendations?: boolean
+  notRecommendations?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  creator?: boolean | Prisma.Plate$creatorArgs<ExtArgs>
   ingredients?: boolean | Prisma.Plate$ingredientsArgs<ExtArgs>
   reviews?: boolean | Prisma.Plate$reviewsArgs<ExtArgs>
+  dietItems?: boolean | Prisma.Plate$dietItemsArgs<ExtArgs>
   tags?: boolean | Prisma.Plate$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.PlateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plate"]>
@@ -1128,82 +1284,96 @@ export type PlateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   description?: boolean
-  source?: boolean
+  price?: boolean
   type?: boolean
   flavor?: boolean
-  creatorId?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
+  recommendations?: boolean
+  notRecommendations?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  creator?: boolean | Prisma.Plate$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["plate"]>
 
 export type PlateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   description?: boolean
-  source?: boolean
+  price?: boolean
   type?: boolean
   flavor?: boolean
-  creatorId?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
+  recommendations?: boolean
+  notRecommendations?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  creator?: boolean | Prisma.Plate$creatorArgs<ExtArgs>
 }, ExtArgs["result"]["plate"]>
 
 export type PlateSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
-  source?: boolean
+  price?: boolean
   type?: boolean
   flavor?: boolean
-  creatorId?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
+  recommendations?: boolean
+  notRecommendations?: boolean
+  calories?: boolean
+  proteins?: boolean
+  carbs?: boolean
+  fats?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "source" | "type" | "flavor" | "creatorId" | "avgRating" | "ratingsCount" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
+export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "type" | "flavor" | "avgRating" | "ratingsCount" | "recommendations" | "notRecommendations" | "calories" | "proteins" | "carbs" | "fats" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
 export type PlateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creator?: boolean | Prisma.Plate$creatorArgs<ExtArgs>
   ingredients?: boolean | Prisma.Plate$ingredientsArgs<ExtArgs>
   reviews?: boolean | Prisma.Plate$reviewsArgs<ExtArgs>
+  dietItems?: boolean | Prisma.Plate$dietItemsArgs<ExtArgs>
   tags?: boolean | Prisma.Plate$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.PlateCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type PlateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creator?: boolean | Prisma.Plate$creatorArgs<ExtArgs>
-}
-export type PlateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creator?: boolean | Prisma.Plate$creatorArgs<ExtArgs>
-}
+export type PlateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PlateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $PlatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Plate"
   objects: {
-    creator: Prisma.$UserPayload<ExtArgs> | null
     ingredients: Prisma.$PlateIngredientPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
+    dietItems: Prisma.$DietItemPayload<ExtArgs>[]
     tags: Prisma.$PlateTagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     description: string | null
-    source: $Enums.PlateSource
+    price: number
     type: $Enums.PlateType
     flavor: $Enums.FlavorProfile
-    creatorId: string | null
     avgRating: number
     ratingsCount: number
+    recommendations: number
+    notRecommendations: number
+    calories: number
+    proteins: number
+    carbs: number
+    fats: number
     isAvailable: boolean
     createdAt: Date
     updatedAt: Date
@@ -1601,9 +1771,9 @@ readonly fields: PlateFieldRefs;
  */
 export interface Prisma__PlateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  creator<T extends Prisma.Plate$creatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$creatorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   ingredients<T extends Prisma.Plate$ingredientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$ingredientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateIngredientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Plate$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dietItems<T extends Prisma.Plate$dietItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$dietItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DietItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Plate$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1637,12 +1807,17 @@ export interface PlateFieldRefs {
   readonly id: Prisma.FieldRef<"Plate", 'String'>
   readonly name: Prisma.FieldRef<"Plate", 'String'>
   readonly description: Prisma.FieldRef<"Plate", 'String'>
-  readonly source: Prisma.FieldRef<"Plate", 'PlateSource'>
+  readonly price: Prisma.FieldRef<"Plate", 'Float'>
   readonly type: Prisma.FieldRef<"Plate", 'PlateType'>
   readonly flavor: Prisma.FieldRef<"Plate", 'FlavorProfile'>
-  readonly creatorId: Prisma.FieldRef<"Plate", 'String'>
   readonly avgRating: Prisma.FieldRef<"Plate", 'Float'>
   readonly ratingsCount: Prisma.FieldRef<"Plate", 'Int'>
+  readonly recommendations: Prisma.FieldRef<"Plate", 'Int'>
+  readonly notRecommendations: Prisma.FieldRef<"Plate", 'Int'>
+  readonly calories: Prisma.FieldRef<"Plate", 'Float'>
+  readonly proteins: Prisma.FieldRef<"Plate", 'Float'>
+  readonly carbs: Prisma.FieldRef<"Plate", 'Float'>
+  readonly fats: Prisma.FieldRef<"Plate", 'Float'>
   readonly isAvailable: Prisma.FieldRef<"Plate", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Plate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Plate", 'DateTime'>
@@ -1900,10 +2075,6 @@ export type PlateCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.PlateCreateManyInput | Prisma.PlateCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PlateIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1974,10 +2145,6 @@ export type PlateUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Plates to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PlateIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2047,25 +2214,6 @@ export type PlateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Plate.creator
- */
-export type Plate$creatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-}
-
-/**
  * Plate.ingredients
  */
 export type Plate$ingredientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2111,6 +2259,30 @@ export type Plate$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
+}
+
+/**
+ * Plate.dietItems
+ */
+export type Plate$dietItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DietItem
+   */
+  select?: Prisma.DietItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DietItem
+   */
+  omit?: Prisma.DietItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DietItemInclude<ExtArgs> | null
+  where?: Prisma.DietItemWhereInput
+  orderBy?: Prisma.DietItemOrderByWithRelationInput | Prisma.DietItemOrderByWithRelationInput[]
+  cursor?: Prisma.DietItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DietItemScalarFieldEnum | Prisma.DietItemScalarFieldEnum[]
 }
 
 /**
