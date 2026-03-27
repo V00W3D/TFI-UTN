@@ -135,7 +135,12 @@
     @apply min-h-screen flex flex-col transition-all duration-300 bg-qart-bg;
   }
   .auth-navbar {
-    @apply flex items-center justify-center gap-4 px-6 h-16 glass-header sticky top-0 z-50;
+    @apply flex items-center justify-center gap-4 px-6 h-16 sticky top-0 z-50;
+    background: var(--qart-nav-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--qart-border);
+    transition: background-color 0.3s ease;
   }
   .auth-link {
     @apply px-5 py-2 border-2 border-transparent text-sm font-bold tracking-tight transition-all duration-300 text-qart-text-muted;
@@ -144,7 +149,8 @@
     @apply border-qart-border text-qart-primary;
   }
   .auth-link-active {
-    @apply bg-qart-accent text-white border-qart-accent shadow-sharp;
+    @apply bg-qart-accent text-white border-qart-accent;
+    box-shadow: var(--qart-shadow-sharp);
   }
   .auth-content {
     @apply flex-1 flex items-center justify-center p-6 md:p-12;
