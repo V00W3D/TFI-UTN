@@ -1,0 +1,43 @@
+:root {
+  /* ── Core Backgrounds ── */
+  --qart-bg:           #050505; /* Pure Ink Black */
+  --qart-bg-warm:      #0F0F0F; /* Slightly Lighter Ink */
+  --qart-surface:      #0A0A0A; /* Card Surface */
+  --qart-nav-bg:       rgba(5, 5, 5, 0.95);
+
+  /* RGB Components for glass/alpha effects */
+  --qart-surface-rgb:  10, 10, 10;
+  --qart-border-rgb:   255, 255, 255;
+
+  /* ── Borders & Decor (Sharp) ── */
+  --qart-border:       #2A2A2A;
+  --qart-border-soft:  #1A1A1A;
+
+  /* ── Typography (Pristine) ── */
+  --qart-text:         #E0E0E0; /* Silver */
+  --qart-text-muted:   #888888;
+  --qart-primary:      #FFFFFF; /* High Pitch White */
+
+  /* ── Brand Accents (Vivid) ── */
+  --qart-accent:       #EF4444; /* Vivid Flat Red */
+  --qart-accent-2:     #F59E0B;
+  --qart-success:      #22C55E;
+  --qart-error:        #EF4444;
+
+  /* ── Inverse Colors ── */
+  --qart-text-on-primary: #050505; /* Black text on Light Primary */
+  --qart-text-inv:        #050505;
+
+  /* ── Custom Geometry & Shadows ── */
+  --qart-radius:       0px;
+  --qart-shadow-sharp: 4px 4px 0px #2A2A2A;
+  --qart-shadow-hover: 6px 6px 0px #EF4444;
+
+  /* ── Generic Aliases ── */
+  --surface:           var(--qart-surface);
+  --surface-soft:      #1A1A1A;
+  --border:            var(--qart-border);
+  --text-primary:      var(--qart-text);
+  --text-secondary:    var(--qart-text-muted);
+  --color-accent:      var(--qart-accent);
+}

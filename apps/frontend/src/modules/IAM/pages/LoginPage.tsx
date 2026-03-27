@@ -6,13 +6,12 @@ import { form, sdk } from '../../../tools/sdk';
 
 /**
  * @file LoginPage.tsx
- * @description Dynamic, fast-casual Login with reactive Zustand SDK states.
+ * @description Architectural Login with sharp geometry and bold typography.
  */
 const LoginPage = () => {
   const { setModule, setUser } = useAppStore();
   const navigate = useNavigate();
 
-  // The "Beautiful UX Component" SDK reactive state Hook
   const { data, error, isFetching, isFormValid } = sdk.iam.login.$use();
   const { Form, fields } = form.iam.login;
 
@@ -28,89 +27,66 @@ const LoginPage = () => {
   }, [data, setUser, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-qart-bg relative overflow-hidden">
-      {/* Enterprise Solid Background Elements */}
-      <div className="absolute top-0 right-0 w-[40vw] h-screen bg-gray-100 skew-x-12 translate-x-32" />
-
-      <div className="w-full max-w-md bg-qart-surface p-8 md:p-10 shadow-bouncy rounded-xl relative z-10 border-2 border-qart-border">
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-qart-primary text-white rounded-lg flex items-center justify-center font-display text-4xl shadow-md mx-auto mb-6 transform -rotate-3">
-            🍔
+    <div className="auth-card">
+      <div className="relative z-10">
+        <div className="text-center mb-12">
+          <div className="w-20 h-20 bg-qart-accent text-white flex items-center justify-center font-display text-5xl border-4 border-qart-border shadow-[8px_8px_0px_#1A1A1A] mx-auto mb-8 -rotate-3 uppercase font-black">
+            Q
           </div>
-          <h2 className="text-3xl font-display text-qart-primary mb-2 uppercase tracking-tighter">
-            Inicia Sesión
-          </h2>
+          <h2 className="text-4xl font-display text-qart-primary mb-3 uppercase font-black tracking-tight">Acceso QART</h2>
+          <p className="text-sm font-bold uppercase tracking-widest text-qart-text-muted">Gestión de Autor</p>
         </div>
 
-        {/* --- DYNAMIC REACTIVE ERROR BANNER --- */}
+        {/* ERROR BANNER (SHARP) */}
         <AnimatePresence>
           {error && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mb-6 overflow-hidden"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="mb-8"
             >
-              <div className="bg-red-50 border-l-4 border-qart-error p-4 rounded-r-md">
-                <div className="flex">
-                  <div className="shrink-0">
-                    <svg
-                      className="h-5 w-5 text-qart-error"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-bold text-red-800">
-                      Error:{' '}
-                      {error.code === 'UNAUTHORIZED'
-                        ? 'Credenciales incorrectas'
-                        : 'Algo salió mal. Verifica tus datos.'}
-                    </p>
-                  </div>
-                </div>
+              <div className="bg-qart-error text-white border-2 border-qart-border p-5 flex gap-4 shadow-[4px_4px_0px_#000]">
+                <span className="font-black">!</span>
+                <p className="text-xs font-black uppercase tracking-widest leading-snug">
+                  {error.code === 'UNAUTHORIZED'
+                    ? 'Credenciales Inválidas. Intente de Nuevo.'
+                    : 'Error de Sistema. Verifique sus Datos.'}
+                </p>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* --- DYNAMIC LOADING OVERLAY --- */}
+        {/* FORM OVERLAY */}
         <div className="relative">
           {isFetching && (
-            <div className="absolute inset-0 bg-white/70 backdrop-blur-sm z-20 flex items-center justify-center rounded-lg">
-              <div className="w-10 h-10 border-4 border-qart-border border-t-qart-primary rounded-full animate-spin"></div>
+            <div className="absolute inset-x-0 -top-4 bottom-0 bg-qart-bg/80 z-20 flex items-center justify-center border-2 border-qart-border">
+              <div className="w-12 h-12 border-4 border-qart-border border-t-qart-accent animate-spin"></div>
             </div>
           )}
 
-          <Form buttonText={isFetching ? 'Verificando...' : 'Ingresar'}>
-            <div className="space-y-6">
-              <fields.identity label="Usuario o Email" placeholder="hola@qart.com" required />
+          <Form buttonText={isFetching ? 'Verificando...' : 'Entrar'}>
+            <div className="space-y-8">
+              <fields.identity label="Usuario / Email" placeholder="NOMBRE_USUARIO" required />
               <fields.password label="Contraseña" control="password" required />
             </div>
           </Form>
         </div>
 
-        {/* Validation hint based on reactive store */}
         {!isFormValid && !isFetching && (
-          <p className="mt-4 text-xs text-center text-qart-text-muted font-bold">
-            Completá todos los campos para ingresar.
+          <p className="mt-8 text-[10px] text-center text-qart-text-muted font-black uppercase tracking-[0.3em]">
+            Campos obligatorios pendientes
           </p>
         )}
 
-        <div className="mt-8 text-center text-sm font-bold text-qart-text-muted">
-          ¿No tenés cuenta?{' '}
-          <button
-            onClick={() => navigate('/iam/register')}
-            className="text-qart-accent hover:text-red-700 transition-colors cursor-pointer"
-          >
-            Registrate ahora
-          </button>
+        <div className="mt-12 pt-8 border-t-2 border-qart-border text-center">
+          <p className="text-xs font-bold text-qart-text-muted uppercase tracking-widest">
+            ¿Sin acceso?{' '}
+            <span onClick={() => navigate('/iam/register')} className="text-qart-accent hover:underline cursor-pointer">
+              Registrar cuenta
+            </span>
+          </p>
         </div>
       </div>
     </div>

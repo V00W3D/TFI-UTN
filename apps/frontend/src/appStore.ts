@@ -33,12 +33,17 @@ interface AppState {
   setUser: (user: AppUser | null) => void;
 }
 
+const savedMode = (localStorage.getItem('qart-mode') as AppMode) ?? 'light';
+
 export const useAppStore = create<AppState>((set) => ({
-  mode: 'light',
+  mode: savedMode,
   module: 'CORE',
   user: null,
 
-  setMode: (mode) => set({ mode }),
+  setMode: (mode) => {
+    set({ mode });
+    localStorage.setItem('qart-mode', mode);
+  },
   setModule: (module) => set({ module }),
   setUser: (user) => set({ user }),
 }));

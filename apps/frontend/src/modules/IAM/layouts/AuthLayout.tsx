@@ -16,12 +16,11 @@
  * - Planning Poker: 1
  */
 import { NavLink, Outlet } from 'react-router-dom';
-import './auth-layout.css';
 
 const AuthLayout = () => {
   return (
     <div className="auth-container">
-      <nav className="auth-navbar bg">
+      <nav className="auth-navbar">
         <NavLink
           to="/iam/login"
           replace

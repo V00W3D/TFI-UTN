@@ -11,9 +11,23 @@ import { useEffect } from 'react';
 import AppRoutes from './AppRoutes';
 import { sdk } from './tools/sdk';
 import { useAppStore } from './appStore';
+import ThemeToggle from './modules/ThemeToggle';
 
 const App = () => {
   const setUser = useAppStore((s) => s.setUser);
+  const mode = useAppStore((s) => s.mode);
+
+  useEffect(() => {
+    // Dynamic theme loading
+    let link = document.getElementById('qart-theme') as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement('link');
+      link.id = 'qart-theme';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+    }
+    link.href = `/themes/${mode}.css`;
+  }, [mode]);
 
   useEffect(() => {
     // Initial Session Hydration
@@ -32,6 +46,7 @@ const App = () => {
   return (
     <>
       <AppRoutes />
+      <ThemeToggle />
     </>
   );
 };

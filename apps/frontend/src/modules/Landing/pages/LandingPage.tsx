@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Story from '../components/Story';
+import HowWeServe from '../components/HowWeServe';
 import FeaturedDish from '../components/FeaturedDish';
 import CraftSection from '../components/CraftSection';
 import Contact from '../components/Contact';
@@ -20,15 +21,12 @@ const LandingPage = () => {
   }, [setModule]);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-qart-bg overflow-x-hidden">
       <Navbar />
       <Hero />
-      <div className="l-container">
-        <section className="l-section">
-          <Story />
-        </section>
-        <FeaturedDish />
-      </div>
+      <HowWeServe />
+      <Story />
+      <FeaturedDish />
       <CraftSection />
       <Contact />
     </div>

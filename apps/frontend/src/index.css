@@ -1,37 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import 'tailwindcss';
 
 /* =============================================================================
-   🍔 QART "ENTERPRISE FAST CASUAL" DESIGN SYSTEM
-   Clean · Solid · High-Contrast
+   🍽️ QART — SISTEMA DE DISEÑO
+   Cálido · Juvenil · Con Carácter
    ============================================================================= */
 
 @theme {
-  --color-qart-primary: var(--qart-primary);
-  --color-qart-accent: var(--qart-accent);
-  --color-qart-bg: var(--qart-bg);
-  --color-qart-surface: var(--qart-surface);
-  --color-qart-border: var(--qart-border);
-  --color-qart-text: var(--qart-text);
+  --color-qart-primary:    var(--qart-primary);
+  --color-qart-accent:     var(--qart-accent);
+  --color-qart-accent-2:   var(--qart-accent-2);
+  --color-qart-bg:         var(--qart-bg);
+  --color-qart-bg-warm:    var(--qart-bg-warm);
+  --color-qart-surface:    var(--qart-surface);
+  --color-qart-border:     var(--qart-border);
+  --color-qart-border-soft:var(--qart-border-soft);
+  --color-qart-text:       var(--qart-text);
   --color-qart-text-muted: var(--qart-text-muted);
-  --color-qart-success: var(--qart-success);
-  --color-qart-error: var(--qart-error);
+  --color-qart-success:    var(--qart-success);
+  --color-qart-error:      var(--qart-error);
 }
 
 @layer base {
   :root {
-    /* ── The "Solid Enterprise" Palette (McDonalds/ShakeShack Vibe) ── */
-    --qart-primary: #121212; /* Solid Pitch Black */
-    --qart-accent: #E60000;  /* Vibrant Fast-Food Red */
-    --qart-bg: #F4F4F5;      /* Clean neutral gray */
-    --qart-surface: #FFFFFF; /* Pure white */
-    --qart-border: #D4D4D8;  /* Crisp gray border */
-    
-    --qart-text: #121212;
-    --qart-text-muted: #52525B;
-    
-    --qart-success: #16A34A; /* Solid Green */
-    --qart-error: #DC2626;   /* Solid Red */
-
     font-size: 16px;
   }
 
@@ -39,54 +30,131 @@
     font-family: 'Inter', system-ui, sans-serif;
     background-color: var(--qart-bg);
     color: var(--qart-text);
-    line-height: 1.5;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   h1, h2, h3, h4, h5, h6, .font-display {
-    font-family: 'Outfit', 'Poppins', system-ui, sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+
+  * {
+    scroll-behavior: smooth;
   }
 }
 
 @layer utilities {
-  /* ── Clean, Solid Components ── */
-  .glass-header {
-    background: #FFFFFF;
-    border-bottom: 1px solid var(--qart-border);
+  /* ── Separadores de Sección ── */
+  .section-divider {
+    @apply relative h-32 w-full overflow-hidden pointer-events-none;
+  }
+  .section-divider-bottom {
+    @apply absolute bottom-0 left-0 w-full rotate-180;
+  }
+  .section-divider-top {
+    @apply absolute top-0 left-0 w-full;
   }
 
-  /* ── Ultra-Tactile Enterprise Buttons ── */
+  /* ── Navbar ── */
+  .glass-header {
+    background: var(--qart-nav-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--qart-border);
+    transition: background-color 0.3s ease;
+  }
+
+  /* ── Botones (SQUARE) ── */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-qart-accent text-white font-bold tracking-wide text-base rounded-lg transition-colors duration-200 cursor-pointer;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 font-bold tracking-tight text-base rounded-none transition-all duration-200 cursor-pointer border-2 border-transparent;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--qart-accent);
+    color: var(--qart-text-on-primary);
+    box-shadow: var(--qart-shadow-sharp);
   }
   .btn-primary:hover:not(:disabled) {
-    @apply bg-[#CC0000]; 
+    transform: translate(-2px, -2px);
+    box-shadow: var(--qart-shadow-hover);
   }
-  .btn-primary:disabled {
-    @apply opacity-50 cursor-not-allowed;
+  .btn-primary:active:not(:disabled) {
+    transform: translate(0, 0);
+    box-shadow: none;
   }
 
   .btn-outline {
-    @apply inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-qart-border text-qart-primary font-bold tracking-wide text-base rounded-lg transition-colors duration-200 cursor-pointer;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-qart-border text-qart-primary font-bold tracking-tight text-base rounded-none transition-all duration-200 cursor-pointer;
+    background-color: var(--qart-surface);
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
   .btn-outline:hover {
-    @apply border-qart-primary bg-gray-50;
+    background: var(--qart-bg-warm);
+    transform: translate(-2px, -2px);
+    box-shadow: var(--qart-shadow-sharp);
   }
 
-  /* ── Subtle, Enterprise Cards ── */
-  .card-friendly {
-    @apply bg-qart-surface border border-qart-border rounded-xl transition-shadow duration-200;
+  /* ── Cards (SQUARE) ── */
+  .card-base {
+    @apply bg-qart-surface border-2 border-qart-border rounded-none transition-all duration-300;
   }
-  .card-friendly:hover {
-    @apply shadow-md;
+  .card-base:hover {
+    border-color: var(--qart-accent);
+    box-shadow: var(--qart-shadow-sharp);
+    transform: translate(-2px, -2px);
   }
-  
-  .shadow-bouncy {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  /* ── Sección alternada ── */
+  .section-warm {
+    background-color: var(--qart-bg-warm);
+    @apply border-y-2 border-qart-border;
+  }
+
+  /* ── Badge pill (SQUARE) ── */
+  .badge-accent {
+    @apply inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 border-2 border-qart-accent;
+    background: transparent;
+    color: var(--qart-accent);
+  }
+
+  /* ── Input genérico (SQUARE) ── */
+  .input-base {
+    @apply w-full px-4 py-4 rounded-none border-2 border-qart-border text-qart-text text-sm font-medium transition-all duration-200 outline-none;
+    background-color: var(--qart-surface);
+  }
+  .input-base:focus {
+    border-color: var(--qart-accent);
+    box-shadow: 4px 4px 0px var(--qart-accent);
+  }
+
+  /* ── Auth Layout (Consolidated) ── */
+  .auth-container {
+    @apply min-h-screen flex flex-col transition-all duration-300 bg-qart-bg;
+  }
+  .auth-navbar {
+    @apply flex items-center justify-center gap-4 px-6 h-16 glass-header sticky top-0 z-50;
+  }
+  .auth-link {
+    @apply px-5 py-2 border-2 border-transparent text-sm font-bold tracking-tight transition-all duration-300 text-qart-text-muted;
+  }
+  .auth-link:hover {
+    @apply border-qart-border text-qart-primary;
+  }
+  .auth-link-active {
+    @apply bg-qart-accent text-white border-qart-accent shadow-sharp;
+  }
+  .auth-content {
+    @apply flex-1 flex items-center justify-center p-6 md:p-12;
+  }
+  .auth-card {
+    @apply w-full max-w-md p-10 rounded-none border-4 border-qart-border relative overflow-hidden;
+    background-color: var(--qart-surface);
+    box-shadow: 12px 12px 0px var(--qart-border);
+  }
+  .auth-footer-text {
+    @apply mt-8 text-center text-sm font-bold text-qart-text-muted;
   }
 }

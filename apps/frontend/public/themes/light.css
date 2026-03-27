@@ -1,0 +1,43 @@
+:root {
+  /* ── Core Backgrounds ── */
+  --qart-bg:           #F9F7F2; /* Architectural Cream */
+  --qart-bg-warm:      #F0EDE4;
+  --qart-surface:      #FFFFFF;
+  --qart-nav-bg:       rgba(249, 247, 242, 0.96);
+
+  /* RGB Components for glass/alpha effects */
+  --qart-surface-rgb:  255, 255, 255;
+  --qart-border-rgb:   26, 26, 26;
+
+  /* ── Borders & Decor (Sharp) ── */
+  --qart-border:       #1A1A1A; /* Solid Black Border */
+  --qart-border-soft:  #D1D1D1;
+
+  /* ── Typography (High Contrast) ── */
+  --qart-text:         #1A1A1A;
+  --qart-text-muted:   #4B4B4B;
+  --qart-primary:      #1A1A1A; /* Strong Architectural Pitch */
+
+  /* ── Brand Accents (Sophisticated) ── */
+  --qart-accent:       #C2410C; /* Terracotta Red */
+  --qart-accent-2:     #92400E; /* Deep Amber */
+  --qart-success:      #166534;
+  --qart-error:        #991B1B;
+
+  /* ── Inverse Colors ── */
+  --qart-text-on-primary: #FFFFFF;
+  --qart-text-inv:        #FFFFFF;
+
+  /* ── Custom Geometry & Shadows ── */
+  --qart-radius:       0px;
+  --qart-shadow-sharp: 4px 4px 0px #1A1A1A;
+  --qart-shadow-hover: 8px 8px 0px #1A1A1A;
+
+  /* ── Generic Aliases ── */
+  --surface:           var(--qart-surface);
+  --surface-soft:      var(--qart-bg-warm);
+  --border:            var(--qart-border);
+  --text-primary:      var(--qart-text);
+  --text-secondary:    var(--qart-text-muted);
+  --color-accent:      var(--qart-accent);
+}

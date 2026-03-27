@@ -321,7 +321,7 @@ const RulesList = memo(({ rules }: { rules: readonly string[] }) => (
           key={i}
           className="flex items-start gap-2 text-xs leading-relaxed text-(--text-secondary)"
         >
-          <span className="mt-1 size-1.5 rounded-full shrink-0 bg-(--color-primary-muted)" />
+          <span className="mt-1 size-1.5 rounded-none shrink-0 bg-(--color-primary-muted)" />
           <span className="flex-1">{rule}</span>
         </li>
       ))}

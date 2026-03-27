@@ -4,217 +4,143 @@ import { sdk } from '../../../tools/sdk';
 
 /**
  * @file FeaturedDish.tsx
- * @description Enterprise-grade "Top Creations" carousel displaying QART signature plates.
- * Refined to match the "Solid Pitch Black & Fast-Food Red" identity.
+ * @description Architectural grid of signature plates with sharp edges and bold metrics.
  */
 const FeaturedDish = () => {
-  // $use() subscribes to the Zustand state — it does NOT fire the request.
-  // sdk.customers.plates({}) is the callable that fires the actual HTTP GET.
   const { data, isFetching, error } = sdk.customers.plates.$use();
   const [selectedBurgerId, setSelectedBurgerId] = useState<string | null>(null);
 
-  // Trigger the actual fetch on mount
   useEffect(() => {
     sdk.customers.plates({});
   }, []);
 
-  // Extract plates from the ApiSuccess envelope
   const plates = data && 'data' in data ? data.data : [];
 
   return (
-    <section
-      id="menu"
-      className="py-32 bg-qart-bg relative selection:bg-qart-accent selection:text-white"
-    >
+    <section id="menu" className="py-32 bg-qart-bg relative selection:bg-qart-accent selection:text-white">
       <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
-        {/* ENTEPRISE HEADER */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 border-b border-qart-border pb-8">
+        {/* ARCHITECTURAL HEADER */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-8 pb-12 border-b-4 border-qart-border">
           <div className="max-w-2xl">
-            <span className="text-qart-accent font-bold tracking-widest uppercase text-sm mb-3 block">
-              Menú Oficial
+            <span className="badge-accent mb-6 uppercase tracking-[0.3em] font-black">
+              Catálogo de Autor
             </span>
-            <h2 className="text-5xl md:text-6xl font-display text-qart-primary mb-6 leading-tight">
-              Top Creaciones
+            <h2 className="text-6xl md:text-8xl font-display text-qart-primary mb-8 leading-none uppercase font-black">
+              Nuestros <br /> Platos
             </h2>
-            <p className="text-qart-text-muted text-xl leading-relaxed">
-              Descubrí las obras maestras nutricionales de QART. Diseñadas meticulosamente para
-              equilibrar sabor explosivo y macros perfectos.
+            <p className="text-qart-text-muted text-xl leading-snug font-bold uppercase tracking-tight">
+              Creaciones brutales, sabor sin concesiones. Cada ingrediente tiene un propósito.
             </p>
           </div>
-          <button className="btn-outline shrink-0 group">
+          <button className="btn-outline shrink-0 group uppercase tracking-widest py-6 px-10">
             Ver Menú Completo
-            <span className="ml-2 group-hover:translate-x-1 transition-transform inline-block">
+            <span className="ml-4 group-hover:translate-x-2 transition-transform inline-block">
               →
             </span>
           </button>
         </div>
 
-        {/* LOADING STATE */}
-        {isFetching && (
-          <div className="flex justify-center items-center py-32">
-            <div className="w-16 h-16 rounded-full border-4 border-qart-border border-t-qart-accent animate-spin"></div>
-          </div>
-        )}
-
-        {/* ERROR STATE */}
-        {error && (
-          <div className="text-center py-24 bg-red-50 rounded-2xl border border-red-100">
-            <h3 className="text-qart-error font-bold text-2xl mb-2">Error de Conexión</h3>
-            <p className="text-red-700">No pudimos cargar el menú en este momento.</p>
-          </div>
-        )}
-
         {/* CARDS GRID */}
         {!isFetching && !error && plates.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {plates.map(
-              (
-                burger: {
-                  id: string;
-                  name: string;
-                  price: number;
-                  description?: string | null;
-                  calories: number;
-                  proteins: number;
-                  carbs: number;
-                  fats: number;
-                  avgRating: number;
-                  flavor: string;
-                  recommendations: number;
-                },
-                idx: number,
-              ) => {
-                const isSelected = selectedBurgerId === burger.id;
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {plates.map((burger: any, idx: number) => {
+              const isSelected = selectedBurgerId === burger.id;
 
-                return (
-                  <motion.div
-                    key={burger.id}
-                    className={`card-friendly flex flex-col group relative overflow-hidden transition-all duration-300 ${isSelected ? 'ring-2 ring-qart-primary shadow-xl scale-[1.02]' : 'hover:-translate-y-2 hover:shadow-lg cursor-pointer'}`}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-50px' }}
-                    transition={{ delay: idx * 0.1, type: 'spring', stiffness: 90 }}
-                    onClick={() => setSelectedBurgerId(isSelected ? null : burger.id)}
-                  >
-                    {/* ACCENT HEADER BAR */}
-                    <div className="h-2 w-full bg-linear-to-r from-qart-accent to-red-600" />
+              return (
+                <motion.div
+                  key={burger.id}
+                  className={`card-base flex flex-col group relative ${isSelected ? 'shadow-[12px_12px_0px_#EF4444]' : ''}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.05 }}
+                  onClick={() => setSelectedBurgerId(isSelected ? null : burger.id)}
+                >
+                  <div className="p-10 flex-1 flex flex-col">
+                    {/* IMAGE PLACEHOLDER (SHARP) */}
+                    <div className="relative aspect-square mb-8 bg-qart-bg-warm border-2 border-qart-border-soft flex items-center justify-center overflow-hidden">
+                       <div className="w-1/2 h-1 bg-qart-accent/10" />
+                       {/* Label overlay */}
+                       <div className="absolute top-4 left-4 bg-qart-border text-qart-bg text-[10px] font-black px-2 py-1 uppercase tracking-tighter">
+                         QART_SPEC_0{idx + 1}
+                       </div>
+                    </div>
 
-                    <div className="p-8 flex-1 flex flex-col">
-                      {/* EMOJI / IMAGE PLACEHOLDER WITH SOLID BORDER */}
-                      <div className="w-full h-48 mb-8 relative flex items-center justify-center bg-gray-50 rounded-xl border border-qart-border group-hover:bg-gray-100 transition-colors">
-                        <div
-                          className={`relative z-10 text-7xl transition-transform duration-500 ${isSelected ? 'scale-125' : 'group-hover:scale-110 group-hover:-rotate-3'}`}
-                        >
-                          🍔
-                        </div>
-                        {/* Rating Badge Overlay */}
-                        <div className="absolute top-4 right-4 bg-white px-3 py-1.5 rounded-full border border-qart-border shadow-sm flex items-center gap-1.5">
-                          <span className="text-amber-500 text-sm">★</span>
-                          <span className="font-bold text-sm">{burger.avgRating.toFixed(1)}</span>
-                        </div>
-                      </div>
-
-                      {/* TITLE & DESCRIPTION */}
-                      <div className="mb-6 flex-1">
-                        <div className="flex justify-between items-start gap-4 mb-3">
-                          <h3 className="text-2xl font-display text-qart-primary leading-tight">
-                            {burger.name}
-                          </h3>
-                        </div>
-                        <p className="text-qart-text-muted text-base leading-relaxed">
-                          {burger.description || 'Sin descripción disponible.'}
-                        </p>
-                      </div>
-
-                      {/* INTERACTIVE MACROS PANEL */}
-                      <AnimatePresence>
-                        {isSelected && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden mb-6"
-                          >
-                            <div className="bg-gray-50 rounded-xl p-5 border border-qart-border">
-                              <div className="flex items-center justify-between mb-4 pb-3 border-b border-qart-border">
-                                <span className="font-bold text-xs tracking-wider text-qart-text uppercase">
-                                  Valores Físicos
-                                </span>
-                                <span className="text-xs font-bold text-qart-accent bg-red-50 px-2 py-1 rounded">
-                                  {burger.flavor}
-                                </span>
-                              </div>
-
-                              <div className="grid grid-cols-2 gap-y-4 gap-x-6 text-sm">
-                                <div>
-                                  <span className="block text-qart-text-muted text-xs mb-1">
-                                    Calorías
-                                  </span>
-                                  <span className="font-bold text-qart-primary text-lg">
-                                    {burger.calories}{' '}
-                                    <span className="text-xs font-normal">kcal</span>
-                                  </span>
-                                </div>
-                                <div>
-                                  <span className="block text-qart-text-muted text-xs mb-1">
-                                    Proteínas
-                                  </span>
-                                  <span className="font-bold text-qart-primary text-lg">
-                                    {burger.proteins} <span className="text-xs font-normal">g</span>
-                                  </span>
-                                </div>
-                                <div>
-                                  <span className="block text-qart-text-muted text-xs mb-1">
-                                    Carbs
-                                  </span>
-                                  <span className="font-bold text-qart-primary text-lg">
-                                    {burger.carbs} <span className="text-xs font-normal">g</span>
-                                  </span>
-                                </div>
-                                <div>
-                                  <span className="block text-qart-text-muted text-xs mb-1">
-                                    Grasas
-                                  </span>
-                                  <span className="font-bold text-qart-primary text-lg">
-                                    {burger.fats} <span className="text-xs font-normal">g</span>
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="mt-5 pt-3 border-t border-qart-border flex items-center justify-between text-xs text-qart-text-muted">
-                                <span>{burger.recommendations} personas lo armaron</span>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-
-                      {/* FOOTER: PRICE & ACTION */}
-                      <div className="flex justify-between items-center pt-6 border-t border-qart-border mt-auto">
-                        <div className="flex flex-col">
-                          <span className="text-xs text-qart-text-muted font-bold tracking-wider uppercase mb-1">
-                            Precio
-                          </span>
-                          <span className="text-3xl font-display text-qart-primary tracking-tight">
-                            ${burger.price.toFixed(2)}
-                          </span>
-                        </div>
-                        <button
-                          className={`w-14 h-14 rounded-xl flex items-center justify-center text-2xl font-bold transition-all duration-200 cursor-pointer shadow-sm ${
-                            isSelected
-                              ? 'bg-qart-primary text-white scale-95'
-                              : 'bg-qart-accent text-white hover:bg-[#CC0000] hover:-translate-y-1 hover:shadow-md'
-                          }`}
-                          aria-label="Agregar o ver detalles"
-                        >
-                          {isSelected ? '✓' : '+'}
-                        </button>
+                    <div className="flex items-center justify-between mb-6">
+                      <span className="text-xs font-black uppercase tracking-[0.2em] text-qart-accent">
+                        Premium
+                      </span>
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-qart-primary text-qart-bg border-2 border-qart-border">
+                        <span className="text-xs font-black tracking-tighter">
+                          RATING {burger.avgRating.toFixed(1)}
+                        </span>
                       </div>
                     </div>
-                  </motion.div>
-                );
-              },
-            )}
+
+                    <div className="mb-8 flex-1">
+                      <h3 className="text-3xl font-display text-qart-primary leading-tight uppercase font-black mb-3">
+                        {burger.name}
+                      </h3>
+                      <p className="text-qart-text-muted text-sm font-bold uppercase tracking-tighter leading-relaxed">
+                        {burger.description || 'Sin descripción disponible.'}
+                      </p>
+                    </div>
+
+                    {/* INFOGRAPHIC PANEL (SHARP) */}
+                    <AnimatePresence>
+                      {isSelected && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden mb-8 border-t-2 border-qart-border pt-8"
+                        >
+                          <div className="grid grid-cols-2 gap-8 text-xs font-black uppercase tracking-widest">
+                            <div>
+                              <span className="text-qart-text-muted block mb-2">Calories</span>
+                              <span className="text-2xl text-qart-primary">{burger.calories}</span>
+                            </div>
+                            <div>
+                              <span className="text-qart-text-muted block mb-2">Proteins</span>
+                              <span className="text-2xl text-qart-primary">{burger.proteins}g</span>
+                            </div>
+                            <div>
+                              <span className="text-qart-text-muted block mb-2">Carbs</span>
+                              <span className="text-2xl text-qart-primary">{burger.carbs}g</span>
+                            </div>
+                            <div>
+                              <span className="text-qart-text-muted block mb-2">Flavor</span>
+                              <span className="text-lg text-qart-accent">{burger.flavor}</span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* FOOTER: PRICE & ACTION */}
+                    <div className="flex justify-between items-center pt-8 border-t-4 border-qart-border mt-auto">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] text-qart-text-muted font-black tracking-[0.3em] uppercase mb-1">
+                          Inversión
+                        </span>
+                        <span className="text-4xl font-display text-qart-primary font-black">
+                          ${burger.price.toFixed(0)}
+                        </span>
+                      </div>
+                      <button
+                        className={`w-16 h-16 flex items-center justify-center text-3xl font-black transition-all duration-300 border-4 border-qart-border ${
+                          isSelected
+                            ? 'bg-qart-accent text-white'
+                            : 'bg-qart-primary text-qart-bg'
+                        }`}
+                      >
+                        {isSelected ? '✓' : '+'}
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </div>

@@ -1,53 +1,48 @@
 import { motion } from 'framer-motion';
 
 /**
- * @file CraftSection.tsx (Repurposed as massive energetic CTA block)
- * @description Giant orange call to action banner driving users to the builder.
+ * @file CraftSection.tsx
+ * @description Massive architectural CTA block with high-contrast geometry.
  */
 const CraftSection = () => {
   return (
-    <section className="py-24 md:py-32 bg-qart-accent text-white overflow-hidden relative">
+    <section className="py-32 bg-qart-primary text-qart-text-inv overflow-hidden relative border-y-4 border-qart-border">
       <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
         <motion.h2
-          className="text-5xl md:text-7xl font-display mb-8"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ type: 'spring', stiffness: 100 }}
-        >
-          Es hora de crear la tuya.
-        </motion.h2>
-
-        <motion.p
-          className="text-xl md:text-2xl font-medium opacity-90 mb-12 max-w-2xl mx-auto"
+          className="text-6xl md:text-8xl font-display mb-10 leading-none uppercase font-black"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
         >
-          Únete a miles de adictos a las hamburguesas que ya están diseñando su bocado perfecto capa
-          por capa.
+          ¿Qué vas a <br />
+          <span className="text-qart-accent">armar hoy?</span>
+        </motion.h2>
+
+        <motion.p
+          className="text-xl md:text-2xl font-bold uppercase tracking-tighter opacity-90 mb-16 max-w-2xl mx-auto leading-tight"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+        >
+          Milanesa napolitana, burger doble smash, o lo que se te ocurra. Tu plato ideal te está esperando en QART.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.2 }}
         >
-          <button className="bg-white text-qart-accent font-bold px-10 py-5 rounded-full text-xl shadow-2xl hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all">
-            Empezar a Armar 🍔
+          <button className="btn-outline px-12 py-6 text-2xl !bg-qart-bg !text-qart-primary !border-qart-border shadow-[10px_10px_0px_rgba(0,0,0,0.5)] uppercase tracking-[0.2em] font-black group transition-all">
+            Empezar a armar
           </button>
         </motion.div>
       </div>
 
-      {/* Background Graphic Elements */}
-      <div className="absolute top-0 right-10 text-[20rem] opacity-10 rotate-12 -translate-y-1/2 select-none pointer-events-none">
-        🍟
-      </div>
-      <div className="absolute bottom-0 left-10 text-[20rem] opacity-10 -rotate-12 translate-y-1/4 select-none pointer-events-none">
-        🥤
-      </div>
+      {/* Background Graphic Elements (Structural) */}
+      <div className="absolute top-0 right-0 w-1/4 h-full bg-qart-accent/10 border-l-2 border-qart-border hidden lg:block" />
+      <div className="absolute bottom-0 left-0 w-1/4 h-full bg-qart-accent/5 border-r-2 border-qart-border hidden lg:block" />
     </section>
   );
 };
