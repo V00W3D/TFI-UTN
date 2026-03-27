@@ -62,6 +62,34 @@ All set as Replit secrets/env vars:
 - `GET /iam/me` — Current session info
 - `GET /customers/plates` — Fetch plate catalog
 
+## Theme System
+QART uses a dynamic CSS variable theming system:
+- **Theme files**: `apps/frontend/public/themes/light.css` and `dark.css` — define all `--qart-*` CSS variables
+- **Loading**: `App.tsx` injects a `<link id="qart-theme">` pointing to the active theme file at runtime
+- **Tailwind bridge**: `index.css` `@theme` block forwards all `--qart-*` vars to Tailwind color tokens (`--color-qart-*`) and shadow tokens (`--shadow-*`)
+- **Dark class**: `main.tsx` toggles `.dark` on `<html>` for any `dark:` Tailwind variants
+- **Theme store**: Zustand `useAppStore` holds `mode: 'light' | 'dark'`, persisted in localStorage
+
+### Color Palette Design
+**Light mode** — Architectural warm cream:
+- Backgrounds: `#F7F3EC` (cream), `#EDE6D8` (sand), `#FFFFFF` (surface)
+- Border: `#1A1410` (bold warm black)
+- Text: `#1A1410` primary, `#60524A` muted
+- Accent: `#C2410C` terracotta
+
+**Dark mode** — Warm charcoal night (NOT an invert of light):
+- Backgrounds: `#0D0B09`, `#181410`, `#1E1A16` (three clearly distinct dark warm layers)
+- Border: `#3D3530` (warm brown — visible on all dark surfaces)
+- Text: `#F0E8E0` (warm off-white), `#8A7E76` muted
+- Accent: `#E8621A` (vivid terracotta orange)
+- Shadows use accent color `#E8621A` instead of black-on-black
+
+### CSS Token Conventions
+- `--qart-text-on-primary` — text color for elements with `bg-qart-primary` background
+- `--qart-text-on-accent` — text color for elements with `bg-qart-accent` background (always white)
+- Never hardcode shadow colors like `shadow-[*px_#000]` — use `shadow-sharp`, `shadow-hover`, `shadow-accent`, `shadow-warm` classes
+- Never use `text-white` on `bg-qart-primary` backgrounds — use `style={{ color: 'var(--qart-text-on-primary)' }}`
+
 ## CSS Notes
 - Tailwind v4 does not support `@apply` with custom classes defined in `@layer utilities`
 - Custom utility classes that need to be applied with `@apply` must have their styles inlined instead

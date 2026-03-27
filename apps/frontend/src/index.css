@@ -7,18 +7,36 @@
    ============================================================================= */
 
 @theme {
-  --color-qart-primary:    var(--qart-primary);
-  --color-qart-accent:     var(--qart-accent);
-  --color-qart-accent-2:   var(--qart-accent-2);
-  --color-qart-bg:         var(--qart-bg);
-  --color-qart-bg-warm:    var(--qart-bg-warm);
-  --color-qart-surface:    var(--qart-surface);
-  --color-qart-border:     var(--qart-border);
-  --color-qart-border-soft:var(--qart-border-soft);
-  --color-qart-text:       var(--qart-text);
-  --color-qart-text-muted: var(--qart-text-muted);
-  --color-qart-success:    var(--qart-success);
-  --color-qart-error:      var(--qart-error);
+  /* ── Core Colors (forwarded from CSS vars set by theme files) ── */
+  --color-qart-primary:       var(--qart-primary);
+  --color-qart-accent:        var(--qart-accent);
+  --color-qart-accent-2:      var(--qart-accent-2);
+  --color-qart-accent-warm:   var(--qart-accent-warm);
+  --color-qart-accent-light:  var(--qart-accent-light);
+  --color-qart-accent-muted:  var(--qart-accent-muted);
+  --color-qart-bg:            var(--qart-bg);
+  --color-qart-bg-warm:       var(--qart-bg-warm);
+  --color-qart-surface:       var(--qart-surface);
+  --color-qart-surface-raised:var(--qart-surface-raised);
+  --color-qart-border:        var(--qart-border);
+  --color-qart-border-soft:   var(--qart-border-soft);
+  --color-qart-border-subtle: var(--qart-border-subtle);
+  --color-qart-text:          var(--qart-text);
+  --color-qart-text-muted:    var(--qart-text-muted);
+  --color-qart-text-subtle:   var(--qart-text-subtle);
+  --color-qart-success:       var(--qart-success);
+  --color-qart-success-bg:    var(--qart-success-bg);
+  --color-qart-error:         var(--qart-error);
+  --color-qart-error-bg:      var(--qart-error-bg);
+  --color-qart-warning:       var(--qart-warning);
+  --color-qart-warning-bg:    var(--qart-warning-bg);
+
+  /* ── Shadows (forwarded from theme vars — theme-aware) ── */
+  --shadow-sharp:        var(--qart-shadow-sharp);
+  --shadow-hover:        var(--qart-shadow-hover);
+  --shadow-accent:       var(--qart-shadow-accent);
+  --shadow-accent-hover: var(--qart-shadow-accent-hover);
+  --shadow-warm:         var(--qart-shadow-warm);
 }
 
 @layer base {
@@ -66,7 +84,7 @@
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-bottom: 2px solid var(--qart-border);
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   /* ── Botones (SQUARE) ── */
@@ -74,7 +92,7 @@
     @apply inline-flex items-center justify-center gap-2 px-8 py-4 font-bold tracking-tight text-base rounded-none transition-all duration-200 cursor-pointer border-2 border-transparent;
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--qart-accent);
-    color: var(--qart-text-on-primary);
+    color: var(--qart-text-on-accent);
     box-shadow: var(--qart-shadow-sharp);
   }
   .btn-primary:hover:not(:disabled) {
@@ -84,6 +102,10 @@
   .btn-primary:active:not(:disabled) {
     transform: translate(0, 0);
     box-shadow: none;
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .btn-outline {
@@ -103,7 +125,7 @@
   }
   .card-base:hover {
     border-color: var(--qart-accent);
-    box-shadow: var(--qart-shadow-sharp);
+    box-shadow: var(--qart-shadow-accent);
     transform: translate(-2px, -2px);
   }
 
@@ -125,9 +147,40 @@
     @apply w-full px-4 py-4 rounded-none border-2 border-qart-border text-qart-text text-sm font-medium transition-all duration-200 outline-none;
     background-color: var(--qart-surface);
   }
+  .input-base::placeholder {
+    color: var(--qart-text-subtle);
+  }
   .input-base:focus {
     border-color: var(--qart-accent);
     box-shadow: 4px 4px 0px var(--qart-accent);
+  }
+
+  /* ── Step Number Badge (SQUARE) — theme-aware ── */
+  .step-badge {
+    @apply absolute -top-4 -right-4 w-11 h-11 rounded-none flex items-center justify-center font-bold text-base z-20;
+    background-color: var(--qart-accent);
+    color: var(--qart-text-on-accent);
+    border: 4px solid var(--qart-surface);
+    box-shadow: var(--qart-shadow-sharp);
+  }
+
+  /* ── Feature Pill Badge — theme-aware ── */
+  .feature-pill {
+    @apply flex items-center gap-4 border-2 border-qart-border px-5 py-3;
+  }
+  .feature-pill span {
+    @apply text-sm font-black text-qart-primary uppercase tracking-widest;
+  }
+  .feature-pill .feature-dot {
+    @apply w-3 h-3 bg-qart-accent flex-shrink-0;
+  }
+
+  /* ── Icon Box — theme-aware ── */
+  .icon-box-accent {
+    @apply flex items-center justify-center border-4 border-qart-border;
+    background-color: var(--qart-accent);
+    color: var(--qart-text-on-accent);
+    box-shadow: var(--qart-shadow-sharp);
   }
 
   /* ── Auth Layout (Consolidated) ── */
@@ -149,7 +202,8 @@
     @apply border-qart-border text-qart-primary;
   }
   .auth-link-active {
-    @apply bg-qart-accent text-white border-qart-accent;
+    @apply bg-qart-accent border-qart-accent;
+    color: var(--qart-text-on-accent);
     box-shadow: var(--qart-shadow-sharp);
   }
   .auth-content {
@@ -162,5 +216,25 @@
   }
   .auth-footer-text {
     @apply mt-8 text-center text-sm font-bold text-qart-text-muted;
+  }
+
+  /* ── Error / Success Banners (SHARP) ── */
+  .banner-error {
+    @apply border-2 border-qart-border p-5 flex gap-4;
+    background-color: var(--qart-error);
+    color: var(--qart-text-on-accent);
+    box-shadow: var(--qart-shadow-sharp);
+  }
+  .banner-success {
+    @apply border-2 border-qart-border p-5 flex gap-4;
+    background-color: var(--qart-success);
+    color: var(--qart-text-on-accent);
+    box-shadow: var(--qart-shadow-sharp);
+  }
+  .banner-info {
+    @apply border-2 border-qart-border p-5 flex gap-4;
+    background-color: var(--qart-surface-raised);
+    color: var(--qart-text);
+    box-shadow: var(--qart-shadow-sharp);
   }
 }

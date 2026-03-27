@@ -38,7 +38,7 @@ const RegisterPage = () => {
               Protocolo de Alta de Usuario
             </p>
           </div>
-          <div className="w-16 h-16 bg-qart-primary text-qart-bg border-4 border-qart-border flex items-center justify-center font-display text-4xl shadow-[6px_6px_0px_rgba(0,0,0,0.5)] mx-auto md:mx-0 -rotate-6 uppercase font-black">
+          <div className="w-16 h-16 bg-qart-primary border-4 border-qart-border flex items-center justify-center font-display text-4xl shadow-hover mx-auto md:mx-0 -rotate-6 uppercase font-black" style={{ color: 'var(--qart-text-on-primary)' }}>
             R
           </div>
         </div>
@@ -52,7 +52,7 @@ const RegisterPage = () => {
               exit={{ opacity: 0, x: -20 }}
               className="mb-8"
             >
-              <div className="bg-qart-accent text-white border-2 border-qart-border p-5 flex gap-4 shadow-[4px_4px_0px_#000]">
+              <div className="banner-error">
                  <span className="font-black">ERROR</span>
                  <p className="text-xs font-black uppercase tracking-widest leading-snug flex-1">
                    Inconsistencia en los datos. Revise los campos marcados.

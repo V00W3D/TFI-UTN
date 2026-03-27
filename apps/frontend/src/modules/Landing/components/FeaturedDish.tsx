@@ -61,7 +61,7 @@ const FeaturedDish = () => {
                     <div className="relative aspect-square mb-8 bg-qart-bg-warm border-2 border-qart-border-soft flex items-center justify-center overflow-hidden">
                        <div className="w-1/2 h-1 bg-qart-accent/10" />
                        {/* Label overlay */}
-                       <div className="absolute top-4 left-4 bg-qart-border text-qart-bg text-[10px] font-black px-2 py-1 uppercase tracking-tighter">
+                       <div className="absolute top-4 left-4 bg-qart-primary text-qart-bg text-[10px] font-black px-2 py-1 uppercase tracking-tighter">
                          QART_SPEC_0{idx + 1}
                        </div>
                     </div>
@@ -130,9 +130,10 @@ const FeaturedDish = () => {
                       <button
                         className={`w-16 h-16 flex items-center justify-center text-3xl font-black transition-all duration-300 border-4 border-qart-border ${
                           isSelected
-                            ? 'bg-qart-accent text-white'
-                            : 'bg-qart-primary text-qart-bg'
+                            ? 'bg-qart-accent'
+                            : 'bg-qart-primary'
                         }`}
+                        style={{ color: isSelected ? 'var(--qart-text-on-accent)' : 'var(--qart-text-on-primary)' }}
                       >
                         {isSelected ? '✓' : '+'}
                       </button>
