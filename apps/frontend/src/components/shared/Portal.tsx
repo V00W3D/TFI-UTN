@@ -11,7 +11,7 @@ interface PortalProps {
 
 const Portal = ({ children }: PortalProps) => {
   const portalRoot = document.getElementById('portal-root');
-  
+
   if (!portalRoot) {
     return <>{children}</>;
   }

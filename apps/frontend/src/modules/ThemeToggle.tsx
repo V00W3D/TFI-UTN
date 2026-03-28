@@ -13,7 +13,7 @@ const ThemeToggle = () => {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-[9999]">
+    <div className="fixed bottom-8 right-8 z-9999">
       <motion.button
         whileHover={{ scale: 1.1, rotate: 12 }}
         whileTap={{ scale: 0.9, rotate: -12 }}

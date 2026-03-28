@@ -3,42 +3,75 @@
 
 /* =============================================================================
    🍽️ QART — SISTEMA DE DISEÑO
-   Cálido · Juvenil · Con Carácter
+   Cálido · Arquitectónico · Con Carácter
+   Todos los tokens de light.css y dark.css disponibles como clases Tailwind.
    ============================================================================= */
 
 @theme {
-  /* ── Core Colors (forwarded from CSS vars set by theme files) ── */
-  --color-qart-primary:       var(--qart-primary);
-  --color-qart-accent:        var(--qart-accent);
-  --color-qart-accent-2:      var(--qart-accent-2);
-  --color-qart-accent-warm:   var(--qart-accent-warm);
-  --color-qart-accent-light:  var(--qart-accent-light);
-  --color-qart-accent-muted:  var(--qart-accent-muted);
-  --color-qart-bg:            var(--qart-bg);
-  --color-qart-bg-warm:       var(--qart-bg-warm);
-  --color-qart-surface:       var(--qart-surface);
-  --color-qart-surface-raised:var(--qart-surface-raised);
-  --color-qart-border:        var(--qart-border);
-  --color-qart-border-soft:   var(--qart-border-soft);
-  --color-qart-border-subtle: var(--qart-border-subtle);
-  --color-qart-text:          var(--qart-text);
-  --color-qart-text-muted:    var(--qart-text-muted);
-  --color-qart-text-subtle:   var(--qart-text-subtle);
-  --color-qart-success:       var(--qart-success);
-  --color-qart-success-bg:    var(--qart-success-bg);
-  --color-qart-error:         var(--qart-error);
-  --color-qart-error-bg:      var(--qart-error-bg);
-  --color-qart-warning:       var(--qart-warning);
-  --color-qart-warning-bg:    var(--qart-warning-bg);
+  /* ── Fondos ── */
+  --color-qart-bg: var(--qart-bg);
+  --color-qart-bg-warm: var(--qart-bg-warm);
+  --color-qart-surface: var(--qart-surface);
+  --color-qart-surface-raised: var(--qart-surface-raised);
+  --color-qart-surface-sunken: var(--qart-surface-sunken);
+  --color-qart-surface-inverse: var(--qart-surface-inverse);
 
-  /* ── Shadows (forwarded from theme vars — theme-aware) ── */
-  --shadow-sharp:        var(--qart-shadow-sharp);
-  --shadow-hover:        var(--qart-shadow-hover);
-  --shadow-accent:       var(--qart-shadow-accent);
+  /* ── Tipografía ── */
+  --color-qart-text: var(--qart-text);
+  --color-qart-text-muted: var(--qart-text-muted);
+  --color-qart-text-subtle: var(--qart-text-subtle);
+  --color-qart-text-disabled: var(--qart-text-disabled);
+  --color-qart-primary: var(--qart-primary);
+
+  /* ── Textos sobre fondos coloreados ── */
+  --color-qart-text-on-primary: var(--qart-text-on-primary);
+  --color-qart-text-inv: var(--qart-text-inv);
+  --color-qart-text-on-accent: var(--qart-text-on-accent);
+  --color-qart-text-on-inverse: var(--qart-text-on-inverse);
+
+  /* ── Bordes ── */
+  --color-qart-border: var(--qart-border);
+  --color-qart-border-soft: var(--qart-border-soft);
+  --color-qart-border-subtle: var(--qart-border-subtle);
+  --color-qart-border-ghost: var(--qart-border-ghost);
+
+  /* ── Accent terracotta ── */
+  --color-qart-accent: var(--qart-accent);
+  --color-qart-accent-hover: var(--qart-accent-hover);
+  --color-qart-accent-soft: var(--qart-accent-soft);
+  --color-qart-accent-muted: var(--qart-accent-muted);
+
+  /* ── Accent ámbar ── */
+  --color-qart-accent-2: var(--qart-accent-2);
+  --color-qart-accent-warm: var(--qart-accent-warm);
+  --color-qart-accent-light: var(--qart-accent-light);
+
+  /* ── Semánticos ── */
+  --color-qart-success: var(--qart-success);
+  --color-qart-success-bg: var(--qart-success-bg);
+  --color-qart-success-border: var(--qart-success-border);
+  --color-qart-error: var(--qart-error);
+  --color-qart-error-bg: var(--qart-error-bg);
+  --color-qart-error-border: var(--qart-error-border);
+  --color-qart-warning: var(--qart-warning);
+  --color-qart-warning-bg: var(--qart-warning-bg);
+  --color-qart-warning-border: var(--qart-warning-border);
+  --color-qart-info: var(--qart-info);
+  --color-qart-info-bg: var(--qart-info-bg);
+
+  /* ── Sombras ── */
+  --shadow-sharp: var(--qart-shadow-sharp);
+  --shadow-hover: var(--qart-shadow-hover);
+  --shadow-accent: var(--qart-shadow-accent);
   --shadow-accent-hover: var(--qart-shadow-accent-hover);
-  --shadow-warm:         var(--qart-shadow-warm);
+  --shadow-warm: var(--qart-shadow-warm);
+  --shadow-soft: var(--qart-shadow-soft);
+  --shadow-elevated: var(--qart-shadow-elevated);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   BASE
+───────────────────────────────────────────────────────────── */
 @layer base {
   :root {
     font-size: 16px;
@@ -51,10 +84,18 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
-  h1, h2, h3, h4, h5, h6, .font-display {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 800;
     letter-spacing: -0.015em;
@@ -66,51 +107,53 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────────
+   UTILITIES — todas las clases de componentes
+───────────────────────────────────────────────────────────── */
 @layer utilities {
-  /* ── Separadores de Sección ── */
-  .section-divider {
-    @apply relative h-32 w-full overflow-hidden pointer-events-none;
-  }
-  .section-divider-bottom {
-    @apply absolute bottom-0 left-0 w-full rotate-180;
-  }
-  .section-divider-top {
-    @apply absolute top-0 left-0 w-full;
-  }
-
-  /* ── Navbar ── */
+  /* ── Navbar glass ── */
   .glass-header {
     background: var(--qart-nav-bg);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-bottom: 2px solid var(--qart-border);
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
   }
 
-  /* ── Botones (SQUARE) ── */
+  /* ── Botón primario — accent sobre fondo oscuro ── */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-8 py-4 font-bold tracking-tight text-base rounded-none transition-all duration-200 cursor-pointer border-2 border-transparent;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4
+           font-bold tracking-tight text-base rounded-none
+           transition-all duration-200 cursor-pointer border-2 border-transparent;
     font-family: 'Plus Jakarta Sans', sans-serif;
     background: var(--qart-accent);
     color: var(--qart-text-on-accent);
     box-shadow: var(--qart-shadow-sharp);
   }
   .btn-primary:hover:not(:disabled) {
+    background: var(--qart-accent-hover);
     transform: translate(-2px, -2px);
-    box-shadow: var(--qart-shadow-hover);
+    box-shadow: var(--qart-shadow-accent-hover);
   }
   .btn-primary:active:not(:disabled) {
     transform: translate(0, 0);
     box-shadow: none;
   }
   .btn-primary:disabled {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
   }
 
+  /* ── Botón outline — superficie + borde arquitectónico ── */
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-qart-border text-qart-primary font-bold tracking-tight text-base rounded-none transition-all duration-200 cursor-pointer;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4
+           border-2 font-bold tracking-tight text-base
+           rounded-none transition-all duration-200 cursor-pointer;
+    border-color: var(--qart-border);
     background-color: var(--qart-surface);
+    color: var(--qart-text);
     font-family: 'Plus Jakarta Sans', sans-serif;
   }
   .btn-outline:hover {
@@ -119,9 +162,11 @@
     box-shadow: var(--qart-shadow-sharp);
   }
 
-  /* ── Cards (SQUARE) ── */
+  /* ── Card base ── */
   .card-base {
-    @apply bg-qart-surface border-2 border-qart-border rounded-none transition-all duration-300;
+    @apply rounded-none transition-all duration-300;
+    background-color: var(--qart-surface);
+    border: 2px solid var(--qart-border);
   }
   .card-base:hover {
     border-color: var(--qart-accent);
@@ -135,17 +180,21 @@
     @apply border-y-2 border-qart-border;
   }
 
-  /* ── Badge pill (SQUARE) ── */
+  /* ── Badge accent ── */
   .badge-accent {
-    @apply inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 border-2 border-qart-accent;
+    @apply inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 border-2 rounded-none;
+    border-color: var(--qart-accent);
     background: transparent;
     color: var(--qart-accent);
   }
 
-  /* ── Input genérico (SQUARE) ── */
+  /* ── Input base ── */
   .input-base {
-    @apply w-full px-4 py-4 rounded-none border-2 border-qart-border text-qart-text text-sm font-medium transition-all duration-200 outline-none;
-    background-color: var(--qart-surface);
+    @apply w-full px-4 py-4 rounded-none border-2 text-sm font-medium
+           transition-all duration-200 outline-none;
+    border-color: var(--qart-border);
+    background-color: var(--qart-surface-sunken);
+    color: var(--qart-text);
   }
   .input-base::placeholder {
     color: var(--qart-text-subtle);
@@ -155,37 +204,66 @@
     box-shadow: 4px 4px 0px var(--qart-accent);
   }
 
-  /* ── Step Number Badge (SQUARE) — theme-aware ── */
+  /* ── Badge numérico de pasos ── */
   .step-badge {
-    @apply absolute -top-4 -right-4 w-11 h-11 rounded-none flex items-center justify-center font-bold text-base z-20;
+    @apply absolute -top-4 -right-4 w-11 h-11 rounded-none flex items-center
+           justify-center font-bold text-base z-20;
     background-color: var(--qart-accent);
     color: var(--qart-text-on-accent);
     border: 4px solid var(--qart-surface);
     box-shadow: var(--qart-shadow-sharp);
   }
 
-  /* ── Feature Pill Badge — theme-aware ── */
+  /* ── Feature pill ── */
   .feature-pill {
-    @apply flex items-center gap-4 border-2 border-qart-border px-5 py-3;
+    @apply flex items-center gap-4 border-2 px-5 py-3;
+    border-color: var(--qart-border);
   }
   .feature-pill span {
-    @apply text-sm font-black text-qart-primary uppercase tracking-widest;
+    @apply text-sm font-black uppercase tracking-widest;
+    color: var(--qart-text);
   }
   .feature-pill .feature-dot {
-    @apply w-3 h-3 bg-qart-accent flex-shrink-0;
+    @apply w-3 h-3 shrink-0;
+    background-color: var(--qart-accent);
   }
 
-  /* ── Icon Box — theme-aware ── */
+  /* ── Icon box accent ── */
   .icon-box-accent {
-    @apply flex items-center justify-center border-4 border-qart-border;
+    @apply flex items-center justify-center border-4;
+    border-color: var(--qart-border);
     background-color: var(--qart-accent);
     color: var(--qart-text-on-accent);
     box-shadow: var(--qart-shadow-sharp);
   }
 
-  /* ── Auth Layout (Consolidated) ── */
+  /* ── Banners semánticos ── */
+  .banner-error {
+    @apply border-2 p-5 flex gap-4;
+    border-color: var(--qart-border);
+    background-color: var(--qart-error);
+    color: var(--qart-text-on-error);
+    box-shadow: var(--qart-shadow-sharp);
+  }
+  .banner-success {
+    @apply border-2 p-5 flex gap-4;
+    border-color: var(--qart-border);
+    background-color: var(--qart-success);
+    color: var(--qart-text-on-success);
+    box-shadow: var(--qart-shadow-sharp);
+  }
+  .banner-info {
+    @apply border-2 p-5 flex gap-4;
+    border-color: var(--qart-border);
+    background-color: var(--qart-surface-raised);
+    color: var(--qart-text);
+    box-shadow: var(--qart-shadow-sharp);
+  }
+
+  /* ── Auth layout ── */
   .auth-container {
-    @apply min-h-screen flex flex-col transition-all duration-300 bg-qart-bg;
+    @apply min-h-screen flex flex-col transition-all duration-300;
+    background-color: var(--qart-bg);
   }
   .auth-navbar {
     @apply flex items-center justify-center gap-4 px-6 h-16 sticky top-0 z-50;
@@ -196,13 +274,18 @@
     transition: background-color 0.3s ease;
   }
   .auth-link {
-    @apply px-5 py-2 border-2 border-transparent text-sm font-bold tracking-tight transition-all duration-300 text-qart-text-muted;
+    @apply px-5 py-2 border-2 border-transparent text-sm font-bold
+           tracking-tight transition-all duration-300;
+    color: var(--qart-text-muted);
   }
   .auth-link:hover {
-    @apply border-qart-border text-qart-primary;
+    border-color: var(--qart-border);
+    color: var(--qart-text);
   }
   .auth-link-active {
-    @apply bg-qart-accent border-qart-accent;
+    @apply border-2;
+    background-color: var(--qart-accent);
+    border-color: var(--qart-accent);
     color: var(--qart-text-on-accent);
     box-shadow: var(--qart-shadow-sharp);
   }
@@ -210,31 +293,20 @@
     @apply flex-1 flex items-center justify-center p-6 md:p-12;
   }
   .auth-card {
-    @apply w-full max-w-md p-10 rounded-none border-4 border-qart-border relative overflow-hidden;
+    @apply w-full max-w-md p-10 rounded-none border-4 relative overflow-hidden;
     background-color: var(--qart-surface);
+    border-color: var(--qart-border);
     box-shadow: 12px 12px 0px var(--qart-border);
   }
-  .auth-footer-text {
-    @apply mt-8 text-center text-sm font-bold text-qart-text-muted;
-  }
 
-  /* ── Error / Success Banners (SHARP) ── */
-  .banner-error {
-    @apply border-2 border-qart-border p-5 flex gap-4;
-    background-color: var(--qart-error);
-    color: var(--qart-text-on-accent);
-    box-shadow: var(--qart-shadow-sharp);
+  /* ── Separadores de sección ── */
+  .section-divider {
+    @apply relative h-32 w-full overflow-hidden pointer-events-none;
   }
-  .banner-success {
-    @apply border-2 border-qart-border p-5 flex gap-4;
-    background-color: var(--qart-success);
-    color: var(--qart-text-on-accent);
-    box-shadow: var(--qart-shadow-sharp);
+  .section-divider-bottom {
+    @apply absolute bottom-0 left-0 w-full rotate-180;
   }
-  .banner-info {
-    @apply border-2 border-qart-border p-5 flex gap-4;
-    background-color: var(--qart-surface-raised);
-    color: var(--qart-text);
-    box-shadow: var(--qart-shadow-sharp);
+  .section-divider-top {
+    @apply absolute top-0 left-0 w-full;
   }
 }

@@ -1,59 +1,102 @@
+/* ============================================================================
+   QART — DARK THEME
+   Obsidiana cálida · Ámbar en las sombras · Alta densidad · No es un invert de light
+   ============================================================================ */
 :root {
-  /* ── Core Backgrounds (Warm Charcoal Night — NOT a light-mode invert) ── */
-  --qart-bg:              #0D0B09;  /* Deep warm near-black — distinct base */
-  --qart-bg-warm:         #181410;  /* Warmer dark — clearly different from bg */
-  --qart-surface:         #1E1A16;  /* Card surface — warm dark brown, visible on bg */
-  --qart-surface-raised:  #252118;  /* Elevated surface — higher z-plane */
-  --qart-nav-bg:          rgba(13, 11, 9, 0.96);
+  /* ── Fondos — 5 niveles de profundidad, todos marrón-carbón cálido ── */
+  --qart-bg: #0d0b09; /* Negro carbón cálido — fondo raíz */
+  --qart-bg-warm: #181410; /* Marrón muy oscuro — secciones alternadas */
+  --qart-surface: #1e1a16; /* Marrón carbón — cards */
+  --qart-surface-raised: #252118; /* Un escalón más claro que surface */
+  --qart-surface-sunken: #141210; /* Más oscuro que bg — inputs hundidos */
+  --qart-nav-bg: rgba(13, 11, 9, 0.97);
 
-  /* RGB Components for glass/alpha effects */
-  --qart-surface-rgb:     30, 26, 22;
-  --qart-border-rgb:      90, 80, 70;
+  /* ── Sección invertida — SIEMPRE oscuro en dark también ───────────────────
+   * En dark, "invertido" NO es blanco: es un marrón ámbar profundo.
+   * Así la sección destaca del bg sin volverse un rectángulo blanco
+   * que haría invisible el texto heredado del body (#F0E8E0). */
+  --qart-surface-inverse: #2a1a0a; /* Ámbar oscuro — CTA invertido */
+  --qart-text-on-inverse: #f0e8e0; /* Crema cálida — siempre legible */
+  --qart-text-on-inverse-dim: rgba(240, 232, 224, 0.65);
+  --qart-border-on-inverse: rgba(240, 232, 224, 0.12);
 
-  /* ── Borders (Warm & Legible on Dark) ── */
-  --qart-border:          #3D3530;  /* Warm brown — VISIBLE on every dark surface */
-  --qart-border-soft:     #2A2420;  /* Softer warm border */
-  --qart-border-subtle:   #1E1A16;  /* Very subtle separation */
+  /* ── RGB para efectos glass/alpha ── */
+  --qart-surface-rgb: 30, 26, 22;
+  --qart-border-rgb: 90, 80, 70;
 
-  /* ── Typography (Warm Off-White — NOT pure white) ── */
-  --qart-text:            #F0E8E0;  /* Warm off-white — primary text */
-  --qart-text-muted:      #8A7E76;  /* Warm muted brown-gray — secondary text */
-  --qart-text-subtle:     #5A504A;  /* Very muted — tertiary / placeholder */
-  --qart-primary:         #F0E8E0;  /* Primary text = warm white (matches --qart-text) */
+  /* ── Bordes — 4 niveles, todos visibles sobre fondos oscuros ── */
+  --qart-border: #3d3530; /* Marrón cálido — visible en toda superficie */
+  --qart-border-soft: #2a2420; /* Marrón suave */
+  --qart-border-subtle: #211d19; /* Casi imperceptible */
+  --qart-border-ghost: #1a1610; /* Solo separación estructural */
 
-  /* ── Brand Accents (Vivid & Warm on Dark) ── */
-  --qart-accent:          #E8621A;  /* Vivid terracotta orange — pops on dark */
-  --qart-accent-2:        #D97706;  /* Warm amber */
-  --qart-accent-warm:     #F59E0B;  /* Golden amber */
-  --qart-accent-light:    #2A1A0A;  /* Very dark amber — subtle accent background */
-  --qart-accent-muted:    #261108;  /* Even darker amber tint for hover states */
+  /* ── Tipografía — off-white cálido, nunca puro blanco ── */
+  --qart-text: #f0e8e0; /* Crema cálida — texto principal */
+  --qart-text-muted: #8a7e76; /* Marrón grisáceo — secundario */
+  --qart-text-subtle: #5a504a; /* Marrón oscuro — placeholders */
+  --qart-text-disabled: #3d3530; /* = borde — deshabilitado */
+  --qart-primary: #f0e8e0; /* = qart-text — alias JSX */
 
-  /* ── Semantic Colors (Vivid for dark backgrounds) ── */
-  --qart-success:         #4ADE80;
-  --qart-success-bg:      #052E16;
-  --qart-error:           #F87171;
-  --qart-error-bg:        #2D0A0A;
-  --qart-warning:         #FCD34D;
-  --qart-warning-bg:      #1C1000;
+  /* ── Textos sobre fondos coloreados ── */
+  --qart-text-on-primary: #0d0b09; /* Negro sobre qart-primary (que es crema en dark) */
+  --qart-text-inv: #0d0b09;
+  --qart-text-on-accent: #ffffff;
+  --qart-text-on-success: #052e16;
+  --qart-text-on-error: #2d0a0a;
 
-  /* ── Inverse Colors (for elements ON light/accent backgrounds) ── */
-  --qart-text-on-primary: #0D0B09;  /* Very dark text on warm-white or accent bg */
-  --qart-text-inv:        #0D0B09;
-  --qart-text-on-accent:  #FFFFFF;  /* White text on terracotta/orange accent */
+  /* ── Accent: Terracotta naranja — más vívido en dark para sobresalir ── */
+  --qart-accent: #e8621a;
+  --qart-accent-hover: #f07830;
+  --qart-accent-soft: #2a1a0a; /* Fondo muy oscuro de acento */
+  --qart-accent-muted: #3d2010; /* Hover suave de acento */
 
-  /* ── Shadows (Warm-toned, Not Black-on-Black) ── */
-  --qart-radius:          0px;
-  --qart-shadow-sharp:    4px 4px 0px #3D3530;
-  --qart-shadow-hover:    6px 6px 0px #E8621A;
-  --qart-shadow-accent:   4px 4px 0px #E8621A;
-  --qart-shadow-accent-hover: 8px 8px 0px #E8621A;
-  --qart-shadow-warm:     4px 4px 0px #2A2420;
+  /* ── Accent secundario: Ámbar dorado ── */
+  --qart-accent-2: #d97706;
+  --qart-accent-warm: #f59e0b;
+  --qart-accent-light: #261108; /* Ámbar muy oscuro — fondos sutiles */
 
-  /* ── Generic Aliases ── */
-  --surface:              var(--qart-surface);
-  --surface-soft:         #2A2420;
-  --border:               var(--qart-border);
-  --text-primary:         var(--qart-text);
-  --text-secondary:       var(--qart-text-muted);
-  --color-accent:         var(--qart-accent);
+  /* ── Semánticos — más vívidos en dark para visibilidad ── */
+  --qart-success: #4ade80;
+  --qart-success-bg: #052e16;
+  --qart-success-border: #166534;
+  --qart-error: #f87171;
+  --qart-error-bg: #2d0a0a;
+  --qart-error-border: #991b1b;
+  --qart-warning: #fcd34d;
+  --qart-warning-bg: #1c1000;
+  --qart-warning-border: #92400e;
+  --qart-info: #93c5fd;
+  --qart-info-bg: #1e3a5f;
+
+  /* ── Sombras — con tinte cálido, no negro frío ── */
+  --qart-shadow-sharp: 4px 4px 0px #3d3530;
+  --qart-shadow-hover: 6px 6px 0px #e8621a;
+  --qart-shadow-accent: 4px 4px 0px #e8621a;
+  --qart-shadow-accent-hover: 8px 8px 0px #e8621a;
+  --qart-shadow-warm: 4px 4px 0px #2a2420;
+  --qart-shadow-soft: 0 2px 12px rgba(0, 0, 0, 0.45);
+  --qart-shadow-elevated: 0 4px 24px rgba(0, 0, 0, 0.6);
+
+  /* ── Geometría ── */
+  --qart-radius: 0px;
+
+  /* ── Aliases genéricos (FormFactory, SDK components) ── */
+  --surface: var(--qart-surface);
+  --surface-soft: var(--qart-bg-warm);
+  --surface-sunken: var(--qart-surface-sunken);
+  --border: var(--qart-border);
+  --border-strong: var(--qart-border-soft);
+  --text-primary: var(--qart-text);
+  --text-secondary: var(--qart-text-muted);
+  --text-muted: var(--qart-text-subtle);
+  --text-inverse: var(--qart-text-on-accent);
+  --color-primary: var(--qart-accent);
+  --color-primary-soft: var(--qart-accent-soft);
+  --color-primary-muted: var(--qart-accent-muted);
+  --color-primary-dark: var(--qart-accent-hover);
+  --color-primary-glow: rgba(232, 98, 26, 0.25);
+  --color-accent: var(--qart-accent);
+  --color-error: var(--qart-error);
+  --color-success: var(--qart-success);
+  --color-warning: var(--qart-warning);
 }

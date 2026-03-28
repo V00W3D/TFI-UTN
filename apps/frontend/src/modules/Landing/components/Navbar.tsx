@@ -79,7 +79,10 @@ const Navbar = () => {
               >
                 Ingresar
               </button>
-              <button onClick={() => navigate('/iam/register')} className="btn-primary py-2 px-8 uppercase text-sm tracking-widest">
+              <button
+                onClick={() => navigate('/iam/register')}
+                className="btn-primary py-2 px-8 uppercase text-sm tracking-widest"
+              >
                 Crear Mi Plato
               </button>
             </>

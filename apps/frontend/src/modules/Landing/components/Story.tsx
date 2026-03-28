@@ -72,9 +72,9 @@ const Story = () => {
   return (
     <section id="como-funciona" className="py-32 bg-qart-bg relative overflow-hidden">
       {/* SECTION DIVIDER - Transition to FeaturedDish */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0">
         <svg
-          className="relative block w-[calc(100%+1.3px)] h-[60px]"
+          className="relative block w-[calc(100%+1.3px)] h-15"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
@@ -88,7 +88,7 @@ const Story = () => {
         </svg>
       </div>
       {/* TOP DIVIDER - Clean line to transition from bg-warm */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-qart-border to-transparent opacity-50" />
+      <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-qart-border to-transparent opacity-50" />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* HEADER */}
         <div className="text-center mb-24">
@@ -107,7 +107,7 @@ const Story = () => {
         {/* 3 STEP CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
           {/* Connecting Line (Desktop only) */}
-          <div className="hidden md:block absolute top-[60px] left-[15%] w-[70%] h-0.5 border-t-2 border-dashed border-qart-border -z-10" />
+          <div className="hidden md:block absolute top-15 left-[15%] w-[70%] h-0.5 border-t-2 border-dashed border-qart-border -z-10" />
 
           {steps.map((step, idx) => (
             <motion.div
@@ -118,12 +118,10 @@ const Story = () => {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ delay: idx * 0.2, type: 'spring', stiffness: 100 }}
             >
-              <div className="relative flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 bg-qart-bg-warm rounded-4xl flex items-center justify-center p-6 mb-8 group-hover:scale-110 transition-transform duration-500">
+              <div className="relative shrink-0 w-24 h-24 sm:w-32 sm:h-32 bg-qart-bg-warm rounded-4xl flex items-center justify-center p-6 mb-8 group-hover:scale-110 transition-transform duration-500">
                 {step.icon}
                 {/* Number Badge */}
-                <div className="step-badge transition-all duration-300">
-                  {idx + 1}
-                </div>
+                <div className="step-badge transition-all duration-300">{idx + 1}</div>
               </div>
 
               <h3 className="text-2xl font-display text-qart-primary mb-4 group-hover:text-qart-accent transition-colors">

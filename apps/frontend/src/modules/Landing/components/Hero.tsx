@@ -9,7 +9,7 @@ const Hero = () => {
     <section className="relative min-h-[90vh] flex items-center pt-24 overflow-hidden bg-qart-bg">
       {/* Structural Decor (Sharp) */}
       <div className="absolute top-0 right-0 w-1/3 h-full bg-qart-bg-warm border-l-4 border-qart-border hidden lg:block" />
-      
+
       {/* CONTENT GRID */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* TEXT CONTENT */}
@@ -39,7 +39,8 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
           >
-            Sabor de autor, esencia de barrio. Armamos lo que se te ocurra, sin vueltas, con los mejores ingredientes.
+            Sabor de autor, esencia de barrio. Armamos lo que se te ocurra, sin vueltas, con los
+            mejores ingredientes.
           </motion.p>
 
           <motion.div
@@ -61,7 +62,7 @@ const Hero = () => {
             </button>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8, duration: 0.6 }}
@@ -69,24 +70,48 @@ const Hero = () => {
           >
             <div className="flex items-center gap-4 group">
               <div className="w-14 h-14 bg-qart-surface border-2 border-qart-border flex items-center justify-center transition-all duration-300 group-hover:bg-qart-accent group-hover:text-white">
-                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <svg
+                  className="w-7 h-7"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
                 </svg>
               </div>
               <div className="text-left">
-                <p className="text-xs font-black text-qart-primary uppercase tracking-widest">Delivery</p>
+                <p className="text-xs font-black text-qart-primary uppercase tracking-widest">
+                  Delivery
+                </p>
                 <p className="text-xs text-qart-text-muted font-bold">RÁPIDO & CALIENTE</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-4 group">
               <div className="w-14 h-14 bg-qart-surface border-2 border-qart-border flex items-center justify-center transition-all duration-300 group-hover:bg-qart-accent-2 group-hover:text-white">
-                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                <svg
+                  className="w-7 h-7"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
                 </svg>
               </div>
               <div className="text-left">
-                <p className="text-xs font-black text-qart-primary uppercase tracking-widest">En el Local</p>
+                <p className="text-xs font-black text-qart-primary uppercase tracking-widest">
+                  En el Local
+                </p>
                 <p className="text-xs text-qart-text-muted font-bold">AMBIENTE ÚNICO</p>
               </div>
             </div>
@@ -100,8 +125,8 @@ const Hero = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <div className="relative w-full aspect-square max-w-[500px] border-8 border-qart-border bg-qart-bg-warm">
-             <img
+          <div className="relative w-full aspect-square max-w-125 border-8 border-qart-border bg-qart-bg-warm">
+            <img
               src="/hero.png"
               alt="Plato personalizado"
               className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-500"

@@ -38,7 +38,10 @@ const RegisterPage = () => {
               Protocolo de Alta de Usuario
             </p>
           </div>
-          <div className="w-16 h-16 bg-qart-primary border-4 border-qart-border flex items-center justify-center font-display text-4xl shadow-hover mx-auto md:mx-0 -rotate-6 uppercase font-black" style={{ color: 'var(--qart-text-on-primary)' }}>
+          <div
+            className="w-16 h-16 bg-qart-primary border-4 border-qart-border flex items-center justify-center font-display text-4xl shadow-hover mx-auto md:mx-0 -rotate-6 uppercase font-black"
+            style={{ color: 'var(--qart-text-on-primary)' }}
+          >
             R
           </div>
         </div>
@@ -53,10 +56,10 @@ const RegisterPage = () => {
               className="mb-8"
             >
               <div className="banner-error">
-                 <span className="font-black">ERROR</span>
-                 <p className="text-xs font-black uppercase tracking-widest leading-snug flex-1">
-                   Inconsistencia en los datos. Revise los campos marcados.
-                 </p>
+                <span className="font-black">ERROR</span>
+                <p className="text-xs font-black uppercase tracking-widest leading-snug flex-1">
+                  Inconsistencia en los datos. Revise los campos marcados.
+                </p>
               </div>
             </motion.div>
           )}
@@ -94,12 +97,7 @@ const RegisterPage = () => {
 
               <FormSection title="Seguridad" className="space-y-6">
                 <fields.username label="Usuario" placeholder="USER_ID" required />
-                <fields.email
-                  label="Email"
-                  placeholder="EMAIL_ADDR"
-                  control="email"
-                  required
-                />
+                <fields.email label="Email" placeholder="EMAIL_ADDR" control="email" required />
                 <fields.password label="Contraseña" control="password" required />
                 <fields.phone label="Teléfono" control="phone" required />
               </FormSection>
@@ -116,7 +114,10 @@ const RegisterPage = () => {
         <div className="mt-12 pt-8 border-t-2 border-qart-border text-center">
           <p className="text-xs font-bold text-qart-text-muted uppercase tracking-widest">
             ¿Ya tiene cuenta?{' '}
-            <span onClick={() => navigate('/iam/login')} className="text-qart-accent hover:underline cursor-pointer">
+            <span
+              onClick={() => navigate('/iam/login')}
+              className="text-qart-accent hover:underline cursor-pointer"
+            >
               Iniciar Sesión
             </span>
           </p>
