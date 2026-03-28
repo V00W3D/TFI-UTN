@@ -121,7 +121,7 @@ const Story = () => {
               <div className="relative flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32 bg-qart-bg-warm rounded-4xl flex items-center justify-center p-6 mb-8 group-hover:scale-110 transition-transform duration-500">
                 {step.icon}
                 {/* Number Badge */}
-                <div className="absolute -top-4 -right-4 w-11 h-11 bg-qart-primary text-white rounded-none flex items-center justify-center font-bold text-base border-4 border-white shadow-2xl z-20 transition-all duration-300">
+                <div className="step-badge transition-all duration-300">
                   {idx + 1}
                 </div>
               </div>

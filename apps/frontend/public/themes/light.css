@@ -1,43 +1,59 @@
 :root {
   /* ── Core Backgrounds ── */
-  --qart-bg:           #F9F7F2; /* Architectural Cream */
-  --qart-bg-warm:      #F0EDE4;
-  --qart-surface:      #FFFFFF;
-  --qart-nav-bg:       rgba(249, 247, 242, 0.96);
+  --qart-bg:              #F7F3EC;  /* Architectural warm cream */
+  --qart-bg-warm:         #EDE6D8;  /* Deep warm sand */
+  --qart-surface:         #FFFFFF;  /* Pure white surface */
+  --qart-surface-raised:  #FAFAF7;  /* Subtle elevated surface */
+  --qart-nav-bg:          rgba(247, 243, 236, 0.97);
 
   /* RGB Components for glass/alpha effects */
-  --qart-surface-rgb:  255, 255, 255;
-  --qart-border-rgb:   26, 26, 26;
+  --qart-surface-rgb:     255, 255, 255;
+  --qart-border-rgb:      26, 20, 16;
 
-  /* ── Borders & Decor (Sharp) ── */
-  --qart-border:       #1A1A1A; /* Solid Black Border */
-  --qart-border-soft:  #D1D1D1;
+  /* ── Borders (High Contrast) ── */
+  --qart-border:          #1A1410;  /* Bold warm black border */
+  --qart-border-soft:     #C8BAA8;  /* Warm muted border */
+  --qart-border-subtle:   #E5DDD0;  /* Very soft border */
 
-  /* ── Typography (High Contrast) ── */
-  --qart-text:         #1A1A1A;
-  --qart-text-muted:   #4B4B4B;
-  --qart-primary:      #1A1A1A; /* Strong Architectural Pitch */
+  /* ── Typography ── */
+  --qart-text:            #1A1410;  /* Very dark warm brown — primary readable text */
+  --qart-text-muted:      #60524A;  /* Medium warm brown — secondary text */
+  --qart-text-subtle:     #9C8878;  /* Very muted — tertiary / placeholder text */
+  --qart-primary:         #1A1410;  /* Strong architectural primary */
 
-  /* ── Brand Accents (Sophisticated) ── */
-  --qart-accent:       #C2410C; /* Terracotta Red */
-  --qart-accent-2:     #92400E; /* Deep Amber */
-  --qart-success:      #166534;
-  --qart-error:        #991B1B;
+  /* ── Brand Accents ── */
+  --qart-accent:          #C2410C;  /* Terracotta red — main brand color */
+  --qart-accent-2:        #92400E;  /* Deep amber brown */
+  --qart-accent-warm:     #D97706;  /* Golden amber */
+  --qart-accent-light:    #FEF3C7;  /* Very light amber — subtle accent bg */
+  --qart-accent-muted:    #FDE8DC;  /* Light terracotta tint for hover states */
 
-  /* ── Inverse Colors ── */
-  --qart-text-on-primary: #FFFFFF;
-  --qart-text-inv:        #FFFFFF;
+  /* ── Semantic Colors ── */
+  --qart-success:         #166534;
+  --qart-success-bg:      #DCFCE7;
+  --qart-error:           #991B1B;
+  --qart-error-bg:        #FEE2E2;
+  --qart-warning:         #92400E;
+  --qart-warning-bg:      #FEF3C7;
 
-  /* ── Custom Geometry & Shadows ── */
-  --qart-radius:       0px;
-  --qart-shadow-sharp: 4px 4px 0px #1A1A1A;
-  --qart-shadow-hover: 8px 8px 0px #1A1A1A;
+  /* ── Inverse Colors (for elements ON dark/accent backgrounds) ── */
+  --qart-text-on-primary: #F7F3EC;  /* Warm cream text on dark backgrounds */
+  --qart-text-inv:        #F7F3EC;
+  --qart-text-on-accent:  #FFFFFF;  /* White text on terracotta/accent */
+
+  /* ── Shadows (Sharp Architectural) ── */
+  --qart-radius:          0px;
+  --qart-shadow-sharp:    4px 4px 0px #1A1410;
+  --qart-shadow-hover:    8px 8px 0px #1A1410;
+  --qart-shadow-accent:   4px 4px 0px #C2410C;
+  --qart-shadow-accent-hover: 8px 8px 0px #C2410C;
+  --qart-shadow-warm:     4px 4px 0px #C8BAA8;
 
   /* ── Generic Aliases ── */
-  --surface:           var(--qart-surface);
-  --surface-soft:      var(--qart-bg-warm);
-  --border:            var(--qart-border);
-  --text-primary:      var(--qart-text);
-  --text-secondary:    var(--qart-text-muted);
-  --color-accent:      var(--qart-accent);
+  --surface:              var(--qart-surface);
+  --surface-soft:         var(--qart-bg-warm);
+  --border:               var(--qart-border);
+  --text-primary:         var(--qart-text);
+  --text-secondary:       var(--qart-text-muted);
+  --color-accent:         var(--qart-accent);
 }

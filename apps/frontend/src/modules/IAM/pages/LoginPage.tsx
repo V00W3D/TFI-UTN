@@ -30,7 +30,7 @@ const LoginPage = () => {
     <div className="auth-card">
       <div className="relative z-10">
         <div className="text-center mb-12">
-          <div className="w-20 h-20 bg-qart-accent text-white flex items-center justify-center font-display text-5xl border-4 border-qart-border shadow-[8px_8px_0px_#1A1A1A] mx-auto mb-8 -rotate-3 uppercase font-black">
+          <div className="w-20 h-20 bg-qart-accent flex items-center justify-center font-display text-5xl border-4 border-qart-border shadow-hover mx-auto mb-8 -rotate-3 uppercase font-black" style={{ color: 'var(--qart-text-on-accent)' }}>
             Q
           </div>
           <h2 className="text-4xl font-display text-qart-primary mb-3 uppercase font-black tracking-tight">Acceso QART</h2>
@@ -46,7 +46,7 @@ const LoginPage = () => {
               exit={{ opacity: 0, x: 20 }}
               className="mb-8"
             >
-              <div className="bg-qart-error text-white border-2 border-qart-border p-5 flex gap-4 shadow-[4px_4px_0px_#000]">
+              <div className="banner-error">
                 <span className="font-black">!</span>
                 <p className="text-xs font-black uppercase tracking-widest leading-snug">
                   {error.code === 'UNAUTHORIZED'

@@ -9,9 +9,15 @@ import { roleMiddleware } from '../middleware/role.middleware';
 import { ErrorTools } from './ErrorTools';
 import { BACKEND_URL, BACKEND_HOST, BACKEND_PORT, BUN_MODE } from '../env';
 
-// Accept both localhost and 127.0.0.1 — browsers treat them as different origins.
+// Accept localhost, 127.0.0.1, and Replit proxied domains.
 const FRONTEND_PORT = process.env.FRONTEND_PORT ?? '5173';
-const ALLOWED_ORIGINS = [`http://localhost:${FRONTEND_PORT}`, `http://127.0.0.1:${FRONTEND_PORT}`];
+const REPLIT_DEV_DOMAIN = process.env.REPLIT_DEV_DOMAIN;
+const ALLOWED_ORIGINS: (string | RegExp)[] = [
+  `http://localhost:${FRONTEND_PORT}`,
+  `http://127.0.0.1:${FRONTEND_PORT}`,
+  ...(REPLIT_DEV_DOMAIN ? [`https://${REPLIT_DEV_DOMAIN}`] : []),
+  /\.replit\.dev$/,
+];
 
 /**
  * @description Core Express application.

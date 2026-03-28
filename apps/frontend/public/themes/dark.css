@@ -1,43 +1,59 @@
 :root {
-  /* ── Core Backgrounds ── */
-  --qart-bg:           #050505; /* Pure Ink Black */
-  --qart-bg-warm:      #0F0F0F; /* Slightly Lighter Ink */
-  --qart-surface:      #0A0A0A; /* Card Surface */
-  --qart-nav-bg:       rgba(5, 5, 5, 0.95);
+  /* ── Core Backgrounds (Warm Charcoal Night — NOT a light-mode invert) ── */
+  --qart-bg:              #0D0B09;  /* Deep warm near-black — distinct base */
+  --qart-bg-warm:         #181410;  /* Warmer dark — clearly different from bg */
+  --qart-surface:         #1E1A16;  /* Card surface — warm dark brown, visible on bg */
+  --qart-surface-raised:  #252118;  /* Elevated surface — higher z-plane */
+  --qart-nav-bg:          rgba(13, 11, 9, 0.96);
 
   /* RGB Components for glass/alpha effects */
-  --qart-surface-rgb:  10, 10, 10;
-  --qart-border-rgb:   255, 255, 255;
+  --qart-surface-rgb:     30, 26, 22;
+  --qart-border-rgb:      90, 80, 70;
 
-  /* ── Borders & Decor (Sharp) ── */
-  --qart-border:       #2A2A2A;
-  --qart-border-soft:  #1A1A1A;
+  /* ── Borders (Warm & Legible on Dark) ── */
+  --qart-border:          #3D3530;  /* Warm brown — VISIBLE on every dark surface */
+  --qart-border-soft:     #2A2420;  /* Softer warm border */
+  --qart-border-subtle:   #1E1A16;  /* Very subtle separation */
 
-  /* ── Typography (Pristine) ── */
-  --qart-text:         #E0E0E0; /* Silver */
-  --qart-text-muted:   #888888;
-  --qart-primary:      #FFFFFF; /* High Pitch White */
+  /* ── Typography (Warm Off-White — NOT pure white) ── */
+  --qart-text:            #F0E8E0;  /* Warm off-white — primary text */
+  --qart-text-muted:      #8A7E76;  /* Warm muted brown-gray — secondary text */
+  --qart-text-subtle:     #5A504A;  /* Very muted — tertiary / placeholder */
+  --qart-primary:         #F0E8E0;  /* Primary text = warm white (matches --qart-text) */
 
-  /* ── Brand Accents (Vivid) ── */
-  --qart-accent:       #EF4444; /* Vivid Flat Red */
-  --qart-accent-2:     #F59E0B;
-  --qart-success:      #22C55E;
-  --qart-error:        #EF4444;
+  /* ── Brand Accents (Vivid & Warm on Dark) ── */
+  --qart-accent:          #E8621A;  /* Vivid terracotta orange — pops on dark */
+  --qart-accent-2:        #D97706;  /* Warm amber */
+  --qart-accent-warm:     #F59E0B;  /* Golden amber */
+  --qart-accent-light:    #2A1A0A;  /* Very dark amber — subtle accent background */
+  --qart-accent-muted:    #261108;  /* Even darker amber tint for hover states */
 
-  /* ── Inverse Colors ── */
-  --qart-text-on-primary: #050505; /* Black text on Light Primary */
-  --qart-text-inv:        #050505;
+  /* ── Semantic Colors (Vivid for dark backgrounds) ── */
+  --qart-success:         #4ADE80;
+  --qart-success-bg:      #052E16;
+  --qart-error:           #F87171;
+  --qart-error-bg:        #2D0A0A;
+  --qart-warning:         #FCD34D;
+  --qart-warning-bg:      #1C1000;
 
-  /* ── Custom Geometry & Shadows ── */
-  --qart-radius:       0px;
-  --qart-shadow-sharp: 4px 4px 0px #2A2A2A;
-  --qart-shadow-hover: 6px 6px 0px #EF4444;
+  /* ── Inverse Colors (for elements ON light/accent backgrounds) ── */
+  --qart-text-on-primary: #0D0B09;  /* Very dark text on warm-white or accent bg */
+  --qart-text-inv:        #0D0B09;
+  --qart-text-on-accent:  #FFFFFF;  /* White text on terracotta/orange accent */
+
+  /* ── Shadows (Warm-toned, Not Black-on-Black) ── */
+  --qart-radius:          0px;
+  --qart-shadow-sharp:    4px 4px 0px #3D3530;
+  --qart-shadow-hover:    6px 6px 0px #E8621A;
+  --qart-shadow-accent:   4px 4px 0px #E8621A;
+  --qart-shadow-accent-hover: 8px 8px 0px #E8621A;
+  --qart-shadow-warm:     4px 4px 0px #2A2420;
 
   /* ── Generic Aliases ── */
-  --surface:           var(--qart-surface);
-  --surface-soft:      #1A1A1A;
-  --border:            var(--qart-border);
-  --text-primary:      var(--qart-text);
-  --text-secondary:    var(--qart-text-muted);
-  --color-accent:      var(--qart-accent);
+  --surface:              var(--qart-surface);
+  --surface-soft:         #2A2420;
+  --border:               var(--qart-border);
+  --text-primary:         var(--qart-text);
+  --text-secondary:       var(--qart-text-muted);
+  --color-accent:         var(--qart-accent);
 }

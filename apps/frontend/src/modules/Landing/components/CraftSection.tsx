@@ -34,7 +34,7 @@ const CraftSection = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
         >
-          <button className="btn-outline px-12 py-6 text-2xl !bg-qart-bg !text-qart-primary !border-qart-border shadow-[10px_10px_0px_rgba(0,0,0,0.5)] uppercase tracking-[0.2em] font-black group transition-all">
+          <button className="btn-outline px-12 py-6 text-2xl !bg-qart-bg !text-qart-primary !border-qart-border shadow-hover uppercase tracking-[0.2em] font-black group transition-all">
             Empezar a armar
           </button>
         </motion.div>
