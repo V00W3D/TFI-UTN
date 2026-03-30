@@ -55,13 +55,13 @@ export const ModelName = {
   CustomerProfile: 'CustomerProfile',
   StaffProfile: 'StaffProfile',
   AuthorityProfile: 'AuthorityProfile',
-  Diet: 'Diet',
-  DietItem: 'DietItem',
-  Plate: 'Plate',
   Ingredient: 'Ingredient',
-  PlateIngredient: 'PlateIngredient',
+  IngredientVariant: 'IngredientVariant',
+  Recipe: 'Recipe',
+  RecipeItem: 'RecipeItem',
+  Plate: 'Plate',
+  PlateAdjustment: 'PlateAdjustment',
   Review: 'Review',
-  CreatorStats: 'CreatorStats',
   Tag: 'Tag',
   PlateTag: 'PlateTag'
 } as const
@@ -93,8 +93,8 @@ export const UserScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   role: 'role',
-  createdat: 'createdat',
-  updatedat: 'updatedat'
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -124,50 +124,131 @@ export const AuthorityProfileScalarFieldEnum = {
 export type AuthorityProfileScalarFieldEnum = (typeof AuthorityProfileScalarFieldEnum)[keyof typeof AuthorityProfileScalarFieldEnum]
 
 
-export const DietScalarFieldEnum = {
+export const IngredientScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   name: 'name',
   description: 'description',
-  isPublic: 'isPublic',
-  avgRating: 'avgRating',
-  ratingsCount: 'ratingsCount',
-  copiedFromId: 'copiedFromId',
+  category: 'category',
+  subCategory: 'subCategory',
+  primaryFlavor: 'primaryFlavor',
+  nutritionBasisGrams: 'nutritionBasisGrams',
+  calories: 'calories',
+  proteins: 'proteins',
+  carbs: 'carbs',
+  fats: 'fats',
+  fiber: 'fiber',
+  sugars: 'sugars',
+  sodium: 'sodium',
+  saturatedFat: 'saturatedFat',
+  transFat: 'transFat',
+  monounsaturatedFat: 'monounsaturatedFat',
+  polyunsaturatedFat: 'polyunsaturatedFat',
+  allergens: 'allergens',
+  dietaryTags: 'dietaryTags',
+  nutritionTags: 'nutritionTags',
+  notes: 'notes',
+  extraAttributes: 'extraAttributes',
+  isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
-export type DietScalarFieldEnum = (typeof DietScalarFieldEnum)[keyof typeof DietScalarFieldEnum]
+export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
 
 
-export const DietItemScalarFieldEnum = {
+export const IngredientVariantScalarFieldEnum = {
   id: 'id',
-  dietId: 'dietId',
-  mealType: 'mealType',
-  plateId: 'plateId',
   ingredientId: 'ingredientId',
-  reason: 'reason',
-  createdAt: 'createdAt'
+  name: 'name',
+  description: 'description',
+  preparationMethod: 'preparationMethod',
+  preparationNotes: 'preparationNotes',
+  portionGrams: 'portionGrams',
+  yieldFactor: 'yieldFactor',
+  overrideCalories: 'overrideCalories',
+  overrideProteins: 'overrideProteins',
+  overrideCarbs: 'overrideCarbs',
+  overrideFats: 'overrideFats',
+  overrideFiber: 'overrideFiber',
+  overrideSugars: 'overrideSugars',
+  overrideSodium: 'overrideSodium',
+  overrideSaturatedFat: 'overrideSaturatedFat',
+  overrideTransFat: 'overrideTransFat',
+  overrideMonounsaturatedFat: 'overrideMonounsaturatedFat',
+  overridePolyunsaturatedFat: 'overridePolyunsaturatedFat',
+  isDefault: 'isDefault',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
-export type DietItemScalarFieldEnum = (typeof DietItemScalarFieldEnum)[keyof typeof DietItemScalarFieldEnum]
+export type IngredientVariantScalarFieldEnum = (typeof IngredientVariantScalarFieldEnum)[keyof typeof IngredientVariantScalarFieldEnum]
+
+
+export const RecipeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  type: 'type',
+  flavor: 'flavor',
+  difficulty: 'difficulty',
+  prepTimeMinutes: 'prepTimeMinutes',
+  cookTimeMinutes: 'cookTimeMinutes',
+  yieldServings: 'yieldServings',
+  assemblyNotes: 'assemblyNotes',
+  allergens: 'allergens',
+  dietaryTags: 'dietaryTags',
+  isPublic: 'isPublic',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type RecipeScalarFieldEnum = (typeof RecipeScalarFieldEnum)[keyof typeof RecipeScalarFieldEnum]
+
+
+export const RecipeItemScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  variantId: 'variantId',
+  quantityGrams: 'quantityGrams',
+  prepNotes: 'prepNotes',
+  isOptional: 'isOptional',
+  isMainComponent: 'isMainComponent',
+  sortOrder: 'sortOrder'
+} as const
+
+export type RecipeItemScalarFieldEnum = (typeof RecipeItemScalarFieldEnum)[keyof typeof RecipeItemScalarFieldEnum]
 
 
 export const PlateScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
-  price: 'price',
-  type: 'type',
-  flavor: 'flavor',
+  recipeId: 'recipeId',
+  size: 'size',
+  servedWeightGrams: 'servedWeightGrams',
+  costPrice: 'costPrice',
+  menuPrice: 'menuPrice',
   avgRating: 'avgRating',
   ratingsCount: 'ratingsCount',
-  recommendations: 'recommendations',
-  notRecommendations: 'notRecommendations',
-  calories: 'calories',
-  proteins: 'proteins',
-  carbs: 'carbs',
-  fats: 'fats',
+  likesCount: 'likesCount',
+  dislikesCount: 'dislikesCount',
+  calculatedCalories: 'calculatedCalories',
+  calculatedProteins: 'calculatedProteins',
+  calculatedCarbs: 'calculatedCarbs',
+  calculatedFats: 'calculatedFats',
+  calculatedFiber: 'calculatedFiber',
+  calculatedSugars: 'calculatedSugars',
+  calculatedSodium: 'calculatedSodium',
+  calculatedSaturatedFat: 'calculatedSaturatedFat',
+  calculatedTransFat: 'calculatedTransFat',
+  calculatedMonounsaturatedFat: 'calculatedMonounsaturatedFat',
+  calculatedPolyunsaturatedFat: 'calculatedPolyunsaturatedFat',
+  allergens: 'allergens',
+  dietaryTags: 'dietaryTags',
+  nutritionTags: 'nutritionTags',
+  nutritionNotes: 'nutritionNotes',
   isAvailable: 'isAvailable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -176,26 +257,18 @@ export const PlateScalarFieldEnum = {
 export type PlateScalarFieldEnum = (typeof PlateScalarFieldEnum)[keyof typeof PlateScalarFieldEnum]
 
 
-export const IngredientScalarFieldEnum = {
+export const PlateAdjustmentScalarFieldEnum = {
   id: 'id',
-  name: 'name',
-  flavor: 'flavor',
-  calories: 'calories',
-  proteins: 'proteins',
-  carbs: 'carbs',
-  fats: 'fats',
-  isActive: 'isActive'
-} as const
-
-export type IngredientScalarFieldEnum = (typeof IngredientScalarFieldEnum)[keyof typeof IngredientScalarFieldEnum]
-
-
-export const PlateIngredientScalarFieldEnum = {
   plateId: 'plateId',
-  ingredientId: 'ingredientId'
+  recipeItemId: 'recipeItemId',
+  variantId: 'variantId',
+  adjustmentType: 'adjustmentType',
+  quantityGrams: 'quantityGrams',
+  notes: 'notes',
+  sortOrder: 'sortOrder'
 } as const
 
-export type PlateIngredientScalarFieldEnum = (typeof PlateIngredientScalarFieldEnum)[keyof typeof PlateIngredientScalarFieldEnum]
+export type PlateAdjustmentScalarFieldEnum = (typeof PlateAdjustmentScalarFieldEnum)[keyof typeof PlateAdjustmentScalarFieldEnum]
 
 
 export const ReviewScalarFieldEnum = {
@@ -204,32 +277,18 @@ export const ReviewScalarFieldEnum = {
   plateId: 'plateId',
   rating: 'rating',
   comment: 'comment',
+  recommends: 'recommends',
   createdAt: 'createdAt'
 } as const
 
 export type ReviewScalarFieldEnum = (typeof ReviewScalarFieldEnum)[keyof typeof ReviewScalarFieldEnum]
 
 
-export const CreatorStatsScalarFieldEnum = {
-  userId: 'userId',
-  totalPlates: 'totalPlates',
-  totalOrders: 'totalOrders',
-  avgRating: 'avgRating',
-  reputationScore: 'reputationScore',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type CreatorStatsScalarFieldEnum = (typeof CreatorStatsScalarFieldEnum)[keyof typeof CreatorStatsScalarFieldEnum]
-
-
 export const TagScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  isApproved: 'isApproved',
+  description: 'description',
   isActive: 'isActive',
-  usageCount: 'usageCount',
-  createdById: 'createdById',
   createdAt: 'createdAt'
 } as const
 
@@ -252,6 +311,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -266,4 +333,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

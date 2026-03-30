@@ -137,7 +137,7 @@ export type PlateTagGroupByOutputType = {
   _max: PlateTagMaxAggregateOutputType | null
 }
 
-type GetPlateTagGroupByPayload<T extends PlateTagGroupByArgs> = Prisma.PrismaPromise<
+export type GetPlateTagGroupByPayload<T extends PlateTagGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PlateTagGroupByOutputType, T['by']> &
       {

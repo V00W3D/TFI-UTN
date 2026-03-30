@@ -9,6 +9,24 @@
 * 🟢 You can import this file directly.
 */
 
+export const UserRole = {
+  CUSTOMER: 'CUSTOMER',
+  STAFF: 'STAFF',
+  AUTHORITY: 'AUTHORITY'
+} as const
+
+export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+
+
+export const Sex = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+} as const
+
+export type Sex = (typeof Sex)[keyof typeof Sex]
+
+
 export const CustomerTier = {
   REGULAR: 'REGULAR',
   VIP: 'VIP',
@@ -40,14 +58,41 @@ export const AuthorityRank = {
 export type AuthorityRank = (typeof AuthorityRank)[keyof typeof AuthorityRank]
 
 
-export const MealType = {
-  BREAKFAST: 'BREAKFAST',
-  LUNCH: 'LUNCH',
-  SNACK: 'SNACK',
-  DINNER: 'DINNER'
+export const IngredientCategory = {
+  PROTEIN_ANIMAL: 'PROTEIN_ANIMAL',
+  PROTEIN_PLANT: 'PROTEIN_PLANT',
+  VEGETABLE: 'VEGETABLE',
+  FRUIT: 'FRUIT',
+  LEGUME: 'LEGUME',
+  GRAIN: 'GRAIN',
+  BREAD: 'BREAD',
+  DAIRY: 'DAIRY',
+  FAT: 'FAT',
+  SAUCE: 'SAUCE',
+  CONDIMENT: 'CONDIMENT',
+  SWEETENER: 'SWEETENER',
+  BEVERAGE: 'BEVERAGE',
+  OTHER: 'OTHER'
 } as const
 
-export type MealType = (typeof MealType)[keyof typeof MealType]
+export type IngredientCategory = (typeof IngredientCategory)[keyof typeof IngredientCategory]
+
+
+export const PreparationMethod = {
+  RAW: 'RAW',
+  GRILLED: 'GRILLED',
+  FRIED: 'FRIED',
+  BAKED: 'BAKED',
+  ROASTED: 'ROASTED',
+  SAUTEED: 'SAUTEED',
+  BOILED: 'BOILED',
+  STEAMED: 'STEAMED',
+  SMOKED: 'SMOKED',
+  PICKLED: 'PICKLED',
+  FERMENTED: 'FERMENTED'
+} as const
+
+export type PreparationMethod = (typeof PreparationMethod)[keyof typeof PreparationMethod]
 
 
 export const PlateType = {
@@ -68,25 +113,85 @@ export const FlavorProfile = {
   ACID: 'ACID',
   BITTERSWEET: 'BITTERSWEET',
   UMAMI: 'UMAMI',
+  SPICY: 'SPICY',
   UNKNOWN: 'UNKNOWN'
 } as const
 
 export type FlavorProfile = (typeof FlavorProfile)[keyof typeof FlavorProfile]
 
 
-export const UserRole = {
-  CUSTOMER: 'CUSTOMER',
-  STAFF: 'STAFF',
-  AUTHORITY: 'AUTHORITY'
+export const Difficulty = {
+  EASY: 'EASY',
+  MEDIUM: 'MEDIUM',
+  HARD: 'HARD',
+  CHEF: 'CHEF'
 } as const
 
-export type UserRole = (typeof UserRole)[keyof typeof UserRole]
+export type Difficulty = (typeof Difficulty)[keyof typeof Difficulty]
 
 
-export const Sex = {
-  MALE: 'MALE',
-  FEMALE: 'FEMALE',
-  OTHER: 'OTHER'
+export const PlateSize = {
+  SMALL: 'SMALL',
+  REGULAR: 'REGULAR',
+  LARGE: 'LARGE',
+  XL: 'XL'
 } as const
 
-export type Sex = (typeof Sex)[keyof typeof Sex]
+export type PlateSize = (typeof PlateSize)[keyof typeof PlateSize]
+
+
+export const AdjustmentType = {
+  ADDITION: 'ADDITION',
+  REMOVAL: 'REMOVAL',
+  SUBSTITUTION: 'SUBSTITUTION'
+} as const
+
+export type AdjustmentType = (typeof AdjustmentType)[keyof typeof AdjustmentType]
+
+
+export const Allergen = {
+  GLUTEN: 'GLUTEN',
+  MILK: 'MILK',
+  EGG: 'EGG',
+  PEANUT: 'PEANUT',
+  TREE_NUT: 'TREE_NUT',
+  SOY: 'SOY',
+  SESAME: 'SESAME',
+  FISH: 'FISH',
+  SHELLFISH: 'SHELLFISH',
+  MUSTARD: 'MUSTARD',
+  CELERY: 'CELERY',
+  SULFITES: 'SULFITES'
+} as const
+
+export type Allergen = (typeof Allergen)[keyof typeof Allergen]
+
+
+export const DietaryTag = {
+  VEGETARIAN: 'VEGETARIAN',
+  VEGAN: 'VEGAN',
+  GLUTEN_FREE: 'GLUTEN_FREE',
+  DAIRY_FREE: 'DAIRY_FREE',
+  NUT_FREE: 'NUT_FREE',
+  LOW_CARB: 'LOW_CARB',
+  KETO_COMPATIBLE: 'KETO_COMPATIBLE',
+  PALEO_COMPATIBLE: 'PALEO_COMPATIBLE',
+  PESCATARIAN: 'PESCATARIAN'
+} as const
+
+export type DietaryTag = (typeof DietaryTag)[keyof typeof DietaryTag]
+
+
+export const NutritionTag = {
+  HIGH_PROTEIN: 'HIGH_PROTEIN',
+  HIGH_FIBER: 'HIGH_FIBER',
+  HIGH_HEALTHY_FATS: 'HIGH_HEALTHY_FATS',
+  LOW_SUGAR: 'LOW_SUGAR',
+  LOW_SODIUM: 'LOW_SODIUM',
+  WHOLE_FOOD: 'WHOLE_FOOD',
+  MINIMALLY_PROCESSED: 'MINIMALLY_PROCESSED',
+  ENERGY_DENSE: 'ENERGY_DENSE',
+  SATIATING: 'SATIATING'
+} as const
+
+export type NutritionTag = (typeof NutritionTag)[keyof typeof NutritionTag]

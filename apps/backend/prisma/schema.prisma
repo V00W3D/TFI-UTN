@@ -7,65 +7,286 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─────────────────────────────────────────────
-// USER
-// ─────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// USUARIOS Y ACCESO
+// ═══════════════════════════════════════════════════════════════
 
 model User {
-  id String @id @default(uuid())
-
-  name  String  @db.VarChar(128)
-  sname String? @db.VarChar(128)
-  lname String  @db.VarChar(128)
-  sex   Sex     @default(OTHER)
-
-  username String @unique @db.VarChar(32)
-  password String @db.VarChar(128)
-
-  email String  @unique @db.VarChar(128)
-  phone String? @unique @db.VarChar(15)
-
-  role UserRole @default(CUSTOMER)
+  id       String   @id @default(uuid())
+  name     String   @db.VarChar(128)
+  sname    String?  @db.VarChar(128)
+  lname    String   @db.VarChar(128)
+  sex      Sex      @default(OTHER)
+  username String   @unique @db.VarChar(32)
+  password String   @db.VarChar(128)
+  email    String   @unique @db.VarChar(128)
+  phone    String?  @unique @db.VarChar(15)
+  role     UserRole @default(CUSTOMER)
 
   customer  CustomerProfile?
   staff     StaffProfile?
   authority AuthorityProfile?
+  reviews   Review[]
 
-  reviews  Review[]
-  stats    CreatorStats?
-  diets    Diet[]
-
-  // 🔥 RELACIÓN INVERSA PARA TAGS
-  createdTags Tag[]
-
-  createdat DateTime @default(now())
-  updatedat DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// ─────────────────────────────────────────────
-// CUSTOMER
-// ─────────────────────────────────────────────
-
 model CustomerProfile {
-  userId String      @id
-  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   tier   CustomerTier @default(REGULAR)
+}
+
+model StaffProfile {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post   StaffPost
+}
+
+model AuthorityProfile {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rank   AuthorityRank
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CATÁLOGO GASTRONÓMICO
+// ═══════════════════════════════════════════════════════════════
+
+// Nutrición explícita y plana: evita composites ambiguos y permite describir
+// mejor casos como palta, frutos secos o pescados grasos sin reducir todo a
+// un "health score" simplista.
+model Ingredient {
+  id                     String             @id @default(uuid())
+  name                   String             @unique @db.VarChar(64)
+  description            String?            @db.VarChar(255)
+  category               IngredientCategory
+  subCategory            String?            @db.VarChar(64)
+  primaryFlavor          FlavorProfile?
+  nutritionBasisGrams    Float              @default(100)
+  calories               Float              @default(0)
+  proteins               Float              @default(0)
+  carbs                  Float              @default(0)
+  fats                   Float              @default(0)
+  fiber                  Float              @default(0)
+  sugars                 Float              @default(0)
+  sodium                 Float              @default(0)
+  saturatedFat           Float              @default(0)
+  transFat               Float              @default(0)
+  monounsaturatedFat     Float              @default(0)
+  polyunsaturatedFat     Float              @default(0)
+  allergens              Allergen[]
+  dietaryTags            DietaryTag[]
+  nutritionTags          NutritionTag[]
+  notes                  String?            @db.VarChar(255)
+  extraAttributes        Json?
+  variants               IngredientVariant[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model IngredientVariant {
+  id                           String            @id @default(uuid())
+  ingredientId                 String
+  ingredient                   Ingredient        @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  name                         String            @db.VarChar(64)
+  description                  String?           @db.VarChar(255)
+  preparationMethod            PreparationMethod @default(RAW)
+  preparationNotes             String?           @db.VarChar(255)
+  portionGrams                 Float             @default(100)
+  yieldFactor                  Float             @default(1)
+  overrideCalories             Float?
+  overrideProteins             Float?
+  overrideCarbs                Float?
+  overrideFats                 Float?
+  overrideFiber                Float?
+  overrideSugars               Float?
+  overrideSodium               Float?
+  overrideSaturatedFat         Float?
+  overrideTransFat             Float?
+  overrideMonounsaturatedFat   Float?
+  overridePolyunsaturatedFat   Float?
+  isDefault                    Boolean           @default(false)
+  recipeItems                  RecipeItem[]
+  plateAdjustments             PlateAdjustment[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ingredientId, name])
+  @@index([ingredientId, preparationMethod])
+}
+
+model Recipe {
+  id              String         @id @default(uuid())
+  name            String         @db.VarChar(128)
+  description     String?        @db.Text
+  type            PlateType
+  flavor          FlavorProfile
+  difficulty      Difficulty     @default(MEDIUM)
+  prepTimeMinutes Int?
+  cookTimeMinutes Int?
+  yieldServings   Int            @default(1)
+  assemblyNotes   String?        @db.Text
+  allergens       Allergen[]
+  dietaryTags     DietaryTag[]
+  items           RecipeItem[]
+  plates          Plate[]
+
+  isPublic  Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RecipeItem {
+  id              String            @id @default(uuid())
+  recipeId        String
+  recipe          Recipe            @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  variantId       String
+  variant         IngredientVariant @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  quantityGrams   Float
+  prepNotes       String?           @db.VarChar(255)
+  isOptional      Boolean           @default(false)
+  isMainComponent Boolean           @default(false)
+  sortOrder       Int               @default(0)
+  plateAdjustments PlateAdjustment[]
+
+  @@unique([recipeId, sortOrder])
+  @@index([variantId])
+}
+
+model Plate {
+  id                           String        @id @default(uuid())
+  name                         String        @db.VarChar(128)
+  description                  String?       @db.Text
+  recipeId                     String
+  recipe                       Recipe        @relation(fields: [recipeId], references: [id], onDelete: Restrict)
+  size                         PlateSize     @default(REGULAR)
+  servedWeightGrams            Float?
+  costPrice                    Decimal       @default(0) @db.Decimal(10, 2)
+  menuPrice                    Decimal       @default(0) @db.Decimal(10, 2)
+  avgRating                    Float         @default(0)
+  ratingsCount                 Int           @default(0)
+  likesCount                   Int           @default(0)
+  dislikesCount                Int           @default(0)
+  // Snapshot nutricional del plato final ya resuelto.
+  calculatedCalories           Float         @default(0)
+  calculatedProteins           Float         @default(0)
+  calculatedCarbs              Float         @default(0)
+  calculatedFats               Float         @default(0)
+  calculatedFiber              Float         @default(0)
+  calculatedSugars             Float         @default(0)
+  calculatedSodium             Float         @default(0)
+  calculatedSaturatedFat       Float         @default(0)
+  calculatedTransFat           Float         @default(0)
+  calculatedMonounsaturatedFat Float         @default(0)
+  calculatedPolyunsaturatedFat Float         @default(0)
+  // Pueden diferir de la receta base si el plato aplica ajustes.
+  allergens                    Allergen[]
+  dietaryTags                  DietaryTag[]
+  nutritionTags                NutritionTag[]
+  nutritionNotes               String?       @db.VarChar(255)
+  adjustments                  PlateAdjustment[]
+  reviews                      Review[]
+  tags                         PlateTag[]
+
+  isAvailable Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([recipeId])
+  @@index([isAvailable, menuPrice])
+}
+
+// Ajustes a nivel plato: permiten describir un SKU/menu-item derivado de una
+// receta base sin duplicar todos los componentes.
+model PlateAdjustment {
+  id             String             @id @default(uuid())
+  plateId         String
+  plate           Plate              @relation(fields: [plateId], references: [id], onDelete: Cascade)
+  // REMOVAL: recipeItemId
+  // ADDITION: variantId
+  // SUBSTITUTION: recipeItemId + variantId
+  recipeItemId    String?
+  recipeItem      RecipeItem?        @relation(fields: [recipeItemId], references: [id], onDelete: SetNull)
+  variantId       String?
+  variant         IngredientVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  adjustmentType  AdjustmentType
+  // Null = usar la cantidad original del recipe item cuando aplique.
+  quantityGrams   Float?
+  notes           String?            @db.VarChar(255)
+  sortOrder       Int                @default(0)
+
+  @@index([plateId, sortOrder])
+  @@index([plateId, adjustmentType])
+  @@index([recipeItemId])
+  @@index([variantId])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FEEDBACK Y ETIQUETADO
+// ═══════════════════════════════════════════════════════════════
+
+model Review {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plateId    String
+  plate      Plate    @relation(fields: [plateId], references: [id], onDelete: Cascade)
+  rating     Float
+  comment    String?  @db.VarChar(500)
+  recommends Boolean?
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, plateId])
+  @@index([plateId, rating])
+}
+
+model Tag {
+  id          String   @id @default(uuid())
+  name        String   @unique @db.VarChar(32)
+  description String?  @db.VarChar(128)
+  isActive    Boolean  @default(true)
+  plates      PlateTag[]
+  createdAt   DateTime @default(now())
+}
+
+model PlateTag {
+  plateId String
+  tagId   String
+
+  plate Plate @relation(fields: [plateId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([plateId, tagId])
+  @@index([tagId])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ENUMS
+// ═══════════════════════════════════════════════════════════════
+
+enum UserRole {
+  CUSTOMER
+  STAFF
+  AUTHORITY
+}
+
+enum Sex {
+  MALE
+  FEMALE
+  OTHER
 }
 
 enum CustomerTier {
   REGULAR
   VIP
   PREMIUM
-}
-
-// ─────────────────────────────────────────────
-// STAFF
-// ─────────────────────────────────────────────
-
-model StaffProfile {
-  userId String    @id
-  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post   StaffPost
 }
 
 enum StaffPost {
@@ -77,16 +298,6 @@ enum StaffPost {
   DELIVERY
 }
 
-// ─────────────────────────────────────────────
-// AUTHORITY
-// ─────────────────────────────────────────────
-
-model AuthorityProfile {
-  userId String        @id
-  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  rank   AuthorityRank
-}
-
 enum AuthorityRank {
   SUPERVISOR
   MANAGER
@@ -94,212 +305,35 @@ enum AuthorityRank {
   OWNER
 }
 
-// ─────────────────────────────────────────────
-// NUTRITION: DIET & DIET ITEM
-// ─────────────────────────────────────────────
-
-model Diet {
-  id     String @id @default(uuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  name        String  @db.VarChar(128)
-  description String? @db.VarChar(500)
-  isPublic    Boolean @default(false)
-
-  avgRating    Float @default(0)
-  ratingsCount Int   @default(0)
-
-  // Track if they copied someone else's public diet
-  copiedFromId String?
-  copiedFrom   Diet?   @relation("DietCopies", fields: [copiedFromId], references: [id])
-  copies       Diet[]  @relation("DietCopies")
-
-  items DietItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum IngredientCategory {
+  PROTEIN_ANIMAL
+  PROTEIN_PLANT
+  VEGETABLE
+  FRUIT
+  LEGUME
+  GRAIN
+  BREAD
+  DAIRY
+  FAT
+  SAUCE
+  CONDIMENT
+  SWEETENER
+  BEVERAGE
+  OTHER
 }
 
-model DietItem {
-  id     String   @id @default(uuid())
-  dietId String
-  diet   Diet     @relation(fields: [dietId], references: [id], onDelete: Cascade)
-
-  mealType MealType
-
-  plateId      String?
-  ingredientId String?
-
-  plate      Plate?      @relation(fields: [plateId], references: [id])
-  ingredient Ingredient? @relation(fields: [ingredientId], references: [id])
-
-  reason String? @db.VarChar(255) // Por qué lo come
-
-  createdAt DateTime @default(now())
-}
-
-// ─────────────────────────────────────────────
-// PLATE
-// ─────────────────────────────────────────────
-
-model Plate {
-  id String @id @default(uuid())
-
-  name        String  @db.VarChar(128)
-  description String?
-
-  price Float @default(0.0)
-
-  type   PlateType
-  flavor FlavorProfile
-
-  avgRating    Float @default(0)
-  ratingsCount Int   @default(0)
-
-  recommendations    Int @default(0) // Likes
-  notRecommendations Int @default(0) // Dislikes
-
-  // Nutritional Macros
-  calories Float @default(0) // kcal
-  proteins Float @default(0) // grams
-  carbs    Float @default(0) // grams
-  fats     Float @default(0) // grams
-
-  isAvailable Boolean @default(true)
-
-  ingredients PlateIngredient[]
-  reviews     Review[]
-  dietItems   DietItem[]
-
-  // 🔥 RELACIÓN INVERSA PARA TAGS
-  tags PlateTag[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// ─────────────────────────────────────────────
-// INGREDIENT
-// ─────────────────────────────────────────────
-
-model Ingredient {
-  id String @id @default(uuid())
-
-  name String @unique @db.VarChar(64)
-
-  flavor FlavorProfile
-
-  // Nutritional Macros (per 100g or serving)
-  calories Float @default(0)
-  proteins Float @default(0)
-  carbs    Float @default(0)
-  fats     Float @default(0)
-
-  isActive Boolean @default(true)
-
-  plates    PlateIngredient[]
-  dietItems DietItem[]
-}
-
-// ─────────────────────────────────────────────
-// PLATE - INGREDIENT
-// ─────────────────────────────────────────────
-
-model PlateIngredient {
-  plateId      String
-  ingredientId String
-
-  plate      Plate      @relation(fields: [plateId], references: [id], onDelete: Cascade)
-  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
-
-  @@id([plateId, ingredientId])
-}
-
-// ─────────────────────────────────────────────
-// REVIEW
-// ─────────────────────────────────────────────
-
-model Review {
-  id String @id @default(uuid())
-
-  userId  String
-  plateId String
-
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  plate Plate @relation(fields: [plateId], references: [id], onDelete: Cascade)
-
-  rating Float
-  comment String? @db.VarChar(500)
-
-  createdAt DateTime @default(now())
-
-  @@unique([userId, plateId])
-}
-
-// ─────────────────────────────────────────────
-// CREATOR STATS
-// ─────────────────────────────────────────────
-
-model CreatorStats {
-  userId String @id
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  totalPlates     Int   @default(0)
-  totalOrders     Int   @default(0)
-  avgRating       Float @default(0)
-  reputationScore Float @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// ─────────────────────────────────────────────
-// TAG
-// ─────────────────────────────────────────────
-
-model Tag {
-  id String @id @default(uuid())
-
-  name String @unique @db.VarChar(32)
-
-  isApproved Boolean @default(false)
-  isActive   Boolean @default(true)
-
-  // 🔥 NUEVO
-  usageCount Int @default(0)
-
-  createdById String?
-  createdBy   User? @relation(fields: [createdById], references: [id])
-
-  plates PlateTag[]
-
-  createdAt DateTime @default(now())
-}
-
-// ─────────────────────────────────────────────
-// PLATE - TAG
-// ─────────────────────────────────────────────
-
-model PlateTag {
-  plateId String
-  tagId   String
-
-  plate Plate @relation(fields: [plateId], references: [id], onDelete: Cascade)
-  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@id([plateId, tagId])
-}
-
-// ─────────────────────────────────────────────
-// ENUMS
-// ─────────────────────────────────────────────
-
-enum MealType {
-  BREAKFAST
-  LUNCH
-  SNACK
-  DINNER
+enum PreparationMethod {
+  RAW
+  GRILLED
+  FRIED
+  BAKED
+  ROASTED
+  SAUTEED
+  BOILED
+  STEAMED
+  SMOKED
+  PICKLED
+  FERMENTED
 }
 
 enum PlateType {
@@ -317,17 +351,65 @@ enum FlavorProfile {
   ACID
   BITTERSWEET
   UMAMI
+  SPICY
   UNKNOWN
 }
 
-enum UserRole {
-  CUSTOMER
-  STAFF
-  AUTHORITY
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+  CHEF
 }
 
-enum Sex {
-  MALE
-  FEMALE
-  OTHER
+enum PlateSize {
+  SMALL
+  REGULAR
+  LARGE
+  XL
+}
+
+enum AdjustmentType {
+  ADDITION
+  REMOVAL
+  SUBSTITUTION
+}
+
+enum Allergen {
+  GLUTEN
+  MILK
+  EGG
+  PEANUT
+  TREE_NUT
+  SOY
+  SESAME
+  FISH
+  SHELLFISH
+  MUSTARD
+  CELERY
+  SULFITES
+}
+
+enum DietaryTag {
+  VEGETARIAN
+  VEGAN
+  GLUTEN_FREE
+  DAIRY_FREE
+  NUT_FREE
+  LOW_CARB
+  KETO_COMPATIBLE
+  PALEO_COMPATIBLE
+  PESCATARIAN
+}
+
+enum NutritionTag {
+  HIGH_PROTEIN
+  HIGH_FIBER
+  HIGH_HEALTHY_FATS
+  LOW_SUGAR
+  LOW_SODIUM
+  WHOLE_FOOD
+  MINIMALLY_PROCESSED
+  ENERGY_DENSE
+  SATIATING
 }

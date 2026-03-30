@@ -27,44 +27,72 @@ export type AggregatePlate = {
 }
 
 export type PlateAvgAggregateOutputType = {
-  price: number | null
+  servedWeightGrams: number | null
+  costPrice: runtime.Decimal | null
+  menuPrice: runtime.Decimal | null
   avgRating: number | null
   ratingsCount: number | null
-  recommendations: number | null
-  notRecommendations: number | null
-  calories: number | null
-  proteins: number | null
-  carbs: number | null
-  fats: number | null
+  likesCount: number | null
+  dislikesCount: number | null
+  calculatedCalories: number | null
+  calculatedProteins: number | null
+  calculatedCarbs: number | null
+  calculatedFats: number | null
+  calculatedFiber: number | null
+  calculatedSugars: number | null
+  calculatedSodium: number | null
+  calculatedSaturatedFat: number | null
+  calculatedTransFat: number | null
+  calculatedMonounsaturatedFat: number | null
+  calculatedPolyunsaturatedFat: number | null
 }
 
 export type PlateSumAggregateOutputType = {
-  price: number | null
+  servedWeightGrams: number | null
+  costPrice: runtime.Decimal | null
+  menuPrice: runtime.Decimal | null
   avgRating: number | null
   ratingsCount: number | null
-  recommendations: number | null
-  notRecommendations: number | null
-  calories: number | null
-  proteins: number | null
-  carbs: number | null
-  fats: number | null
+  likesCount: number | null
+  dislikesCount: number | null
+  calculatedCalories: number | null
+  calculatedProteins: number | null
+  calculatedCarbs: number | null
+  calculatedFats: number | null
+  calculatedFiber: number | null
+  calculatedSugars: number | null
+  calculatedSodium: number | null
+  calculatedSaturatedFat: number | null
+  calculatedTransFat: number | null
+  calculatedMonounsaturatedFat: number | null
+  calculatedPolyunsaturatedFat: number | null
 }
 
 export type PlateMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
-  price: number | null
-  type: $Enums.PlateType | null
-  flavor: $Enums.FlavorProfile | null
+  recipeId: string | null
+  size: $Enums.PlateSize | null
+  servedWeightGrams: number | null
+  costPrice: runtime.Decimal | null
+  menuPrice: runtime.Decimal | null
   avgRating: number | null
   ratingsCount: number | null
-  recommendations: number | null
-  notRecommendations: number | null
-  calories: number | null
-  proteins: number | null
-  carbs: number | null
-  fats: number | null
+  likesCount: number | null
+  dislikesCount: number | null
+  calculatedCalories: number | null
+  calculatedProteins: number | null
+  calculatedCarbs: number | null
+  calculatedFats: number | null
+  calculatedFiber: number | null
+  calculatedSugars: number | null
+  calculatedSodium: number | null
+  calculatedSaturatedFat: number | null
+  calculatedTransFat: number | null
+  calculatedMonounsaturatedFat: number | null
+  calculatedPolyunsaturatedFat: number | null
+  nutritionNotes: string | null
   isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -74,17 +102,27 @@ export type PlateMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
-  price: number | null
-  type: $Enums.PlateType | null
-  flavor: $Enums.FlavorProfile | null
+  recipeId: string | null
+  size: $Enums.PlateSize | null
+  servedWeightGrams: number | null
+  costPrice: runtime.Decimal | null
+  menuPrice: runtime.Decimal | null
   avgRating: number | null
   ratingsCount: number | null
-  recommendations: number | null
-  notRecommendations: number | null
-  calories: number | null
-  proteins: number | null
-  carbs: number | null
-  fats: number | null
+  likesCount: number | null
+  dislikesCount: number | null
+  calculatedCalories: number | null
+  calculatedProteins: number | null
+  calculatedCarbs: number | null
+  calculatedFats: number | null
+  calculatedFiber: number | null
+  calculatedSugars: number | null
+  calculatedSodium: number | null
+  calculatedSaturatedFat: number | null
+  calculatedTransFat: number | null
+  calculatedMonounsaturatedFat: number | null
+  calculatedPolyunsaturatedFat: number | null
+  nutritionNotes: string | null
   isAvailable: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -94,17 +132,30 @@ export type PlateCountAggregateOutputType = {
   id: number
   name: number
   description: number
-  price: number
-  type: number
-  flavor: number
+  recipeId: number
+  size: number
+  servedWeightGrams: number
+  costPrice: number
+  menuPrice: number
   avgRating: number
   ratingsCount: number
-  recommendations: number
-  notRecommendations: number
-  calories: number
-  proteins: number
-  carbs: number
-  fats: number
+  likesCount: number
+  dislikesCount: number
+  calculatedCalories: number
+  calculatedProteins: number
+  calculatedCarbs: number
+  calculatedFats: number
+  calculatedFiber: number
+  calculatedSugars: number
+  calculatedSodium: number
+  calculatedSaturatedFat: number
+  calculatedTransFat: number
+  calculatedMonounsaturatedFat: number
+  calculatedPolyunsaturatedFat: number
+  allergens: number
+  dietaryTags: number
+  nutritionTags: number
+  nutritionNotes: number
   isAvailable: number
   createdAt: number
   updatedAt: number
@@ -113,44 +164,72 @@ export type PlateCountAggregateOutputType = {
 
 
 export type PlateAvgAggregateInputType = {
-  price?: true
+  servedWeightGrams?: true
+  costPrice?: true
+  menuPrice?: true
   avgRating?: true
   ratingsCount?: true
-  recommendations?: true
-  notRecommendations?: true
-  calories?: true
-  proteins?: true
-  carbs?: true
-  fats?: true
+  likesCount?: true
+  dislikesCount?: true
+  calculatedCalories?: true
+  calculatedProteins?: true
+  calculatedCarbs?: true
+  calculatedFats?: true
+  calculatedFiber?: true
+  calculatedSugars?: true
+  calculatedSodium?: true
+  calculatedSaturatedFat?: true
+  calculatedTransFat?: true
+  calculatedMonounsaturatedFat?: true
+  calculatedPolyunsaturatedFat?: true
 }
 
 export type PlateSumAggregateInputType = {
-  price?: true
+  servedWeightGrams?: true
+  costPrice?: true
+  menuPrice?: true
   avgRating?: true
   ratingsCount?: true
-  recommendations?: true
-  notRecommendations?: true
-  calories?: true
-  proteins?: true
-  carbs?: true
-  fats?: true
+  likesCount?: true
+  dislikesCount?: true
+  calculatedCalories?: true
+  calculatedProteins?: true
+  calculatedCarbs?: true
+  calculatedFats?: true
+  calculatedFiber?: true
+  calculatedSugars?: true
+  calculatedSodium?: true
+  calculatedSaturatedFat?: true
+  calculatedTransFat?: true
+  calculatedMonounsaturatedFat?: true
+  calculatedPolyunsaturatedFat?: true
 }
 
 export type PlateMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  price?: true
-  type?: true
-  flavor?: true
+  recipeId?: true
+  size?: true
+  servedWeightGrams?: true
+  costPrice?: true
+  menuPrice?: true
   avgRating?: true
   ratingsCount?: true
-  recommendations?: true
-  notRecommendations?: true
-  calories?: true
-  proteins?: true
-  carbs?: true
-  fats?: true
+  likesCount?: true
+  dislikesCount?: true
+  calculatedCalories?: true
+  calculatedProteins?: true
+  calculatedCarbs?: true
+  calculatedFats?: true
+  calculatedFiber?: true
+  calculatedSugars?: true
+  calculatedSodium?: true
+  calculatedSaturatedFat?: true
+  calculatedTransFat?: true
+  calculatedMonounsaturatedFat?: true
+  calculatedPolyunsaturatedFat?: true
+  nutritionNotes?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -160,17 +239,27 @@ export type PlateMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  price?: true
-  type?: true
-  flavor?: true
+  recipeId?: true
+  size?: true
+  servedWeightGrams?: true
+  costPrice?: true
+  menuPrice?: true
   avgRating?: true
   ratingsCount?: true
-  recommendations?: true
-  notRecommendations?: true
-  calories?: true
-  proteins?: true
-  carbs?: true
-  fats?: true
+  likesCount?: true
+  dislikesCount?: true
+  calculatedCalories?: true
+  calculatedProteins?: true
+  calculatedCarbs?: true
+  calculatedFats?: true
+  calculatedFiber?: true
+  calculatedSugars?: true
+  calculatedSodium?: true
+  calculatedSaturatedFat?: true
+  calculatedTransFat?: true
+  calculatedMonounsaturatedFat?: true
+  calculatedPolyunsaturatedFat?: true
+  nutritionNotes?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -180,17 +269,30 @@ export type PlateCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
-  price?: true
-  type?: true
-  flavor?: true
+  recipeId?: true
+  size?: true
+  servedWeightGrams?: true
+  costPrice?: true
+  menuPrice?: true
   avgRating?: true
   ratingsCount?: true
-  recommendations?: true
-  notRecommendations?: true
-  calories?: true
-  proteins?: true
-  carbs?: true
-  fats?: true
+  likesCount?: true
+  dislikesCount?: true
+  calculatedCalories?: true
+  calculatedProteins?: true
+  calculatedCarbs?: true
+  calculatedFats?: true
+  calculatedFiber?: true
+  calculatedSugars?: true
+  calculatedSodium?: true
+  calculatedSaturatedFat?: true
+  calculatedTransFat?: true
+  calculatedMonounsaturatedFat?: true
+  calculatedPolyunsaturatedFat?: true
+  allergens?: true
+  dietaryTags?: true
+  nutritionTags?: true
+  nutritionNotes?: true
   isAvailable?: true
   createdAt?: true
   updatedAt?: true
@@ -287,17 +389,30 @@ export type PlateGroupByOutputType = {
   id: string
   name: string
   description: string | null
-  price: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  recipeId: string
+  size: $Enums.PlateSize
+  servedWeightGrams: number | null
+  costPrice: runtime.Decimal
+  menuPrice: runtime.Decimal
   avgRating: number
   ratingsCount: number
-  recommendations: number
-  notRecommendations: number
-  calories: number
-  proteins: number
-  carbs: number
-  fats: number
+  likesCount: number
+  dislikesCount: number
+  calculatedCalories: number
+  calculatedProteins: number
+  calculatedCarbs: number
+  calculatedFats: number
+  calculatedFiber: number
+  calculatedSugars: number
+  calculatedSodium: number
+  calculatedSaturatedFat: number
+  calculatedTransFat: number
+  calculatedMonounsaturatedFat: number
+  calculatedPolyunsaturatedFat: number
+  allergens: $Enums.Allergen[]
+  dietaryTags: $Enums.DietaryTag[]
+  nutritionTags: $Enums.NutritionTag[]
+  nutritionNotes: string | null
   isAvailable: boolean
   createdAt: Date
   updatedAt: Date
@@ -308,7 +423,7 @@ export type PlateGroupByOutputType = {
   _max: PlateMaxAggregateOutputType | null
 }
 
-type GetPlateGroupByPayload<T extends PlateGroupByArgs> = Prisma.PrismaPromise<
+export type GetPlateGroupByPayload<T extends PlateGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<PlateGroupByOutputType, T['by']> &
       {
@@ -330,23 +445,36 @@ export type PlateWhereInput = {
   id?: Prisma.StringFilter<"Plate"> | string
   name?: Prisma.StringFilter<"Plate"> | string
   description?: Prisma.StringNullableFilter<"Plate"> | string | null
-  price?: Prisma.FloatFilter<"Plate"> | number
-  type?: Prisma.EnumPlateTypeFilter<"Plate"> | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFilter<"Plate"> | $Enums.FlavorProfile
+  recipeId?: Prisma.StringFilter<"Plate"> | string
+  size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
+  servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
+  costPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFilter<"Plate"> | number
   ratingsCount?: Prisma.IntFilter<"Plate"> | number
-  recommendations?: Prisma.IntFilter<"Plate"> | number
-  notRecommendations?: Prisma.IntFilter<"Plate"> | number
-  calories?: Prisma.FloatFilter<"Plate"> | number
-  proteins?: Prisma.FloatFilter<"Plate"> | number
-  carbs?: Prisma.FloatFilter<"Plate"> | number
-  fats?: Prisma.FloatFilter<"Plate"> | number
+  likesCount?: Prisma.IntFilter<"Plate"> | number
+  dislikesCount?: Prisma.IntFilter<"Plate"> | number
+  calculatedCalories?: Prisma.FloatFilter<"Plate"> | number
+  calculatedProteins?: Prisma.FloatFilter<"Plate"> | number
+  calculatedCarbs?: Prisma.FloatFilter<"Plate"> | number
+  calculatedFats?: Prisma.FloatFilter<"Plate"> | number
+  calculatedFiber?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSugars?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSodium?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedTransFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  allergens?: Prisma.EnumAllergenNullableListFilter<"Plate">
+  dietaryTags?: Prisma.EnumDietaryTagNullableListFilter<"Plate">
+  nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Plate">
+  nutritionNotes?: Prisma.StringNullableFilter<"Plate"> | string | null
   isAvailable?: Prisma.BoolFilter<"Plate"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
-  ingredients?: Prisma.PlateIngredientListRelationFilter
+  recipe?: Prisma.XOR<Prisma.RecipeScalarRelationFilter, Prisma.RecipeWhereInput>
+  adjustments?: Prisma.PlateAdjustmentListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
-  dietItems?: Prisma.DietItemListRelationFilter
   tags?: Prisma.PlateTagListRelationFilter
 }
 
@@ -354,23 +482,36 @@ export type PlateOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  flavor?: Prisma.SortOrder
+  recipeId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  servedWeightGrams?: Prisma.SortOrderInput | Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
-  recommendations?: Prisma.SortOrder
-  notRecommendations?: Prisma.SortOrder
-  calories?: Prisma.SortOrder
-  proteins?: Prisma.SortOrder
-  carbs?: Prisma.SortOrder
-  fats?: Prisma.SortOrder
+  likesCount?: Prisma.SortOrder
+  dislikesCount?: Prisma.SortOrder
+  calculatedCalories?: Prisma.SortOrder
+  calculatedProteins?: Prisma.SortOrder
+  calculatedCarbs?: Prisma.SortOrder
+  calculatedFats?: Prisma.SortOrder
+  calculatedFiber?: Prisma.SortOrder
+  calculatedSugars?: Prisma.SortOrder
+  calculatedSodium?: Prisma.SortOrder
+  calculatedSaturatedFat?: Prisma.SortOrder
+  calculatedTransFat?: Prisma.SortOrder
+  calculatedMonounsaturatedFat?: Prisma.SortOrder
+  calculatedPolyunsaturatedFat?: Prisma.SortOrder
+  allergens?: Prisma.SortOrder
+  dietaryTags?: Prisma.SortOrder
+  nutritionTags?: Prisma.SortOrder
+  nutritionNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  ingredients?: Prisma.PlateIngredientOrderByRelationAggregateInput
+  recipe?: Prisma.RecipeOrderByWithRelationInput
+  adjustments?: Prisma.PlateAdjustmentOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
-  dietItems?: Prisma.DietItemOrderByRelationAggregateInput
   tags?: Prisma.PlateTagOrderByRelationAggregateInput
 }
 
@@ -381,23 +522,36 @@ export type PlateWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PlateWhereInput | Prisma.PlateWhereInput[]
   name?: Prisma.StringFilter<"Plate"> | string
   description?: Prisma.StringNullableFilter<"Plate"> | string | null
-  price?: Prisma.FloatFilter<"Plate"> | number
-  type?: Prisma.EnumPlateTypeFilter<"Plate"> | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFilter<"Plate"> | $Enums.FlavorProfile
+  recipeId?: Prisma.StringFilter<"Plate"> | string
+  size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
+  servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
+  costPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFilter<"Plate"> | number
   ratingsCount?: Prisma.IntFilter<"Plate"> | number
-  recommendations?: Prisma.IntFilter<"Plate"> | number
-  notRecommendations?: Prisma.IntFilter<"Plate"> | number
-  calories?: Prisma.FloatFilter<"Plate"> | number
-  proteins?: Prisma.FloatFilter<"Plate"> | number
-  carbs?: Prisma.FloatFilter<"Plate"> | number
-  fats?: Prisma.FloatFilter<"Plate"> | number
+  likesCount?: Prisma.IntFilter<"Plate"> | number
+  dislikesCount?: Prisma.IntFilter<"Plate"> | number
+  calculatedCalories?: Prisma.FloatFilter<"Plate"> | number
+  calculatedProteins?: Prisma.FloatFilter<"Plate"> | number
+  calculatedCarbs?: Prisma.FloatFilter<"Plate"> | number
+  calculatedFats?: Prisma.FloatFilter<"Plate"> | number
+  calculatedFiber?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSugars?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSodium?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedTransFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  allergens?: Prisma.EnumAllergenNullableListFilter<"Plate">
+  dietaryTags?: Prisma.EnumDietaryTagNullableListFilter<"Plate">
+  nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Plate">
+  nutritionNotes?: Prisma.StringNullableFilter<"Plate"> | string | null
   isAvailable?: Prisma.BoolFilter<"Plate"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
-  ingredients?: Prisma.PlateIngredientListRelationFilter
+  recipe?: Prisma.XOR<Prisma.RecipeScalarRelationFilter, Prisma.RecipeWhereInput>
+  adjustments?: Prisma.PlateAdjustmentListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
-  dietItems?: Prisma.DietItemListRelationFilter
   tags?: Prisma.PlateTagListRelationFilter
 }, "id">
 
@@ -405,17 +559,30 @@ export type PlateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
-  price?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  flavor?: Prisma.SortOrder
+  recipeId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  servedWeightGrams?: Prisma.SortOrderInput | Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
-  recommendations?: Prisma.SortOrder
-  notRecommendations?: Prisma.SortOrder
-  calories?: Prisma.SortOrder
-  proteins?: Prisma.SortOrder
-  carbs?: Prisma.SortOrder
-  fats?: Prisma.SortOrder
+  likesCount?: Prisma.SortOrder
+  dislikesCount?: Prisma.SortOrder
+  calculatedCalories?: Prisma.SortOrder
+  calculatedProteins?: Prisma.SortOrder
+  calculatedCarbs?: Prisma.SortOrder
+  calculatedFats?: Prisma.SortOrder
+  calculatedFiber?: Prisma.SortOrder
+  calculatedSugars?: Prisma.SortOrder
+  calculatedSodium?: Prisma.SortOrder
+  calculatedSaturatedFat?: Prisma.SortOrder
+  calculatedTransFat?: Prisma.SortOrder
+  calculatedMonounsaturatedFat?: Prisma.SortOrder
+  calculatedPolyunsaturatedFat?: Prisma.SortOrder
+  allergens?: Prisma.SortOrder
+  dietaryTags?: Prisma.SortOrder
+  nutritionTags?: Prisma.SortOrder
+  nutritionNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -433,17 +600,30 @@ export type PlateScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   name?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Plate"> | string | null
-  price?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
-  type?: Prisma.EnumPlateTypeWithAggregatesFilter<"Plate"> | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileWithAggregatesFilter<"Plate"> | $Enums.FlavorProfile
+  recipeId?: Prisma.StringWithAggregatesFilter<"Plate"> | string
+  size?: Prisma.EnumPlateSizeWithAggregatesFilter<"Plate"> | $Enums.PlateSize
+  servedWeightGrams?: Prisma.FloatNullableWithAggregatesFilter<"Plate"> | number | null
+  costPrice?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
   ratingsCount?: Prisma.IntWithAggregatesFilter<"Plate"> | number
-  recommendations?: Prisma.IntWithAggregatesFilter<"Plate"> | number
-  notRecommendations?: Prisma.IntWithAggregatesFilter<"Plate"> | number
-  calories?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
-  proteins?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
-  carbs?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
-  fats?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  likesCount?: Prisma.IntWithAggregatesFilter<"Plate"> | number
+  dislikesCount?: Prisma.IntWithAggregatesFilter<"Plate"> | number
+  calculatedCalories?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedProteins?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedCarbs?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedFats?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedFiber?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedSugars?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedSodium?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedSaturatedFat?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedTransFat?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedMonounsaturatedFat?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
+  allergens?: Prisma.EnumAllergenNullableListFilter<"Plate">
+  dietaryTags?: Prisma.EnumDietaryTagNullableListFilter<"Plate">
+  nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Plate">
+  nutritionNotes?: Prisma.StringNullableWithAggregatesFilter<"Plate"> | string | null
   isAvailable?: Prisma.BoolWithAggregatesFilter<"Plate"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Plate"> | Date | string
@@ -453,23 +633,35 @@ export type PlateCreateInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientCreateNestedManyWithoutPlateInput
+  recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
+  adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
@@ -477,23 +669,35 @@ export type PlateUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  recipeId: string
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutPlateInput
+  adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
@@ -501,23 +705,35 @@ export type PlateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
+  adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
@@ -525,23 +741,35 @@ export type PlateUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
+  adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
 }
 
@@ -549,17 +777,30 @@ export type PlateCreateManyInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  recipeId: string
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -569,17 +810,29 @@ export type PlateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -589,74 +842,124 @@ export type PlateUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PlateNullableScalarRelationFilter = {
-  is?: Prisma.PlateWhereInput | null
-  isNot?: Prisma.PlateWhereInput | null
+export type PlateListRelationFilter = {
+  every?: Prisma.PlateWhereInput
+  some?: Prisma.PlateWhereInput
+  none?: Prisma.PlateWhereInput
+}
+
+export type PlateOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type PlateCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  flavor?: Prisma.SortOrder
+  recipeId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  servedWeightGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
-  recommendations?: Prisma.SortOrder
-  notRecommendations?: Prisma.SortOrder
-  calories?: Prisma.SortOrder
-  proteins?: Prisma.SortOrder
-  carbs?: Prisma.SortOrder
-  fats?: Prisma.SortOrder
+  likesCount?: Prisma.SortOrder
+  dislikesCount?: Prisma.SortOrder
+  calculatedCalories?: Prisma.SortOrder
+  calculatedProteins?: Prisma.SortOrder
+  calculatedCarbs?: Prisma.SortOrder
+  calculatedFats?: Prisma.SortOrder
+  calculatedFiber?: Prisma.SortOrder
+  calculatedSugars?: Prisma.SortOrder
+  calculatedSodium?: Prisma.SortOrder
+  calculatedSaturatedFat?: Prisma.SortOrder
+  calculatedTransFat?: Prisma.SortOrder
+  calculatedMonounsaturatedFat?: Prisma.SortOrder
+  calculatedPolyunsaturatedFat?: Prisma.SortOrder
+  allergens?: Prisma.SortOrder
+  dietaryTags?: Prisma.SortOrder
+  nutritionTags?: Prisma.SortOrder
+  nutritionNotes?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type PlateAvgOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  servedWeightGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
-  recommendations?: Prisma.SortOrder
-  notRecommendations?: Prisma.SortOrder
-  calories?: Prisma.SortOrder
-  proteins?: Prisma.SortOrder
-  carbs?: Prisma.SortOrder
-  fats?: Prisma.SortOrder
+  likesCount?: Prisma.SortOrder
+  dislikesCount?: Prisma.SortOrder
+  calculatedCalories?: Prisma.SortOrder
+  calculatedProteins?: Prisma.SortOrder
+  calculatedCarbs?: Prisma.SortOrder
+  calculatedFats?: Prisma.SortOrder
+  calculatedFiber?: Prisma.SortOrder
+  calculatedSugars?: Prisma.SortOrder
+  calculatedSodium?: Prisma.SortOrder
+  calculatedSaturatedFat?: Prisma.SortOrder
+  calculatedTransFat?: Prisma.SortOrder
+  calculatedMonounsaturatedFat?: Prisma.SortOrder
+  calculatedPolyunsaturatedFat?: Prisma.SortOrder
 }
 
 export type PlateMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  flavor?: Prisma.SortOrder
+  recipeId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  servedWeightGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
-  recommendations?: Prisma.SortOrder
-  notRecommendations?: Prisma.SortOrder
-  calories?: Prisma.SortOrder
-  proteins?: Prisma.SortOrder
-  carbs?: Prisma.SortOrder
-  fats?: Prisma.SortOrder
+  likesCount?: Prisma.SortOrder
+  dislikesCount?: Prisma.SortOrder
+  calculatedCalories?: Prisma.SortOrder
+  calculatedProteins?: Prisma.SortOrder
+  calculatedCarbs?: Prisma.SortOrder
+  calculatedFats?: Prisma.SortOrder
+  calculatedFiber?: Prisma.SortOrder
+  calculatedSugars?: Prisma.SortOrder
+  calculatedSodium?: Prisma.SortOrder
+  calculatedSaturatedFat?: Prisma.SortOrder
+  calculatedTransFat?: Prisma.SortOrder
+  calculatedMonounsaturatedFat?: Prisma.SortOrder
+  calculatedPolyunsaturatedFat?: Prisma.SortOrder
+  nutritionNotes?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -666,32 +969,51 @@ export type PlateMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
-  price?: Prisma.SortOrder
-  type?: Prisma.SortOrder
-  flavor?: Prisma.SortOrder
+  recipeId?: Prisma.SortOrder
+  size?: Prisma.SortOrder
+  servedWeightGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
-  recommendations?: Prisma.SortOrder
-  notRecommendations?: Prisma.SortOrder
-  calories?: Prisma.SortOrder
-  proteins?: Prisma.SortOrder
-  carbs?: Prisma.SortOrder
-  fats?: Prisma.SortOrder
+  likesCount?: Prisma.SortOrder
+  dislikesCount?: Prisma.SortOrder
+  calculatedCalories?: Prisma.SortOrder
+  calculatedProteins?: Prisma.SortOrder
+  calculatedCarbs?: Prisma.SortOrder
+  calculatedFats?: Prisma.SortOrder
+  calculatedFiber?: Prisma.SortOrder
+  calculatedSugars?: Prisma.SortOrder
+  calculatedSodium?: Prisma.SortOrder
+  calculatedSaturatedFat?: Prisma.SortOrder
+  calculatedTransFat?: Prisma.SortOrder
+  calculatedMonounsaturatedFat?: Prisma.SortOrder
+  calculatedPolyunsaturatedFat?: Prisma.SortOrder
+  nutritionNotes?: Prisma.SortOrder
   isAvailable?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type PlateSumOrderByAggregateInput = {
-  price?: Prisma.SortOrder
+  servedWeightGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
   ratingsCount?: Prisma.SortOrder
-  recommendations?: Prisma.SortOrder
-  notRecommendations?: Prisma.SortOrder
-  calories?: Prisma.SortOrder
-  proteins?: Prisma.SortOrder
-  carbs?: Prisma.SortOrder
-  fats?: Prisma.SortOrder
+  likesCount?: Prisma.SortOrder
+  dislikesCount?: Prisma.SortOrder
+  calculatedCalories?: Prisma.SortOrder
+  calculatedProteins?: Prisma.SortOrder
+  calculatedCarbs?: Prisma.SortOrder
+  calculatedFats?: Prisma.SortOrder
+  calculatedFiber?: Prisma.SortOrder
+  calculatedSugars?: Prisma.SortOrder
+  calculatedSodium?: Prisma.SortOrder
+  calculatedSaturatedFat?: Prisma.SortOrder
+  calculatedTransFat?: Prisma.SortOrder
+  calculatedMonounsaturatedFat?: Prisma.SortOrder
+  calculatedPolyunsaturatedFat?: Prisma.SortOrder
 }
 
 export type PlateScalarRelationFilter = {
@@ -699,42 +1021,99 @@ export type PlateScalarRelationFilter = {
   isNot?: Prisma.PlateWhereInput
 }
 
-export type PlateCreateNestedOneWithoutDietItemsInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutDietItemsInput
+export type PlateCreateNestedManyWithoutRecipeInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutRecipeInput, Prisma.PlateUncheckedCreateWithoutRecipeInput> | Prisma.PlateCreateWithoutRecipeInput[] | Prisma.PlateUncheckedCreateWithoutRecipeInput[]
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutRecipeInput | Prisma.PlateCreateOrConnectWithoutRecipeInput[]
+  createMany?: Prisma.PlateCreateManyRecipeInputEnvelope
+  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+}
+
+export type PlateUncheckedCreateNestedManyWithoutRecipeInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutRecipeInput, Prisma.PlateUncheckedCreateWithoutRecipeInput> | Prisma.PlateCreateWithoutRecipeInput[] | Prisma.PlateUncheckedCreateWithoutRecipeInput[]
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutRecipeInput | Prisma.PlateCreateOrConnectWithoutRecipeInput[]
+  createMany?: Prisma.PlateCreateManyRecipeInputEnvelope
+  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+}
+
+export type PlateUpdateManyWithoutRecipeNestedInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutRecipeInput, Prisma.PlateUncheckedCreateWithoutRecipeInput> | Prisma.PlateCreateWithoutRecipeInput[] | Prisma.PlateUncheckedCreateWithoutRecipeInput[]
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutRecipeInput | Prisma.PlateCreateOrConnectWithoutRecipeInput[]
+  upsert?: Prisma.PlateUpsertWithWhereUniqueWithoutRecipeInput | Prisma.PlateUpsertWithWhereUniqueWithoutRecipeInput[]
+  createMany?: Prisma.PlateCreateManyRecipeInputEnvelope
+  set?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  disconnect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  delete?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  update?: Prisma.PlateUpdateWithWhereUniqueWithoutRecipeInput | Prisma.PlateUpdateWithWhereUniqueWithoutRecipeInput[]
+  updateMany?: Prisma.PlateUpdateManyWithWhereWithoutRecipeInput | Prisma.PlateUpdateManyWithWhereWithoutRecipeInput[]
+  deleteMany?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
+}
+
+export type PlateUncheckedUpdateManyWithoutRecipeNestedInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutRecipeInput, Prisma.PlateUncheckedCreateWithoutRecipeInput> | Prisma.PlateCreateWithoutRecipeInput[] | Prisma.PlateUncheckedCreateWithoutRecipeInput[]
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutRecipeInput | Prisma.PlateCreateOrConnectWithoutRecipeInput[]
+  upsert?: Prisma.PlateUpsertWithWhereUniqueWithoutRecipeInput | Prisma.PlateUpsertWithWhereUniqueWithoutRecipeInput[]
+  createMany?: Prisma.PlateCreateManyRecipeInputEnvelope
+  set?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  disconnect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  delete?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  connect?: Prisma.PlateWhereUniqueInput | Prisma.PlateWhereUniqueInput[]
+  update?: Prisma.PlateUpdateWithWhereUniqueWithoutRecipeInput | Prisma.PlateUpdateWithWhereUniqueWithoutRecipeInput[]
+  updateMany?: Prisma.PlateUpdateManyWithWhereWithoutRecipeInput | Prisma.PlateUpdateManyWithWhereWithoutRecipeInput[]
+  deleteMany?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
+}
+
+export type PlateCreateallergensInput = {
+  set: $Enums.Allergen[]
+}
+
+export type PlateCreatedietaryTagsInput = {
+  set: $Enums.DietaryTag[]
+}
+
+export type PlateCreatenutritionTagsInput = {
+  set: $Enums.NutritionTag[]
+}
+
+export type EnumPlateSizeFieldUpdateOperationsInput = {
+  set?: $Enums.PlateSize
+}
+
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
+export type PlateUpdateallergensInput = {
+  set?: $Enums.Allergen[]
+  push?: $Enums.Allergen | $Enums.Allergen[]
+}
+
+export type PlateUpdatedietaryTagsInput = {
+  set?: $Enums.DietaryTag[]
+  push?: $Enums.DietaryTag | $Enums.DietaryTag[]
+}
+
+export type PlateUpdatenutritionTagsInput = {
+  set?: $Enums.NutritionTag[]
+  push?: $Enums.NutritionTag | $Enums.NutritionTag[]
+}
+
+export type PlateCreateNestedOneWithoutAdjustmentsInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutAdjustmentsInput, Prisma.PlateUncheckedCreateWithoutAdjustmentsInput>
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutAdjustmentsInput
   connect?: Prisma.PlateWhereUniqueInput
 }
 
-export type PlateUpdateOneWithoutDietItemsNestedInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutDietItemsInput
-  upsert?: Prisma.PlateUpsertWithoutDietItemsInput
-  disconnect?: Prisma.PlateWhereInput | boolean
-  delete?: Prisma.PlateWhereInput | boolean
+export type PlateUpdateOneRequiredWithoutAdjustmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutAdjustmentsInput, Prisma.PlateUncheckedCreateWithoutAdjustmentsInput>
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutAdjustmentsInput
+  upsert?: Prisma.PlateUpsertWithoutAdjustmentsInput
   connect?: Prisma.PlateWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutDietItemsInput, Prisma.PlateUpdateWithoutDietItemsInput>, Prisma.PlateUncheckedUpdateWithoutDietItemsInput>
-}
-
-export type EnumPlateTypeFieldUpdateOperationsInput = {
-  set?: $Enums.PlateType
-}
-
-export type EnumFlavorProfileFieldUpdateOperationsInput = {
-  set?: $Enums.FlavorProfile
-}
-
-export type PlateCreateNestedOneWithoutIngredientsInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutIngredientsInput, Prisma.PlateUncheckedCreateWithoutIngredientsInput>
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutIngredientsInput
-  connect?: Prisma.PlateWhereUniqueInput
-}
-
-export type PlateUpdateOneRequiredWithoutIngredientsNestedInput = {
-  create?: Prisma.XOR<Prisma.PlateCreateWithoutIngredientsInput, Prisma.PlateUncheckedCreateWithoutIngredientsInput>
-  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutIngredientsInput
-  upsert?: Prisma.PlateUpsertWithoutIngredientsInput
-  connect?: Prisma.PlateWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutIngredientsInput, Prisma.PlateUpdateWithoutIngredientsInput>, Prisma.PlateUncheckedUpdateWithoutIngredientsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutAdjustmentsInput, Prisma.PlateUpdateWithoutAdjustmentsInput>, Prisma.PlateUncheckedUpdateWithoutAdjustmentsInput>
 }
 
 export type PlateCreateNestedOneWithoutReviewsInput = {
@@ -765,219 +1144,291 @@ export type PlateUpdateOneRequiredWithoutTagsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutTagsInput, Prisma.PlateUpdateWithoutTagsInput>, Prisma.PlateUncheckedUpdateWithoutTagsInput>
 }
 
-export type PlateCreateWithoutDietItemsInput = {
+export type PlateCreateWithoutRecipeInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientCreateNestedManyWithoutPlateInput
+  adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
-export type PlateUncheckedCreateWithoutDietItemsInput = {
+export type PlateUncheckedCreateWithoutRecipeInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutPlateInput
+  adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
-export type PlateCreateOrConnectWithoutDietItemsInput = {
+export type PlateCreateOrConnectWithoutRecipeInput = {
   where: Prisma.PlateWhereUniqueInput
-  create: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutRecipeInput, Prisma.PlateUncheckedCreateWithoutRecipeInput>
 }
 
-export type PlateUpsertWithoutDietItemsInput = {
-  update: Prisma.XOR<Prisma.PlateUpdateWithoutDietItemsInput, Prisma.PlateUncheckedUpdateWithoutDietItemsInput>
-  create: Prisma.XOR<Prisma.PlateCreateWithoutDietItemsInput, Prisma.PlateUncheckedCreateWithoutDietItemsInput>
-  where?: Prisma.PlateWhereInput
+export type PlateCreateManyRecipeInputEnvelope = {
+  data: Prisma.PlateCreateManyRecipeInput | Prisma.PlateCreateManyRecipeInput[]
+  skipDuplicates?: boolean
 }
 
-export type PlateUpdateToOneWithWhereWithoutDietItemsInput = {
-  where?: Prisma.PlateWhereInput
-  data: Prisma.XOR<Prisma.PlateUpdateWithoutDietItemsInput, Prisma.PlateUncheckedUpdateWithoutDietItemsInput>
+export type PlateUpsertWithWhereUniqueWithoutRecipeInput = {
+  where: Prisma.PlateWhereUniqueInput
+  update: Prisma.XOR<Prisma.PlateUpdateWithoutRecipeInput, Prisma.PlateUncheckedUpdateWithoutRecipeInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutRecipeInput, Prisma.PlateUncheckedCreateWithoutRecipeInput>
 }
 
-export type PlateUpdateWithoutDietItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
-  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
-  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
-  reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
-  tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
+export type PlateUpdateWithWhereUniqueWithoutRecipeInput = {
+  where: Prisma.PlateWhereUniqueInput
+  data: Prisma.XOR<Prisma.PlateUpdateWithoutRecipeInput, Prisma.PlateUncheckedUpdateWithoutRecipeInput>
 }
 
-export type PlateUncheckedUpdateWithoutDietItemsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
-  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
-  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
-  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
-  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
-  tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
+export type PlateUpdateManyWithWhereWithoutRecipeInput = {
+  where: Prisma.PlateScalarWhereInput
+  data: Prisma.XOR<Prisma.PlateUpdateManyMutationInput, Prisma.PlateUncheckedUpdateManyWithoutRecipeInput>
 }
 
-export type PlateCreateWithoutIngredientsInput = {
+export type PlateScalarWhereInput = {
+  AND?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
+  OR?: Prisma.PlateScalarWhereInput[]
+  NOT?: Prisma.PlateScalarWhereInput | Prisma.PlateScalarWhereInput[]
+  id?: Prisma.StringFilter<"Plate"> | string
+  name?: Prisma.StringFilter<"Plate"> | string
+  description?: Prisma.StringNullableFilter<"Plate"> | string | null
+  recipeId?: Prisma.StringFilter<"Plate"> | string
+  size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
+  servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
+  costPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFilter<"Plate"> | number
+  ratingsCount?: Prisma.IntFilter<"Plate"> | number
+  likesCount?: Prisma.IntFilter<"Plate"> | number
+  dislikesCount?: Prisma.IntFilter<"Plate"> | number
+  calculatedCalories?: Prisma.FloatFilter<"Plate"> | number
+  calculatedProteins?: Prisma.FloatFilter<"Plate"> | number
+  calculatedCarbs?: Prisma.FloatFilter<"Plate"> | number
+  calculatedFats?: Prisma.FloatFilter<"Plate"> | number
+  calculatedFiber?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSugars?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSodium?: Prisma.FloatFilter<"Plate"> | number
+  calculatedSaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedTransFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFilter<"Plate"> | number
+  allergens?: Prisma.EnumAllergenNullableListFilter<"Plate">
+  dietaryTags?: Prisma.EnumDietaryTagNullableListFilter<"Plate">
+  nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Plate">
+  nutritionNotes?: Prisma.StringNullableFilter<"Plate"> | string | null
+  isAvailable?: Prisma.BoolFilter<"Plate"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Plate"> | Date | string
+}
+
+export type PlateCreateWithoutAdjustmentsInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
-export type PlateUncheckedCreateWithoutIngredientsInput = {
+export type PlateUncheckedCreateWithoutAdjustmentsInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  recipeId: string
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
-export type PlateCreateOrConnectWithoutIngredientsInput = {
+export type PlateCreateOrConnectWithoutAdjustmentsInput = {
   where: Prisma.PlateWhereUniqueInput
-  create: Prisma.XOR<Prisma.PlateCreateWithoutIngredientsInput, Prisma.PlateUncheckedCreateWithoutIngredientsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutAdjustmentsInput, Prisma.PlateUncheckedCreateWithoutAdjustmentsInput>
 }
 
-export type PlateUpsertWithoutIngredientsInput = {
-  update: Prisma.XOR<Prisma.PlateUpdateWithoutIngredientsInput, Prisma.PlateUncheckedUpdateWithoutIngredientsInput>
-  create: Prisma.XOR<Prisma.PlateCreateWithoutIngredientsInput, Prisma.PlateUncheckedCreateWithoutIngredientsInput>
+export type PlateUpsertWithoutAdjustmentsInput = {
+  update: Prisma.XOR<Prisma.PlateUpdateWithoutAdjustmentsInput, Prisma.PlateUncheckedUpdateWithoutAdjustmentsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutAdjustmentsInput, Prisma.PlateUncheckedCreateWithoutAdjustmentsInput>
   where?: Prisma.PlateWhereInput
 }
 
-export type PlateUpdateToOneWithWhereWithoutIngredientsInput = {
+export type PlateUpdateToOneWithWhereWithoutAdjustmentsInput = {
   where?: Prisma.PlateWhereInput
-  data: Prisma.XOR<Prisma.PlateUpdateWithoutIngredientsInput, Prisma.PlateUncheckedUpdateWithoutIngredientsInput>
+  data: Prisma.XOR<Prisma.PlateUpdateWithoutAdjustmentsInput, Prisma.PlateUncheckedUpdateWithoutAdjustmentsInput>
 }
 
-export type PlateUpdateWithoutIngredientsInput = {
+export type PlateUpdateWithoutAdjustmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
-export type PlateUncheckedUpdateWithoutIngredientsInput = {
+export type PlateUncheckedUpdateWithoutAdjustmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
 }
 
@@ -985,22 +1436,34 @@ export type PlateCreateWithoutReviewsInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
+  recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
+  adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
@@ -1008,22 +1471,34 @@ export type PlateUncheckedCreateWithoutReviewsInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  recipeId: string
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
+  adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
@@ -1047,22 +1522,34 @@ export type PlateUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
+  adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
@@ -1070,22 +1557,34 @@ export type PlateUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
+  adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
 }
 
@@ -1093,46 +1592,70 @@ export type PlateCreateWithoutTagsInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientCreateNestedManyWithoutPlateInput
+  recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
+  adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemCreateNestedManyWithoutPlateInput
 }
 
 export type PlateUncheckedCreateWithoutTagsInput = {
   id?: string
   name: string
   description?: string | null
-  price?: number
-  type: $Enums.PlateType
-  flavor: $Enums.FlavorProfile
+  recipeId: string
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
   ratingsCount?: number
-  recommendations?: number
-  notRecommendations?: number
-  calories?: number
-  proteins?: number
-  carbs?: number
-  fats?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
   isAvailable?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedCreateNestedManyWithoutPlateInput
+  adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
-  dietItems?: Prisma.DietItemUncheckedCreateNestedManyWithoutPlateInput
 }
 
 export type PlateCreateOrConnectWithoutTagsInput = {
@@ -1155,46 +1678,204 @@ export type PlateUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUpdateManyWithoutPlateNestedInput
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
+  adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  price?: Prisma.FloatFieldUpdateOperationsInput | number
-  type?: Prisma.EnumPlateTypeFieldUpdateOperationsInput | $Enums.PlateType
-  flavor?: Prisma.EnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile
+  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
   ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  recommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  notRecommendations?: Prisma.IntFieldUpdateOperationsInput | number
-  calories?: Prisma.FloatFieldUpdateOperationsInput | number
-  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  ingredients?: Prisma.PlateIngredientUncheckedUpdateManyWithoutPlateNestedInput
+  adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
-  dietItems?: Prisma.DietItemUncheckedUpdateManyWithoutPlateNestedInput
+}
+
+export type PlateCreateManyRecipeInput = {
+  id?: string
+  name: string
+  description?: string | null
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: number
+  ratingsCount?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlateUpdateWithoutRecipeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
+}
+
+export type PlateUncheckedUpdateWithoutRecipeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
+}
+
+export type PlateUncheckedUpdateManyWithoutRecipeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1203,16 +1884,14 @@ export type PlateUncheckedUpdateWithoutTagsInput = {
  */
 
 export type PlateCountOutputType = {
-  ingredients: number
+  adjustments: number
   reviews: number
-  dietItems: number
   tags: number
 }
 
 export type PlateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ingredients?: boolean | PlateCountOutputTypeCountIngredientsArgs
+  adjustments?: boolean | PlateCountOutputTypeCountAdjustmentsArgs
   reviews?: boolean | PlateCountOutputTypeCountReviewsArgs
-  dietItems?: boolean | PlateCountOutputTypeCountDietItemsArgs
   tags?: boolean | PlateCountOutputTypeCountTagsArgs
 }
 
@@ -1229,8 +1908,8 @@ export type PlateCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
 /**
  * PlateCountOutputType without action
  */
-export type PlateCountOutputTypeCountIngredientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PlateIngredientWhereInput
+export type PlateCountOutputTypeCountAdjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlateAdjustmentWhereInput
 }
 
 /**
@@ -1238,13 +1917,6 @@ export type PlateCountOutputTypeCountIngredientsArgs<ExtArgs extends runtime.Typ
  */
 export type PlateCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ReviewWhereInput
-}
-
-/**
- * PlateCountOutputType without action
- */
-export type PlateCountOutputTypeCountDietItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DietItemWhereInput
 }
 
 /**
@@ -1259,23 +1931,36 @@ export type PlateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
-  type?: boolean
-  flavor?: boolean
+  recipeId?: boolean
+  size?: boolean
+  servedWeightGrams?: boolean
+  costPrice?: boolean
+  menuPrice?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
-  recommendations?: boolean
-  notRecommendations?: boolean
-  calories?: boolean
-  proteins?: boolean
-  carbs?: boolean
-  fats?: boolean
+  likesCount?: boolean
+  dislikesCount?: boolean
+  calculatedCalories?: boolean
+  calculatedProteins?: boolean
+  calculatedCarbs?: boolean
+  calculatedFats?: boolean
+  calculatedFiber?: boolean
+  calculatedSugars?: boolean
+  calculatedSodium?: boolean
+  calculatedSaturatedFat?: boolean
+  calculatedTransFat?: boolean
+  calculatedMonounsaturatedFat?: boolean
+  calculatedPolyunsaturatedFat?: boolean
+  allergens?: boolean
+  dietaryTags?: boolean
+  nutritionTags?: boolean
+  nutritionNotes?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  ingredients?: boolean | Prisma.Plate$ingredientsArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
+  adjustments?: boolean | Prisma.Plate$adjustmentsArgs<ExtArgs>
   reviews?: boolean | Prisma.Plate$reviewsArgs<ExtArgs>
-  dietItems?: boolean | Prisma.Plate$dietItemsArgs<ExtArgs>
   tags?: boolean | Prisma.Plate$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.PlateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plate"]>
@@ -1284,96 +1969,154 @@ export type PlateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
-  type?: boolean
-  flavor?: boolean
+  recipeId?: boolean
+  size?: boolean
+  servedWeightGrams?: boolean
+  costPrice?: boolean
+  menuPrice?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
-  recommendations?: boolean
-  notRecommendations?: boolean
-  calories?: boolean
-  proteins?: boolean
-  carbs?: boolean
-  fats?: boolean
+  likesCount?: boolean
+  dislikesCount?: boolean
+  calculatedCalories?: boolean
+  calculatedProteins?: boolean
+  calculatedCarbs?: boolean
+  calculatedFats?: boolean
+  calculatedFiber?: boolean
+  calculatedSugars?: boolean
+  calculatedSodium?: boolean
+  calculatedSaturatedFat?: boolean
+  calculatedTransFat?: boolean
+  calculatedMonounsaturatedFat?: boolean
+  calculatedPolyunsaturatedFat?: boolean
+  allergens?: boolean
+  dietaryTags?: boolean
+  nutritionTags?: boolean
+  nutritionNotes?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plate"]>
 
 export type PlateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
-  type?: boolean
-  flavor?: boolean
+  recipeId?: boolean
+  size?: boolean
+  servedWeightGrams?: boolean
+  costPrice?: boolean
+  menuPrice?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
-  recommendations?: boolean
-  notRecommendations?: boolean
-  calories?: boolean
-  proteins?: boolean
-  carbs?: boolean
-  fats?: boolean
+  likesCount?: boolean
+  dislikesCount?: boolean
+  calculatedCalories?: boolean
+  calculatedProteins?: boolean
+  calculatedCarbs?: boolean
+  calculatedFats?: boolean
+  calculatedFiber?: boolean
+  calculatedSugars?: boolean
+  calculatedSodium?: boolean
+  calculatedSaturatedFat?: boolean
+  calculatedTransFat?: boolean
+  calculatedMonounsaturatedFat?: boolean
+  calculatedPolyunsaturatedFat?: boolean
+  allergens?: boolean
+  dietaryTags?: boolean
+  nutritionTags?: boolean
+  nutritionNotes?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plate"]>
 
 export type PlateSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
-  price?: boolean
-  type?: boolean
-  flavor?: boolean
+  recipeId?: boolean
+  size?: boolean
+  servedWeightGrams?: boolean
+  costPrice?: boolean
+  menuPrice?: boolean
   avgRating?: boolean
   ratingsCount?: boolean
-  recommendations?: boolean
-  notRecommendations?: boolean
-  calories?: boolean
-  proteins?: boolean
-  carbs?: boolean
-  fats?: boolean
+  likesCount?: boolean
+  dislikesCount?: boolean
+  calculatedCalories?: boolean
+  calculatedProteins?: boolean
+  calculatedCarbs?: boolean
+  calculatedFats?: boolean
+  calculatedFiber?: boolean
+  calculatedSugars?: boolean
+  calculatedSodium?: boolean
+  calculatedSaturatedFat?: boolean
+  calculatedTransFat?: boolean
+  calculatedMonounsaturatedFat?: boolean
+  calculatedPolyunsaturatedFat?: boolean
+  allergens?: boolean
+  dietaryTags?: boolean
+  nutritionTags?: boolean
+  nutritionNotes?: boolean
   isAvailable?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "type" | "flavor" | "avgRating" | "ratingsCount" | "recommendations" | "notRecommendations" | "calories" | "proteins" | "carbs" | "fats" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
+export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "recipeId" | "size" | "servedWeightGrams" | "costPrice" | "menuPrice" | "avgRating" | "ratingsCount" | "likesCount" | "dislikesCount" | "calculatedCalories" | "calculatedProteins" | "calculatedCarbs" | "calculatedFats" | "calculatedFiber" | "calculatedSugars" | "calculatedSodium" | "calculatedSaturatedFat" | "calculatedTransFat" | "calculatedMonounsaturatedFat" | "calculatedPolyunsaturatedFat" | "allergens" | "dietaryTags" | "nutritionTags" | "nutritionNotes" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
 export type PlateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  ingredients?: boolean | Prisma.Plate$ingredientsArgs<ExtArgs>
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
+  adjustments?: boolean | Prisma.Plate$adjustmentsArgs<ExtArgs>
   reviews?: boolean | Prisma.Plate$reviewsArgs<ExtArgs>
-  dietItems?: boolean | Prisma.Plate$dietItemsArgs<ExtArgs>
   tags?: boolean | Prisma.Plate$tagsArgs<ExtArgs>
   _count?: boolean | Prisma.PlateCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type PlateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type PlateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type PlateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
+}
+export type PlateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
+}
 
 export type $PlatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Plate"
   objects: {
-    ingredients: Prisma.$PlateIngredientPayload<ExtArgs>[]
+    recipe: Prisma.$RecipePayload<ExtArgs>
+    adjustments: Prisma.$PlateAdjustmentPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
-    dietItems: Prisma.$DietItemPayload<ExtArgs>[]
     tags: Prisma.$PlateTagPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     name: string
     description: string | null
-    price: number
-    type: $Enums.PlateType
-    flavor: $Enums.FlavorProfile
+    recipeId: string
+    size: $Enums.PlateSize
+    servedWeightGrams: number | null
+    costPrice: runtime.Decimal
+    menuPrice: runtime.Decimal
     avgRating: number
     ratingsCount: number
-    recommendations: number
-    notRecommendations: number
-    calories: number
-    proteins: number
-    carbs: number
-    fats: number
+    likesCount: number
+    dislikesCount: number
+    calculatedCalories: number
+    calculatedProteins: number
+    calculatedCarbs: number
+    calculatedFats: number
+    calculatedFiber: number
+    calculatedSugars: number
+    calculatedSodium: number
+    calculatedSaturatedFat: number
+    calculatedTransFat: number
+    calculatedMonounsaturatedFat: number
+    calculatedPolyunsaturatedFat: number
+    allergens: $Enums.Allergen[]
+    dietaryTags: $Enums.DietaryTag[]
+    nutritionTags: $Enums.NutritionTag[]
+    nutritionNotes: string | null
     isAvailable: boolean
     createdAt: Date
     updatedAt: Date
@@ -1771,9 +2514,9 @@ readonly fields: PlateFieldRefs;
  */
 export interface Prisma__PlateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  ingredients<T extends Prisma.Plate$ingredientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$ingredientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateIngredientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  recipe<T extends Prisma.RecipeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.RecipeDefaultArgs<ExtArgs>>): Prisma.Prisma__RecipeClient<runtime.Types.Result.GetResult<Prisma.$RecipePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  adjustments<T extends Prisma.Plate$adjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$adjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Plate$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  dietItems<T extends Prisma.Plate$dietItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$dietItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DietItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Plate$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1807,17 +2550,30 @@ export interface PlateFieldRefs {
   readonly id: Prisma.FieldRef<"Plate", 'String'>
   readonly name: Prisma.FieldRef<"Plate", 'String'>
   readonly description: Prisma.FieldRef<"Plate", 'String'>
-  readonly price: Prisma.FieldRef<"Plate", 'Float'>
-  readonly type: Prisma.FieldRef<"Plate", 'PlateType'>
-  readonly flavor: Prisma.FieldRef<"Plate", 'FlavorProfile'>
+  readonly recipeId: Prisma.FieldRef<"Plate", 'String'>
+  readonly size: Prisma.FieldRef<"Plate", 'PlateSize'>
+  readonly servedWeightGrams: Prisma.FieldRef<"Plate", 'Float'>
+  readonly costPrice: Prisma.FieldRef<"Plate", 'Decimal'>
+  readonly menuPrice: Prisma.FieldRef<"Plate", 'Decimal'>
   readonly avgRating: Prisma.FieldRef<"Plate", 'Float'>
   readonly ratingsCount: Prisma.FieldRef<"Plate", 'Int'>
-  readonly recommendations: Prisma.FieldRef<"Plate", 'Int'>
-  readonly notRecommendations: Prisma.FieldRef<"Plate", 'Int'>
-  readonly calories: Prisma.FieldRef<"Plate", 'Float'>
-  readonly proteins: Prisma.FieldRef<"Plate", 'Float'>
-  readonly carbs: Prisma.FieldRef<"Plate", 'Float'>
-  readonly fats: Prisma.FieldRef<"Plate", 'Float'>
+  readonly likesCount: Prisma.FieldRef<"Plate", 'Int'>
+  readonly dislikesCount: Prisma.FieldRef<"Plate", 'Int'>
+  readonly calculatedCalories: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedProteins: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedCarbs: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedFats: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedFiber: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedSugars: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedSodium: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedSaturatedFat: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedTransFat: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedMonounsaturatedFat: Prisma.FieldRef<"Plate", 'Float'>
+  readonly calculatedPolyunsaturatedFat: Prisma.FieldRef<"Plate", 'Float'>
+  readonly allergens: Prisma.FieldRef<"Plate", 'Allergen[]'>
+  readonly dietaryTags: Prisma.FieldRef<"Plate", 'DietaryTag[]'>
+  readonly nutritionTags: Prisma.FieldRef<"Plate", 'NutritionTag[]'>
+  readonly nutritionNotes: Prisma.FieldRef<"Plate", 'String'>
   readonly isAvailable: Prisma.FieldRef<"Plate", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Plate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Plate", 'DateTime'>
@@ -2075,6 +2831,10 @@ export type PlateCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    */
   data: Prisma.PlateCreateManyInput | Prisma.PlateCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlateIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2145,6 +2905,10 @@ export type PlateUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many Plates to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlateIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2214,27 +2978,27 @@ export type PlateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * Plate.ingredients
+ * Plate.adjustments
  */
-export type Plate$ingredientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Plate$adjustmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PlateIngredient
+   * Select specific fields to fetch from the PlateAdjustment
    */
-  select?: Prisma.PlateIngredientSelect<ExtArgs> | null
+  select?: Prisma.PlateAdjustmentSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PlateIngredient
+   * Omit specific fields from the PlateAdjustment
    */
-  omit?: Prisma.PlateIngredientOmit<ExtArgs> | null
+  omit?: Prisma.PlateAdjustmentOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PlateIngredientInclude<ExtArgs> | null
-  where?: Prisma.PlateIngredientWhereInput
-  orderBy?: Prisma.PlateIngredientOrderByWithRelationInput | Prisma.PlateIngredientOrderByWithRelationInput[]
-  cursor?: Prisma.PlateIngredientWhereUniqueInput
+  include?: Prisma.PlateAdjustmentInclude<ExtArgs> | null
+  where?: Prisma.PlateAdjustmentWhereInput
+  orderBy?: Prisma.PlateAdjustmentOrderByWithRelationInput | Prisma.PlateAdjustmentOrderByWithRelationInput[]
+  cursor?: Prisma.PlateAdjustmentWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PlateIngredientScalarFieldEnum | Prisma.PlateIngredientScalarFieldEnum[]
+  distinct?: Prisma.PlateAdjustmentScalarFieldEnum | Prisma.PlateAdjustmentScalarFieldEnum[]
 }
 
 /**
@@ -2259,30 +3023,6 @@ export type Plate$reviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ReviewScalarFieldEnum | Prisma.ReviewScalarFieldEnum[]
-}
-
-/**
- * Plate.dietItems
- */
-export type Plate$dietItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the DietItem
-   */
-  select?: Prisma.DietItemSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the DietItem
-   */
-  omit?: Prisma.DietItemOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DietItemInclude<ExtArgs> | null
-  where?: Prisma.DietItemWhereInput
-  orderBy?: Prisma.DietItemOrderByWithRelationInput | Prisma.DietItemOrderByWithRelationInput[]
-  cursor?: Prisma.DietItemWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DietItemScalarFieldEnum | Prisma.DietItemScalarFieldEnum[]
 }
 
 /**

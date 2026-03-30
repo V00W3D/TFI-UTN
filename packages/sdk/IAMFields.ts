@@ -1,51 +1,55 @@
 /**
- * @file MyFields.ts
+ * @file IAMFields.ts
  * @author Victor
- * @description Automatically enforced JSDoc header according to context.md guidelines.
- * @param null
- * @returns null
- * @example null
- * @remarks This file is part of the QART monorepo architecture.
+ * @description Shared IAM field definitions aligned with the current Prisma schema.
+ * @remarks Centralizes auth/account enums and reusable form field validators.
  *
  * Metrics:
- * - LOC: 50
- * - Experience Level: Junior
- * - Estimated Time: 30m
- * - FPA: 1
- * - PERT: 1
- * - Planning Poker: 1
+ * - LOC: 170
+ * - Experience Level: Mid
+ * - Estimated Time: 35m
+ * - FPA: 2
+ * - PERT: 35m
+ * - Planning Poker: 2
  */
 import { z } from 'zod';
 import { defineField, NAME_BASE, PASSWORD_LENGTH } from './FieldDef';
 
-//#region PRISMA_ENUM_TYPES
-// ─────────────────────────────────────────────────────────────
-//  TypeScript unions mirroring every Prisma enum in schema.prisma.
-//  Single source of truth shared by contracts, services, and frontend.
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// PRISMA ENUM VALUES
+// ═══════════════════════════════════════════════════════════════
+
+export const SEX_VALUES = ['MALE', 'FEMALE', 'OTHER'] as const;
+export const USER_ROLE_VALUES = ['CUSTOMER', 'STAFF', 'AUTHORITY'] as const;
+export const CUSTOMER_TIER_VALUES = ['REGULAR', 'VIP', 'PREMIUM'] as const;
+export const STAFF_POST_VALUES = [
+  'COOK',
+  'CASHIER',
+  'WAITER',
+  'BARISTA',
+  'CLEANER',
+  'DELIVERY',
+] as const;
+export const AUTHORITY_RANK_VALUES = ['SUPERVISOR', 'MANAGER', 'DIRECTOR', 'OWNER'] as const;
 
 /** @public Mirrors Prisma `Sex` enum. */
-export type Sex = 'MALE' | 'FEMALE' | 'OTHER';
+export type Sex = (typeof SEX_VALUES)[number];
 
 /** @public Mirrors Prisma `UserRole` enum. */
-export type UserRole = 'CUSTOMER' | 'STAFF' | 'AUTHORITY';
+export type UserRole = (typeof USER_ROLE_VALUES)[number];
 
 /** @public Mirrors Prisma `CustomerTier` enum. */
-export type CustomerTier = 'REGULAR' | 'VIP' | 'PREMIUM';
+export type CustomerTier = (typeof CUSTOMER_TIER_VALUES)[number];
 
 /** @public Mirrors Prisma `StaffPost` enum. */
-export type StaffPost = 'COOK' | 'CASHIER' | 'WAITER' | 'BARISTA' | 'CLEANER' | 'DELIVERY';
+export type StaffPost = (typeof STAFF_POST_VALUES)[number];
 
 /** @public Mirrors Prisma `AuthorityRank` enum. */
-export type AuthorityRank = 'SUPERVISOR' | 'MANAGER' | 'DIRECTOR' | 'OWNER';
-//#endregion
+export type AuthorityRank = (typeof AUTHORITY_RANK_VALUES)[number];
 
-//#region STRING_FIELDS
-// ─────────────────────────────────────────────────────────────
-//  All produced by defineField — return type is FieldDef<ZodString>
-//  or FieldDef<ZodNullable<ZodString>> depending on nullable.
-//  No explicit type annotation — TypeScript infers the exact type.
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// STRING FIELDS
+// ═══════════════════════════════════════════════════════════════
 
 /** @public username — VarChar(32), alphanumeric + underscore, no reserved words. */
 export const usernameField = defineField({
@@ -94,13 +98,13 @@ export const cpasswordField = defineField({
 /** @public name — VarChar(128). */
 export const nameField = defineField({ label: 'Nombre', ...NAME_BASE });
 
-/** @public sname — VarChar(128), nullable. Form stores '' → ApiClient converts to null. */
+/** @public sname — VarChar(128), nullable. */
 export const snameField = defineField({ label: 'Segundo nombre', nullable: true, ...NAME_BASE });
 
 /** @public lname — VarChar(128). */
 export const lnameField = defineField({ label: 'Apellido', ...NAME_BASE });
 
-/** @public email — VarChar(128), native Zod v4 email format. */
+/** @public email — VarChar(128), normalized to lowercase. */
 export const emailField = defineField({
   label: 'Email',
   lowercase: true,
@@ -113,7 +117,7 @@ export const emailField = defineField({
   ],
 });
 
-/** @public phone — VarChar(15), nullable, E.164. Form stores '' → null. */
+/** @public phone — VarChar(15), nullable, E.164. */
 export const phoneField = defineField({
   label: 'Teléfono',
   nullable: true,
@@ -129,22 +133,14 @@ export const phoneField = defineField({
     'Ejemplo válido: +5493811234567.',
   ],
 });
-//#endregion
 
-//#region COMPOSITE_FIELDS
-// ─────────────────────────────────────────────────────────────
-//  identityField is constructed manually (not via defineField)
-//  because it is a union validator, not a simple string field.
-//
-//  NO explicit type annotation — TypeScript infers:
-//    { schema: ZodString; rules: readonly string[] }
-//  which matches FieldDef<ZodString> structurally.
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// COMPOSITE FIELD
+// ═══════════════════════════════════════════════════════════════
 
 /**
  * @public
  * @summary Login identity: accepts username, email, or phone.
- * Validates that the value satisfies at least one sub-schema.
  */
 export const identityField = {
   schema: z
@@ -153,8 +149,9 @@ export const identityField = {
     .toLowerCase()
     .superRefine((value, ctx) => {
       const isValid = [usernameField.schema, emailField.schema, phoneField.schema].some(
-        (sub) => sub.safeParse(value).success,
+        (subSchema) => subSchema.safeParse(value).success,
       );
+
       if (!isValid)
         ctx.addIssue({
           code: 'custom',
@@ -163,47 +160,37 @@ export const identityField = {
     }),
   rules: ['Podés ingresar tu nombre de usuario, email o teléfono.'] as const,
 } as const;
-// No : FieldDef<...> annotation — TypeScript infers { schema: ZodString, rules: [...] }
-// which is structurally compatible with FieldDef<ZodString>.
-//#endregion
 
-//#region ENUM_FIELDS
-// ─────────────────────────────────────────────────────────────
-//  Enum fields have NO explicit type annotation and NO "as" cast.
-//  TypeScript infers the exact ZodEnum type from z.enum([...]).
-//
-//  In Zod v4, z.enum(['A','B','C']) returns:
-//    ZodEnum<{ A: 'A'; B: 'B'; C: 'C' }>
-//  which is more specific than ZodType<'A'|'B'|'C'> and shows cleanly in hover.
-// ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════
+// ENUM FIELDS
+// ═══════════════════════════════════════════════════════════════
 
-/** @public sex — Prisma Sex enum: `'MALE' | 'FEMALE' | 'OTHER'`. */
+/** @public sex — Prisma Sex enum. */
 export const sexField = {
-  schema: z.enum(['MALE', 'FEMALE', 'OTHER']),
+  schema: z.enum(SEX_VALUES),
   rules: ['Elegí una de las opciones disponibles.'] as const,
 } as const;
 
-/** @public userRole — Prisma UserRole enum: `'CUSTOMER' | 'STAFF' | 'AUTHORITY'`. */
+/** @public userRole — Prisma UserRole enum. */
 export const userRoleField = {
-  schema: z.enum(['CUSTOMER', 'STAFF', 'AUTHORITY']),
+  schema: z.enum(USER_ROLE_VALUES),
   rules: ['El rol determina los permisos del usuario en el sistema.'] as const,
 } as const;
 
-/** @public customerTier — Prisma CustomerTier enum: `'REGULAR' | 'VIP' | 'PREMIUM'`. */
+/** @public customerTier — Prisma CustomerTier enum. */
 export const customerTierField = {
-  schema: z.enum(['REGULAR', 'VIP', 'PREMIUM']),
+  schema: z.enum(CUSTOMER_TIER_VALUES),
   rules: ['El nivel determina los beneficios del cliente.'] as const,
 } as const;
 
 /** @public staffPost — Prisma StaffPost enum. */
 export const staffPostField = {
-  schema: z.enum(['COOK', 'CASHIER', 'WAITER', 'BARISTA', 'CLEANER', 'DELIVERY']),
+  schema: z.enum(STAFF_POST_VALUES),
   rules: ['El puesto define las responsabilidades del trabajador.'] as const,
 } as const;
 
 /** @public authorityRank — Prisma AuthorityRank enum. */
 export const authorityRankField = {
-  schema: z.enum(['SUPERVISOR', 'MANAGER', 'DIRECTOR', 'OWNER']),
+  schema: z.enum(AUTHORITY_RANK_VALUES),
   rules: ['El rango define la jerarquía de autoridad.'] as const,
 } as const;
-//#endregion

@@ -62,40 +62,40 @@ export type StaffProfile = Prisma.StaffProfileModel
  */
 export type AuthorityProfile = Prisma.AuthorityProfileModel
 /**
- * Model Diet
+ * Model Ingredient
  * 
  */
-export type Diet = Prisma.DietModel
+export type Ingredient = Prisma.IngredientModel
 /**
- * Model DietItem
+ * Model IngredientVariant
  * 
  */
-export type DietItem = Prisma.DietItemModel
+export type IngredientVariant = Prisma.IngredientVariantModel
+/**
+ * Model Recipe
+ * 
+ */
+export type Recipe = Prisma.RecipeModel
+/**
+ * Model RecipeItem
+ * 
+ */
+export type RecipeItem = Prisma.RecipeItemModel
 /**
  * Model Plate
  * 
  */
 export type Plate = Prisma.PlateModel
 /**
- * Model Ingredient
+ * Model PlateAdjustment
  * 
  */
-export type Ingredient = Prisma.IngredientModel
-/**
- * Model PlateIngredient
- * 
- */
-export type PlateIngredient = Prisma.PlateIngredientModel
+export type PlateAdjustment = Prisma.PlateAdjustmentModel
 /**
  * Model Review
  * 
  */
 export type Review = Prisma.ReviewModel
-/**
- * Model CreatorStats
- * 
- */
-export type CreatorStats = Prisma.CreatorStatsModel
 /**
  * Model Tag
  * 
