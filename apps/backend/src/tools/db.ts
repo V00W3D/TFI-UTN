@@ -46,7 +46,7 @@ export const prisma = new PrismaClient({
 export const prismaAdapter = {
   name: 'prisma',
   instance: prisma,
-
+  url: DATABASE_URL,
   connect: async () => {
     await prisma.$connect();
   },
