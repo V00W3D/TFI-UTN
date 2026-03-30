@@ -3,9 +3,8 @@ import { getPlatesService } from '../services/GetPlatesService';
 
 /**
  * @description Catalog Handler (GET /customers/plates).
- * Orchestrates fetching the QART nutritional plate catalog.
+ * Returns the full customer-facing restaurant catalog already shaped for the public contract.
  */
-export const GetPlatesHandler = api.handler('GET /customers/plates')(async (_input, _ctx) => {
-  const plates = await getPlatesService();
-  return plates;
+export const GetPlatesHandler = api.handler('GET /customers/plates')(async () => {
+  return getPlatesService();
 });

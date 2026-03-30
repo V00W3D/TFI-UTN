@@ -8,27 +8,28 @@ const COOKIE_BASE = { httpOnly: true, secure: BUN_MODE === 'prod', sameSite: 'st
 
 /**
  * @description Authentication Handler (POST /iam/login).
- * Orchestrates the identity verification process and establishes a secure session via JWT cookies.
- * 1. Delegates credential validation to the loginService.
- * 2. Issues 'CupCake' (Access) and 'Cake' (Refresh) cookies upon success.
+ * Validates credentials, issues both JWT cookies, and returns the authenticated subject.
  */
 export const LoginHandler = api.handler('POST /iam/login')(async (input, { res }) => {
   const user = await loginService(input);
-  const payload = {
+  const tokenPayload = {
     id: user.id,
-    role: user.role,
     username: user.username,
     email: user.email,
-    phone: user.phone,
-    profile: user.profile,
+    phone: user.phone ?? null,
+    role: user.role,
+    profile: { ...user.profile },
   };
-  res.cookie('CupCake', jwt.sign(payload, SESSION_SECRET, { expiresIn: '1h' }), {
+
+  res.cookie('CupCake', jwt.sign(tokenPayload, SESSION_SECRET, { expiresIn: '1h' }), {
     ...COOKIE_BASE,
     maxAge: 3600000,
   });
-  res.cookie('Cake', jwt.sign(payload, REFRESH_SECRET, { expiresIn: '7d' }), {
+
+  res.cookie('Cake', jwt.sign(tokenPayload, REFRESH_SECRET, { expiresIn: '7d' }), {
     ...COOKIE_BASE,
     maxAge: 604800000,
   });
+
   return user;
 });

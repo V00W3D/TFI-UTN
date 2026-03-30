@@ -3,8 +3,8 @@ import { registerService } from '../services/RegisterService';
 
 /**
  * @description Registration Handler (POST /iam/register).
- * Entry point for new user creation. Validates input against the RegisterContract via SDK automatically.
+ * Delegates account creation to the IAM service layer after contract validation.
  */
-export const RegisterHandler = api.handler('POST /iam/register')(async (input) =>
-  registerService(input),
-);
+export const RegisterHandler = api.handler('POST /iam/register')(async (input) => {
+  await registerService(input);
+});

@@ -5,25 +5,29 @@ import { prisma } from '../../../tools/db';
 
 /**
  * @description User Registration Logic.
- * 1. Hashes the raw password using Argon2 for secure storage.
- * 2. Persists the new user record in the database.
- * @throws AppError if constraints are violated (handled by ErrorTools).
+ * Persists a normalized customer account that matches the current Prisma schema.
  */
 export async function registerService(
   input: InferRequest<typeof RegisterContract>,
 ): Promise<InferSuccess<typeof RegisterContract>> {
   const password = await argon2.hash(input.password);
+
   await prisma.user.create({
     data: {
-      username: input.username,
-      email: input.email,
-      phone: input.phone,
+      name: input.name.trim(),
+      sname: input.sname?.trim() ?? null,
+      lname: input.lname.trim(),
+      sex: input.sex,
+      username: input.username.trim().toLowerCase(),
+      email: input.email.trim().toLowerCase(),
+      phone: input.phone ?? null,
       password,
       role: 'CUSTOMER',
-      name: input.name,
-      sname: input.sname,
-      lname: input.lname,
-      customer: { create: { tier: 'REGULAR' } },
+      customer: {
+        create: {
+          tier: 'REGULAR',
+        },
+      },
     },
   });
 }
