@@ -8,31 +8,31 @@ import { motion } from 'framer-motion';
 const CraftSection = () => {
   return (
     <section
-      className="py-32 overflow-hidden relative border-y-4 border-qart-border"
+      className="py-20 overflow-hidden relative border-y-4 border-qart-border"
       style={{ background: 'var(--qart-surface-inverse)' }}
     >
       <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
         <motion.h2
-          className="text-6xl md:text-8xl font-display mb-10 leading-none uppercase font-black"
+          className="text-4xl md:text-5xl font-display mb-6 leading-none uppercase font-black"
           style={{ color: 'var(--qart-text-on-inverse)' }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          ¿Qué vas a <br />
-          <span className="text-qart-accent">armar hoy?</span>
+          Armá tu pedido <br />
+          <span className="text-qart-accent">cuando quieras.</span>
         </motion.h2>
 
         <motion.p
-          className="text-xl md:text-2xl font-bold uppercase tracking-tighter mb-16 max-w-2xl mx-auto leading-tight"
+          className="text-base md:text-lg font-bold uppercase tracking-tighter mb-9 max-w-2xl mx-auto leading-tight"
           style={{ color: 'var(--qart-text-on-inverse-dim)' }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
         >
-          Milanesa napolitana, burger doble smash, o lo que se te ocurra. Tu plato ideal te está
-          esperando en QART.
+          Elegí la base, sumá ingredientes y resolvé tu pedido en pocos pasos, con una experiencia
+          clara de principio a fin.
         </motion.p>
 
         <motion.div
@@ -42,7 +42,7 @@ const CraftSection = () => {
           transition={{ delay: 0.2 }}
         >
           <button
-            className="px-12 py-6 text-2xl font-black uppercase tracking-[0.2em] border-4 transition-all duration-200"
+            className="px-7 py-3.5 text-base font-black uppercase tracking-[0.16em] border-4 transition-all duration-200"
             style={{
               background: 'var(--qart-bg)',
               color: 'var(--qart-text)',
@@ -60,7 +60,7 @@ const CraftSection = () => {
               b.style.boxShadow = 'var(--qart-shadow-sharp)';
             }}
           >
-            Empezar a armar
+            Empezar ahora
           </button>
         </motion.div>
       </div>

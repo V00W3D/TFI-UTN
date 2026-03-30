@@ -1,105 +1,138 @@
 import { useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '../../../appStore';
 import { form, sdk } from '../../../tools/sdk';
+import { ArrowRightIcon, IdentityIcon, LockIcon } from '../../../components/shared/AppIcons';
 
-/**
- * @file LoginPage.tsx
- * @description Architectural Login with sharp geometry and bold typography.
- */
 const LoginPage = () => {
   const { setModule, setUser } = useAppStore();
   const navigate = useNavigate();
 
   const { data, error, isFetching, isFormValid } = sdk.iam.login.$use();
-  const { Form, fields } = form.iam.login;
+  const { fields, submit, $form } = form.iam.login;
 
   useEffect(() => {
     setModule('IAM');
-  }, [setModule]);
+    sdk.iam.login.$reset();
+    $form.getState().reset();
+  }, [$form, setModule]);
 
   useEffect(() => {
     if (data && 'data' in data) {
       setUser(data.data);
-      navigate('/');
+      navigate('/', { replace: true });
     }
-  }, [data, setUser, navigate]);
+  }, [data, navigate, setUser]);
+
+  const handleSubmit = submit(async (values) => {
+    if (isFetching) return;
+    try {
+      await sdk.iam.login(values);
+    } catch {
+      // El error queda reflejado en el store del endpoint.
+    }
+  });
 
   return (
-    <div className="auth-card">
-      <div className="relative z-10">
-        <div className="text-center mb-12">
-          <div
-            className="w-20 h-20 bg-qart-accent flex items-center justify-center font-display text-5xl border-4 border-qart-border shadow-hover mx-auto mb-8 -rotate-3 uppercase font-black"
-            style={{ color: 'var(--qart-text-on-accent)' }}
-          >
-            Q
+    <section className="auth-shell auth-shell--login">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+        className="auth-panel auth-panel--login"
+      >
+        <div className="auth-hero">
+          <div className="auth-badge">INGRESO A QART</div>
+
+          <div className="auth-hero-copy">
+            <p className="auth-kicker">INICIAR SESIÓN</p>
+            <h1 className="auth-title">¡BIENVENIDO DE VUELTA!</h1>
           </div>
-          <h2 className="text-4xl font-display text-qart-primary mb-3 uppercase font-black tracking-tight">
-            Acceso QART
-          </h2>
-          <p className="text-sm font-bold uppercase tracking-widest text-qart-text-muted">
-            Gestión de Autor
-          </p>
         </div>
 
-        {/* ERROR BANNER (SHARP) */}
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="mb-8"
-            >
-              <div className="banner-error">
-                <span className="font-black">!</span>
-                <p className="text-xs font-black uppercase tracking-widest leading-snug">
+        <div className="auth-form-panel">
+          <div className="auth-panel-header">
+            <div>
+              <p className="auth-kicker">INICIAR SESIÓN</p>
+              <h2 className="auth-section-heading">INGRESÁ CON TUS DATOS</h2>
+            </div>
+            <div className="auth-panel-mark">Q</div>
+          </div>
+
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                className="auth-alert auth-alert--error"
+              >
+                <strong>NO PUDIMOS INICIAR SESIÓN</strong>
+                <span>
                   {error.code === 'UNAUTHORIZED'
-                    ? 'Credenciales Inválidas. Intente de Nuevo.'
-                    : 'Error de Sistema. Verifique sus Datos.'}
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                    ? 'LOS DATOS INGRESADOS NO COINCIDEN CON UNA CUENTA ACTIVA.'
+                    : 'NO PUDIMOS VALIDAR EL ACCESO. PROBÁ DE NUEVO.'}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-        {/* FORM OVERLAY */}
-        <div className="relative">
-          {isFetching && (
-            <div className="absolute inset-x-0 -top-4 bottom-0 bg-qart-bg/80 z-20 flex items-center justify-center border-2 border-qart-border">
-              <div className="w-12 h-12 border-4 border-qart-border border-t-qart-accent animate-spin"></div>
+          <form onSubmit={handleSubmit} className="auth-page-form">
+            <div className="auth-form-section">
+              <fields.identity
+                label="Usuario, correo o teléfono"
+                placeholder="TU_USUARIO / CORREO@DOMINIO.COM / +54 9 ..."
+                required
+                fieldMode="login"
+                addons={[{ type: 'icon', icon: <IdentityIcon className="size-[1.05rem]" /> }]}
+              />
+              <fields.password
+                label="Contraseña"
+                placeholder="INGRESÁ TU CONTRASEÑA"
+                control="password"
+                required
+                fieldMode="login"
+                addons={[
+                  { type: 'icon', icon: <LockIcon className="size-[1.05rem]" /> },
+                  { type: 'passwordToggle' },
+                ]}
+              />
             </div>
-          )}
 
-          <Form buttonText={isFetching ? 'Verificando...' : 'Entrar'}>
-            <div className="space-y-8">
-              <fields.identity label="Usuario / Email" placeholder="NOMBRE_USUARIO" required />
-              <fields.password label="Contraseña" control="password" required />
-            </div>
-          </Form>
-        </div>
-
-        {!isFormValid && !isFetching && (
-          <p className="mt-8 text-[10px] text-center text-qart-text-muted font-black uppercase tracking-[0.3em]">
-            Campos obligatorios pendientes
-          </p>
-        )}
-
-        <div className="mt-12 pt-8 border-t-2 border-qart-border text-center">
-          <p className="text-xs font-bold text-qart-text-muted uppercase tracking-widest">
-            ¿Sin acceso?{' '}
-            <span
-              onClick={() => navigate('/iam/register')}
-              className="text-qart-accent hover:underline cursor-pointer"
+            <button
+              type="submit"
+              disabled={isFetching || !isFormValid}
+              className="auth-submit-button"
             >
-              Registrar cuenta
-            </span>
-          </p>
+              <span>{isFetching ? 'VALIDANDO...' : 'INGRESAR'}</span>
+              <span className="auth-submit-arrow" aria-hidden="true">
+                <ArrowRightIcon className="size-[1.05rem]" />
+              </span>
+            </button>
+          </form>
+
+          <div className="auth-meta-row">
+            <p className="auth-footnote">
+              {!isFormValid && !isFetching
+                ? 'COMPLETÁ EL ACCESO Y LA CONTRASEÑA PARA CONTINUAR.'
+                : 'PODÉS USAR USUARIO, CORREO O TELÉFONO PARA INGRESAR.'}
+            </p>
+
+            <p className="auth-switch">
+              ¿TODAVÍA NO TENÉS CUENTA?{' '}
+              <button
+                type="button"
+                onClick={() => navigate('/iam/register')}
+                className="auth-inline-link"
+              >
+                CREAR CUENTA
+              </button>
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </section>
   );
 };
 

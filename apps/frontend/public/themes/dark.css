@@ -67,6 +67,18 @@
   --qart-warning-border: #92400e;
   --qart-info: #93c5fd;
   --qart-info-bg: #1e3a5f;
+  --qart-insight-benefit: #86efac;
+  --qart-insight-benefit-bg: #052e16;
+  --qart-insight-benefit-border: #166534;
+  --qart-insight-balanced: #93c5fd;
+  --qart-insight-balanced-bg: #172554;
+  --qart-insight-balanced-border: #1d4ed8;
+  --qart-insight-caution: #fcd34d;
+  --qart-insight-caution-bg: #1c1000;
+  --qart-insight-caution-border: #92400e;
+  --qart-insight-danger: #fca5a5;
+  --qart-insight-danger-bg: #2d0a0a;
+  --qart-insight-danger-border: #991b1b;
 
   /* ── Sombras — con tinte cálido, no negro frío ── */
   --qart-shadow-sharp: 4px 4px 0px #3d3530;

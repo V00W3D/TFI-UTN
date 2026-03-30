@@ -8,7 +8,7 @@ const Story = () => {
   const steps = [
     {
       title: 'Elegí tu base',
-      desc: 'Milanesa de carne, de pollo, burger doble smash o medallón veggie. Vos elegís el punto de partida.',
+      desc: 'Milanesa, burger o alternativa veggie. Elegís la base y arrancás el pedido desde ahí.',
       icon: (
         <svg
           className="w-12 h-12 text-qart-accent"
@@ -28,8 +28,8 @@ const Story = () => {
       color: 'bg-qart-accent/10',
     },
     {
-      title: 'Personalizá todo',
-      desc: 'Sumá cheddar, hacela napolitana, agregá bacon crocante o salsa secreta. No hay límites para tu antojo.',
+      title: 'Sumá lo que quieras',
+      desc: 'Agregá ingredientes, salsas y extras según tu gusto, con una vista clara de cada opción.',
       icon: (
         <svg
           className="w-12 h-12 text-qart-accent-2"
@@ -48,8 +48,8 @@ const Story = () => {
       color: 'bg-qart-accent-2/10',
     },
     {
-      title: 'Disfrutá donde sea',
-      desc: 'Te lo enviamos volando a casa o te esperamos en nuestro local con la mesa lista. Así de simple.',
+      title: 'Recibilo o vení al local',
+      desc: 'Elegí envío o retiro y seguí todo en pocos pasos, sin perder tiempo entre pantallas.',
       icon: (
         <svg
           className="w-12 h-12 text-qart-primary"
@@ -70,11 +70,11 @@ const Story = () => {
   ];
 
   return (
-    <section id="como-funciona" className="py-32 bg-qart-bg relative overflow-hidden">
+    <section id="como-funciona" className="py-20 bg-qart-bg relative overflow-hidden">
       {/* SECTION DIVIDER - Transition to FeaturedDish */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0">
         <svg
-          className="relative block w-[calc(100%+1.3px)] h-15"
+          className="relative block w-[calc(100%+1.3px)] h-12"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
@@ -91,23 +91,23 @@ const Story = () => {
       <div className="absolute top-0 left-0 w-full h-px bg-linear-to-r from-transparent via-qart-border to-transparent opacity-50" />
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* HEADER */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-14 md:mb-16">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="inline-block px-4 py-1.5 bg-qart-bg-warm text-qart-primary text-xs font-bold rounded-none uppercase tracking-widest mb-6 border border-qart-border"
+            className="inline-block px-3 py-1 bg-qart-bg-warm text-qart-primary text-[0.72rem] font-bold rounded-none uppercase tracking-widest mb-4 border border-qart-border"
           >
-            Simple como pedir en la caja
+            Claro desde el inicio
           </motion.span>
-          <h2 className="text-5xl md:text-6xl text-qart-primary mb-6">
-            Armá tu plato ideal <br /> <span className="text-qart-accent">en tres pasos</span>
+          <h2 className="text-3xl md:text-4xl text-qart-primary mb-4">
+            Armá tu pedido <br /> <span className="text-qart-accent">en tres pasos</span>
           </h2>
         </div>
 
         {/* 3 STEP CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
           {/* Connecting Line (Desktop only) */}
-          <div className="hidden md:block absolute top-15 left-[15%] w-[70%] h-0.5 border-t-2 border-dashed border-qart-border -z-10" />
+          <div className="hidden md:block absolute top-12 left-[15%] w-[70%] h-0.5 border-t-2 border-dashed border-qart-border -z-10" />
 
           {steps.map((step, idx) => (
             <motion.div
@@ -118,16 +118,16 @@ const Story = () => {
               viewport={{ once: true, margin: '-50px' }}
               transition={{ delay: idx * 0.2, type: 'spring', stiffness: 100 }}
             >
-              <div className="relative shrink-0 w-24 h-24 sm:w-32 sm:h-32 bg-qart-bg-warm rounded-4xl flex items-center justify-center p-6 mb-8 group-hover:scale-110 transition-transform duration-500">
+              <div className="relative shrink-0 w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] bg-qart-bg-warm rounded-4xl flex items-center justify-center p-4 mb-5 group-hover:scale-110 transition-transform duration-500">
                 {step.icon}
                 {/* Number Badge */}
                 <div className="step-badge transition-all duration-300">{idx + 1}</div>
               </div>
 
-              <h3 className="text-2xl font-display text-qart-primary mb-4 group-hover:text-qart-accent transition-colors">
+              <h3 className="text-lg font-display text-qart-primary mb-2.5 group-hover:text-qart-accent transition-colors">
                 {step.title}
               </h3>
-              <p className="text-qart-text-muted text-base leading-relaxed px-4 font-medium">
+              <p className="text-qart-text-muted text-[0.9rem] leading-relaxed px-3 font-medium">
                 {step.desc}
               </p>
             </motion.div>

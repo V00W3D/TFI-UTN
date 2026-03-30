@@ -16,6 +16,7 @@
  * - Planning Poker: 1
  */
 import { NavLink, Outlet } from 'react-router-dom';
+import '../pages/AuthPages.css';
 
 const AuthLayout = () => {
   return (
@@ -26,7 +27,7 @@ const AuthLayout = () => {
           replace
           className={({ isActive }) => (isActive ? 'auth-link auth-link-active' : 'auth-link')}
         >
-          Iniciar Sesión
+          Iniciar sesión
         </NavLink>
 
         <NavLink

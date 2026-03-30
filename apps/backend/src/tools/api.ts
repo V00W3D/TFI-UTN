@@ -11,12 +11,15 @@ import { BACKEND_URL, BACKEND_HOST, BACKEND_PORT, BUN_MODE } from '../env';
 
 // Accept localhost, 127.0.0.1, and Replit proxied domains.
 const FRONTEND_PORT = process.env.FRONTEND_PORT ?? '5173';
+const FRONTEND_HOST = process.env.FRONTEND_HOST ?? '100.87.111.94';
 const REPLIT_DEV_DOMAIN = process.env.REPLIT_DEV_DOMAIN;
 const ALLOWED_ORIGINS: (string | RegExp)[] = [
-  `http://localhost:${FRONTEND_PORT}`,
+  `http://${FRONTEND_HOST}:${FRONTEND_PORT}`,
   `http://127.0.0.1:${FRONTEND_PORT}`,
   ...(REPLIT_DEV_DOMAIN ? [`https://${REPLIT_DEV_DOMAIN}`] : []),
   /\.replit\.dev$/,
+  `http://192.168.1.11:${FRONTEND_PORT}`,
+  `http://localhost:${FRONTEND_PORT}`,
 ];
 
 /**

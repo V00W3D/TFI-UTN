@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import type { ClientApiInstance, RequestState } from '@app/sdk/ApiClient';
 import type { FormState } from '@app/sdk';
 import type { AnyContract, RequestShapeOf } from '@app/sdk';
+import { ClearIcon, EyeClosedIcon, EyeOpenIcon } from '../components/shared/AppIcons';
 import './FormFactoryStyles.css';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -44,12 +45,12 @@ export type ControlType =
  * @summary Opción individual para controles `select` o `radio`.
  * @property value - Valor interno enviado al store.
  * @property label - Texto visible al usuario.
- * @property icon  - Ruta a imagen decorativa (opcional).
+ * @property icon  - Ícono decorativo (opcional).
  */
 export interface ControlOption {
   value: string;
   label: string;
-  icon?: string;
+  icon?: ReactNode;
 }
 
 /**
@@ -76,7 +77,7 @@ export type InputControl =
  * - `strength`        — indicador visual de fortaleza de contraseña
  */
 export type FieldAddon =
-  | { type: 'icon'; src: string }
+  | { type: 'icon'; icon: ReactNode }
   | { type: 'passwordToggle' }
   | { type: 'hint'; text: string }
   | { type: 'rules'; rules: readonly string[] }
@@ -283,13 +284,19 @@ const extractAddons = (addons: FieldAddon[]) => ({
 //#region SUBCOMPONENTS
 
 const SlotButton = memo(
-  ({ onClick, icon, description }: { onClick: () => void; icon: string; description: string }) => (
-    <button type="button" onClick={onClick} className="ff-slot-btn">
-      <img
-        src={icon}
-        alt={description}
-        className="size-6 object-contain pointer-events-none ff-icon"
-      />
+  ({
+    onClick,
+    icon,
+    description,
+  }: {
+    onClick: () => void;
+    icon: ReactNode;
+    description: string;
+  }) => (
+    <button type="button" onClick={onClick} className="ff-slot-btn" aria-label={description}>
+      <span className="ff-icon" aria-hidden="true">
+        {icon}
+      </span>
     </button>
   ),
 );
@@ -414,11 +421,9 @@ const NativeInput = memo(
                       {isSelected && <div className="ff-radio-dot" />}
                     </div>
                     {opt.icon && (
-                      <img
-                        src={opt.icon}
-                        alt={opt.label}
-                        className="size-6 object-contain transition-all duration-300 ff-icon"
-                      />
+                      <span className="ff-icon" aria-hidden="true">
+                        {opt.icon}
+                      </span>
                     )}
                     <span className="ff-radio-label">{opt.label}</span>
                   </div>
@@ -501,7 +506,6 @@ const BoundField = memo(
     const isFormValid = useStore(store, (s) => s.isFormValid);
     const save = useStore(store, (s) => s.set);
     const markBlur = useStore(store, (s) => s.blur);
-    const clear = useStore(store, (s) => s.reset);
 
     const errors = (rawErrors ?? []) as string[];
     const type: ControlType = Array.isArray(control) ? (control[0] as ControlType) : control;
@@ -535,7 +539,10 @@ const BoundField = memo(
     );
     const togglePassword = useCallback(() => setPasswordVisible((p) => !p), []);
     const toggleRules = useCallback(() => setRulesVisible((p) => !p), []);
-    const handleClear = useCallback(() => clear(), [clear]);
+    const handleClear = useCallback(() => {
+      setHasInteracted(true);
+      save(name, '' as never);
+    }, [name, save]);
 
     return (
       <div className={`ff-field ${stateClass}`}>
@@ -554,11 +561,9 @@ const BoundField = memo(
           {iconAddon && (
             <div className="ff-slot-left">
               <div className="ff-slot-icon">
-                <img
-                  src={iconAddon.src}
-                  alt="ícono del campo"
-                  className="size-5 object-contain ff-icon"
-                />
+                <span className="ff-icon" aria-hidden="true">
+                  {iconAddon.icon}
+                </span>
               </div>
             </div>
           )}
@@ -577,11 +582,23 @@ const BoundField = memo(
             }}
           />
           <div className="ff-slot-right">
-            <SlotButton onClick={handleClear} icon="/rubber-icon.png" description="Limpiar campo" />
+            {type !== 'radio' && type !== 'checkbox' && hasValue && (
+              <SlotButton
+                onClick={handleClear}
+                icon={<ClearIcon className="size-[1.05rem]" />}
+                description="Limpiar campo"
+              />
+            )}
             {hasPasswordToggle && type === 'password' && (
               <SlotButton
                 onClick={togglePassword}
-                icon={passwordVisible ? '/open-eye.png' : '/closed-eye.png'}
+                icon={
+                  passwordVisible ? (
+                    <EyeOpenIcon className="size-[1.05rem]" />
+                  ) : (
+                    <EyeClosedIcon className="size-[1.05rem]" />
+                  )
+                }
                 description={passwordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               />
             )}

@@ -10,20 +10,20 @@ const HowWeServe = () => {
   return (
     <section
       id="locales"
-      className="py-32 bg-qart-bg relative overflow-hidden border-b-4 border-qart-border"
+      className="py-20 bg-qart-bg relative overflow-hidden border-b-4 border-qart-border"
     >
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
           {/* ── DELIVERY — fondo surface normal ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="group relative bg-qart-surface p-12 border-4 border-qart-border flex flex-col justify-between"
+            className="group relative bg-qart-surface p-7 md:p-8 border-4 border-qart-border flex flex-col justify-between"
           >
             <div className="relative z-10">
               <div
-                className="w-20 h-20 flex items-center justify-center mb-10 border-4 border-qart-border"
+                className="w-14 h-14 flex items-center justify-center mb-6 border-4 border-qart-border"
                 style={{
                   background: 'var(--qart-accent)',
                   color: 'var(--qart-text-on-accent)',
@@ -31,7 +31,7 @@ const HowWeServe = () => {
                 }}
               >
                 <svg
-                  className="w-10 h-10"
+                  className="w-7 h-7"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -44,29 +44,30 @@ const HowWeServe = () => {
                   />
                 </svg>
               </div>
-              <h3 className="text-5xl text-qart-primary mb-6 uppercase tracking-tighter font-black">
+              <h3 className="text-3xl text-qart-primary mb-4 uppercase tracking-tighter font-black">
                 A domicilio
               </h3>
-              <p className="text-lg text-qart-text-muted mb-10 font-bold uppercase tracking-tight leading-tight">
-                Llevamos el sabor del barrio directamente a tu mesa. Envases sustentables y entrega
-                veloz.
+              <p className="text-[0.95rem] text-qart-text-muted mb-6 font-bold uppercase tracking-tight leading-tight">
+                Te llevamos el pedido a donde estés, con tiempos claros y seguimiento simple.
               </p>
-              <div className="space-y-4">
-                {['Rastreo en vivo', 'Envío prioritario', 'Zona Amplia'].map((feat) => (
-                  <div
-                    key={feat}
-                    className="flex items-center gap-4 border-2 border-qart-border px-5 py-3"
-                  >
-                    <div className="w-3 h-3 bg-qart-accent shrink-0" />
-                    <span className="text-sm font-black text-qart-primary uppercase tracking-widest">
-                      {feat}
-                    </span>
-                  </div>
-                ))}
+              <div className="space-y-3">
+                {['Seguimiento del pedido', 'Entrega prioritaria', 'Cobertura amplia'].map(
+                  (feat) => (
+                    <div
+                      key={feat}
+                      className="flex items-center gap-3 border-2 border-qart-border px-3.5 py-2"
+                    >
+                      <div className="w-2.5 h-2.5 bg-qart-accent shrink-0" />
+                      <span className="text-[0.82rem] font-black text-qart-primary uppercase tracking-widest">
+                        {feat}
+                      </span>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
-            <button className="mt-12 btn-primary w-full text-xl uppercase tracking-widest">
-              Pedir Ahora
+            <button className="mt-7 btn-primary w-full text-[0.9rem] uppercase tracking-widest">
+              Pedir online
             </button>
           </motion.div>
 
@@ -75,12 +76,12 @@ const HowWeServe = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="group relative p-12 border-4 border-qart-border flex flex-col justify-between"
+            className="group relative p-7 md:p-8 border-4 border-qart-border flex flex-col justify-between"
             style={{ background: 'var(--qart-surface-inverse)' }}
           >
             <div className="relative z-10">
               <div
-                className="w-20 h-20 flex items-center justify-center mb-10 border-4 border-qart-border"
+                className="w-14 h-14 flex items-center justify-center mb-6 border-4 border-qart-border"
                 style={{
                   background: 'var(--qart-accent)',
                   color: 'var(--qart-text-on-accent)',
@@ -88,7 +89,7 @@ const HowWeServe = () => {
                 }}
               >
                 <svg
-                  className="w-10 h-10"
+                  className="w-7 h-7"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -102,28 +103,29 @@ const HowWeServe = () => {
                 </svg>
               </div>
               <h3
-                className="text-5xl mb-6 uppercase tracking-tighter font-black"
+                className="text-3xl mb-4 uppercase tracking-tighter font-black"
                 style={{ color: 'var(--qart-text-on-inverse)' }}
               >
                 En el local
               </h3>
               <p
-                className="text-lg mb-10 font-bold uppercase tracking-tight leading-tight"
+                className="text-[0.95rem] mb-6 font-bold uppercase tracking-tight leading-tight"
                 style={{ color: 'var(--qart-text-on-inverse-dim)' }}
               >
-                Ambiente relajado, buena música y la mejor atención. El spot ideal del barrio.
+                Un espacio cómodo, atención cercana y un guiño a Tucumán para vivir la marca en el
+                local.
               </p>
-              <div className="space-y-4">
-                {['Puertas abiertas 12-23hs', 'Sin reserva previa', 'Música en vivo'].map(
+              <div className="space-y-3">
+                {['Abierto de 12 a 23 hs', 'Sin reserva previa', 'Mesas para grupos'].map(
                   (feat) => (
                     <div
                       key={feat}
-                      className="flex items-center gap-4 px-5 py-3 border-2"
+                      className="flex items-center gap-3 px-3.5 py-2 border-2"
                       style={{ borderColor: 'var(--qart-border-on-inverse)' }}
                     >
-                      <div className="w-3 h-3 bg-qart-accent shrink-0" />
+                      <div className="w-2.5 h-2.5 bg-qart-accent shrink-0" />
                       <span
-                        className="text-sm font-black uppercase tracking-widest"
+                        className="text-[0.82rem] font-black uppercase tracking-widest"
                         style={{ color: 'var(--qart-text-on-inverse)' }}
                       >
                         {feat}
@@ -134,7 +136,7 @@ const HowWeServe = () => {
               </div>
             </div>
             <button
-              className="mt-12 w-full text-xl uppercase tracking-widest font-black border-4 py-4 px-8 transition-all duration-200"
+              className="mt-7 w-full text-[0.9rem] uppercase tracking-widest font-black border-4 py-2.5 px-5 transition-all duration-200"
               style={{
                 background: 'var(--qart-bg)',
                 color: 'var(--qart-text)',
@@ -152,7 +154,7 @@ const HowWeServe = () => {
                 b.style.boxShadow = 'var(--qart-shadow-sharp)';
               }}
             >
-              Ver Ubicación
+              Ver dirección
             </button>
           </motion.div>
         </div>
