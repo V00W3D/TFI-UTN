@@ -164,6 +164,7 @@ model Plate {
   id                           String        @id @default(uuid())
   name                         String        @db.VarChar(128)
   description                  String?       @db.Text
+  imageUrl                     String?       @db.VarChar(255)
   recipeId                     String
   recipe                       Recipe        @relation(fields: [recipeId], references: [id], onDelete: Restrict)
   size                         PlateSize     @default(REGULAR)

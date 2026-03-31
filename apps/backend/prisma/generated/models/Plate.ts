@@ -72,6 +72,7 @@ export type PlateMinAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  imageUrl: string | null
   recipeId: string | null
   size: $Enums.PlateSize | null
   servedWeightGrams: number | null
@@ -102,6 +103,7 @@ export type PlateMaxAggregateOutputType = {
   id: string | null
   name: string | null
   description: string | null
+  imageUrl: string | null
   recipeId: string | null
   size: $Enums.PlateSize | null
   servedWeightGrams: number | null
@@ -132,6 +134,7 @@ export type PlateCountAggregateOutputType = {
   id: number
   name: number
   description: number
+  imageUrl: number
   recipeId: number
   size: number
   servedWeightGrams: number
@@ -209,6 +212,7 @@ export type PlateMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  imageUrl?: true
   recipeId?: true
   size?: true
   servedWeightGrams?: true
@@ -239,6 +243,7 @@ export type PlateMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  imageUrl?: true
   recipeId?: true
   size?: true
   servedWeightGrams?: true
@@ -269,6 +274,7 @@ export type PlateCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  imageUrl?: true
   recipeId?: true
   size?: true
   servedWeightGrams?: true
@@ -389,6 +395,7 @@ export type PlateGroupByOutputType = {
   id: string
   name: string
   description: string | null
+  imageUrl: string | null
   recipeId: string
   size: $Enums.PlateSize
   servedWeightGrams: number | null
@@ -445,6 +452,7 @@ export type PlateWhereInput = {
   id?: Prisma.StringFilter<"Plate"> | string
   name?: Prisma.StringFilter<"Plate"> | string
   description?: Prisma.StringNullableFilter<"Plate"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Plate"> | string | null
   recipeId?: Prisma.StringFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
@@ -482,6 +490,7 @@ export type PlateOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -522,6 +531,7 @@ export type PlateWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PlateWhereInput | Prisma.PlateWhereInput[]
   name?: Prisma.StringFilter<"Plate"> | string
   description?: Prisma.StringNullableFilter<"Plate"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Plate"> | string | null
   recipeId?: Prisma.StringFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
@@ -559,6 +569,7 @@ export type PlateOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
+  imageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -600,6 +611,7 @@ export type PlateScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   name?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   description?: Prisma.StringNullableWithAggregatesFilter<"Plate"> | string | null
+  imageUrl?: Prisma.StringNullableWithAggregatesFilter<"Plate"> | string | null
   recipeId?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeWithAggregatesFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableWithAggregatesFilter<"Plate"> | number | null
@@ -633,6 +645,7 @@ export type PlateCreateInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -669,6 +682,7 @@ export type PlateUncheckedCreateInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
@@ -705,6 +719,7 @@ export type PlateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -741,6 +756,7 @@ export type PlateUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -777,6 +793,7 @@ export type PlateCreateManyInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
@@ -810,6 +827,7 @@ export type PlateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -842,6 +860,7 @@ export type PlateUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -885,6 +904,7 @@ export type PlateCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrder
@@ -939,6 +959,7 @@ export type PlateMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrder
@@ -969,6 +990,7 @@ export type PlateMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  imageUrl?: Prisma.SortOrder
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrder
@@ -1148,6 +1170,7 @@ export type PlateCreateWithoutRecipeInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1183,6 +1206,7 @@ export type PlateUncheckedCreateWithoutRecipeInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1247,6 +1271,7 @@ export type PlateScalarWhereInput = {
   id?: Prisma.StringFilter<"Plate"> | string
   name?: Prisma.StringFilter<"Plate"> | string
   description?: Prisma.StringNullableFilter<"Plate"> | string | null
+  imageUrl?: Prisma.StringNullableFilter<"Plate"> | string | null
   recipeId?: Prisma.StringFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
@@ -1280,6 +1305,7 @@ export type PlateCreateWithoutAdjustmentsInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1315,6 +1341,7 @@ export type PlateUncheckedCreateWithoutAdjustmentsInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
@@ -1366,6 +1393,7 @@ export type PlateUpdateWithoutAdjustmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1401,6 +1429,7 @@ export type PlateUncheckedUpdateWithoutAdjustmentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1436,6 +1465,7 @@ export type PlateCreateWithoutReviewsInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1471,6 +1501,7 @@ export type PlateUncheckedCreateWithoutReviewsInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
@@ -1522,6 +1553,7 @@ export type PlateUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1557,6 +1589,7 @@ export type PlateUncheckedUpdateWithoutReviewsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1592,6 +1625,7 @@ export type PlateCreateWithoutTagsInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1627,6 +1661,7 @@ export type PlateUncheckedCreateWithoutTagsInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
@@ -1678,6 +1713,7 @@ export type PlateUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1713,6 +1749,7 @@ export type PlateUncheckedUpdateWithoutTagsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1748,6 +1785,7 @@ export type PlateCreateManyRecipeInput = {
   id?: string
   name: string
   description?: string | null
+  imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1780,6 +1818,7 @@ export type PlateUpdateWithoutRecipeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1815,6 +1854,7 @@ export type PlateUncheckedUpdateWithoutRecipeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1850,6 +1890,7 @@ export type PlateUncheckedUpdateManyWithoutRecipeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1931,6 +1972,7 @@ export type PlateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   name?: boolean
   description?: boolean
+  imageUrl?: boolean
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
@@ -1969,6 +2011,7 @@ export type PlateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   description?: boolean
+  imageUrl?: boolean
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
@@ -2003,6 +2046,7 @@ export type PlateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   name?: boolean
   description?: boolean
+  imageUrl?: boolean
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
@@ -2037,6 +2081,7 @@ export type PlateSelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
+  imageUrl?: boolean
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
@@ -2066,7 +2111,7 @@ export type PlateSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "recipeId" | "size" | "servedWeightGrams" | "costPrice" | "menuPrice" | "avgRating" | "ratingsCount" | "likesCount" | "dislikesCount" | "calculatedCalories" | "calculatedProteins" | "calculatedCarbs" | "calculatedFats" | "calculatedFiber" | "calculatedSugars" | "calculatedSodium" | "calculatedSaturatedFat" | "calculatedTransFat" | "calculatedMonounsaturatedFat" | "calculatedPolyunsaturatedFat" | "allergens" | "dietaryTags" | "nutritionTags" | "nutritionNotes" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
+export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "imageUrl" | "recipeId" | "size" | "servedWeightGrams" | "costPrice" | "menuPrice" | "avgRating" | "ratingsCount" | "likesCount" | "dislikesCount" | "calculatedCalories" | "calculatedProteins" | "calculatedCarbs" | "calculatedFats" | "calculatedFiber" | "calculatedSugars" | "calculatedSodium" | "calculatedSaturatedFat" | "calculatedTransFat" | "calculatedMonounsaturatedFat" | "calculatedPolyunsaturatedFat" | "allergens" | "dietaryTags" | "nutritionTags" | "nutritionNotes" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
 export type PlateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   adjustments?: boolean | Prisma.Plate$adjustmentsArgs<ExtArgs>
@@ -2093,6 +2138,7 @@ export type $PlatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     name: string
     description: string | null
+    imageUrl: string | null
     recipeId: string
     size: $Enums.PlateSize
     servedWeightGrams: number | null
@@ -2550,6 +2596,7 @@ export interface PlateFieldRefs {
   readonly id: Prisma.FieldRef<"Plate", 'String'>
   readonly name: Prisma.FieldRef<"Plate", 'String'>
   readonly description: Prisma.FieldRef<"Plate", 'String'>
+  readonly imageUrl: Prisma.FieldRef<"Plate", 'String'>
   readonly recipeId: Prisma.FieldRef<"Plate", 'String'>
   readonly size: Prisma.FieldRef<"Plate", 'PlateSize'>
   readonly servedWeightGrams: Prisma.FieldRef<"Plate", 'Float'>

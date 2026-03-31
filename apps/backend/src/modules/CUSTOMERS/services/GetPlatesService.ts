@@ -1,6 +1,8 @@
 import { ERR, type InferSuccess } from '@app/sdk';
 import type { GetPlatesContract } from '@app/contracts';
 import { prisma as db } from '../../../tools/db';
+import { BACKEND_URL } from '../../../env';
+import { resolveAssetUrl } from '../../../catalog/plateImages';
 
 const mapIngredientNutrition = (ingredient: {
   calories: number;
@@ -287,6 +289,7 @@ export const getPlatesService = async (): Promise<InferSuccess<typeof GetPlatesC
       id: plate.id,
       name: plate.name,
       description: plate.description ?? null,
+      imageUrl: resolveAssetUrl((plate as { imageUrl?: string | null }).imageUrl ?? null, BACKEND_URL),
       size: plate.size,
       servedWeightGrams: plate.servedWeightGrams ?? null,
       menuPrice: plate.menuPrice.toNumber(),

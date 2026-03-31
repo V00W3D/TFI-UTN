@@ -149,6 +149,7 @@ export const PlateSchema = z.object({
   id: z.uuid(),
   name: plateNameField.schema,
   description: descriptionField.schema,
+  imageUrl: z.string().max(255).nullable(),
   size: plateSizeField.schema,
   servedWeightGrams: z.number().nullable(),
   menuPrice: z.number(),

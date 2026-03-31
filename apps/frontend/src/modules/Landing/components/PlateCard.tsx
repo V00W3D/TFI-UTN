@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import {
   formatEnum,
   formatPrice,
@@ -21,6 +22,8 @@ interface PlateCardProps {
 
 const PlateCard = ({ plate, emphasis = 'regular', index = 0, onOpenSection }: PlateCardProps) => {
   const guideBadges = getGuideBadges(plate);
+  const [imageFailed, setImageFailed] = useState(false);
+  const hasMediaImage = Boolean(plate.imageUrl && !imageFailed);
 
   return (
     <motion.article
@@ -30,7 +33,19 @@ const PlateCard = ({ plate, emphasis = 'regular', index = 0, onOpenSection }: Pl
       viewport={{ once: true, margin: '-60px' }}
       transition={{ delay: index * 0.05, duration: 0.35 }}
     >
-      <div className="featured-card-media">
+      <div
+        className={`featured-card-media${hasMediaImage ? ' featured-card-media--with-image' : ''}`}
+      >
+        {hasMediaImage && (
+          <img
+            src={plate.imageUrl!}
+            alt={plate.name}
+            className="featured-card-media-image"
+            loading="lazy"
+            onError={() => setImageFailed(true)}
+          />
+        )}
+        <div className="featured-card-media-overlay" />
         <div className="featured-card-media-badge">
           {plate.isAvailable ? 'Disponible' : 'Fuera de carta'}
         </div>

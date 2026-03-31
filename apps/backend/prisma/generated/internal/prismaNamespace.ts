@@ -1560,6 +1560,7 @@ export const PlateScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  imageUrl: 'imageUrl',
   recipeId: 'recipeId',
   size: 'size',
   servedWeightGrams: 'servedWeightGrams',

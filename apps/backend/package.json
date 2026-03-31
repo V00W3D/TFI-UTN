@@ -8,6 +8,7 @@
     "seed": "bun src/seed.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "start": "node dist/index.js",
+    "plates:webp": "bash scripts/convert-plates-to-webp.sh",
     "db:reset": "prisma migrate reset",
     "db:migrate": "prisma migrate dev --name db_init",
     "db:generate": "prisma generate"

@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import express, { Router } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -27,12 +28,23 @@ const ALLOWED_ORIGINS: (string | RegExp)[] = [
  * Isolated from the SDK to allow independent middleware configuration (CORS, Helmet, etc.).
  */
 const app = express();
+const PUBLIC_DIR = fileURLToPath(new URL('../../public', import.meta.url));
 
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: ALLOWED_ORIGINS, credentials: true }));
+app.use(
+  '/assets',
+  express.static(PUBLIC_DIR, {
+    setHeaders: (res) => {
+      // Frontend and backend run on different origins in dev, so images need an explicit
+      // resource policy that allows being embedded from the client app.
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    },
+  }),
+);
 
 /**
  * @description SDK API Singleton.

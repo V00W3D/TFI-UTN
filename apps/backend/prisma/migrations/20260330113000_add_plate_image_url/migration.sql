@@ -1,0 +1,2 @@
+ALTER TABLE "Plate"
+ADD COLUMN "imageUrl" VARCHAR(255);
