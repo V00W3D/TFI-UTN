@@ -1,17 +1,59 @@
-import { useEffect, type CSSProperties } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { useEffect, useState, type CSSProperties } from 'react';
+import { Link } from 'react-router-dom';
 import { sdk } from '../../../tools/sdk';
-import PlateCardsRenderer from './PlateCardsRenderer';
+import PlateCard from './PlateCard';
+import PlateNutritionModal from './PlateNutritionModal';
+import PlateRecipeModal from './PlateRecipeModal';
 
 const sectionStyle = { '--tw-selection-color': 'var(--qart-accent)' } as CSSProperties;
+const PLATES_PER_PAGE = 3;
+type FeaturedModalView = 'nutrition' | 'recipe';
 
 const FeaturedDish = () => {
   const { data, isFetching, error } = sdk.customers.plates.$use();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedModal, setSelectedModal] = useState<{
+    plateId: string;
+    view: FeaturedModalView;
+  } | null>(null);
 
   useEffect(() => {
     void sdk.customers.plates({});
   }, []);
 
   const plates = data && 'data' in data ? data.data : [];
+  const totalPages = Math.max(1, Math.ceil(plates.length / PLATES_PER_PAGE));
+  const currentSliceStart = (currentPage - 1) * PLATES_PER_PAGE;
+  const visiblePlates = plates.slice(currentSliceStart, currentSliceStart + PLATES_PER_PAGE);
+  const selectedPlate = selectedModal
+    ? plates.find((plate) => plate.id === selectedModal.plateId) ?? null
+    : null;
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  useEffect(() => {
+    if (!selectedPlate) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSelectedModal(null);
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedPlate]);
 
   return (
     <section id="menu" className="py-20 bg-qart-bg relative" style={sectionStyle}>
@@ -25,20 +67,20 @@ const FeaturedDish = () => {
               Nuestros <br /> platos
             </h2>
             <p className="text-qart-text-muted text-base leading-snug font-bold uppercase tracking-tight max-w-2xl">
-              Explorá platos disponibles y abrí cada ficha para ver guía, nutrición, receta,
-              componentes y reseñas.
+              Explorá los destacados, movete por páginas de hasta tres platos y saltá al espacio
+              customer para ver el catálogo completo.
             </p>
           </div>
 
-          <button
-            type="button"
+          <Link
+            to="/customer"
             className="btn-outline shrink-0 group uppercase tracking-widest py-3 px-7"
           >
             Ver menú completo
             <span className="ml-4 group-hover:translate-x-2 transition-transform inline-block">
               →
             </span>
-          </button>
+          </Link>
         </div>
 
         {isFetching && (
@@ -69,9 +111,80 @@ const FeaturedDish = () => {
         )}
 
         {!isFetching && !error && plates.length > 0 && (
-          <PlateCardsRenderer plates={plates} layout="grid" />
+          <>
+            <div className="featured-pagination">
+              <div className="featured-pagination-status">
+                <span>
+                  Página {currentPage} de {totalPages}
+                </span>
+                <span>{plates.length} platos cargados</span>
+              </div>
+
+              {totalPages > 1 && (
+                <div className="featured-pagination-slider" aria-label="Paginación del menú destacado">
+                  <button
+                    type="button"
+                    className="btn-outline uppercase tracking-widest py-3 px-5"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                  >
+                    Anterior
+                  </button>
+
+                  <div className="featured-pagination-pages">
+                    {Array.from({ length: totalPages }, (_, index) => {
+                      const pageNumber = index + 1;
+
+                      return (
+                        <button
+                          key={pageNumber}
+                          type="button"
+                          className={`featured-pagination-page ${
+                            pageNumber === currentPage ? 'featured-pagination-page--active' : ''
+                          }`}
+                          aria-current={pageNumber === currentPage ? 'page' : undefined}
+                          onClick={() => setCurrentPage(pageNumber)}
+                        >
+                          {pageNumber}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    type="button"
+                    className="btn-outline uppercase tracking-widest py-3 px-5"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                  >
+                    Siguiente
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="plate-collection plate-collection--grid plate-collection--paged">
+              {visiblePlates.map((plate) => (
+                <PlateCard
+                  key={plate.id}
+                  plate={plate}
+                  onOpenNutrition={() => setSelectedModal({ plateId: plate.id, view: 'nutrition' })}
+                  onOpenRecipe={() => setSelectedModal({ plateId: plate.id, view: 'recipe' })}
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
+
+      <AnimatePresence>
+        {selectedPlate && selectedModal?.view === 'nutrition' && (
+          <PlateNutritionModal plate={selectedPlate} onClose={() => setSelectedModal(null)} />
+        )}
+        {selectedPlate && selectedModal?.view === 'recipe' && (
+          <PlateRecipeModal plate={selectedPlate} onClose={() => setSelectedModal(null)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 };

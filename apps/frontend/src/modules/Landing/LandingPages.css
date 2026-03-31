@@ -16,6 +16,11 @@
   gap: 1.15rem;
 }
 
+.plate-collection--paged {
+  grid-template-rows: repeat(2, minmax(0, auto));
+  align-items: stretch;
+}
+
 .plate-collection--one-row,
 .plate-collection--carousel {
   display: grid;
@@ -56,6 +61,72 @@
   display: flex;
   justify-content: flex-end;
   gap: 0.6rem;
+}
+
+.featured-pagination {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1.2rem;
+}
+
+.featured-pagination-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--qart-text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.featured-pagination-slider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.featured-pagination-pages {
+  display: flex;
+  flex: 1;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+}
+
+.featured-pagination-page {
+  min-width: 2.75rem;
+  padding: 0.72rem 0.88rem;
+  border: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-surface) 82%, var(--qart-bg-warm));
+  color: var(--qart-text);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.featured-pagination-page:hover {
+  transform: translate(-2px, -2px);
+  border-color: var(--qart-accent);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--qart-accent) 65%, transparent);
+  cursor: pointer;
+}
+
+.featured-pagination-page--active {
+  background: var(--qart-primary);
+  color: var(--qart-text-on-primary);
+  box-shadow: 5px 5px 0 color-mix(in srgb, var(--qart-border) 78%, transparent);
+}
+
+.featured-pagination .btn-outline:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .featured-card {
@@ -182,14 +253,41 @@
   position: absolute;
   right: 0.8rem;
   bottom: 0.8rem;
-  display: grid;
-  gap: 0.2rem;
-  justify-items: end;
-  color: var(--qart-text-muted);
-  font-size: 0.66rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.45rem;
+}
+
+.featured-card-media-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-surface) 86%, transparent);
+  color: var(--qart-primary);
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--qart-border) 75%, transparent);
+}
+
+.featured-card-media-symbol--difficulty {
+  width: auto;
+  padding: 0.3rem 0.5rem;
+}
+
+.featured-card-media-icon {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.featured-card-media-icon--large {
+  width: 2rem;
+  height: 2rem;
+}
+
+.featured-card-media-difficulty {
+  width: 3.8rem;
+  height: 1.6rem;
 }
 
 .featured-card-media-signature {
@@ -214,9 +312,9 @@
 
 .featured-card-media-signature strong {
   color: var(--qart-primary);
-  font-size: 0.9rem;
-  font-weight: 900;
-  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .featured-card-content {
@@ -234,22 +332,61 @@
   gap: 1rem;
 }
 
+.featured-card-symbols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.featured-symbol-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.35rem;
+  height: 3.35rem;
+  padding: 0.6rem;
+  border: 1px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-surface) 84%, var(--qart-bg-warm));
+  color: var(--qart-primary);
+}
+
+.featured-symbol-chip svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.featured-symbol-chip--difficulty {
+  width: auto;
+  padding-inline: 0.7rem;
+}
+
+.featured-symbol-chip--difficulty svg {
+  width: 4rem;
+  height: 1.35rem;
+}
+
 .featured-rating-pill {
   display: grid;
-  gap: 0.15rem;
+  gap: 0.28rem;
   justify-items: end;
-  padding: 0.45rem 0.58rem;
+  padding: 0.55rem 0.68rem;
   border: 2px solid var(--qart-border);
   background: var(--qart-primary);
   color: var(--qart-text-on-primary);
 }
 
-.featured-rating-pill strong {
-  font-size: 0.96rem;
+.featured-rating-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.featured-rating-meta strong {
+  font-size: 1rem;
   line-height: 1;
 }
 
-.featured-rating-pill span {
+.featured-rating-meta span {
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -287,19 +424,85 @@
   gap: 0.7rem;
 }
 
+.featured-card-story {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.82rem 0.9rem;
+  border: 1px solid var(--qart-border-subtle);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--qart-accent) 4%, transparent), transparent),
+    color-mix(in srgb, var(--qart-surface) 78%, var(--qart-bg-warm));
+}
+
+.featured-card-quote {
+  margin: 0;
+  color: var(--qart-text);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.featured-card-ingredients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.featured-ingredient-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.38rem 0.52rem;
+  border: 1px solid var(--qart-border-subtle);
+  background: color-mix(in srgb, var(--qart-surface) 80%, var(--qart-bg-warm));
+  color: var(--qart-text);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.featured-ingredient-badge svg {
+  width: 1.18rem;
+  height: 1.18rem;
+  color: var(--qart-primary);
+}
+
+.featured-ingredient-badge--muted {
+  color: var(--qart-text-muted);
+}
+
 .featured-card-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.6rem;
 }
 
-.featured-card-metrics > div,
+.featured-card-metrics > div {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.68rem 0.78rem;
+  border: 1px solid var(--qart-border-subtle);
+  background: color-mix(in srgb, var(--qart-bg-warm) 35%, var(--qart-surface));
+}
+
 .featured-metric-card {
   display: grid;
   gap: 0.25rem;
   padding: 0.68rem 0.78rem;
   border: 1px solid var(--qart-border-subtle);
   background: color-mix(in srgb, var(--qart-bg-warm) 35%, var(--qart-surface));
+}
+
+.featured-metric-copy {
+  display: grid;
+  gap: 0.16rem;
+}
+
+.featured-metric-icon {
+  width: 1.35rem;
+  height: 1.35rem;
+  color: var(--qart-primary);
 }
 
 .featured-card-metrics span,
@@ -369,6 +572,17 @@
   text-transform: uppercase;
 }
 
+.featured-footer-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.featured-footer-item svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
 .featured-price-label {
   display: block;
   margin-bottom: 0.25rem;
@@ -392,7 +606,19 @@
   gap: 0.5rem;
 }
 
+.featured-card-actions--single {
+  grid-template-columns: 1fr;
+}
+
+.featured-card-actions--pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .featured-card-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
   padding: 0.72rem 0.58rem;
   border: 2px solid var(--qart-border);
   background: color-mix(in srgb, var(--qart-surface) 80%, var(--qart-bg-warm));
@@ -414,6 +640,22 @@
   background: var(--qart-bg-warm);
   box-shadow: 5px 5px 0 color-mix(in srgb, var(--qart-accent) 75%, transparent);
   cursor: pointer;
+}
+
+.featured-card-action--primary {
+  background: var(--qart-primary);
+  color: var(--qart-text-on-primary);
+}
+
+.featured-card-action--primary:hover {
+  background: var(--qart-accent);
+  color: var(--qart-text-on-accent);
+}
+
+.featured-card-action-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
 }
 
 .featured-kicker,
@@ -449,6 +691,14 @@
     radial-gradient(circle at top left, color-mix(in srgb, var(--qart-accent) 12%, transparent), transparent 35%),
     var(--qart-surface);
   box-shadow: 14px 14px 0 color-mix(in srgb, var(--qart-border) 88%, transparent);
+}
+
+.featured-modal--nutrition {
+  width: min(1180px, 100%);
+}
+
+.featured-modal--recipe {
+  width: min(1100px, 100%);
 }
 
 .featured-modal-header {
@@ -613,6 +863,399 @@
   gap: 0.6rem;
 }
 
+.featured-modal-hero {
+  display: grid;
+  grid-template-columns: minmax(18rem, 23rem) minmax(0, 1fr);
+  gap: 0.95rem;
+  align-items: stretch;
+}
+
+.featured-modal-media {
+  position: relative;
+  overflow: hidden;
+  min-height: 20rem;
+  border: 2px solid var(--qart-border);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--qart-accent) 18%, transparent), transparent 40%),
+    linear-gradient(135deg, var(--qart-bg-warm), var(--qart-surface-raised));
+}
+
+.featured-modal-media--with-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--qart-primary) 14%, transparent), transparent 42%),
+    linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--qart-surface) 18%, transparent) 58%, color-mix(in srgb, var(--qart-surface) 82%, transparent) 100%);
+  pointer-events: none;
+}
+
+.featured-modal-media-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-modal-media-fallback {
+  display: grid;
+  gap: 0.7rem;
+  align-content: center;
+  justify-items: center;
+  min-height: 100%;
+  padding: 1rem;
+  color: var(--qart-primary);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.featured-modal-media-fallback-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.featured-modal-hero-panel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.featured-modal-hero-meta {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.featured-modal-difficulty {
+  width: 4.2rem;
+  height: 1.45rem;
+}
+
+.featured-metric-value--icon,
+.featured-metric-value--stack {
+  display: inline-flex;
+  align-items: center;
+}
+
+.featured-nutrition-hero-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.featured-nutrition-hero-card,
+.featured-ingredient-card,
+.featured-total-card {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.95rem;
+  border: 2px solid var(--insight-border, var(--qart-border-soft));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--insight-fg, var(--qart-primary)) 10%, transparent), transparent),
+    var(--insight-bg, var(--qart-surface));
+  color: var(--insight-fg, var(--qart-text));
+  min-height: 100%;
+}
+
+.featured-nutrition-hero-card {
+  min-height: 15.5rem;
+  align-content: start;
+}
+
+.featured-ingredient-card {
+  border-color: color-mix(in srgb, var(--insight-border, var(--qart-border-soft)) 70%, var(--qart-border-subtle));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--insight-fg, var(--qart-primary)) 6%, transparent), transparent),
+    color-mix(in srgb, var(--insight-bg, var(--qart-surface)) 42%, var(--qart-surface));
+}
+
+.featured-nutrition-hero-card-head,
+.featured-total-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.featured-nutrition-icon-box,
+.featured-ingredient-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  border: 2px solid currentColor;
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.featured-nutrition-hero-icon,
+.featured-ingredient-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.featured-nutrition-tone {
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.featured-nutrition-hero-card-copy {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.featured-nutrition-hero-card-copy strong {
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.featured-nutrition-hero-card-copy span,
+.featured-total-card small,
+.featured-ingredient-stat small {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 78%, var(--qart-text-muted));
+}
+
+.featured-nutrition-hero-card-copy--secondary strong {
+  font-size: 1.15rem;
+}
+
+.featured-ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.featured-ingredient-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.85rem;
+}
+
+.featured-ingredient-card-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.featured-ingredient-card-side {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: end;
+}
+
+.featured-ingredient-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.featured-ingredient-stat {
+  display: grid;
+  gap: 0.16rem;
+  padding: 0.75rem;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  background: color-mix(in srgb, var(--qart-surface) 74%, var(--qart-bg-warm));
+}
+
+.featured-ingredient-stat span {
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, currentColor 78%, var(--qart-text-muted));
+}
+
+.featured-ingredient-stat strong,
+.featured-total-card strong {
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
+
+.featured-total-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.featured-total-card-head {
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.featured-total-card-icon {
+  width: 1.55rem;
+  height: 1.55rem;
+}
+
+.featured-recipe-ingredient-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.featured-recipe-card,
+.featured-recipe-step-card {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.95rem;
+  border: 2px solid var(--qart-border-soft);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--qart-accent) 5%, transparent), transparent),
+    color-mix(in srgb, var(--qart-surface) 84%, var(--qart-bg-warm));
+}
+
+.featured-recipe-card-head,
+.featured-recipe-step-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.featured-recipe-icon-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-surface) 75%, var(--qart-bg-warm));
+  color: var(--qart-primary);
+  flex-shrink: 0;
+}
+
+.featured-recipe-icon {
+  width: 1.7rem;
+  height: 1.7rem;
+}
+
+.featured-recipe-ingredient-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.featured-recipe-pill {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.72rem 0.78rem;
+  border: 1px solid var(--qart-border-subtle);
+  background: color-mix(in srgb, var(--qart-surface) 76%, var(--qart-bg-warm));
+}
+
+.featured-recipe-pill span {
+  color: var(--qart-text-muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.featured-recipe-pill strong {
+  color: var(--qart-primary);
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.featured-recipe-step-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.featured-recipe-step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border: 2px solid var(--qart-border);
+  background: var(--qart-primary);
+  color: var(--qart-text-on-primary);
+  font-size: 0.88rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.featured-reference-table-shell {
+  overflow-x: auto;
+  border: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-surface) 88%, var(--qart-bg-warm));
+}
+
+.featured-reference-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.featured-reference-table th,
+.featured-reference-table td {
+  padding: 0.85rem 0.9rem;
+  border-bottom: 1px solid var(--qart-border-subtle);
+  text-align: left;
+  vertical-align: top;
+}
+
+.featured-reference-table th {
+  background: color-mix(in srgb, var(--qart-bg-warm) 72%, var(--qart-surface));
+  color: var(--qart-text-muted);
+  font-size: 0.64rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.featured-reference-table tbody tr {
+  color: var(--insight-fg, var(--qart-text));
+}
+
+.featured-reference-table tbody tr td {
+  background: color-mix(in srgb, var(--insight-bg, var(--qart-surface)) 72%, var(--qart-surface));
+}
+
+.featured-reference-metric {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.featured-reference-metric strong {
+  display: block;
+  margin-bottom: 0.18rem;
+  font-size: 0.92rem;
+  line-height: 1.1;
+}
+
+.featured-reference-metric small,
+.featured-reference-source {
+  color: color-mix(in srgb, currentColor 76%, var(--qart-text-muted));
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.featured-reference-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+  flex-shrink: 0;
+}
+
+.featured-reference-notes {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
 .featured-stack {
   display: grid;
   gap: 0.75rem;
@@ -692,12 +1335,25 @@
   .featured-review-summary {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .featured-modal-hero,
+  .featured-ingredient-grid,
+  .featured-recipe-ingredient-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .featured-modal-hero-meta,
+  .featured-nutrition-hero-grid,
+  .featured-total-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
   .featured-dish-grid,
   .plate-collection--grid,
   .plate-group-secondary,
+  .featured-card-actions--pair,
   .featured-card-metrics,
   .featured-metric-grid,
   .featured-metric-grid--compact,
@@ -705,7 +1361,13 @@
   .featured-data-grid,
   .featured-hero-grid,
   .featured-review-summary,
-  .featured-card-actions {
+  .featured-card-actions,
+  .featured-modal-hero-meta,
+  .featured-nutrition-hero-grid,
+  .featured-ingredient-grid,
+  .featured-ingredient-stats-grid,
+  .featured-total-grid,
+  .featured-recipe-ingredient-meta {
     grid-template-columns: 1fr;
   }
 
@@ -714,7 +1376,9 @@
   .featured-modal-header,
   .featured-section-heading,
   .featured-subcard-header,
-  .plate-carousel-controls {
+  .plate-carousel-controls,
+  .featured-pagination-status,
+  .featured-pagination-slider {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -736,6 +1400,10 @@
     padding: 0.9rem;
   }
 
+  .featured-modal-media {
+    min-height: 15rem;
+  }
+
   .featured-price-value {
     font-size: 1.34rem;
   }
@@ -743,5 +1411,9 @@
   .plate-collection--one-row,
   .plate-collection--carousel {
     grid-auto-columns: minmax(16rem, 84vw);
+  }
+
+  .featured-pagination-pages {
+    width: 100%;
   }
 }

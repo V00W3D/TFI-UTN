@@ -65,6 +65,9 @@ model Ingredient {
   subCategory            String?            @db.VarChar(64)
   primaryFlavor          FlavorProfile?
   nutritionBasisGrams    Float              @default(100)
+  pricingBasisGrams      Float              @default(100)
+  costPrice              Decimal            @default(0) @db.Decimal(10, 2)
+  salePrice              Decimal            @default(0) @db.Decimal(10, 2)
   calories               Float              @default(0)
   proteins               Float              @default(0)
   carbs                  Float              @default(0)
@@ -81,11 +84,21 @@ model Ingredient {
   nutritionTags          NutritionTag[]
   notes                  String?            @db.VarChar(255)
   extraAttributes        Json?
+  preferredSupplierId    String?
+  preferredSupplier      Supplier?          @relation("PreferredIngredientSupplier", fields: [preferredSupplierId], references: [id], onDelete: SetNull)
+  defaultStorageType     StorageType        @default(AMBIENT)
+  maxStockGrams          Float              @default(0)
+  reorderPointGrams      Float              @default(0)
   variants               IngredientVariant[]
+  inventoryLevels        InventoryLevel[]
+  supplierSources        SupplierIngredient[]
+  purchaseItems          PurchaseItem[]
 
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([preferredSupplierId])
 }
 
 model IngredientVariant {
@@ -169,13 +182,19 @@ model Plate {
   recipe                       Recipe        @relation(fields: [recipeId], references: [id], onDelete: Restrict)
   size                         PlateSize     @default(REGULAR)
   servedWeightGrams            Float?
+  netPrice                     Decimal       @default(0) @db.Decimal(10, 2)
+  taxAmount                    Decimal       @default(0) @db.Decimal(10, 2)
+  profitAmount                 Decimal       @default(0) @db.Decimal(10, 2)
+  profitMarginRate             Decimal       @default(0.3) @db.Decimal(5, 4)
   costPrice                    Decimal       @default(0) @db.Decimal(10, 2)
   menuPrice                    Decimal       @default(0) @db.Decimal(10, 2)
   avgRating                    Float         @default(0)
   ratingsCount                 Int           @default(0)
   likesCount                   Int           @default(0)
   dislikesCount                Int           @default(0)
-  // Snapshot nutricional del plato final ya resuelto.
+  // Cache legacy del plato final ya resuelto.
+  // El runtime customer debe calcular nutricion desde recipe.items + adjustments.
+  // Pendiente de migracion futura: remover estos campos cuando el backfill deje de ser necesario.
   calculatedCalories           Float         @default(0)
   calculatedProteins           Float         @default(0)
   calculatedCarbs              Float         @default(0)
@@ -195,6 +214,7 @@ model Plate {
   adjustments                  PlateAdjustment[]
   reviews                      Review[]
   tags                         PlateTag[]
+  saleItems                    SaleItem[]
 
   isAvailable Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -227,6 +247,184 @@ model PlateAdjustment {
   @@index([plateId, adjustmentType])
   @@index([recipeItemId])
   @@index([variantId])
+}
+
+// ═══════════════════════════════════════════════════════════════
+// OPERACIONES, COSTOS Y PRECIOS
+// ═══════════════════════════════════════════════════════════════
+
+model Supplier {
+  id                  String               @id @default(uuid())
+  name                String               @unique @db.VarChar(96)
+  description         String?              @db.VarChar(255)
+  contactName         String?              @db.VarChar(96)
+  email               String?              @db.VarChar(128)
+  phone               String?              @db.VarChar(32)
+  leadTimeDays        Int?
+  notes               String?              @db.VarChar(255)
+  preferredIngredients Ingredient[]        @relation("PreferredIngredientSupplier")
+  suppliedIngredients SupplierIngredient[]
+  purchases           Purchase[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SupplierIngredient {
+  id                String     @id @default(uuid())
+  supplierId        String
+  supplier          Supplier   @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  ingredientId      String
+  ingredient        Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  supplierSku       String?    @db.VarChar(64)
+  purchaseUnitLabel String?    @db.VarChar(32)
+  pricingBasisGrams Float      @default(100)
+  unitCostNet       Decimal    @default(0) @db.Decimal(10, 2)
+  minimumOrderGrams Float?
+  leadTimeDays      Int?
+  isPreferred       Boolean    @default(false)
+  lastQuotedAt      DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([supplierId, ingredientId])
+  @@index([ingredientId])
+}
+
+model StorageLocation {
+  id            String           @id @default(uuid())
+  name          String           @unique @db.VarChar(64)
+  description   String?          @db.VarChar(255)
+  storageType   StorageType
+  capacityGrams Float            @default(0)
+  notes         String?          @db.VarChar(255)
+  inventoryLevels InventoryLevel[]
+  purchaseItems PurchaseItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model InventoryLevel {
+  id                  String          @id @default(uuid())
+  ingredientId        String
+  ingredient          Ingredient      @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+  storageLocationId   String
+  storageLocation     StorageLocation @relation(fields: [storageLocationId], references: [id], onDelete: Cascade)
+  currentQuantityGrams Float          @default(0)
+  reservedQuantityGrams Float         @default(0)
+  maxQuantityGrams    Float           @default(0)
+  reorderPointGrams   Float           @default(0)
+  averageUnitCost     Decimal         @default(0) @db.Decimal(10, 2)
+  lastPurchaseUnitCost Decimal        @default(0) @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ingredientId, storageLocationId])
+  @@index([storageLocationId])
+}
+
+model TaxRule {
+  id                  String   @id @default(uuid())
+  key                 String   @unique @db.VarChar(48)
+  name                String   @db.VarChar(64)
+  description         String?  @db.VarChar(255)
+  rate                Decimal  @default(0) @db.Decimal(8, 4)
+  includedInMenuPrice Boolean  @default(true)
+  isActive            Boolean  @default(true)
+  sortOrder           Int      @default(0)
+  sourceLabel         String?  @db.VarChar(96)
+  note                String?  @db.VarChar(255)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Purchase {
+  id            String         @id @default(uuid())
+  supplierId    String
+  supplier      Supplier       @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  documentNumber String?       @db.VarChar(64)
+  purchasedAt   DateTime       @default(now())
+  receivedAt    DateTime?
+  status        PurchaseStatus @default(RECEIVED)
+  currencyCode  String         @default("ARS") @db.VarChar(3)
+  subtotalNet   Decimal        @default(0) @db.Decimal(12, 2)
+  taxAmount     Decimal        @default(0) @db.Decimal(12, 2)
+  totalAmount   Decimal        @default(0) @db.Decimal(12, 2)
+  notes         String?        @db.VarChar(255)
+  items         PurchaseItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([supplierId, purchasedAt])
+}
+
+model PurchaseItem {
+  id                String           @id @default(uuid())
+  purchaseId        String
+  purchase          Purchase         @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  ingredientId      String
+  ingredient        Ingredient       @relation(fields: [ingredientId], references: [id], onDelete: Restrict)
+  storageLocationId String?
+  storageLocation   StorageLocation? @relation(fields: [storageLocationId], references: [id], onDelete: SetNull)
+  quantityGrams     Float
+  pricingBasisGrams Float            @default(100)
+  unitCostNet       Decimal          @default(0) @db.Decimal(10, 2)
+  taxRate           Decimal          @default(0) @db.Decimal(8, 4)
+  lineNetAmount     Decimal          @default(0) @db.Decimal(12, 2)
+  lineTaxAmount     Decimal          @default(0) @db.Decimal(12, 2)
+  lineTotalAmount   Decimal          @default(0) @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+
+  @@index([purchaseId])
+  @@index([ingredientId])
+  @@index([storageLocationId])
+}
+
+model Sale {
+  id           String      @id @default(uuid())
+  soldAt       DateTime    @default(now())
+  status       SaleStatus  @default(CONFIRMED)
+  channel      SaleChannel @default(COUNTER)
+  currencyCode String      @default("ARS") @db.VarChar(3)
+  subtotalNet  Decimal     @default(0) @db.Decimal(12, 2)
+  taxAmount    Decimal     @default(0) @db.Decimal(12, 2)
+  totalAmount  Decimal     @default(0) @db.Decimal(12, 2)
+  notes        String?     @db.VarChar(255)
+  items        SaleItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([soldAt, status])
+}
+
+model SaleItem {
+  id             String   @id @default(uuid())
+  saleId         String
+  sale           Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  plateId        String
+  plate          Plate    @relation(fields: [plateId], references: [id], onDelete: Restrict)
+  quantity       Int      @default(1)
+  unitCostAmount Decimal  @default(0) @db.Decimal(10, 2)
+  unitNetAmount  Decimal  @default(0) @db.Decimal(10, 2)
+  unitTaxAmount  Decimal  @default(0) @db.Decimal(10, 2)
+  unitTotalAmount Decimal @default(0) @db.Decimal(10, 2)
+  lineCostAmount Decimal  @default(0) @db.Decimal(12, 2)
+  lineNetAmount  Decimal  @default(0) @db.Decimal(12, 2)
+  lineTaxAmount  Decimal  @default(0) @db.Decimal(12, 2)
+  lineTotalAmount Decimal @default(0) @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+
+  @@index([saleId])
+  @@index([plateId])
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -370,10 +568,37 @@ enum PlateSize {
   XL
 }
 
+enum StorageType {
+  AMBIENT
+  COLD
+  FREEZER
+  PRODUCE
+}
+
 enum AdjustmentType {
   ADDITION
   REMOVAL
   SUBSTITUTION
+}
+
+enum PurchaseStatus {
+  DRAFT
+  RECEIVED
+  CANCELLED
+}
+
+enum SaleStatus {
+  OPEN
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+}
+
+enum SaleChannel {
+  COUNTER
+  TAKEAWAY
+  DELIVERY
+  ONLINE
 }
 
 enum Allergen {

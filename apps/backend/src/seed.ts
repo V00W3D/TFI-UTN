@@ -1,4 +1,10 @@
+import { randomUUID } from 'crypto';
 import * as argon2 from 'argon2';
+import {
+  analyzePlatePricing,
+  calculateIngredientSalePrice,
+  DEFAULT_RESTAURANT_PRICING_CONFIG,
+} from '@app/sdk';
 import type {
   Allergen,
   CustomerTier,
@@ -112,8 +118,6 @@ type PlateSeedInput = {
   recipeId: string;
   size: 'SMALL' | 'REGULAR' | 'LARGE' | 'XL';
   servedWeightGrams: number;
-  costPrice: string;
-  menuPrice: string;
   allergens: Allergen[];
   dietaryTags: DietaryTag[];
   nutritionTags: NutritionTag[];
@@ -168,6 +172,21 @@ type VariantSeedInput = {
   yieldFactor?: number;
   overrides?: Partial<VariantSeed['data']>;
   isDefault?: boolean;
+};
+
+type StorageTypeKey = 'AMBIENT' | 'COLD' | 'FREEZER' | 'PRODUCE';
+
+type IngredientOperationalProfile = {
+  supplierKey: string;
+  supplierName: string;
+  pricingBasisGrams: number;
+  unitCostNet: number;
+  purchaseUnitLabel: string;
+  storageType: StorageTypeKey;
+  storageLabel: string;
+  maxStockGrams: number;
+  currentStockGrams: number;
+  reorderPointGrams: number;
 };
 
 const averageRating = (reviews: ReviewSeed[]) =>
@@ -267,6 +286,348 @@ const variantSeed = ({
   },
 });
 
+const GENERAL_SUPPLIER = {
+  key: 'supplier_qart_general',
+  name: 'Distribuidora QART Generalista',
+  description:
+    'Proveedor mayorista ficticio para integrar secos, frescos, lacteos, fiambres y condimentos.',
+  contactName: 'Mesa Comercial QART',
+  email: 'compras@proveedor-qart.test',
+  phone: '+54 381 600 1000',
+  leadTimeDays: 2,
+  notes: 'Queda como proveedor generalista base y el schema admite sumar mas proveedores despues.',
+} as const;
+
+const STORAGE_LOCATIONS = [
+  {
+    key: 'ambient_pantry',
+    name: 'Despensa seca',
+    description: 'Estanterias para panificados, secos, condimentos y salsas cerradas.',
+    storageType: 'AMBIENT' as const,
+    capacityGrams: 220000,
+    notes: 'Sector ventilado y de rotacion rapida.',
+  },
+  {
+    key: 'cold_room',
+    name: 'Camara fria',
+    description: 'Camara de frio para lacteos, fiambres, huevos y elaboraciones sensibles.',
+    storageType: 'COLD' as const,
+    capacityGrams: 260000,
+    notes: 'Pensada para productos refrigerados de alta rotacion.',
+  },
+  {
+    key: 'freezer_room',
+    name: 'Freezer de produccion',
+    description: 'Espacio de congelado para apoyo operativo y contingencias.',
+    storageType: 'FREEZER' as const,
+    capacityGrams: 180000,
+    notes: 'Se usa como respaldo y para frituras/produccion preparada.',
+  },
+  {
+    key: 'produce_rack',
+    name: 'Batea de frescos',
+    description: 'Area fresca y ventilada para vegetales y frutas de alta salida.',
+    storageType: 'PRODUCE' as const,
+    capacityGrams: 140000,
+    notes: 'Reposicion constante para evitar mermas.',
+  },
+] as const;
+
+const ingredientOperationalProfile = (
+  input: Omit<IngredientOperationalProfile, 'supplierKey' | 'supplierName'>,
+): IngredientOperationalProfile => ({
+  supplierKey: GENERAL_SUPPLIER.key,
+  supplierName: GENERAL_SUPPLIER.name,
+  ...input,
+});
+
+const ingredientOperationalProfiles = {
+  panSanguchero: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 180,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 18000,
+    currentStockGrams: 12000,
+    reorderPointGrams: 5000,
+  }),
+  panChia: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 220,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 14000,
+    currentStockGrams: 9000,
+    reorderPointGrams: 3500,
+  }),
+  masaPizza: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 160,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 22000,
+    currentStockGrams: 15000,
+    reorderPointGrams: 6000,
+  }),
+  tapaEmpanada: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 190,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 16000,
+    currentStockGrams: 10500,
+    reorderPointGrams: 4500,
+  }),
+  carneVacuna: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 1100,
+    purchaseUnitLabel: 'kg',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 32000,
+    currentStockGrams: 21000,
+    reorderPointGrams: 9000,
+  }),
+  carnePollo: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 720,
+    purchaseUnitLabel: 'kg',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 26000,
+    currentStockGrams: 17000,
+    reorderPointGrams: 7000,
+  }),
+  panceta: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 980,
+    purchaseUnitLabel: 'kg',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 9000,
+    currentStockGrams: 5200,
+    reorderPointGrams: 2200,
+  }),
+  jamonCocido: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 760,
+    purchaseUnitLabel: 'kg',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 11000,
+    currentStockGrams: 7200,
+    reorderPointGrams: 2800,
+  }),
+  mozzarella: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 650,
+    purchaseUnitLabel: 'kg',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 18000,
+    currentStockGrams: 12200,
+    reorderPointGrams: 5200,
+  }),
+  quesoCremoso: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 610,
+    purchaseUnitLabel: 'kg',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 12000,
+    currentStockGrams: 7600,
+    reorderPointGrams: 3200,
+  }),
+  cheddar: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 780,
+    purchaseUnitLabel: 'kg',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 9000,
+    currentStockGrams: 5400,
+    reorderPointGrams: 2400,
+  }),
+  tomate: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 180,
+    purchaseUnitLabel: 'kg',
+    storageType: 'PRODUCE',
+    storageLabel: 'Batea de frescos',
+    maxStockGrams: 16000,
+    currentStockGrams: 9800,
+    reorderPointGrams: 4200,
+  }),
+  lechuga: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 90,
+    purchaseUnitLabel: 'kg',
+    storageType: 'PRODUCE',
+    storageLabel: 'Batea de frescos',
+    maxStockGrams: 8000,
+    currentStockGrams: 4600,
+    reorderPointGrams: 1800,
+  }),
+  cebolla: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 70,
+    purchaseUnitLabel: 'kg',
+    storageType: 'PRODUCE',
+    storageLabel: 'Batea de frescos',
+    maxStockGrams: 18000,
+    currentStockGrams: 12000,
+    reorderPointGrams: 5000,
+  }),
+  morron: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 240,
+    purchaseUnitLabel: 'kg',
+    storageType: 'PRODUCE',
+    storageLabel: 'Batea de frescos',
+    maxStockGrams: 9000,
+    currentStockGrams: 5800,
+    reorderPointGrams: 2200,
+  }),
+  papa: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 110,
+    purchaseUnitLabel: 'kg',
+    storageType: 'PRODUCE',
+    storageLabel: 'Batea de frescos',
+    maxStockGrams: 42000,
+    currentStockGrams: 30000,
+    reorderPointGrams: 12000,
+  }),
+  panRallado: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 120,
+    purchaseUnitLabel: 'kg',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 14000,
+    currentStockGrams: 8600,
+    reorderPointGrams: 3200,
+  }),
+  huevo: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 260,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 12000,
+    currentStockGrams: 7800,
+    reorderPointGrams: 2600,
+  }),
+  aceite: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 260,
+    purchaseUnitLabel: 'litro equivalente',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 26000,
+    currentStockGrams: 18000,
+    reorderPointGrams: 7000,
+  }),
+  mayonesa: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 240,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 9000,
+    currentStockGrams: 5800,
+    reorderPointGrams: 2200,
+  }),
+  ketchup: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 180,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 9000,
+    currentStockGrams: 6200,
+    reorderPointGrams: 2500,
+  }),
+  mostaza: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 170,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 7000,
+    currentStockGrams: 4600,
+    reorderPointGrams: 1800,
+  }),
+  aji: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 320,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 3500,
+    currentStockGrams: 2200,
+    reorderPointGrams: 900,
+  }),
+  salsaPizza: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 140,
+    purchaseUnitLabel: 'kg equivalente',
+    storageType: 'COLD',
+    storageLabel: 'Camara fria',
+    maxStockGrams: 18000,
+    currentStockGrams: 11800,
+    reorderPointGrams: 4200,
+  }),
+  aceitunaVerde: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 360,
+    purchaseUnitLabel: 'kg',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 6000,
+    currentStockGrams: 3600,
+    reorderPointGrams: 1400,
+  }),
+  oregano: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 520,
+    purchaseUnitLabel: 'kg',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 1800,
+    currentStockGrams: 900,
+    reorderPointGrams: 300,
+  }),
+  sal: ingredientOperationalProfile({
+    pricingBasisGrams: 100,
+    unitCostNet: 45,
+    purchaseUnitLabel: 'kg',
+    storageType: 'AMBIENT',
+    storageLabel: 'Despensa seca',
+    maxStockGrams: 10000,
+    currentStockGrams: 6800,
+    reorderPointGrams: 2600,
+  }),
+} satisfies Record<string, IngredientOperationalProfile>;
+
+const TAX_RULE_SEEDS = DEFAULT_RESTAURANT_PRICING_CONFIG.taxRules.map((rule, index) => ({
+  ...rule,
+  sortOrder: index,
+}));
+
+const getStorageLocationKeyForType = (storageType: StorageTypeKey) =>
+  storageType === 'AMBIENT'
+    ? 'ambient_pantry'
+    : storageType === 'COLD'
+      ? 'cold_room'
+      : storageType === 'FREEZER'
+        ? 'freezer_room'
+        : 'produce_rack';
+
 const recipeItem = (
   variantKey: string,
   quantityGrams: number,
@@ -288,6 +649,15 @@ const recipeItem = (
 };
 
 async function resetCatalog() {
+  await prisma.$executeRawUnsafe('DELETE FROM "SaleItem"');
+  await prisma.$executeRawUnsafe('DELETE FROM "Sale"');
+  await prisma.$executeRawUnsafe('DELETE FROM "PurchaseItem"');
+  await prisma.$executeRawUnsafe('DELETE FROM "Purchase"');
+  await prisma.$executeRawUnsafe('DELETE FROM "InventoryLevel"');
+  await prisma.$executeRawUnsafe('DELETE FROM "SupplierIngredient"');
+  await prisma.$executeRawUnsafe('DELETE FROM "TaxRule"');
+  await prisma.$executeRawUnsafe('DELETE FROM "StorageLocation"');
+  await prisma.$executeRawUnsafe('DELETE FROM "Supplier"');
   await prisma.review.deleteMany();
   await prisma.plateTag.deleteMany();
   await prisma.plateAdjustment.deleteMany();
@@ -298,6 +668,186 @@ async function resetCatalog() {
   await prisma.ingredient.deleteMany();
   await prisma.tag.deleteMany();
 }
+
+const mapIngredientForPricing = (ingredient: {
+  id: string;
+  name: string;
+  description: string | null;
+  category: IngredientCategory;
+  nutritionBasisGrams: number;
+  calories: number;
+  proteins: number;
+  carbs: number;
+  fats: number;
+  fiber: number;
+  sugars: number;
+  sodium: number;
+  saturatedFat: number;
+  transFat: number;
+  monounsaturatedFat: number;
+  polyunsaturatedFat: number;
+  allergens: Allergen[];
+  dietaryTags: DietaryTag[];
+  nutritionTags: NutritionTag[];
+  notes: string | null;
+  extraAttributes: unknown;
+}) => ({
+  id: ingredient.id,
+  name: ingredient.name,
+  description: ingredient.description ?? null,
+  category: ingredient.category,
+  nutritionBasisGrams: ingredient.nutritionBasisGrams,
+  nutrition: {
+    calories: ingredient.calories,
+    proteins: ingredient.proteins,
+    carbs: ingredient.carbs,
+    fats: ingredient.fats,
+    fiber: ingredient.fiber,
+    sugars: ingredient.sugars,
+    sodium: ingredient.sodium,
+    saturatedFat: ingredient.saturatedFat,
+    transFat: ingredient.transFat,
+    monounsaturatedFat: ingredient.monounsaturatedFat,
+    polyunsaturatedFat: ingredient.polyunsaturatedFat,
+  },
+  allergens: ingredient.allergens,
+  dietaryTags: ingredient.dietaryTags,
+  nutritionTags: ingredient.nutritionTags,
+  notes: ingredient.notes ?? null,
+  extraAttributes: ingredient.extraAttributes ?? null,
+});
+
+const mapVariantForPricing = (variant: {
+  id: string;
+  name: string;
+  description: string | null;
+  preparationMethod: PreparationMethod;
+  preparationNotes: string | null;
+  portionGrams: number;
+  yieldFactor: number;
+  overrideCalories: number | null;
+  overrideProteins: number | null;
+  overrideCarbs: number | null;
+  overrideFats: number | null;
+  overrideFiber: number | null;
+  overrideSugars: number | null;
+  overrideSodium: number | null;
+  overrideSaturatedFat: number | null;
+  overrideTransFat: number | null;
+  overrideMonounsaturatedFat: number | null;
+  overridePolyunsaturatedFat: number | null;
+  ingredient: Parameters<typeof mapIngredientForPricing>[0];
+}) => ({
+  id: variant.id,
+  name: variant.name,
+  description: variant.description ?? null,
+  preparationMethod: variant.preparationMethod,
+  preparationNotes: variant.preparationNotes ?? null,
+  portionGrams: variant.portionGrams,
+  yieldFactor: variant.yieldFactor,
+  overrideNutrition: {
+    calories: variant.overrideCalories ?? null,
+    proteins: variant.overrideProteins ?? null,
+    carbs: variant.overrideCarbs ?? null,
+    fats: variant.overrideFats ?? null,
+    fiber: variant.overrideFiber ?? null,
+    sugars: variant.overrideSugars ?? null,
+    sodium: variant.overrideSodium ?? null,
+    saturatedFat: variant.overrideSaturatedFat ?? null,
+    transFat: variant.overrideTransFat ?? null,
+    monounsaturatedFat: variant.overrideMonounsaturatedFat ?? null,
+    polyunsaturatedFat: variant.overridePolyunsaturatedFat ?? null,
+  },
+  ingredient: mapIngredientForPricing(variant.ingredient),
+});
+
+const mapRecipeItemForPricing = (item: {
+  id: string;
+  quantityGrams: number;
+  prepNotes: string | null;
+  isOptional: boolean;
+  isMainComponent: boolean;
+  sortOrder: number;
+  variant: Parameters<typeof mapVariantForPricing>[0];
+}) => ({
+  id: item.id,
+  quantityGrams: item.quantityGrams,
+  prepNotes: item.prepNotes ?? null,
+  isOptional: item.isOptional,
+  isMainComponent: item.isMainComponent,
+  sortOrder: item.sortOrder,
+  variant: mapVariantForPricing(item.variant),
+});
+
+const mapAdjustmentForPricing = (adjustment: {
+  id: string;
+  adjustmentType: 'ADDITION' | 'REMOVAL' | 'SUBSTITUTION';
+  quantityGrams: number | null;
+  notes: string | null;
+  sortOrder: number;
+  recipeItemId: string | null;
+  recipeItem: Parameters<typeof mapRecipeItemForPricing>[0] | null;
+  variant: Parameters<typeof mapVariantForPricing>[0] | null;
+}) => ({
+  id: adjustment.id,
+  adjustmentType: adjustment.adjustmentType,
+  quantityGrams: adjustment.quantityGrams ?? null,
+  notes: adjustment.notes ?? null,
+  sortOrder: adjustment.sortOrder,
+  recipeItemId: adjustment.recipeItemId ?? null,
+  recipeItem: adjustment.recipeItem ? mapRecipeItemForPricing(adjustment.recipeItem) : null,
+  variant: adjustment.variant ? mapVariantForPricing(adjustment.variant) : null,
+});
+
+const loadPlatesForPricing = async () => {
+  const plates = await prisma.plate.findMany({
+    include: {
+      recipe: {
+        include: {
+          items: {
+            orderBy: { sortOrder: 'asc' },
+            include: {
+              variant: {
+                include: {
+                  ingredient: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      adjustments: {
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          recipeItem: {
+            include: {
+              variant: {
+                include: {
+                  ingredient: true,
+                },
+              },
+            },
+          },
+          variant: {
+            include: {
+              ingredient: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return plates.map((plate) => ({
+    id: plate.id,
+    name: plate.name,
+    recipe: {
+      yieldServings: plate.recipe.yieldServings,
+      items: plate.recipe.items.map(mapRecipeItemForPricing),
+    },
+    adjustments: plate.adjustments.map(mapAdjustmentForPricing),
+  }));
+};
 
 async function upsertCustomer(input: {
   name: string;
@@ -448,6 +998,7 @@ async function main() {
 
   const ingredientIds = new Map<string, string>();
   const variantIds = new Map<string, string>();
+  const storageLocationIds = new Map<string, string>();
 
   const requireIngredientId = (key: string) => {
     const id = ingredientIds.get(key);
@@ -500,6 +1051,8 @@ async function main() {
       include: { items: true },
     });
 
+  // Estos snapshots siguen existiendo por compatibilidad de esquema, pero el runtime
+  // customer ya debe leer la nutricion calculada desde ingredientes y ajustes.
   const createPlate = async (input: PlateSeedInput) =>
     prisma.plate.create({
       data: {
@@ -509,8 +1062,8 @@ async function main() {
         recipeId: input.recipeId,
         size: input.size,
         servedWeightGrams: input.servedWeightGrams,
-        costPrice: input.costPrice,
-        menuPrice: input.menuPrice,
+        costPrice: '0',
+        menuPrice: '0',
         avgRating: averageRating(input.reviews),
         ratingsCount: input.reviews.length,
         likesCount: recommendationCount(input.reviews, true),
@@ -1105,19 +1658,165 @@ async function main() {
   ] satisfies IngredientSeed[];
 
   for (const seed of ingredientSeeds) {
+    const operationalProfile = ingredientOperationalProfiles[seed.key];
     const { extraAttributes, ...ingredientData } = seed.data;
+    const mergedExtraAttributes =
+      operationalProfile == null
+        ? extraAttributes
+        : {
+            ...((extraAttributes &&
+              typeof extraAttributes === 'object' &&
+              !Array.isArray(extraAttributes)
+              ? extraAttributes
+              : {}) as Record<string, JsonValue>),
+            procurement: {
+              supplierKey: operationalProfile.supplierKey,
+              supplierName: operationalProfile.supplierName,
+              pricingBasisGrams: operationalProfile.pricingBasisGrams,
+              unitCostNet: operationalProfile.unitCostNet,
+              purchaseUnitLabel: operationalProfile.purchaseUnitLabel,
+            },
+            inventory: {
+              storageType: operationalProfile.storageType,
+              storageLabel: operationalProfile.storageLabel,
+              maxStockGrams: operationalProfile.maxStockGrams,
+              currentStockGrams: operationalProfile.currentStockGrams,
+              reorderPointGrams: operationalProfile.reorderPointGrams,
+            },
+          };
     const createData =
-      extraAttributes === null
+      mergedExtraAttributes == null
         ? ingredientData
         : {
             ...ingredientData,
-            extraAttributes,
+            extraAttributes: mergedExtraAttributes,
           };
 
     const ingredient = await prisma.ingredient.create({
       data: createData as Parameters<typeof prisma.ingredient.create>[0]['data'],
     });
+
+    if (operationalProfile) {
+      const ingredientSalePricing = calculateIngredientSalePrice({
+        pricingBasisGrams: operationalProfile.pricingBasisGrams,
+        unitCostNet: operationalProfile.unitCostNet,
+        purchaseUnitLabel: operationalProfile.purchaseUnitLabel,
+        supplierKey: operationalProfile.supplierKey,
+        supplierName: operationalProfile.supplierName,
+      });
+
+      await prisma.$executeRawUnsafe(
+        'UPDATE "Ingredient" SET "pricingBasisGrams" = $1, "costPrice" = $2, "salePrice" = $3, "defaultStorageType" = $4::"StorageType", "maxStockGrams" = $5, "reorderPointGrams" = $6 WHERE "id" = $7',
+        operationalProfile.pricingBasisGrams,
+        ingredientSalePricing.costPrice,
+        ingredientSalePricing.salePrice,
+        operationalProfile.storageType,
+        operationalProfile.maxStockGrams,
+        operationalProfile.reorderPointGrams,
+        ingredient.id,
+      );
+    }
+
     ingredientIds.set(seed.key, ingredient.id);
+  }
+
+  const supplierCreatedAt = new Date();
+  const generalSupplierId = randomUUID();
+
+  await prisma.$executeRawUnsafe(
+    'INSERT INTO "Supplier" ("id", "name", "description", "contactName", "email", "phone", "leadTimeDays", "notes", "isActive", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
+    generalSupplierId,
+    GENERAL_SUPPLIER.name,
+    GENERAL_SUPPLIER.description,
+    GENERAL_SUPPLIER.contactName,
+    GENERAL_SUPPLIER.email,
+    GENERAL_SUPPLIER.phone,
+    GENERAL_SUPPLIER.leadTimeDays,
+    GENERAL_SUPPLIER.notes,
+    true,
+    supplierCreatedAt,
+    supplierCreatedAt,
+  );
+
+  for (const location of STORAGE_LOCATIONS) {
+    const storageId = randomUUID();
+    storageLocationIds.set(location.key, storageId);
+
+    await prisma.$executeRawUnsafe(
+      'INSERT INTO "StorageLocation" ("id", "name", "description", "storageType", "capacityGrams", "notes", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4::"StorageType", $5, $6, $7, $8)',
+      storageId,
+      location.name,
+      location.description,
+      location.storageType,
+      location.capacityGrams,
+      location.notes,
+      supplierCreatedAt,
+      supplierCreatedAt,
+    );
+  }
+
+  for (const rule of TAX_RULE_SEEDS) {
+    await prisma.$executeRawUnsafe(
+      'INSERT INTO "TaxRule" ("id", "key", "name", "description", "rate", "includedInMenuPrice", "isActive", "sortOrder", "sourceLabel", "note", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+      randomUUID(),
+      rule.key,
+      rule.label,
+      rule.note,
+      rule.rate,
+      rule.includedInMenuPrice,
+      rule.isActive,
+      rule.sortOrder,
+      rule.sourceLabel,
+      rule.note,
+      supplierCreatedAt,
+      supplierCreatedAt,
+    );
+  }
+
+  for (const [ingredientKey, profile] of Object.entries(ingredientOperationalProfiles)) {
+    const ingredientId = requireIngredientId(ingredientKey);
+    const storageLocationId = storageLocationIds.get(getStorageLocationKeyForType(profile.storageType));
+
+    if (!storageLocationId) {
+      throw new Error(`Missing storage location for ${profile.storageType}.`);
+    }
+
+    await prisma.$executeRawUnsafe(
+      'UPDATE "Ingredient" SET "preferredSupplierId" = $1 WHERE "id" = $2',
+      generalSupplierId,
+      ingredientId,
+    );
+
+    await prisma.$executeRawUnsafe(
+      'INSERT INTO "SupplierIngredient" ("id", "supplierId", "ingredientId", "purchaseUnitLabel", "pricingBasisGrams", "unitCostNet", "minimumOrderGrams", "leadTimeDays", "isPreferred", "lastQuotedAt", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+      randomUUID(),
+      generalSupplierId,
+      ingredientId,
+      profile.purchaseUnitLabel,
+      profile.pricingBasisGrams,
+      profile.unitCostNet,
+      profile.reorderPointGrams,
+      GENERAL_SUPPLIER.leadTimeDays,
+      true,
+      supplierCreatedAt,
+      supplierCreatedAt,
+      supplierCreatedAt,
+    );
+
+    await prisma.$executeRawUnsafe(
+      'INSERT INTO "InventoryLevel" ("id", "ingredientId", "storageLocationId", "currentQuantityGrams", "reservedQuantityGrams", "maxQuantityGrams", "reorderPointGrams", "averageUnitCost", "lastPurchaseUnitCost", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)',
+      randomUUID(),
+      ingredientId,
+      storageLocationId,
+      profile.currentStockGrams,
+      0,
+      profile.maxStockGrams,
+      profile.reorderPointGrams,
+      profile.unitCostNet,
+      profile.unitCostNet,
+      supplierCreatedAt,
+      supplierCreatedAt,
+    );
   }
 
   const variantSeeds = [
@@ -1995,8 +2694,6 @@ async function main() {
     recipeId: pizzaMuzzarella.id,
     size: 'LARGE',
     servedWeightGrams: 550,
-    costPrice: '4200',
-    menuPrice: '12000',
     allergens: ['GLUTEN', 'MILK'],
     dietaryTags: ['VEGETARIAN'],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2022,8 +2719,6 @@ async function main() {
     recipeId: pizzaMuzzarella.id,
     size: 'LARGE',
     servedWeightGrams: 645,
-    costPrice: '5100',
-    menuPrice: '14500',
     allergens: ['GLUTEN', 'MILK'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2051,8 +2746,6 @@ async function main() {
     recipeId: sandwichMilanesa.id,
     size: 'LARGE',
     servedWeightGrams: 675,
-    costPrice: '4700',
-    menuPrice: '13500',
     allergens: ['GLUTEN', 'EGG', 'MUSTARD'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2079,8 +2772,6 @@ async function main() {
     recipeId: sandwichMilanesa.id,
     size: 'LARGE',
     servedWeightGrams: 665,
-    costPrice: '4600',
-    menuPrice: '13200',
     allergens: ['GLUTEN', 'EGG', 'MUSTARD'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2108,8 +2799,6 @@ async function main() {
     recipeId: sandwichMilanesa.id,
     size: 'LARGE',
     servedWeightGrams: 665,
-    costPrice: '4500',
-    menuPrice: '12900',
     allergens: ['GLUTEN', 'EGG', 'MUSTARD'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2137,8 +2826,6 @@ async function main() {
     recipeId: milanesaNapolitana.id,
     size: 'LARGE',
     servedWeightGrams: 692,
-    costPrice: '5200',
-    menuPrice: '14900',
     allergens: ['GLUTEN', 'EGG', 'MILK'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2166,8 +2853,6 @@ async function main() {
     recipeId: hamburguesaClasica.id,
     size: 'REGULAR',
     servedWeightGrams: 582,
-    costPrice: '4800',
-    menuPrice: '13800',
     allergens: ['GLUTEN', 'MILK', 'MUSTARD'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2194,8 +2879,6 @@ async function main() {
     recipeId: hamburguesaClasica.id,
     size: 'REGULAR',
     servedWeightGrams: 585,
-    costPrice: '4550',
-    menuPrice: '13200',
     allergens: ['GLUTEN', 'MILK', 'EGG'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2223,8 +2906,6 @@ async function main() {
     recipeId: empanadasCarne.id,
     size: 'SMALL',
     servedWeightGrams: 418,
-    costPrice: '2600',
-    menuPrice: '7600',
     allergens: ['GLUTEN', 'EGG'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2250,8 +2931,6 @@ async function main() {
     recipeId: empanadasJyQ.id,
     size: 'SMALL',
     servedWeightGrams: 322,
-    costPrice: '2450',
-    menuPrice: '7200',
     allergens: ['GLUTEN', 'MILK'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
@@ -2278,8 +2957,6 @@ async function main() {
     recipeId: papasFritas.id,
     size: 'REGULAR',
     servedWeightGrams: 258,
-    costPrice: '1600',
-    menuPrice: '4900',
     allergens: ['EGG'],
     dietaryTags: ['VEGETARIAN', 'GLUTEN_FREE'],
     nutritionTags: ['ENERGY_DENSE', 'SATIATING'],
@@ -2427,11 +3104,209 @@ async function main() {
   await prisma.plateTag.createMany({ data: tagPayloads });
   await prisma.review.createMany({ data: reviewPayloads });
 
+  const publicPlates = await loadPlatesForPricing();
+  const platePricingById = new Map<string, ReturnType<typeof analyzePlatePricing>>();
+
+  for (const plate of publicPlates) {
+    const pricing = analyzePlatePricing(plate, DEFAULT_RESTAURANT_PRICING_CONFIG);
+    platePricingById.set(plate.id, pricing);
+
+    if (pricing.missingIngredientIds.length > 0) {
+      console.warn(
+        `Pricing metadata missing for plate ${plate.name}: ${pricing.missingIngredientIds.join(', ')}`,
+      );
+    }
+
+    await prisma.plate.update({
+      where: { id: plate.id },
+      data: {
+        costPrice: pricing.costPrice.toFixed(2),
+        menuPrice: pricing.menuPrice.toFixed(2),
+      },
+    });
+
+    await prisma.$executeRawUnsafe(
+      'UPDATE "Plate" SET "netPrice" = $1, "taxAmount" = $2, "profitAmount" = $3, "profitMarginRate" = $4 WHERE "id" = $5',
+      pricing.netPrice,
+      pricing.taxAmount,
+      pricing.profitAmount,
+      DEFAULT_RESTAURANT_PRICING_CONFIG.markupRate,
+      plate.id,
+    );
+  }
+
+  const vatRate = TAX_RULE_SEEDS.find((rule) => rule.key === 'vat' && rule.isActive)?.rate ?? 0;
+  const purchaseCreatedAt = new Date('2026-03-22T10:15:00.000Z');
+  const purchaseItemPayloads = Object.entries(ingredientOperationalProfiles).map(([ingredientKey, profile]) => {
+    const quantityGrams = profile.currentStockGrams;
+    const lineNetAmount = Number(
+      ((profile.unitCostNet * quantityGrams) / profile.pricingBasisGrams).toFixed(2),
+    );
+    const lineTaxAmount = Number((lineNetAmount * vatRate).toFixed(2));
+    const lineTotalAmount = Number((lineNetAmount + lineTaxAmount).toFixed(2));
+
+    return {
+      id: randomUUID(),
+      ingredientId: requireIngredientId(ingredientKey),
+      storageLocationId: storageLocationIds.get(getStorageLocationKeyForType(profile.storageType)),
+      quantityGrams,
+      pricingBasisGrams: profile.pricingBasisGrams,
+      unitCostNet: profile.unitCostNet,
+      taxRate: vatRate,
+      lineNetAmount,
+      lineTaxAmount,
+      lineTotalAmount,
+    };
+  });
+  const purchaseSubtotalNet = Number(
+    purchaseItemPayloads.reduce((total, item) => total + item.lineNetAmount, 0).toFixed(2),
+  );
+  const purchaseTaxAmount = Number(
+    purchaseItemPayloads.reduce((total, item) => total + item.lineTaxAmount, 0).toFixed(2),
+  );
+  const purchaseTotalAmount = Number((purchaseSubtotalNet + purchaseTaxAmount).toFixed(2));
+  const purchaseId = randomUUID();
+
+  await prisma.$executeRawUnsafe(
+    'INSERT INTO "Purchase" ("id", "supplierId", "documentNumber", "purchasedAt", "receivedAt", "status", "currencyCode", "subtotalNet", "taxAmount", "totalAmount", "notes", "createdAt", "updatedAt") VALUES ($1, $2, $3, $4, $5, $6::"PurchaseStatus", $7, $8, $9, $10, $11, $12, $13)',
+    purchaseId,
+    generalSupplierId,
+    'FAC-A-0001-00000001',
+    purchaseCreatedAt,
+    purchaseCreatedAt,
+    'RECEIVED',
+    'ARS',
+    purchaseSubtotalNet,
+    purchaseTaxAmount,
+    purchaseTotalAmount,
+    'Compra inicial de abastecimiento para dejar stock, costos e inventario consistentes.',
+    purchaseCreatedAt,
+    purchaseCreatedAt,
+  );
+
+  for (const item of purchaseItemPayloads) {
+    await prisma.$executeRawUnsafe(
+      'INSERT INTO "PurchaseItem" ("id", "purchaseId", "ingredientId", "storageLocationId", "quantityGrams", "pricingBasisGrams", "unitCostNet", "taxRate", "lineNetAmount", "lineTaxAmount", "lineTotalAmount", "createdAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)',
+      item.id,
+      purchaseId,
+      item.ingredientId,
+      item.storageLocationId ?? null,
+      item.quantityGrams,
+      item.pricingBasisGrams,
+      item.unitCostNet,
+      item.taxRate,
+      item.lineNetAmount,
+      item.lineTaxAmount,
+      item.lineTotalAmount,
+      purchaseCreatedAt,
+    );
+  }
+
+  const saleSeeds = [
+    {
+      soldAt: new Date('2026-03-26T13:05:00.000Z'),
+      channel: 'COUNTER',
+      notes: 'Venta mostrador mediodia.',
+      items: [
+        { plateId: pizzaEspecialPlate.id, quantity: 1 },
+        { plateId: friesPlate.id, quantity: 1 },
+      ],
+    },
+    {
+      soldAt: new Date('2026-03-27T21:18:00.000Z'),
+      channel: 'DELIVERY',
+      notes: 'Pedido nocturno con sanguches.',
+      items: [
+        { plateId: sandwichCompletoPlate.id, quantity: 1 },
+        { plateId: sandwichPolloPlate.id, quantity: 1 },
+      ],
+    },
+    {
+      soldAt: new Date('2026-03-29T20:42:00.000Z'),
+      channel: 'ONLINE',
+      notes: 'Orden online de hamburguesa y empanadas.',
+      items: [
+        { plateId: burgerPlate.id, quantity: 1 },
+        { plateId: empanadasJyQPlate.id, quantity: 1 },
+      ],
+    },
+  ] as const;
+
+  for (const saleSeed of saleSeeds) {
+    const saleId = randomUUID();
+    const saleItemPayloads = saleSeed.items.map((item) => {
+      const pricing = platePricingById.get(item.plateId);
+
+      if (!pricing) {
+        throw new Error(`Missing computed pricing for plate ${item.plateId}.`);
+      }
+
+      return {
+        id: randomUUID(),
+        plateId: item.plateId,
+        quantity: item.quantity,
+        unitCostAmount: pricing.costPrice,
+        unitNetAmount: pricing.netPrice,
+        unitTaxAmount: pricing.taxAmount,
+        unitTotalAmount: pricing.menuPrice,
+        lineCostAmount: Number((pricing.costPrice * item.quantity).toFixed(2)),
+        lineNetAmount: Number((pricing.netPrice * item.quantity).toFixed(2)),
+        lineTaxAmount: Number((pricing.taxAmount * item.quantity).toFixed(2)),
+        lineTotalAmount: Number((pricing.menuPrice * item.quantity).toFixed(2)),
+      };
+    });
+    const saleSubtotalNet = Number(
+      saleItemPayloads.reduce((total, item) => total + item.lineNetAmount, 0).toFixed(2),
+    );
+    const saleTaxAmount = Number(
+      saleItemPayloads.reduce((total, item) => total + item.lineTaxAmount, 0).toFixed(2),
+    );
+    const saleTotalAmount = Number((saleSubtotalNet + saleTaxAmount).toFixed(2));
+
+    await prisma.$executeRawUnsafe(
+      'INSERT INTO "Sale" ("id", "soldAt", "status", "channel", "currencyCode", "subtotalNet", "taxAmount", "totalAmount", "notes", "createdAt", "updatedAt") VALUES ($1, $2, $3::"SaleStatus", $4::"SaleChannel", $5, $6, $7, $8, $9, $10, $11)',
+      saleId,
+      saleSeed.soldAt,
+      'CONFIRMED',
+      saleSeed.channel,
+      'ARS',
+      saleSubtotalNet,
+      saleTaxAmount,
+      saleTotalAmount,
+      saleSeed.notes,
+      saleSeed.soldAt,
+      saleSeed.soldAt,
+    );
+
+    for (const item of saleItemPayloads) {
+      await prisma.$executeRawUnsafe(
+        'INSERT INTO "SaleItem" ("id", "saleId", "plateId", "quantity", "unitCostAmount", "unitNetAmount", "unitTaxAmount", "unitTotalAmount", "lineCostAmount", "lineNetAmount", "lineTaxAmount", "lineTotalAmount", "createdAt") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
+        item.id,
+        saleId,
+        item.plateId,
+        item.quantity,
+        item.unitCostAmount,
+        item.unitNetAmount,
+        item.unitTaxAmount,
+        item.unitTotalAmount,
+        item.lineCostAmount,
+        item.lineNetAmount,
+        item.lineTaxAmount,
+        item.lineTotalAmount,
+        saleSeed.soldAt,
+      );
+    }
+  }
+
   console.log('✅ Seeding Complete!');
   console.log(`   • ${ingredientSeeds.length} ingredientes de cocina clasica argentina`);
   console.log(`   • ${variantSeeds.length} variantes listas para recetas y ajustes`);
   console.log('   • 7 recetas base para pizza, sanguches, milanesas, hamburguesas, empanadas y papas');
   console.log('   • 11 platos finales con tags, reviews y variantes utiles');
+  console.log(
+    `   • 1 proveedor generalista, ${STORAGE_LOCATIONS.length} ubicaciones de stock y ${TAX_RULE_SEEDS.length} reglas fiscales`,
+  );
+  console.log(`   • 1 compra inicial y ${saleSeeds.length} ventas demo para operaciones`);
   console.log(`   • ${reviewPayloads.length} reviews repartidas entre clientes seed`);
 }
 

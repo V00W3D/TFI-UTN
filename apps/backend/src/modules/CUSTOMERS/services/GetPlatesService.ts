@@ -1,4 +1,4 @@
-import { ERR, type InferSuccess } from '@app/sdk';
+import { ERR, analyzePlateNutrition, analyzePlatePricing, type InferSuccess } from '@app/sdk';
 import type { GetPlatesContract } from '@app/contracts';
 import { prisma as db } from '../../../tools/db';
 import { BACKEND_URL } from '../../../env';
@@ -174,32 +174,6 @@ const mapTag = (entry: {
   description: entry.tag.description ?? null,
 });
 
-const mapPlateNutrition = (plate: {
-  calculatedCalories: number;
-  calculatedProteins: number;
-  calculatedCarbs: number;
-  calculatedFats: number;
-  calculatedFiber: number;
-  calculatedSugars: number;
-  calculatedSodium: number;
-  calculatedSaturatedFat: number;
-  calculatedTransFat: number;
-  calculatedMonounsaturatedFat: number;
-  calculatedPolyunsaturatedFat: number;
-}) => ({
-  calories: plate.calculatedCalories,
-  proteins: plate.calculatedProteins,
-  carbs: plate.calculatedCarbs,
-  fats: plate.calculatedFats,
-  fiber: plate.calculatedFiber,
-  sugars: plate.calculatedSugars,
-  sodium: plate.calculatedSodium,
-  saturatedFat: plate.calculatedSaturatedFat,
-  transFat: plate.calculatedTransFat,
-  monounsaturatedFat: plate.calculatedMonounsaturatedFat,
-  polyunsaturatedFat: plate.calculatedPolyunsaturatedFat,
-});
-
 const mapAdjustment = (adjustment: {
   id: string;
   adjustmentType: InferSuccess<typeof GetPlatesContract>[number]['adjustments'][number]['adjustmentType'];
@@ -285,26 +259,8 @@ export const getPlatesService = async (): Promise<InferSuccess<typeof GetPlatesC
       orderBy: [{ likesCount: 'desc' }, { avgRating: 'desc' }, { name: 'asc' }],
     });
 
-    return plates.map((plate) => ({
-      id: plate.id,
-      name: plate.name,
-      description: plate.description ?? null,
-      imageUrl: resolveAssetUrl((plate as { imageUrl?: string | null }).imageUrl ?? null, BACKEND_URL),
-      size: plate.size,
-      servedWeightGrams: plate.servedWeightGrams ?? null,
-      menuPrice: plate.menuPrice.toNumber(),
-      avgRating: plate.avgRating,
-      ratingsCount: plate.ratingsCount,
-      likesCount: plate.likesCount,
-      dislikesCount: plate.dislikesCount,
-      isAvailable: plate.isAvailable,
-      allergens: plate.allergens,
-      dietaryTags: plate.dietaryTags,
-      nutritionTags: plate.nutritionTags,
-      nutritionNotes: plate.nutritionNotes ?? null,
-      nutrition: mapPlateNutrition(plate),
-      tags: plate.tags.map(mapTag),
-      recipe: {
+    return plates.map((plate) => {
+      const recipe = {
         id: plate.recipe.id,
         name: plate.recipe.name,
         description: plate.recipe.description ?? null,
@@ -318,10 +274,39 @@ export const getPlatesService = async (): Promise<InferSuccess<typeof GetPlatesC
         allergens: plate.recipe.allergens,
         dietaryTags: plate.recipe.dietaryTags,
         items: plate.recipe.items.map(mapRecipeItem),
-      },
-      adjustments: plate.adjustments.map(mapAdjustment),
-      reviews: plate.reviews.map(mapReview),
-    }));
+      };
+      const adjustments = plate.adjustments.map(mapAdjustment);
+      const nutrition = analyzePlateNutrition({ recipe, adjustments }).totalNutrition;
+      const pricing = analyzePlatePricing({ recipe, adjustments });
+      const menuPrice = pricing.costPrice > 0 ? pricing.menuPrice : plate.menuPrice.toNumber();
+
+      return {
+        id: plate.id,
+        name: plate.name,
+        description: plate.description ?? null,
+        imageUrl: resolveAssetUrl(
+          (plate as { imageUrl?: string | null }).imageUrl ?? null,
+          BACKEND_URL,
+        ),
+        size: plate.size,
+        servedWeightGrams: plate.servedWeightGrams ?? null,
+        menuPrice,
+        avgRating: plate.avgRating,
+        ratingsCount: plate.ratingsCount,
+        likesCount: plate.likesCount,
+        dislikesCount: plate.dislikesCount,
+        isAvailable: plate.isAvailable,
+        allergens: plate.allergens,
+        dietaryTags: plate.dietaryTags,
+        nutritionTags: plate.nutritionTags,
+        nutritionNotes: plate.nutritionNotes ?? null,
+        nutrition,
+        tags: plate.tags.map(mapTag),
+        recipe,
+        adjustments,
+        reviews: plate.reviews.map(mapReview),
+      };
+    });
   } catch {
     throw ERR.INTERNAL(['DATABASE_ERROR']);
   }

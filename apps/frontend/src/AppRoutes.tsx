@@ -20,12 +20,14 @@
 import { useRoutes } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 
+import { CustomerRoutes } from '@modules/Customer/CustomerRoutes';
 import { IAMRoutes } from '@modules/IAM/IAMRoutes';
 import { LandingRoutes } from '@modules/Landing/LandingRoutes';
 
 export default function AppRoutes() {
   const routes: RouteObject[] = [
     LandingRoutes,
+    CustomerRoutes,
     IAMRoutes,
     // POSRoutes,
     // AdminRoutes,

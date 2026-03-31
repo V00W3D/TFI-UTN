@@ -66,18 +66,18 @@
   --qart-warning-border: #fde68a;
   --qart-info: #1e40af;
   --qart-info-bg: #dbeafe;
-  --qart-insight-benefit: #166534;
-  --qart-insight-benefit-bg: #dcfce7;
-  --qart-insight-benefit-border: #86efac;
-  --qart-insight-balanced: #1d4ed8;
-  --qart-insight-balanced-bg: #dbeafe;
-  --qart-insight-balanced-border: #93c5fd;
-  --qart-insight-caution: #92400e;
-  --qart-insight-caution-bg: #fef3c7;
-  --qart-insight-caution-border: #facc15;
-  --qart-insight-danger: #991b1b;
-  --qart-insight-danger-bg: #fee2e2;
-  --qart-insight-danger-border: #fca5a5;
+  --qart-insight-benefit: #3f6a58;
+  --qart-insight-benefit-bg: #edf5f0;
+  --qart-insight-benefit-border: #bed3c6;
+  --qart-insight-balanced: #5a6e8b;
+  --qart-insight-balanced-bg: #edf2f8;
+  --qart-insight-balanced-border: #c6d2e2;
+  --qart-insight-caution: #89662b;
+  --qart-insight-caution-bg: #faf2e1;
+  --qart-insight-caution-border: #decb9f;
+  --qart-insight-danger: #8d6652;
+  --qart-insight-danger-bg: #f7efe8;
+  --qart-insight-danger-border: #dac2b3;
 
   /* ── Sombras arquitectónicas — offset sólido, sin blur ── */
   --qart-shadow-sharp: 4px 4px 0px #1a1410;

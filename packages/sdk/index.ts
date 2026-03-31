@@ -21,6 +21,8 @@ export * from './FieldDef';
 export * from './IAMFields';
 export * from './CUSTOMERFields';
 export * from './FormStore';
+export * from './plateNutrition';
+export * from './platePricing';
 
 // ─────────────────────────────────────────────────────────────
 //  Type-only re-exports from environment-specific files.
