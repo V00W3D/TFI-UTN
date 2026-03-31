@@ -9,6 +9,11 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5000,
     allowedHosts: true,
+    proxy: {
+      '/iam': { target: 'http://localhost:3000', changeOrigin: true, secure: false },
+      '/customers': { target: 'http://localhost:3000', changeOrigin: true, secure: false },
+      '/assets': { target: 'http://localhost:3000', changeOrigin: true, secure: false },
+    },
   },
 
   resolve: {

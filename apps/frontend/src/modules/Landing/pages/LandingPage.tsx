@@ -6,6 +6,7 @@ import HowWeServe from '../components/HowWeServe';
 import FeaturedDish from '../components/FeaturedDish';
 import CraftSection from '../components/CraftSection';
 import Contact from '../components/Contact';
+import OrderPanel from '../components/OrderPanel';
 import { useAppStore } from '../../../appStore';
 import '../LandingPages.css';
 
@@ -29,6 +30,7 @@ const LandingPage = () => {
       <FeaturedDish />
       <CraftSection />
       <Contact />
+      <OrderPanel />
     </div>
   );
 };

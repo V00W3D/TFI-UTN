@@ -17,5 +17,6 @@ export const PLATE_IMAGES = {
 export const resolveAssetUrl = (assetPath: string | null | undefined, backendUrl: string) => {
   if (!assetPath) return null;
   if (/^https?:\/\//i.test(assetPath)) return assetPath;
+  if (!backendUrl) return assetPath;
   return new URL(assetPath, `${backendUrl}/`).toString();
 };

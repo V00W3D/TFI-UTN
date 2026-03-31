@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
-
+import { useOrderStore } from '../../../orderStore';
 import { sdk } from '../../../tools/sdk';
+import { ParchmentIcon } from './OrderPanel';
 
 /**
  * @file Navbar.tsx
@@ -11,6 +12,8 @@ import { sdk } from '../../../tools/sdk';
 const Navbar = () => {
   const navigate = useNavigate();
   const { user, setUser } = useAppStore();
+  const { toggleOpen, items } = useOrderStore();
+  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
     <motion.nav
@@ -55,6 +58,22 @@ const Navbar = () => {
 
         {/* ACTIONS */}
         <div className="flex items-center gap-2.5">
+          {/* ORDEN button */}
+          <button
+            type="button"
+            className="nav-orden-btn"
+            onClick={toggleOpen}
+            aria-label="Ver orden"
+          >
+            <span className="nav-orden-icon-wrap">
+              <ParchmentIcon className="nav-orden-icon" />
+              {totalItems > 0 && (
+                <span className="nav-orden-badge">{totalItems > 99 ? '99+' : totalItems}</span>
+              )}
+            </span>
+            <span className="nav-orden-label">Orden</span>
+          </button>
+
           {user ? (
             <>
               <span className="hidden sm:block text-[0.68rem] font-black uppercase tracking-widest text-qart-primary border-b-2 border-qart-accent px-1">

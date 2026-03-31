@@ -11,6 +11,7 @@ import {
   formatLandingPrice,
   type LandingPlate,
 } from './landingPlateNutrition';
+import { useOrderStore } from '../../../orderStore';
 
 interface PlateCardProps {
   plate: LandingPlate;
@@ -18,8 +19,31 @@ interface PlateCardProps {
   onOpenRecipe: () => void;
 }
 
+const AddToOrderIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+    aria-hidden="true"
+  >
+    <path d="M6 2L3 6v14h18V6l-3-4z" />
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+    <line x1="12" y1="13" x2="12" y2="17" />
+    <line x1="10" y1="15" x2="14" y2="15" />
+  </svg>
+);
+
 const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => {
   const [imageFailed, setImageFailed] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [added, setAdded] = useState(false);
+  const { addItem, setOpen } = useOrderStore();
+
   const hasMediaImage = Boolean(plate.imageUrl && !imageFailed);
   const sizeIcon = getPlateSizeIconKey(plate.size);
   const typeIcon = getPlateTypeIconKey(plate.recipe.type);
@@ -28,6 +52,17 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
     plate.recipe.assemblyNotes ||
     plate.recipe.description ||
     'Hecho para salir rico desde el primer vistazo.';
+
+  const handleQuantityChange = (delta: number) => {
+    setQuantity((q) => Math.max(1, q + delta));
+  };
+
+  const handleAdd = () => {
+    addItem(plate, quantity);
+    setAdded(true);
+    setOpen(true);
+    setTimeout(() => setAdded(false), 1800);
+  };
 
   return (
     <article className="featured-card">
@@ -106,7 +141,7 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
 
         <div className="featured-card-story">
           <p className="featured-kicker">Lo que invita a pedirlo</p>
-          <p className="featured-card-quote">“{leadQuote}”</p>
+          <p className="featured-card-quote">"{leadQuote}"</p>
         </div>
 
         <div className="featured-card-actions featured-card-actions--pair">
@@ -150,6 +185,48 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
               </span>
             </span>
           </div>
+        </div>
+
+        <div className="plate-order-bar">
+          <div className="plate-qty-control">
+            <button
+              type="button"
+              className="plate-qty-btn"
+              onClick={() => handleQuantityChange(-1)}
+              aria-label="Reducir cantidad"
+            >
+              −
+            </button>
+            <input
+              type="number"
+              className="plate-qty-input"
+              min={1}
+              value={quantity}
+              onChange={(e) => {
+                const v = parseInt(e.target.value, 10);
+                if (!isNaN(v) && v >= 1) setQuantity(v);
+              }}
+              aria-label="Cantidad"
+            />
+            <button
+              type="button"
+              className="plate-qty-btn"
+              onClick={() => handleQuantityChange(1)}
+              aria-label="Aumentar cantidad"
+            >
+              +
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className={`plate-add-btn${added ? ' plate-add-btn--added' : ''}`}
+            onClick={handleAdd}
+            disabled={!plate.isAvailable}
+          >
+            <AddToOrderIcon className="plate-add-btn-icon" />
+            <span>{added ? '¡Añadido!' : 'Añadir'}</span>
+          </button>
         </div>
       </div>
     </article>

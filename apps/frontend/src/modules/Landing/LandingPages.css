@@ -1417,3 +1417,534 @@
     width: 100%;
   }
 }
+
+/* =============================================================================
+   PLATE ORDER BAR — Quantity selector + Add button (bottom of PlateCard)
+   ============================================================================= */
+
+.plate-order-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 0.55rem;
+  padding-top: 0.85rem;
+  border-top: 2px solid var(--qart-border);
+  margin-top: auto;
+}
+
+.plate-qty-control {
+  display: flex;
+  align-items: stretch;
+  border: 2px solid var(--qart-border);
+  background: var(--qart-surface-sunken);
+  flex-shrink: 0;
+}
+
+.plate-qty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: var(--qart-primary);
+  color: var(--qart-text-on-primary);
+  font-size: 1.3rem;
+  font-weight: 900;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
+  flex-shrink: 0;
+}
+
+.plate-qty-btn:hover {
+  background: var(--qart-accent);
+}
+
+.plate-qty-btn:active {
+  transform: scale(0.93);
+}
+
+.plate-qty-input {
+  width: 3.2rem;
+  text-align: center;
+  background: transparent;
+  border: none;
+  border-left: 2px solid var(--qart-border);
+  border-right: 2px solid var(--qart-border);
+  color: var(--qart-text);
+  font-size: 1rem;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  padding: 0;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.plate-qty-input::-webkit-inner-spin-button,
+.plate-qty-input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.plate-add-btn {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0 1rem;
+  border: 2px solid var(--qart-border);
+  background: var(--qart-accent);
+  color: var(--qart-text-on-accent);
+  font-size: 0.78rem;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  min-height: 2.75rem;
+}
+
+.plate-add-btn:hover:not(:disabled) {
+  background: var(--qart-accent-hover);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--qart-shadow-accent-hover);
+}
+
+.plate-add-btn:active:not(:disabled) {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+.plate-add-btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  background: var(--qart-border-soft);
+  color: var(--qart-text-disabled);
+}
+
+.plate-add-btn--added {
+  background: var(--qart-success) !important;
+  transform: translate(-2px, -2px) !important;
+  box-shadow: var(--qart-shadow-sharp) !important;
+}
+
+.plate-add-btn-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+}
+
+/* =============================================================================
+   NAV ORDEN BUTTON — Navbar parchment button
+   ============================================================================= */
+
+.nav-orden-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  padding: 0.45rem 0.75rem;
+  border: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-surface) 84%, var(--qart-bg-warm));
+  color: var(--qart-primary);
+  font-size: 0.72rem;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  position: relative;
+}
+
+.nav-orden-btn:hover {
+  background: var(--qart-primary);
+  color: var(--qart-text-on-primary);
+  transform: translate(-2px, -2px);
+  box-shadow: var(--qart-shadow-sharp);
+}
+
+.nav-orden-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-orden-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.nav-orden-badge {
+  position: absolute;
+  top: -0.55rem;
+  right: -0.65rem;
+  min-width: 1.18rem;
+  height: 1.18rem;
+  padding: 0 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--qart-bg);
+  border-radius: 0;
+  background: var(--qart-accent);
+  color: var(--qart-text-on-accent);
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.nav-orden-label {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .nav-orden-label {
+    display: inline;
+  }
+}
+
+/* =============================================================================
+   ORDER PANEL — Slide-in sidebar
+   ============================================================================= */
+
+.order-panel-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: color-mix(in srgb, var(--qart-primary) 48%, transparent);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.order-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  width: min(420px, 96vw);
+  border-left: 3px solid var(--qart-border);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--qart-accent) 10%, transparent), transparent 40%),
+    var(--qart-surface);
+  box-shadow: -8px 0 0 color-mix(in srgb, var(--qart-border) 55%, transparent);
+  overflow: hidden;
+}
+
+.order-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border-bottom: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-bg-warm) 55%, var(--qart-surface));
+  flex-shrink: 0;
+}
+
+.order-panel-header-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.order-panel-header-icon {
+  width: 1.8rem;
+  height: 1.8rem;
+  color: var(--qart-primary);
+  flex-shrink: 0;
+}
+
+.order-panel-header-text {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.order-panel-title {
+  margin: 0;
+  color: var(--qart-primary);
+  font-size: 1.12rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.order-panel-subtitle {
+  color: var(--qart-text-muted);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.order-panel-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.order-panel-clear-btn {
+  padding: 0.42rem 0.72rem;
+  border: 2px solid var(--qart-border-soft);
+  background: transparent;
+  color: var(--qart-text-muted);
+  font-size: 0.66rem;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.order-panel-clear-btn:hover {
+  border-color: var(--qart-error);
+  color: var(--qart-error);
+}
+
+.order-panel-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 2px solid var(--qart-border);
+  background: var(--qart-primary);
+  color: var(--qart-text-on-primary);
+  font-size: 0.88rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.order-panel-close-btn:hover {
+  background: var(--qart-accent);
+  transform: translate(-2px, -2px);
+}
+
+.order-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1.15rem;
+}
+
+.order-panel-empty {
+  display: grid;
+  gap: 0.75rem;
+  align-content: center;
+  justify-items: center;
+  min-height: 14rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  border: 2px dashed var(--qart-border-soft);
+  background: color-mix(in srgb, var(--qart-bg-warm) 40%, transparent);
+}
+
+.order-panel-empty-icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--qart-text-disabled);
+}
+
+.order-panel-empty-title {
+  margin: 0;
+  color: var(--qart-primary);
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.order-panel-empty-sub {
+  color: var(--qart-text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.order-panel-list {
+  display: grid;
+  gap: 0.65rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.order-panel-item {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.85rem;
+  border: 2px solid var(--qart-border);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--qart-bg-warm) 18%, transparent), transparent),
+    var(--qart-surface);
+  transition: border-color 0.2s ease;
+}
+
+.order-panel-item:hover {
+  border-color: var(--qart-accent);
+}
+
+.order-panel-item-info {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.order-panel-item-name {
+  color: var(--qart-primary);
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.order-panel-item-unit {
+  color: var(--qart-text-muted);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.order-panel-item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.order-panel-qty {
+  display: flex;
+  align-items: stretch;
+  border: 2px solid var(--qart-border);
+  flex-shrink: 0;
+}
+
+.order-panel-qty-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: var(--qart-primary);
+  color: var(--qart-text-on-primary);
+  font-size: 1rem;
+  font-weight: 900;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.order-panel-qty-btn:hover {
+  background: var(--qart-accent);
+}
+
+.order-panel-qty-input {
+  width: 2.4rem;
+  text-align: center;
+  background: var(--qart-surface-sunken);
+  border: none;
+  border-left: 2px solid var(--qart-border);
+  border-right: 2px solid var(--qart-border);
+  color: var(--qart-text);
+  font-size: 0.88rem;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  padding: 0;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.order-panel-qty-input::-webkit-inner-spin-button,
+.order-panel-qty-input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.order-panel-item-subtotal {
+  color: var(--qart-primary);
+  font-size: 0.92rem;
+  font-weight: 900;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.order-panel-item-remove {
+  padding: 0.28rem 0.55rem;
+  border: 2px solid var(--qart-border-soft);
+  background: transparent;
+  color: var(--qart-text-muted);
+  font-size: 0.6rem;
+  font-weight: 900;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.order-panel-item-remove:hover {
+  border-color: var(--qart-error);
+  color: var(--qart-error);
+}
+
+.order-panel-footer {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  border-top: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-bg-warm) 55%, var(--qart-surface));
+  flex-shrink: 0;
+}
+
+.order-panel-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.order-panel-total-label {
+  color: var(--qart-text-muted);
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.order-panel-total-value {
+  color: var(--qart-primary);
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1;
+}
