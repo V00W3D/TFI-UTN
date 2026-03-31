@@ -8,9 +8,9 @@ export default defineConfig({
   server: {
     allowedHosts: true,
     proxy: {
-      '/iam': { target: 'http://localhost:3000', changeOrigin: true, secure: false },
-      '/customers': { target: 'http://localhost:3000', changeOrigin: true, secure: false },
-      '/assets': { target: 'http://localhost:3000', changeOrigin: true, secure: false },
+      '/iam': { target: 'http://100.87.111.94:3000', changeOrigin: true, secure: false },
+      '/customers': { target: 'http://100.87.111.94:3000', changeOrigin: true, secure: false },
+      '/assets': { target: 'http://100.87.111.94:3000', changeOrigin: true, secure: false },
     },
   },
 
