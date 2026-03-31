@@ -619,6 +619,11 @@ const TAX_RULE_SEEDS = DEFAULT_RESTAURANT_PRICING_CONFIG.taxRules.map((rule, ind
   sortOrder: index,
 }));
 
+const getIngredientOperationalProfile = (key: string) =>
+  key in ingredientOperationalProfiles
+    ? ingredientOperationalProfiles[key as keyof typeof ingredientOperationalProfiles]
+    : undefined;
+
 const getStorageLocationKeyForType = (storageType: StorageTypeKey) =>
   storageType === 'AMBIENT'
     ? 'ambient_pantry'
@@ -1658,7 +1663,7 @@ async function main() {
   ] satisfies IngredientSeed[];
 
   for (const seed of ingredientSeeds) {
-    const operationalProfile = ingredientOperationalProfiles[seed.key];
+    const operationalProfile = getIngredientOperationalProfile(seed.key);
     const { extraAttributes, ...ingredientData } = seed.data;
     const mergedExtraAttributes =
       operationalProfile == null
