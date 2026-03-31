@@ -28,6 +28,10 @@ export type AggregatePlate = {
 
 export type PlateAvgAggregateOutputType = {
   servedWeightGrams: number | null
+  netPrice: runtime.Decimal | null
+  taxAmount: runtime.Decimal | null
+  profitAmount: runtime.Decimal | null
+  profitMarginRate: runtime.Decimal | null
   costPrice: runtime.Decimal | null
   menuPrice: runtime.Decimal | null
   avgRating: number | null
@@ -49,6 +53,10 @@ export type PlateAvgAggregateOutputType = {
 
 export type PlateSumAggregateOutputType = {
   servedWeightGrams: number | null
+  netPrice: runtime.Decimal | null
+  taxAmount: runtime.Decimal | null
+  profitAmount: runtime.Decimal | null
+  profitMarginRate: runtime.Decimal | null
   costPrice: runtime.Decimal | null
   menuPrice: runtime.Decimal | null
   avgRating: number | null
@@ -76,6 +84,10 @@ export type PlateMinAggregateOutputType = {
   recipeId: string | null
   size: $Enums.PlateSize | null
   servedWeightGrams: number | null
+  netPrice: runtime.Decimal | null
+  taxAmount: runtime.Decimal | null
+  profitAmount: runtime.Decimal | null
+  profitMarginRate: runtime.Decimal | null
   costPrice: runtime.Decimal | null
   menuPrice: runtime.Decimal | null
   avgRating: number | null
@@ -107,6 +119,10 @@ export type PlateMaxAggregateOutputType = {
   recipeId: string | null
   size: $Enums.PlateSize | null
   servedWeightGrams: number | null
+  netPrice: runtime.Decimal | null
+  taxAmount: runtime.Decimal | null
+  profitAmount: runtime.Decimal | null
+  profitMarginRate: runtime.Decimal | null
   costPrice: runtime.Decimal | null
   menuPrice: runtime.Decimal | null
   avgRating: number | null
@@ -138,6 +154,10 @@ export type PlateCountAggregateOutputType = {
   recipeId: number
   size: number
   servedWeightGrams: number
+  netPrice: number
+  taxAmount: number
+  profitAmount: number
+  profitMarginRate: number
   costPrice: number
   menuPrice: number
   avgRating: number
@@ -168,6 +188,10 @@ export type PlateCountAggregateOutputType = {
 
 export type PlateAvgAggregateInputType = {
   servedWeightGrams?: true
+  netPrice?: true
+  taxAmount?: true
+  profitAmount?: true
+  profitMarginRate?: true
   costPrice?: true
   menuPrice?: true
   avgRating?: true
@@ -189,6 +213,10 @@ export type PlateAvgAggregateInputType = {
 
 export type PlateSumAggregateInputType = {
   servedWeightGrams?: true
+  netPrice?: true
+  taxAmount?: true
+  profitAmount?: true
+  profitMarginRate?: true
   costPrice?: true
   menuPrice?: true
   avgRating?: true
@@ -216,6 +244,10 @@ export type PlateMinAggregateInputType = {
   recipeId?: true
   size?: true
   servedWeightGrams?: true
+  netPrice?: true
+  taxAmount?: true
+  profitAmount?: true
+  profitMarginRate?: true
   costPrice?: true
   menuPrice?: true
   avgRating?: true
@@ -247,6 +279,10 @@ export type PlateMaxAggregateInputType = {
   recipeId?: true
   size?: true
   servedWeightGrams?: true
+  netPrice?: true
+  taxAmount?: true
+  profitAmount?: true
+  profitMarginRate?: true
   costPrice?: true
   menuPrice?: true
   avgRating?: true
@@ -278,6 +314,10 @@ export type PlateCountAggregateInputType = {
   recipeId?: true
   size?: true
   servedWeightGrams?: true
+  netPrice?: true
+  taxAmount?: true
+  profitAmount?: true
+  profitMarginRate?: true
   costPrice?: true
   menuPrice?: true
   avgRating?: true
@@ -399,6 +439,10 @@ export type PlateGroupByOutputType = {
   recipeId: string
   size: $Enums.PlateSize
   servedWeightGrams: number | null
+  netPrice: runtime.Decimal
+  taxAmount: runtime.Decimal
+  profitAmount: runtime.Decimal
+  profitMarginRate: runtime.Decimal
   costPrice: runtime.Decimal
   menuPrice: runtime.Decimal
   avgRating: number
@@ -456,6 +500,10 @@ export type PlateWhereInput = {
   recipeId?: Prisma.StringFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
+  netPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFilter<"Plate"> | number
@@ -484,6 +532,7 @@ export type PlateWhereInput = {
   adjustments?: Prisma.PlateAdjustmentListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   tags?: Prisma.PlateTagListRelationFilter
+  saleItems?: Prisma.SaleItemListRelationFilter
 }
 
 export type PlateOrderByWithRelationInput = {
@@ -494,6 +543,10 @@ export type PlateOrderByWithRelationInput = {
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrderInput | Prisma.SortOrder
+  netPrice?: Prisma.SortOrder
+  taxAmount?: Prisma.SortOrder
+  profitAmount?: Prisma.SortOrder
+  profitMarginRate?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -522,6 +575,7 @@ export type PlateOrderByWithRelationInput = {
   adjustments?: Prisma.PlateAdjustmentOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   tags?: Prisma.PlateTagOrderByRelationAggregateInput
+  saleItems?: Prisma.SaleItemOrderByRelationAggregateInput
 }
 
 export type PlateWhereUniqueInput = Prisma.AtLeast<{
@@ -535,6 +589,10 @@ export type PlateWhereUniqueInput = Prisma.AtLeast<{
   recipeId?: Prisma.StringFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
+  netPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFilter<"Plate"> | number
@@ -563,6 +621,7 @@ export type PlateWhereUniqueInput = Prisma.AtLeast<{
   adjustments?: Prisma.PlateAdjustmentListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   tags?: Prisma.PlateTagListRelationFilter
+  saleItems?: Prisma.SaleItemListRelationFilter
 }, "id">
 
 export type PlateOrderByWithAggregationInput = {
@@ -573,6 +632,10 @@ export type PlateOrderByWithAggregationInput = {
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrderInput | Prisma.SortOrder
+  netPrice?: Prisma.SortOrder
+  taxAmount?: Prisma.SortOrder
+  profitAmount?: Prisma.SortOrder
+  profitMarginRate?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -615,6 +678,10 @@ export type PlateScalarWhereWithAggregatesInput = {
   recipeId?: Prisma.StringWithAggregatesFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeWithAggregatesFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableWithAggregatesFilter<"Plate"> | number | null
+  netPrice?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalWithAggregatesFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatWithAggregatesFilter<"Plate"> | number
@@ -648,6 +715,10 @@ export type PlateCreateInput = {
   imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -676,6 +747,7 @@ export type PlateCreateInput = {
   adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutPlateInput
 }
 
 export type PlateUncheckedCreateInput = {
@@ -686,6 +758,10 @@ export type PlateUncheckedCreateInput = {
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -713,6 +789,7 @@ export type PlateUncheckedCreateInput = {
   adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutPlateInput
 }
 
 export type PlateUpdateInput = {
@@ -722,6 +799,10 @@ export type PlateUpdateInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -750,6 +831,7 @@ export type PlateUpdateInput = {
   adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateUncheckedUpdateInput = {
@@ -760,6 +842,10 @@ export type PlateUncheckedUpdateInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -787,6 +873,7 @@ export type PlateUncheckedUpdateInput = {
   adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateCreateManyInput = {
@@ -797,6 +884,10 @@ export type PlateCreateManyInput = {
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -830,6 +921,10 @@ export type PlateUpdateManyMutationInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -864,6 +959,10 @@ export type PlateUncheckedUpdateManyInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -908,6 +1007,10 @@ export type PlateCountOrderByAggregateInput = {
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrder
+  netPrice?: Prisma.SortOrder
+  taxAmount?: Prisma.SortOrder
+  profitAmount?: Prisma.SortOrder
+  profitMarginRate?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -936,6 +1039,10 @@ export type PlateCountOrderByAggregateInput = {
 
 export type PlateAvgOrderByAggregateInput = {
   servedWeightGrams?: Prisma.SortOrder
+  netPrice?: Prisma.SortOrder
+  taxAmount?: Prisma.SortOrder
+  profitAmount?: Prisma.SortOrder
+  profitMarginRate?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -963,6 +1070,10 @@ export type PlateMaxOrderByAggregateInput = {
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrder
+  netPrice?: Prisma.SortOrder
+  taxAmount?: Prisma.SortOrder
+  profitAmount?: Prisma.SortOrder
+  profitMarginRate?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -994,6 +1105,10 @@ export type PlateMinOrderByAggregateInput = {
   recipeId?: Prisma.SortOrder
   size?: Prisma.SortOrder
   servedWeightGrams?: Prisma.SortOrder
+  netPrice?: Prisma.SortOrder
+  taxAmount?: Prisma.SortOrder
+  profitAmount?: Prisma.SortOrder
+  profitMarginRate?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -1019,6 +1134,10 @@ export type PlateMinOrderByAggregateInput = {
 
 export type PlateSumOrderByAggregateInput = {
   servedWeightGrams?: Prisma.SortOrder
+  netPrice?: Prisma.SortOrder
+  taxAmount?: Prisma.SortOrder
+  profitAmount?: Prisma.SortOrder
+  profitMarginRate?: Prisma.SortOrder
   costPrice?: Prisma.SortOrder
   menuPrice?: Prisma.SortOrder
   avgRating?: Prisma.SortOrder
@@ -1101,14 +1220,6 @@ export type EnumPlateSizeFieldUpdateOperationsInput = {
   set?: $Enums.PlateSize
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 export type PlateUpdateallergensInput = {
   set?: $Enums.Allergen[]
   push?: $Enums.Allergen | $Enums.Allergen[]
@@ -1136,6 +1247,20 @@ export type PlateUpdateOneRequiredWithoutAdjustmentsNestedInput = {
   upsert?: Prisma.PlateUpsertWithoutAdjustmentsInput
   connect?: Prisma.PlateWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutAdjustmentsInput, Prisma.PlateUpdateWithoutAdjustmentsInput>, Prisma.PlateUncheckedUpdateWithoutAdjustmentsInput>
+}
+
+export type PlateCreateNestedOneWithoutSaleItemsInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutSaleItemsInput, Prisma.PlateUncheckedCreateWithoutSaleItemsInput>
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutSaleItemsInput
+  connect?: Prisma.PlateWhereUniqueInput
+}
+
+export type PlateUpdateOneRequiredWithoutSaleItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.PlateCreateWithoutSaleItemsInput, Prisma.PlateUncheckedCreateWithoutSaleItemsInput>
+  connectOrCreate?: Prisma.PlateCreateOrConnectWithoutSaleItemsInput
+  upsert?: Prisma.PlateUpsertWithoutSaleItemsInput
+  connect?: Prisma.PlateWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlateUpdateToOneWithWhereWithoutSaleItemsInput, Prisma.PlateUpdateWithoutSaleItemsInput>, Prisma.PlateUncheckedUpdateWithoutSaleItemsInput>
 }
 
 export type PlateCreateNestedOneWithoutReviewsInput = {
@@ -1173,6 +1298,10 @@ export type PlateCreateWithoutRecipeInput = {
   imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -1200,6 +1329,7 @@ export type PlateCreateWithoutRecipeInput = {
   adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutPlateInput
 }
 
 export type PlateUncheckedCreateWithoutRecipeInput = {
@@ -1209,6 +1339,10 @@ export type PlateUncheckedCreateWithoutRecipeInput = {
   imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -1236,6 +1370,7 @@ export type PlateUncheckedCreateWithoutRecipeInput = {
   adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutPlateInput
 }
 
 export type PlateCreateOrConnectWithoutRecipeInput = {
@@ -1275,6 +1410,10 @@ export type PlateScalarWhereInput = {
   recipeId?: Prisma.StringFilter<"Plate"> | string
   size?: Prisma.EnumPlateSizeFilter<"Plate"> | $Enums.PlateSize
   servedWeightGrams?: Prisma.FloatNullableFilter<"Plate"> | number | null
+  netPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFilter<"Plate"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFilter<"Plate"> | number
@@ -1308,6 +1447,10 @@ export type PlateCreateWithoutAdjustmentsInput = {
   imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -1335,6 +1478,7 @@ export type PlateCreateWithoutAdjustmentsInput = {
   recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutPlateInput
 }
 
 export type PlateUncheckedCreateWithoutAdjustmentsInput = {
@@ -1345,6 +1489,10 @@ export type PlateUncheckedCreateWithoutAdjustmentsInput = {
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -1371,6 +1519,7 @@ export type PlateUncheckedCreateWithoutAdjustmentsInput = {
   updatedAt?: Date | string
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
   tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutPlateInput
 }
 
 export type PlateCreateOrConnectWithoutAdjustmentsInput = {
@@ -1396,6 +1545,10 @@ export type PlateUpdateWithoutAdjustmentsInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1423,6 +1576,7 @@ export type PlateUpdateWithoutAdjustmentsInput = {
   recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateUncheckedUpdateWithoutAdjustmentsInput = {
@@ -1433,6 +1587,10 @@ export type PlateUncheckedUpdateWithoutAdjustmentsInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1459,175 +1617,20 @@ export type PlateUncheckedUpdateWithoutAdjustmentsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutPlateNestedInput
 }
 
-export type PlateCreateWithoutReviewsInput = {
+export type PlateCreateWithoutSaleItemsInput = {
   id?: string
   name: string
   description?: string | null
   imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
-  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  avgRating?: number
-  ratingsCount?: number
-  likesCount?: number
-  dislikesCount?: number
-  calculatedCalories?: number
-  calculatedProteins?: number
-  calculatedCarbs?: number
-  calculatedFats?: number
-  calculatedFiber?: number
-  calculatedSugars?: number
-  calculatedSodium?: number
-  calculatedSaturatedFat?: number
-  calculatedTransFat?: number
-  calculatedMonounsaturatedFat?: number
-  calculatedPolyunsaturatedFat?: number
-  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
-  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
-  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
-  nutritionNotes?: string | null
-  isAvailable?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
-  adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
-  tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
-}
-
-export type PlateUncheckedCreateWithoutReviewsInput = {
-  id?: string
-  name: string
-  description?: string | null
-  imageUrl?: string | null
-  recipeId: string
-  size?: $Enums.PlateSize
-  servedWeightGrams?: number | null
-  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  avgRating?: number
-  ratingsCount?: number
-  likesCount?: number
-  dislikesCount?: number
-  calculatedCalories?: number
-  calculatedProteins?: number
-  calculatedCarbs?: number
-  calculatedFats?: number
-  calculatedFiber?: number
-  calculatedSugars?: number
-  calculatedSodium?: number
-  calculatedSaturatedFat?: number
-  calculatedTransFat?: number
-  calculatedMonounsaturatedFat?: number
-  calculatedPolyunsaturatedFat?: number
-  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
-  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
-  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
-  nutritionNotes?: string | null
-  isAvailable?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
-  tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
-}
-
-export type PlateCreateOrConnectWithoutReviewsInput = {
-  where: Prisma.PlateWhereUniqueInput
-  create: Prisma.XOR<Prisma.PlateCreateWithoutReviewsInput, Prisma.PlateUncheckedCreateWithoutReviewsInput>
-}
-
-export type PlateUpsertWithoutReviewsInput = {
-  update: Prisma.XOR<Prisma.PlateUpdateWithoutReviewsInput, Prisma.PlateUncheckedUpdateWithoutReviewsInput>
-  create: Prisma.XOR<Prisma.PlateCreateWithoutReviewsInput, Prisma.PlateUncheckedCreateWithoutReviewsInput>
-  where?: Prisma.PlateWhereInput
-}
-
-export type PlateUpdateToOneWithWhereWithoutReviewsInput = {
-  where?: Prisma.PlateWhereInput
-  data: Prisma.XOR<Prisma.PlateUpdateWithoutReviewsInput, Prisma.PlateUncheckedUpdateWithoutReviewsInput>
-}
-
-export type PlateUpdateWithoutReviewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
-  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
-  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
-  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
-  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
-  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
-  adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
-  tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
-}
-
-export type PlateUncheckedUpdateWithoutReviewsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
-  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
-  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
-  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
-  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
-  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
-  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
-  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
-  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
-  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
-  tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
-}
-
-export type PlateCreateWithoutTagsInput = {
-  id?: string
-  name: string
-  description?: string | null
-  imageUrl?: string | null
-  size?: $Enums.PlateSize
-  servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -1655,9 +1658,10 @@ export type PlateCreateWithoutTagsInput = {
   recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
   adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
+  tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
 }
 
-export type PlateUncheckedCreateWithoutTagsInput = {
+export type PlateUncheckedCreateWithoutSaleItemsInput = {
   id?: string
   name: string
   description?: string | null
@@ -1665,6 +1669,10 @@ export type PlateUncheckedCreateWithoutTagsInput = {
   recipeId: string
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -1691,31 +1699,36 @@ export type PlateUncheckedCreateWithoutTagsInput = {
   updatedAt?: Date | string
   adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
+  tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
 }
 
-export type PlateCreateOrConnectWithoutTagsInput = {
+export type PlateCreateOrConnectWithoutSaleItemsInput = {
   where: Prisma.PlateWhereUniqueInput
-  create: Prisma.XOR<Prisma.PlateCreateWithoutTagsInput, Prisma.PlateUncheckedCreateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutSaleItemsInput, Prisma.PlateUncheckedCreateWithoutSaleItemsInput>
 }
 
-export type PlateUpsertWithoutTagsInput = {
-  update: Prisma.XOR<Prisma.PlateUpdateWithoutTagsInput, Prisma.PlateUncheckedUpdateWithoutTagsInput>
-  create: Prisma.XOR<Prisma.PlateCreateWithoutTagsInput, Prisma.PlateUncheckedCreateWithoutTagsInput>
+export type PlateUpsertWithoutSaleItemsInput = {
+  update: Prisma.XOR<Prisma.PlateUpdateWithoutSaleItemsInput, Prisma.PlateUncheckedUpdateWithoutSaleItemsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutSaleItemsInput, Prisma.PlateUncheckedCreateWithoutSaleItemsInput>
   where?: Prisma.PlateWhereInput
 }
 
-export type PlateUpdateToOneWithWhereWithoutTagsInput = {
+export type PlateUpdateToOneWithWhereWithoutSaleItemsInput = {
   where?: Prisma.PlateWhereInput
-  data: Prisma.XOR<Prisma.PlateUpdateWithoutTagsInput, Prisma.PlateUncheckedUpdateWithoutTagsInput>
+  data: Prisma.XOR<Prisma.PlateUpdateWithoutSaleItemsInput, Prisma.PlateUncheckedUpdateWithoutSaleItemsInput>
 }
 
-export type PlateUpdateWithoutTagsInput = {
+export type PlateUpdateWithoutSaleItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1743,9 +1756,10 @@ export type PlateUpdateWithoutTagsInput = {
   recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
   adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
 }
 
-export type PlateUncheckedUpdateWithoutTagsInput = {
+export type PlateUncheckedUpdateWithoutSaleItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1753,6 +1767,10 @@ export type PlateUncheckedUpdateWithoutTagsInput = {
   recipeId?: Prisma.StringFieldUpdateOperationsInput | string
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1779,6 +1797,367 @@ export type PlateUncheckedUpdateWithoutTagsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
+}
+
+export type PlateCreateWithoutReviewsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  imageUrl?: string | null
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: number
+  ratingsCount?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
+  adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
+  tags?: Prisma.PlateTagCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutPlateInput
+}
+
+export type PlateUncheckedCreateWithoutReviewsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  imageUrl?: string | null
+  recipeId: string
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: number
+  ratingsCount?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
+  tags?: Prisma.PlateTagUncheckedCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutPlateInput
+}
+
+export type PlateCreateOrConnectWithoutReviewsInput = {
+  where: Prisma.PlateWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlateCreateWithoutReviewsInput, Prisma.PlateUncheckedCreateWithoutReviewsInput>
+}
+
+export type PlateUpsertWithoutReviewsInput = {
+  update: Prisma.XOR<Prisma.PlateUpdateWithoutReviewsInput, Prisma.PlateUncheckedUpdateWithoutReviewsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutReviewsInput, Prisma.PlateUncheckedCreateWithoutReviewsInput>
+  where?: Prisma.PlateWhereInput
+}
+
+export type PlateUpdateToOneWithWhereWithoutReviewsInput = {
+  where?: Prisma.PlateWhereInput
+  data: Prisma.XOR<Prisma.PlateUpdateWithoutReviewsInput, Prisma.PlateUncheckedUpdateWithoutReviewsInput>
+}
+
+export type PlateUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
+  adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutPlateNestedInput
+}
+
+export type PlateUncheckedUpdateWithoutReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
+  tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutPlateNestedInput
+}
+
+export type PlateCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  imageUrl?: string | null
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: number
+  ratingsCount?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  recipe: Prisma.RecipeCreateNestedOneWithoutPlatesInput
+  adjustments?: Prisma.PlateAdjustmentCreateNestedManyWithoutPlateInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemCreateNestedManyWithoutPlateInput
+}
+
+export type PlateUncheckedCreateWithoutTagsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  imageUrl?: string | null
+  recipeId: string
+  size?: $Enums.PlateSize
+  servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: number
+  ratingsCount?: number
+  likesCount?: number
+  dislikesCount?: number
+  calculatedCalories?: number
+  calculatedProteins?: number
+  calculatedCarbs?: number
+  calculatedFats?: number
+  calculatedFiber?: number
+  calculatedSugars?: number
+  calculatedSodium?: number
+  calculatedSaturatedFat?: number
+  calculatedTransFat?: number
+  calculatedMonounsaturatedFat?: number
+  calculatedPolyunsaturatedFat?: number
+  allergens?: Prisma.PlateCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateCreatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: string | null
+  isAvailable?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  adjustments?: Prisma.PlateAdjustmentUncheckedCreateNestedManyWithoutPlateInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutPlateInput
+  saleItems?: Prisma.SaleItemUncheckedCreateNestedManyWithoutPlateInput
+}
+
+export type PlateCreateOrConnectWithoutTagsInput = {
+  where: Prisma.PlateWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlateCreateWithoutTagsInput, Prisma.PlateUncheckedCreateWithoutTagsInput>
+}
+
+export type PlateUpsertWithoutTagsInput = {
+  update: Prisma.XOR<Prisma.PlateUpdateWithoutTagsInput, Prisma.PlateUncheckedUpdateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.PlateCreateWithoutTagsInput, Prisma.PlateUncheckedCreateWithoutTagsInput>
+  where?: Prisma.PlateWhereInput
+}
+
+export type PlateUpdateToOneWithWhereWithoutTagsInput = {
+  where?: Prisma.PlateWhereInput
+  data: Prisma.XOR<Prisma.PlateUpdateWithoutTagsInput, Prisma.PlateUncheckedUpdateWithoutTagsInput>
+}
+
+export type PlateUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  recipe?: Prisma.RecipeUpdateOneRequiredWithoutPlatesNestedInput
+  adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutPlateNestedInput
+}
+
+export type PlateUncheckedUpdateWithoutTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  recipeId?: Prisma.StringFieldUpdateOperationsInput | string
+  size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
+  servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  ratingsCount?: Prisma.IntFieldUpdateOperationsInput | number
+  likesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  dislikesCount?: Prisma.IntFieldUpdateOperationsInput | number
+  calculatedCalories?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedProteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedCarbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFats?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedFiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedSaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedTransFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedMonounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  calculatedPolyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.PlateUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.PlateUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.PlateUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  nutritionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateCreateManyRecipeInput = {
@@ -1788,6 +2167,10 @@ export type PlateCreateManyRecipeInput = {
   imageUrl?: string | null
   size?: $Enums.PlateSize
   servedWeightGrams?: number | null
+  netPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: number
@@ -1821,6 +2204,10 @@ export type PlateUpdateWithoutRecipeInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1848,6 +2235,7 @@ export type PlateUpdateWithoutRecipeInput = {
   adjustments?: Prisma.PlateAdjustmentUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateUncheckedUpdateWithoutRecipeInput = {
@@ -1857,6 +2245,10 @@ export type PlateUncheckedUpdateWithoutRecipeInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1884,6 +2276,7 @@ export type PlateUncheckedUpdateWithoutRecipeInput = {
   adjustments?: Prisma.PlateAdjustmentUncheckedUpdateManyWithoutPlateNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutPlateNestedInput
   tags?: Prisma.PlateTagUncheckedUpdateManyWithoutPlateNestedInput
+  saleItems?: Prisma.SaleItemUncheckedUpdateManyWithoutPlateNestedInput
 }
 
 export type PlateUncheckedUpdateManyWithoutRecipeInput = {
@@ -1893,6 +2286,10 @@ export type PlateUncheckedUpdateManyWithoutRecipeInput = {
   imageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   size?: Prisma.EnumPlateSizeFieldUpdateOperationsInput | $Enums.PlateSize
   servedWeightGrams?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  netPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  profitMarginRate?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   menuPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   avgRating?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1928,12 +2325,14 @@ export type PlateCountOutputType = {
   adjustments: number
   reviews: number
   tags: number
+  saleItems: number
 }
 
 export type PlateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   adjustments?: boolean | PlateCountOutputTypeCountAdjustmentsArgs
   reviews?: boolean | PlateCountOutputTypeCountReviewsArgs
   tags?: boolean | PlateCountOutputTypeCountTagsArgs
+  saleItems?: boolean | PlateCountOutputTypeCountSaleItemsArgs
 }
 
 /**
@@ -1967,6 +2366,13 @@ export type PlateCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Exte
   where?: Prisma.PlateTagWhereInput
 }
 
+/**
+ * PlateCountOutputType without action
+ */
+export type PlateCountOutputTypeCountSaleItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SaleItemWhereInput
+}
+
 
 export type PlateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1976,6 +2382,10 @@ export type PlateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
+  netPrice?: boolean
+  taxAmount?: boolean
+  profitAmount?: boolean
+  profitMarginRate?: boolean
   costPrice?: boolean
   menuPrice?: boolean
   avgRating?: boolean
@@ -2004,6 +2414,7 @@ export type PlateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   adjustments?: boolean | Prisma.Plate$adjustmentsArgs<ExtArgs>
   reviews?: boolean | Prisma.Plate$reviewsArgs<ExtArgs>
   tags?: boolean | Prisma.Plate$tagsArgs<ExtArgs>
+  saleItems?: boolean | Prisma.Plate$saleItemsArgs<ExtArgs>
   _count?: boolean | Prisma.PlateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plate"]>
 
@@ -2015,6 +2426,10 @@ export type PlateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
+  netPrice?: boolean
+  taxAmount?: boolean
+  profitAmount?: boolean
+  profitMarginRate?: boolean
   costPrice?: boolean
   menuPrice?: boolean
   avgRating?: boolean
@@ -2050,6 +2465,10 @@ export type PlateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
+  netPrice?: boolean
+  taxAmount?: boolean
+  profitAmount?: boolean
+  profitMarginRate?: boolean
   costPrice?: boolean
   menuPrice?: boolean
   avgRating?: boolean
@@ -2085,6 +2504,10 @@ export type PlateSelectScalar = {
   recipeId?: boolean
   size?: boolean
   servedWeightGrams?: boolean
+  netPrice?: boolean
+  taxAmount?: boolean
+  profitAmount?: boolean
+  profitMarginRate?: boolean
   costPrice?: boolean
   menuPrice?: boolean
   avgRating?: boolean
@@ -2111,12 +2534,13 @@ export type PlateSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "imageUrl" | "recipeId" | "size" | "servedWeightGrams" | "costPrice" | "menuPrice" | "avgRating" | "ratingsCount" | "likesCount" | "dislikesCount" | "calculatedCalories" | "calculatedProteins" | "calculatedCarbs" | "calculatedFats" | "calculatedFiber" | "calculatedSugars" | "calculatedSodium" | "calculatedSaturatedFat" | "calculatedTransFat" | "calculatedMonounsaturatedFat" | "calculatedPolyunsaturatedFat" | "allergens" | "dietaryTags" | "nutritionTags" | "nutritionNotes" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
+export type PlateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "imageUrl" | "recipeId" | "size" | "servedWeightGrams" | "netPrice" | "taxAmount" | "profitAmount" | "profitMarginRate" | "costPrice" | "menuPrice" | "avgRating" | "ratingsCount" | "likesCount" | "dislikesCount" | "calculatedCalories" | "calculatedProteins" | "calculatedCarbs" | "calculatedFats" | "calculatedFiber" | "calculatedSugars" | "calculatedSodium" | "calculatedSaturatedFat" | "calculatedTransFat" | "calculatedMonounsaturatedFat" | "calculatedPolyunsaturatedFat" | "allergens" | "dietaryTags" | "nutritionTags" | "nutritionNotes" | "isAvailable" | "createdAt" | "updatedAt", ExtArgs["result"]["plate"]>
 export type PlateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   recipe?: boolean | Prisma.RecipeDefaultArgs<ExtArgs>
   adjustments?: boolean | Prisma.Plate$adjustmentsArgs<ExtArgs>
   reviews?: boolean | Prisma.Plate$reviewsArgs<ExtArgs>
   tags?: boolean | Prisma.Plate$tagsArgs<ExtArgs>
+  saleItems?: boolean | Prisma.Plate$saleItemsArgs<ExtArgs>
   _count?: boolean | Prisma.PlateCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PlateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2133,6 +2557,7 @@ export type $PlatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     adjustments: Prisma.$PlateAdjustmentPayload<ExtArgs>[]
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     tags: Prisma.$PlateTagPayload<ExtArgs>[]
+    saleItems: Prisma.$SaleItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2142,6 +2567,10 @@ export type $PlatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     recipeId: string
     size: $Enums.PlateSize
     servedWeightGrams: number | null
+    netPrice: runtime.Decimal
+    taxAmount: runtime.Decimal
+    profitAmount: runtime.Decimal
+    profitMarginRate: runtime.Decimal
     costPrice: runtime.Decimal
     menuPrice: runtime.Decimal
     avgRating: number
@@ -2564,6 +2993,7 @@ export interface Prisma__PlateClient<T, Null = never, ExtArgs extends runtime.Ty
   adjustments<T extends Prisma.Plate$adjustmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$adjustmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reviews<T extends Prisma.Plate$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tags<T extends Prisma.Plate$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlateTagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  saleItems<T extends Prisma.Plate$saleItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plate$saleItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2600,6 +3030,10 @@ export interface PlateFieldRefs {
   readonly recipeId: Prisma.FieldRef<"Plate", 'String'>
   readonly size: Prisma.FieldRef<"Plate", 'PlateSize'>
   readonly servedWeightGrams: Prisma.FieldRef<"Plate", 'Float'>
+  readonly netPrice: Prisma.FieldRef<"Plate", 'Decimal'>
+  readonly taxAmount: Prisma.FieldRef<"Plate", 'Decimal'>
+  readonly profitAmount: Prisma.FieldRef<"Plate", 'Decimal'>
+  readonly profitMarginRate: Prisma.FieldRef<"Plate", 'Decimal'>
   readonly costPrice: Prisma.FieldRef<"Plate", 'Decimal'>
   readonly menuPrice: Prisma.FieldRef<"Plate", 'Decimal'>
   readonly avgRating: Prisma.FieldRef<"Plate", 'Float'>
@@ -3094,6 +3528,30 @@ export type Plate$tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   distinct?: Prisma.PlateTagScalarFieldEnum | Prisma.PlateTagScalarFieldEnum[]
+}
+
+/**
+ * Plate.saleItems
+ */
+export type Plate$saleItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SaleItem
+   */
+  select?: Prisma.SaleItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SaleItem
+   */
+  omit?: Prisma.SaleItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleItemInclude<ExtArgs> | null
+  where?: Prisma.SaleItemWhereInput
+  orderBy?: Prisma.SaleItemOrderByWithRelationInput | Prisma.SaleItemOrderByWithRelationInput[]
+  cursor?: Prisma.SaleItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SaleItemScalarFieldEnum | Prisma.SaleItemScalarFieldEnum[]
 }
 
 /**

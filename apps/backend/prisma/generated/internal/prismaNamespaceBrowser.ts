@@ -61,6 +61,15 @@ export const ModelName = {
   RecipeItem: 'RecipeItem',
   Plate: 'Plate',
   PlateAdjustment: 'PlateAdjustment',
+  Supplier: 'Supplier',
+  SupplierIngredient: 'SupplierIngredient',
+  StorageLocation: 'StorageLocation',
+  InventoryLevel: 'InventoryLevel',
+  TaxRule: 'TaxRule',
+  Purchase: 'Purchase',
+  PurchaseItem: 'PurchaseItem',
+  Sale: 'Sale',
+  SaleItem: 'SaleItem',
   Review: 'Review',
   Tag: 'Tag',
   PlateTag: 'PlateTag'
@@ -132,6 +141,9 @@ export const IngredientScalarFieldEnum = {
   subCategory: 'subCategory',
   primaryFlavor: 'primaryFlavor',
   nutritionBasisGrams: 'nutritionBasisGrams',
+  pricingBasisGrams: 'pricingBasisGrams',
+  costPrice: 'costPrice',
+  salePrice: 'salePrice',
   calories: 'calories',
   proteins: 'proteins',
   carbs: 'carbs',
@@ -148,6 +160,10 @@ export const IngredientScalarFieldEnum = {
   nutritionTags: 'nutritionTags',
   notes: 'notes',
   extraAttributes: 'extraAttributes',
+  preferredSupplierId: 'preferredSupplierId',
+  defaultStorageType: 'defaultStorageType',
+  maxStockGrams: 'maxStockGrams',
+  reorderPointGrams: 'reorderPointGrams',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -229,6 +245,10 @@ export const PlateScalarFieldEnum = {
   recipeId: 'recipeId',
   size: 'size',
   servedWeightGrams: 'servedWeightGrams',
+  netPrice: 'netPrice',
+  taxAmount: 'taxAmount',
+  profitAmount: 'profitAmount',
+  profitMarginRate: 'profitMarginRate',
   costPrice: 'costPrice',
   menuPrice: 'menuPrice',
   avgRating: 'avgRating',
@@ -270,6 +290,164 @@ export const PlateAdjustmentScalarFieldEnum = {
 } as const
 
 export type PlateAdjustmentScalarFieldEnum = (typeof PlateAdjustmentScalarFieldEnum)[keyof typeof PlateAdjustmentScalarFieldEnum]
+
+
+export const SupplierScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  contactName: 'contactName',
+  email: 'email',
+  phone: 'phone',
+  leadTimeDays: 'leadTimeDays',
+  notes: 'notes',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SupplierScalarFieldEnum = (typeof SupplierScalarFieldEnum)[keyof typeof SupplierScalarFieldEnum]
+
+
+export const SupplierIngredientScalarFieldEnum = {
+  id: 'id',
+  supplierId: 'supplierId',
+  ingredientId: 'ingredientId',
+  supplierSku: 'supplierSku',
+  purchaseUnitLabel: 'purchaseUnitLabel',
+  pricingBasisGrams: 'pricingBasisGrams',
+  unitCostNet: 'unitCostNet',
+  minimumOrderGrams: 'minimumOrderGrams',
+  leadTimeDays: 'leadTimeDays',
+  isPreferred: 'isPreferred',
+  lastQuotedAt: 'lastQuotedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SupplierIngredientScalarFieldEnum = (typeof SupplierIngredientScalarFieldEnum)[keyof typeof SupplierIngredientScalarFieldEnum]
+
+
+export const StorageLocationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  storageType: 'storageType',
+  capacityGrams: 'capacityGrams',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type StorageLocationScalarFieldEnum = (typeof StorageLocationScalarFieldEnum)[keyof typeof StorageLocationScalarFieldEnum]
+
+
+export const InventoryLevelScalarFieldEnum = {
+  id: 'id',
+  ingredientId: 'ingredientId',
+  storageLocationId: 'storageLocationId',
+  currentQuantityGrams: 'currentQuantityGrams',
+  reservedQuantityGrams: 'reservedQuantityGrams',
+  maxQuantityGrams: 'maxQuantityGrams',
+  reorderPointGrams: 'reorderPointGrams',
+  averageUnitCost: 'averageUnitCost',
+  lastPurchaseUnitCost: 'lastPurchaseUnitCost',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventoryLevelScalarFieldEnum = (typeof InventoryLevelScalarFieldEnum)[keyof typeof InventoryLevelScalarFieldEnum]
+
+
+export const TaxRuleScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  name: 'name',
+  description: 'description',
+  rate: 'rate',
+  includedInMenuPrice: 'includedInMenuPrice',
+  isActive: 'isActive',
+  sortOrder: 'sortOrder',
+  sourceLabel: 'sourceLabel',
+  note: 'note',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TaxRuleScalarFieldEnum = (typeof TaxRuleScalarFieldEnum)[keyof typeof TaxRuleScalarFieldEnum]
+
+
+export const PurchaseScalarFieldEnum = {
+  id: 'id',
+  supplierId: 'supplierId',
+  documentNumber: 'documentNumber',
+  purchasedAt: 'purchasedAt',
+  receivedAt: 'receivedAt',
+  status: 'status',
+  currencyCode: 'currencyCode',
+  subtotalNet: 'subtotalNet',
+  taxAmount: 'taxAmount',
+  totalAmount: 'totalAmount',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PurchaseScalarFieldEnum = (typeof PurchaseScalarFieldEnum)[keyof typeof PurchaseScalarFieldEnum]
+
+
+export const PurchaseItemScalarFieldEnum = {
+  id: 'id',
+  purchaseId: 'purchaseId',
+  ingredientId: 'ingredientId',
+  storageLocationId: 'storageLocationId',
+  quantityGrams: 'quantityGrams',
+  pricingBasisGrams: 'pricingBasisGrams',
+  unitCostNet: 'unitCostNet',
+  taxRate: 'taxRate',
+  lineNetAmount: 'lineNetAmount',
+  lineTaxAmount: 'lineTaxAmount',
+  lineTotalAmount: 'lineTotalAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type PurchaseItemScalarFieldEnum = (typeof PurchaseItemScalarFieldEnum)[keyof typeof PurchaseItemScalarFieldEnum]
+
+
+export const SaleScalarFieldEnum = {
+  id: 'id',
+  soldAt: 'soldAt',
+  status: 'status',
+  channel: 'channel',
+  currencyCode: 'currencyCode',
+  subtotalNet: 'subtotalNet',
+  taxAmount: 'taxAmount',
+  totalAmount: 'totalAmount',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SaleScalarFieldEnum = (typeof SaleScalarFieldEnum)[keyof typeof SaleScalarFieldEnum]
+
+
+export const SaleItemScalarFieldEnum = {
+  id: 'id',
+  saleId: 'saleId',
+  plateId: 'plateId',
+  quantity: 'quantity',
+  unitCostAmount: 'unitCostAmount',
+  unitNetAmount: 'unitNetAmount',
+  unitTaxAmount: 'unitTaxAmount',
+  unitTotalAmount: 'unitTotalAmount',
+  lineCostAmount: 'lineCostAmount',
+  lineNetAmount: 'lineNetAmount',
+  lineTaxAmount: 'lineTaxAmount',
+  lineTotalAmount: 'lineTotalAmount',
+  createdAt: 'createdAt'
+} as const
+
+export type SaleItemScalarFieldEnum = (typeof SaleItemScalarFieldEnum)[keyof typeof SaleItemScalarFieldEnum]
 
 
 export const ReviewScalarFieldEnum = {

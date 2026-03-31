@@ -16,6 +16,7 @@ FRONTEND_HOST = "0.0.0.0"
 VITE_MODE = "dev"
 VITE_BACKEND_HOST = "localhost"
 VITE_BACKEND_PORT = "3000"
+REFRESH_SECRET = "SOyYzFxJdnQu9hSJ25qI0GMxHYb4RciDEhqrlBB91tSWnBBodKR+xuxo7mfW+5+WkeNj1rAruUzmGKUAZWz3mg=="
 
 [workflows]
 runButton = "Project"
@@ -42,19 +43,19 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "bun --cwd apps/backend dev"
+args = "cd apps/backend && bun install && bun dev"
 
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "bun --cwd apps/frontend dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd apps/frontend && bun install && bun dev"
+waitForPort = 5000
 
 [[ports]]
 localPort = 3000
@@ -62,7 +63,11 @@ externalPort = 80
 
 [[ports]]
 localPort = 5000
-externalPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5173
+externalPort = 5173
 
 [deployment]
 deploymentTarget = "autoscale"

@@ -92,6 +92,51 @@ export type Plate = Prisma.PlateModel
  */
 export type PlateAdjustment = Prisma.PlateAdjustmentModel
 /**
+ * Model Supplier
+ * 
+ */
+export type Supplier = Prisma.SupplierModel
+/**
+ * Model SupplierIngredient
+ * 
+ */
+export type SupplierIngredient = Prisma.SupplierIngredientModel
+/**
+ * Model StorageLocation
+ * 
+ */
+export type StorageLocation = Prisma.StorageLocationModel
+/**
+ * Model InventoryLevel
+ * 
+ */
+export type InventoryLevel = Prisma.InventoryLevelModel
+/**
+ * Model TaxRule
+ * 
+ */
+export type TaxRule = Prisma.TaxRuleModel
+/**
+ * Model Purchase
+ * 
+ */
+export type Purchase = Prisma.PurchaseModel
+/**
+ * Model PurchaseItem
+ * 
+ */
+export type PurchaseItem = Prisma.PurchaseItemModel
+/**
+ * Model Sale
+ * 
+ */
+export type Sale = Prisma.SaleModel
+/**
+ * Model SaleItem
+ * 
+ */
+export type SaleItem = Prisma.SaleItemModel
+/**
  * Model Review
  * 
  */

@@ -28,6 +28,9 @@ export type AggregateIngredient = {
 
 export type IngredientAvgAggregateOutputType = {
   nutritionBasisGrams: number | null
+  pricingBasisGrams: number | null
+  costPrice: runtime.Decimal | null
+  salePrice: runtime.Decimal | null
   calories: number | null
   proteins: number | null
   carbs: number | null
@@ -39,10 +42,15 @@ export type IngredientAvgAggregateOutputType = {
   transFat: number | null
   monounsaturatedFat: number | null
   polyunsaturatedFat: number | null
+  maxStockGrams: number | null
+  reorderPointGrams: number | null
 }
 
 export type IngredientSumAggregateOutputType = {
   nutritionBasisGrams: number | null
+  pricingBasisGrams: number | null
+  costPrice: runtime.Decimal | null
+  salePrice: runtime.Decimal | null
   calories: number | null
   proteins: number | null
   carbs: number | null
@@ -54,6 +62,8 @@ export type IngredientSumAggregateOutputType = {
   transFat: number | null
   monounsaturatedFat: number | null
   polyunsaturatedFat: number | null
+  maxStockGrams: number | null
+  reorderPointGrams: number | null
 }
 
 export type IngredientMinAggregateOutputType = {
@@ -64,6 +74,9 @@ export type IngredientMinAggregateOutputType = {
   subCategory: string | null
   primaryFlavor: $Enums.FlavorProfile | null
   nutritionBasisGrams: number | null
+  pricingBasisGrams: number | null
+  costPrice: runtime.Decimal | null
+  salePrice: runtime.Decimal | null
   calories: number | null
   proteins: number | null
   carbs: number | null
@@ -76,6 +89,10 @@ export type IngredientMinAggregateOutputType = {
   monounsaturatedFat: number | null
   polyunsaturatedFat: number | null
   notes: string | null
+  preferredSupplierId: string | null
+  defaultStorageType: $Enums.StorageType | null
+  maxStockGrams: number | null
+  reorderPointGrams: number | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -89,6 +106,9 @@ export type IngredientMaxAggregateOutputType = {
   subCategory: string | null
   primaryFlavor: $Enums.FlavorProfile | null
   nutritionBasisGrams: number | null
+  pricingBasisGrams: number | null
+  costPrice: runtime.Decimal | null
+  salePrice: runtime.Decimal | null
   calories: number | null
   proteins: number | null
   carbs: number | null
@@ -101,6 +121,10 @@ export type IngredientMaxAggregateOutputType = {
   monounsaturatedFat: number | null
   polyunsaturatedFat: number | null
   notes: string | null
+  preferredSupplierId: string | null
+  defaultStorageType: $Enums.StorageType | null
+  maxStockGrams: number | null
+  reorderPointGrams: number | null
   isActive: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -114,6 +138,9 @@ export type IngredientCountAggregateOutputType = {
   subCategory: number
   primaryFlavor: number
   nutritionBasisGrams: number
+  pricingBasisGrams: number
+  costPrice: number
+  salePrice: number
   calories: number
   proteins: number
   carbs: number
@@ -130,6 +157,10 @@ export type IngredientCountAggregateOutputType = {
   nutritionTags: number
   notes: number
   extraAttributes: number
+  preferredSupplierId: number
+  defaultStorageType: number
+  maxStockGrams: number
+  reorderPointGrams: number
   isActive: number
   createdAt: number
   updatedAt: number
@@ -139,6 +170,9 @@ export type IngredientCountAggregateOutputType = {
 
 export type IngredientAvgAggregateInputType = {
   nutritionBasisGrams?: true
+  pricingBasisGrams?: true
+  costPrice?: true
+  salePrice?: true
   calories?: true
   proteins?: true
   carbs?: true
@@ -150,10 +184,15 @@ export type IngredientAvgAggregateInputType = {
   transFat?: true
   monounsaturatedFat?: true
   polyunsaturatedFat?: true
+  maxStockGrams?: true
+  reorderPointGrams?: true
 }
 
 export type IngredientSumAggregateInputType = {
   nutritionBasisGrams?: true
+  pricingBasisGrams?: true
+  costPrice?: true
+  salePrice?: true
   calories?: true
   proteins?: true
   carbs?: true
@@ -165,6 +204,8 @@ export type IngredientSumAggregateInputType = {
   transFat?: true
   monounsaturatedFat?: true
   polyunsaturatedFat?: true
+  maxStockGrams?: true
+  reorderPointGrams?: true
 }
 
 export type IngredientMinAggregateInputType = {
@@ -175,6 +216,9 @@ export type IngredientMinAggregateInputType = {
   subCategory?: true
   primaryFlavor?: true
   nutritionBasisGrams?: true
+  pricingBasisGrams?: true
+  costPrice?: true
+  salePrice?: true
   calories?: true
   proteins?: true
   carbs?: true
@@ -187,6 +231,10 @@ export type IngredientMinAggregateInputType = {
   monounsaturatedFat?: true
   polyunsaturatedFat?: true
   notes?: true
+  preferredSupplierId?: true
+  defaultStorageType?: true
+  maxStockGrams?: true
+  reorderPointGrams?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -200,6 +248,9 @@ export type IngredientMaxAggregateInputType = {
   subCategory?: true
   primaryFlavor?: true
   nutritionBasisGrams?: true
+  pricingBasisGrams?: true
+  costPrice?: true
+  salePrice?: true
   calories?: true
   proteins?: true
   carbs?: true
@@ -212,6 +263,10 @@ export type IngredientMaxAggregateInputType = {
   monounsaturatedFat?: true
   polyunsaturatedFat?: true
   notes?: true
+  preferredSupplierId?: true
+  defaultStorageType?: true
+  maxStockGrams?: true
+  reorderPointGrams?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -225,6 +280,9 @@ export type IngredientCountAggregateInputType = {
   subCategory?: true
   primaryFlavor?: true
   nutritionBasisGrams?: true
+  pricingBasisGrams?: true
+  costPrice?: true
+  salePrice?: true
   calories?: true
   proteins?: true
   carbs?: true
@@ -241,6 +299,10 @@ export type IngredientCountAggregateInputType = {
   nutritionTags?: true
   notes?: true
   extraAttributes?: true
+  preferredSupplierId?: true
+  defaultStorageType?: true
+  maxStockGrams?: true
+  reorderPointGrams?: true
   isActive?: true
   createdAt?: true
   updatedAt?: true
@@ -341,6 +403,9 @@ export type IngredientGroupByOutputType = {
   subCategory: string | null
   primaryFlavor: $Enums.FlavorProfile | null
   nutritionBasisGrams: number
+  pricingBasisGrams: number
+  costPrice: runtime.Decimal
+  salePrice: runtime.Decimal
   calories: number
   proteins: number
   carbs: number
@@ -357,6 +422,10 @@ export type IngredientGroupByOutputType = {
   nutritionTags: $Enums.NutritionTag[]
   notes: string | null
   extraAttributes: runtime.JsonValue | null
+  preferredSupplierId: string | null
+  defaultStorageType: $Enums.StorageType
+  maxStockGrams: number
+  reorderPointGrams: number
   isActive: boolean
   createdAt: Date
   updatedAt: Date
@@ -393,6 +462,9 @@ export type IngredientWhereInput = {
   subCategory?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   primaryFlavor?: Prisma.EnumFlavorProfileNullableFilter<"Ingredient"> | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  pricingBasisGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  costPrice?: Prisma.DecimalFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFilter<"Ingredient"> | number
   proteins?: Prisma.FloatFilter<"Ingredient"> | number
   carbs?: Prisma.FloatFilter<"Ingredient"> | number
@@ -409,10 +481,18 @@ export type IngredientWhereInput = {
   nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Ingredient">
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   extraAttributes?: Prisma.JsonNullableFilter<"Ingredient">
+  preferredSupplierId?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFilter<"Ingredient"> | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  reorderPointGrams?: Prisma.FloatFilter<"Ingredient"> | number
   isActive?: Prisma.BoolFilter<"Ingredient"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
+  preferredSupplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   variants?: Prisma.IngredientVariantListRelationFilter
+  inventoryLevels?: Prisma.InventoryLevelListRelationFilter
+  supplierSources?: Prisma.SupplierIngredientListRelationFilter
+  purchaseItems?: Prisma.PurchaseItemListRelationFilter
 }
 
 export type IngredientOrderByWithRelationInput = {
@@ -423,6 +503,9 @@ export type IngredientOrderByWithRelationInput = {
   subCategory?: Prisma.SortOrderInput | Prisma.SortOrder
   primaryFlavor?: Prisma.SortOrderInput | Prisma.SortOrder
   nutritionBasisGrams?: Prisma.SortOrder
+  pricingBasisGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  salePrice?: Prisma.SortOrder
   calories?: Prisma.SortOrder
   proteins?: Prisma.SortOrder
   carbs?: Prisma.SortOrder
@@ -439,10 +522,18 @@ export type IngredientOrderByWithRelationInput = {
   nutritionTags?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   extraAttributes?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferredSupplierId?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultStorageType?: Prisma.SortOrder
+  maxStockGrams?: Prisma.SortOrder
+  reorderPointGrams?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  preferredSupplier?: Prisma.SupplierOrderByWithRelationInput
   variants?: Prisma.IngredientVariantOrderByRelationAggregateInput
+  inventoryLevels?: Prisma.InventoryLevelOrderByRelationAggregateInput
+  supplierSources?: Prisma.SupplierIngredientOrderByRelationAggregateInput
+  purchaseItems?: Prisma.PurchaseItemOrderByRelationAggregateInput
 }
 
 export type IngredientWhereUniqueInput = Prisma.AtLeast<{
@@ -456,6 +547,9 @@ export type IngredientWhereUniqueInput = Prisma.AtLeast<{
   subCategory?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   primaryFlavor?: Prisma.EnumFlavorProfileNullableFilter<"Ingredient"> | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  pricingBasisGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  costPrice?: Prisma.DecimalFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFilter<"Ingredient"> | number
   proteins?: Prisma.FloatFilter<"Ingredient"> | number
   carbs?: Prisma.FloatFilter<"Ingredient"> | number
@@ -472,10 +566,18 @@ export type IngredientWhereUniqueInput = Prisma.AtLeast<{
   nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Ingredient">
   notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
   extraAttributes?: Prisma.JsonNullableFilter<"Ingredient">
+  preferredSupplierId?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFilter<"Ingredient"> | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  reorderPointGrams?: Prisma.FloatFilter<"Ingredient"> | number
   isActive?: Prisma.BoolFilter<"Ingredient"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
+  preferredSupplier?: Prisma.XOR<Prisma.SupplierNullableScalarRelationFilter, Prisma.SupplierWhereInput> | null
   variants?: Prisma.IngredientVariantListRelationFilter
+  inventoryLevels?: Prisma.InventoryLevelListRelationFilter
+  supplierSources?: Prisma.SupplierIngredientListRelationFilter
+  purchaseItems?: Prisma.PurchaseItemListRelationFilter
 }, "id" | "name">
 
 export type IngredientOrderByWithAggregationInput = {
@@ -486,6 +588,9 @@ export type IngredientOrderByWithAggregationInput = {
   subCategory?: Prisma.SortOrderInput | Prisma.SortOrder
   primaryFlavor?: Prisma.SortOrderInput | Prisma.SortOrder
   nutritionBasisGrams?: Prisma.SortOrder
+  pricingBasisGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  salePrice?: Prisma.SortOrder
   calories?: Prisma.SortOrder
   proteins?: Prisma.SortOrder
   carbs?: Prisma.SortOrder
@@ -502,6 +607,10 @@ export type IngredientOrderByWithAggregationInput = {
   nutritionTags?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   extraAttributes?: Prisma.SortOrderInput | Prisma.SortOrder
+  preferredSupplierId?: Prisma.SortOrderInput | Prisma.SortOrder
+  defaultStorageType?: Prisma.SortOrder
+  maxStockGrams?: Prisma.SortOrder
+  reorderPointGrams?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -523,6 +632,9 @@ export type IngredientScalarWhereWithAggregatesInput = {
   subCategory?: Prisma.StringNullableWithAggregatesFilter<"Ingredient"> | string | null
   primaryFlavor?: Prisma.EnumFlavorProfileNullableWithAggregatesFilter<"Ingredient"> | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
+  pricingBasisGrams?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
+  costPrice?: Prisma.DecimalWithAggregatesFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalWithAggregatesFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
   proteins?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
   carbs?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
@@ -539,6 +651,10 @@ export type IngredientScalarWhereWithAggregatesInput = {
   nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Ingredient">
   notes?: Prisma.StringNullableWithAggregatesFilter<"Ingredient"> | string | null
   extraAttributes?: Prisma.JsonNullableWithAggregatesFilter<"Ingredient">
+  preferredSupplierId?: Prisma.StringNullableWithAggregatesFilter<"Ingredient"> | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeWithAggregatesFilter<"Ingredient"> | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
+  reorderPointGrams?: Prisma.FloatWithAggregatesFilter<"Ingredient"> | number
   isActive?: Prisma.BoolWithAggregatesFilter<"Ingredient"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Ingredient"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Ingredient"> | Date | string
@@ -552,6 +668,9 @@ export type IngredientCreateInput = {
   subCategory?: string | null
   primaryFlavor?: $Enums.FlavorProfile | null
   nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: number
   proteins?: number
   carbs?: number
@@ -568,10 +687,17 @@ export type IngredientCreateInput = {
   nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferredSupplier?: Prisma.SupplierCreateNestedOneWithoutPreferredIngredientsInput
   variants?: Prisma.IngredientVariantCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientUncheckedCreateInput = {
@@ -582,6 +708,9 @@ export type IngredientUncheckedCreateInput = {
   subCategory?: string | null
   primaryFlavor?: $Enums.FlavorProfile | null
   nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: number
   proteins?: number
   carbs?: number
@@ -598,10 +727,17 @@ export type IngredientUncheckedCreateInput = {
   nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: string | null
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.IngredientVariantUncheckedCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientUpdateInput = {
@@ -612,6 +748,9 @@ export type IngredientUpdateInput = {
   subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFieldUpdateOperationsInput | number
   proteins?: Prisma.FloatFieldUpdateOperationsInput | number
   carbs?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -628,10 +767,17 @@ export type IngredientUpdateInput = {
   nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredSupplier?: Prisma.SupplierUpdateOneWithoutPreferredIngredientsNestedInput
   variants?: Prisma.IngredientVariantUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUpdateManyWithoutIngredientNestedInput
 }
 
 export type IngredientUncheckedUpdateInput = {
@@ -642,6 +788,9 @@ export type IngredientUncheckedUpdateInput = {
   subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFieldUpdateOperationsInput | number
   proteins?: Prisma.FloatFieldUpdateOperationsInput | number
   carbs?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -658,10 +807,17 @@ export type IngredientUncheckedUpdateInput = {
   nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.IngredientVariantUncheckedUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedUpdateManyWithoutIngredientNestedInput
 }
 
 export type IngredientCreateManyInput = {
@@ -672,6 +828,9 @@ export type IngredientCreateManyInput = {
   subCategory?: string | null
   primaryFlavor?: $Enums.FlavorProfile | null
   nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: number
   proteins?: number
   carbs?: number
@@ -688,6 +847,10 @@ export type IngredientCreateManyInput = {
   nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: string | null
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -701,6 +864,9 @@ export type IngredientUpdateManyMutationInput = {
   subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFieldUpdateOperationsInput | number
   proteins?: Prisma.FloatFieldUpdateOperationsInput | number
   carbs?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -717,6 +883,9 @@ export type IngredientUpdateManyMutationInput = {
   nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -730,6 +899,9 @@ export type IngredientUncheckedUpdateManyInput = {
   subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFieldUpdateOperationsInput | number
   proteins?: Prisma.FloatFieldUpdateOperationsInput | number
   carbs?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -746,6 +918,10 @@ export type IngredientUncheckedUpdateManyInput = {
   nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -783,6 +959,9 @@ export type IngredientCountOrderByAggregateInput = {
   subCategory?: Prisma.SortOrder
   primaryFlavor?: Prisma.SortOrder
   nutritionBasisGrams?: Prisma.SortOrder
+  pricingBasisGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  salePrice?: Prisma.SortOrder
   calories?: Prisma.SortOrder
   proteins?: Prisma.SortOrder
   carbs?: Prisma.SortOrder
@@ -799,6 +978,10 @@ export type IngredientCountOrderByAggregateInput = {
   nutritionTags?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   extraAttributes?: Prisma.SortOrder
+  preferredSupplierId?: Prisma.SortOrder
+  defaultStorageType?: Prisma.SortOrder
+  maxStockGrams?: Prisma.SortOrder
+  reorderPointGrams?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -806,6 +989,9 @@ export type IngredientCountOrderByAggregateInput = {
 
 export type IngredientAvgOrderByAggregateInput = {
   nutritionBasisGrams?: Prisma.SortOrder
+  pricingBasisGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  salePrice?: Prisma.SortOrder
   calories?: Prisma.SortOrder
   proteins?: Prisma.SortOrder
   carbs?: Prisma.SortOrder
@@ -817,6 +1003,8 @@ export type IngredientAvgOrderByAggregateInput = {
   transFat?: Prisma.SortOrder
   monounsaturatedFat?: Prisma.SortOrder
   polyunsaturatedFat?: Prisma.SortOrder
+  maxStockGrams?: Prisma.SortOrder
+  reorderPointGrams?: Prisma.SortOrder
 }
 
 export type IngredientMaxOrderByAggregateInput = {
@@ -827,6 +1015,9 @@ export type IngredientMaxOrderByAggregateInput = {
   subCategory?: Prisma.SortOrder
   primaryFlavor?: Prisma.SortOrder
   nutritionBasisGrams?: Prisma.SortOrder
+  pricingBasisGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  salePrice?: Prisma.SortOrder
   calories?: Prisma.SortOrder
   proteins?: Prisma.SortOrder
   carbs?: Prisma.SortOrder
@@ -839,6 +1030,10 @@ export type IngredientMaxOrderByAggregateInput = {
   monounsaturatedFat?: Prisma.SortOrder
   polyunsaturatedFat?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  preferredSupplierId?: Prisma.SortOrder
+  defaultStorageType?: Prisma.SortOrder
+  maxStockGrams?: Prisma.SortOrder
+  reorderPointGrams?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -852,6 +1047,9 @@ export type IngredientMinOrderByAggregateInput = {
   subCategory?: Prisma.SortOrder
   primaryFlavor?: Prisma.SortOrder
   nutritionBasisGrams?: Prisma.SortOrder
+  pricingBasisGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  salePrice?: Prisma.SortOrder
   calories?: Prisma.SortOrder
   proteins?: Prisma.SortOrder
   carbs?: Prisma.SortOrder
@@ -864,6 +1062,10 @@ export type IngredientMinOrderByAggregateInput = {
   monounsaturatedFat?: Prisma.SortOrder
   polyunsaturatedFat?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  preferredSupplierId?: Prisma.SortOrder
+  defaultStorageType?: Prisma.SortOrder
+  maxStockGrams?: Prisma.SortOrder
+  reorderPointGrams?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -871,6 +1073,9 @@ export type IngredientMinOrderByAggregateInput = {
 
 export type IngredientSumOrderByAggregateInput = {
   nutritionBasisGrams?: Prisma.SortOrder
+  pricingBasisGrams?: Prisma.SortOrder
+  costPrice?: Prisma.SortOrder
+  salePrice?: Prisma.SortOrder
   calories?: Prisma.SortOrder
   proteins?: Prisma.SortOrder
   carbs?: Prisma.SortOrder
@@ -882,11 +1087,23 @@ export type IngredientSumOrderByAggregateInput = {
   transFat?: Prisma.SortOrder
   monounsaturatedFat?: Prisma.SortOrder
   polyunsaturatedFat?: Prisma.SortOrder
+  maxStockGrams?: Prisma.SortOrder
+  reorderPointGrams?: Prisma.SortOrder
 }
 
 export type IngredientScalarRelationFilter = {
   is?: Prisma.IngredientWhereInput
   isNot?: Prisma.IngredientWhereInput
+}
+
+export type IngredientListRelationFilter = {
+  every?: Prisma.IngredientWhereInput
+  some?: Prisma.IngredientWhereInput
+  none?: Prisma.IngredientWhereInput
+}
+
+export type IngredientOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type IngredientCreateallergensInput = {
@@ -917,6 +1134,14 @@ export type FloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type DecimalFieldUpdateOperationsInput = {
+  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+}
+
 export type IngredientUpdateallergensInput = {
   set?: $Enums.Allergen[]
   push?: $Enums.Allergen | $Enums.Allergen[]
@@ -930,6 +1155,10 @@ export type IngredientUpdatedietaryTagsInput = {
 export type IngredientUpdatenutritionTagsInput = {
   set?: $Enums.NutritionTag[]
   push?: $Enums.NutritionTag | $Enums.NutritionTag[]
+}
+
+export type EnumStorageTypeFieldUpdateOperationsInput = {
+  set?: $Enums.StorageType
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -950,6 +1179,90 @@ export type IngredientUpdateOneRequiredWithoutVariantsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.IngredientUpdateToOneWithWhereWithoutVariantsInput, Prisma.IngredientUpdateWithoutVariantsInput>, Prisma.IngredientUncheckedUpdateWithoutVariantsInput>
 }
 
+export type IngredientCreateNestedManyWithoutPreferredSupplierInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput> | Prisma.IngredientCreateWithoutPreferredSupplierInput[] | Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput[]
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput | Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput[]
+  createMany?: Prisma.IngredientCreateManyPreferredSupplierInputEnvelope
+  connect?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+}
+
+export type IngredientUncheckedCreateNestedManyWithoutPreferredSupplierInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput> | Prisma.IngredientCreateWithoutPreferredSupplierInput[] | Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput[]
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput | Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput[]
+  createMany?: Prisma.IngredientCreateManyPreferredSupplierInputEnvelope
+  connect?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+}
+
+export type IngredientUpdateManyWithoutPreferredSupplierNestedInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput> | Prisma.IngredientCreateWithoutPreferredSupplierInput[] | Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput[]
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput | Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput[]
+  upsert?: Prisma.IngredientUpsertWithWhereUniqueWithoutPreferredSupplierInput | Prisma.IngredientUpsertWithWhereUniqueWithoutPreferredSupplierInput[]
+  createMany?: Prisma.IngredientCreateManyPreferredSupplierInputEnvelope
+  set?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  disconnect?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  delete?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  connect?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  update?: Prisma.IngredientUpdateWithWhereUniqueWithoutPreferredSupplierInput | Prisma.IngredientUpdateWithWhereUniqueWithoutPreferredSupplierInput[]
+  updateMany?: Prisma.IngredientUpdateManyWithWhereWithoutPreferredSupplierInput | Prisma.IngredientUpdateManyWithWhereWithoutPreferredSupplierInput[]
+  deleteMany?: Prisma.IngredientScalarWhereInput | Prisma.IngredientScalarWhereInput[]
+}
+
+export type IngredientUncheckedUpdateManyWithoutPreferredSupplierNestedInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput> | Prisma.IngredientCreateWithoutPreferredSupplierInput[] | Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput[]
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput | Prisma.IngredientCreateOrConnectWithoutPreferredSupplierInput[]
+  upsert?: Prisma.IngredientUpsertWithWhereUniqueWithoutPreferredSupplierInput | Prisma.IngredientUpsertWithWhereUniqueWithoutPreferredSupplierInput[]
+  createMany?: Prisma.IngredientCreateManyPreferredSupplierInputEnvelope
+  set?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  disconnect?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  delete?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  connect?: Prisma.IngredientWhereUniqueInput | Prisma.IngredientWhereUniqueInput[]
+  update?: Prisma.IngredientUpdateWithWhereUniqueWithoutPreferredSupplierInput | Prisma.IngredientUpdateWithWhereUniqueWithoutPreferredSupplierInput[]
+  updateMany?: Prisma.IngredientUpdateManyWithWhereWithoutPreferredSupplierInput | Prisma.IngredientUpdateManyWithWhereWithoutPreferredSupplierInput[]
+  deleteMany?: Prisma.IngredientScalarWhereInput | Prisma.IngredientScalarWhereInput[]
+}
+
+export type IngredientCreateNestedOneWithoutSupplierSourcesInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutSupplierSourcesInput, Prisma.IngredientUncheckedCreateWithoutSupplierSourcesInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutSupplierSourcesInput
+  connect?: Prisma.IngredientWhereUniqueInput
+}
+
+export type IngredientUpdateOneRequiredWithoutSupplierSourcesNestedInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutSupplierSourcesInput, Prisma.IngredientUncheckedCreateWithoutSupplierSourcesInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutSupplierSourcesInput
+  upsert?: Prisma.IngredientUpsertWithoutSupplierSourcesInput
+  connect?: Prisma.IngredientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IngredientUpdateToOneWithWhereWithoutSupplierSourcesInput, Prisma.IngredientUpdateWithoutSupplierSourcesInput>, Prisma.IngredientUncheckedUpdateWithoutSupplierSourcesInput>
+}
+
+export type IngredientCreateNestedOneWithoutInventoryLevelsInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutInventoryLevelsInput, Prisma.IngredientUncheckedCreateWithoutInventoryLevelsInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutInventoryLevelsInput
+  connect?: Prisma.IngredientWhereUniqueInput
+}
+
+export type IngredientUpdateOneRequiredWithoutInventoryLevelsNestedInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutInventoryLevelsInput, Prisma.IngredientUncheckedCreateWithoutInventoryLevelsInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutInventoryLevelsInput
+  upsert?: Prisma.IngredientUpsertWithoutInventoryLevelsInput
+  connect?: Prisma.IngredientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IngredientUpdateToOneWithWhereWithoutInventoryLevelsInput, Prisma.IngredientUpdateWithoutInventoryLevelsInput>, Prisma.IngredientUncheckedUpdateWithoutInventoryLevelsInput>
+}
+
+export type IngredientCreateNestedOneWithoutPurchaseItemsInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutPurchaseItemsInput, Prisma.IngredientUncheckedCreateWithoutPurchaseItemsInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutPurchaseItemsInput
+  connect?: Prisma.IngredientWhereUniqueInput
+}
+
+export type IngredientUpdateOneRequiredWithoutPurchaseItemsNestedInput = {
+  create?: Prisma.XOR<Prisma.IngredientCreateWithoutPurchaseItemsInput, Prisma.IngredientUncheckedCreateWithoutPurchaseItemsInput>
+  connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutPurchaseItemsInput
+  upsert?: Prisma.IngredientUpsertWithoutPurchaseItemsInput
+  connect?: Prisma.IngredientWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.IngredientUpdateToOneWithWhereWithoutPurchaseItemsInput, Prisma.IngredientUpdateWithoutPurchaseItemsInput>, Prisma.IngredientUncheckedUpdateWithoutPurchaseItemsInput>
+}
+
 export type IngredientCreateWithoutVariantsInput = {
   id?: string
   name: string
@@ -958,6 +1271,9 @@ export type IngredientCreateWithoutVariantsInput = {
   subCategory?: string | null
   primaryFlavor?: $Enums.FlavorProfile | null
   nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: number
   proteins?: number
   carbs?: number
@@ -974,9 +1290,16 @@ export type IngredientCreateWithoutVariantsInput = {
   nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  preferredSupplier?: Prisma.SupplierCreateNestedOneWithoutPreferredIngredientsInput
+  inventoryLevels?: Prisma.InventoryLevelCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientUncheckedCreateWithoutVariantsInput = {
@@ -987,6 +1310,9 @@ export type IngredientUncheckedCreateWithoutVariantsInput = {
   subCategory?: string | null
   primaryFlavor?: $Enums.FlavorProfile | null
   nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: number
   proteins?: number
   carbs?: number
@@ -1003,9 +1329,16 @@ export type IngredientUncheckedCreateWithoutVariantsInput = {
   nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: string | null
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
   isActive?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  inventoryLevels?: Prisma.InventoryLevelUncheckedCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedCreateNestedManyWithoutIngredientInput
 }
 
 export type IngredientCreateOrConnectWithoutVariantsInput = {
@@ -1032,6 +1365,9 @@ export type IngredientUpdateWithoutVariantsInput = {
   subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFieldUpdateOperationsInput | number
   proteins?: Prisma.FloatFieldUpdateOperationsInput | number
   carbs?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1048,9 +1384,16 @@ export type IngredientUpdateWithoutVariantsInput = {
   nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredSupplier?: Prisma.SupplierUpdateOneWithoutPreferredIngredientsNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUpdateManyWithoutIngredientNestedInput
 }
 
 export type IngredientUncheckedUpdateWithoutVariantsInput = {
@@ -1061,6 +1404,9 @@ export type IngredientUncheckedUpdateWithoutVariantsInput = {
   subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
   nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   calories?: Prisma.FloatFieldUpdateOperationsInput | number
   proteins?: Prisma.FloatFieldUpdateOperationsInput | number
   carbs?: Prisma.FloatFieldUpdateOperationsInput | number
@@ -1077,6 +1423,820 @@ export type IngredientUncheckedUpdateWithoutVariantsInput = {
   nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryLevels?: Prisma.InventoryLevelUncheckedUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientCreateWithoutPreferredSupplierInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.IngredientVariantCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientUncheckedCreateWithoutPreferredSupplierInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.IngredientVariantUncheckedCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientCreateOrConnectWithoutPreferredSupplierInput = {
+  where: Prisma.IngredientWhereUniqueInput
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput>
+}
+
+export type IngredientCreateManyPreferredSupplierInputEnvelope = {
+  data: Prisma.IngredientCreateManyPreferredSupplierInput | Prisma.IngredientCreateManyPreferredSupplierInput[]
+  skipDuplicates?: boolean
+}
+
+export type IngredientUpsertWithWhereUniqueWithoutPreferredSupplierInput = {
+  where: Prisma.IngredientWhereUniqueInput
+  update: Prisma.XOR<Prisma.IngredientUpdateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedUpdateWithoutPreferredSupplierInput>
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedCreateWithoutPreferredSupplierInput>
+}
+
+export type IngredientUpdateWithWhereUniqueWithoutPreferredSupplierInput = {
+  where: Prisma.IngredientWhereUniqueInput
+  data: Prisma.XOR<Prisma.IngredientUpdateWithoutPreferredSupplierInput, Prisma.IngredientUncheckedUpdateWithoutPreferredSupplierInput>
+}
+
+export type IngredientUpdateManyWithWhereWithoutPreferredSupplierInput = {
+  where: Prisma.IngredientScalarWhereInput
+  data: Prisma.XOR<Prisma.IngredientUpdateManyMutationInput, Prisma.IngredientUncheckedUpdateManyWithoutPreferredSupplierInput>
+}
+
+export type IngredientScalarWhereInput = {
+  AND?: Prisma.IngredientScalarWhereInput | Prisma.IngredientScalarWhereInput[]
+  OR?: Prisma.IngredientScalarWhereInput[]
+  NOT?: Prisma.IngredientScalarWhereInput | Prisma.IngredientScalarWhereInput[]
+  id?: Prisma.StringFilter<"Ingredient"> | string
+  name?: Prisma.StringFilter<"Ingredient"> | string
+  description?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  category?: Prisma.EnumIngredientCategoryFilter<"Ingredient"> | $Enums.IngredientCategory
+  subCategory?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  primaryFlavor?: Prisma.EnumFlavorProfileNullableFilter<"Ingredient"> | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  pricingBasisGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  costPrice?: Prisma.DecimalFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFilter<"Ingredient"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFilter<"Ingredient"> | number
+  proteins?: Prisma.FloatFilter<"Ingredient"> | number
+  carbs?: Prisma.FloatFilter<"Ingredient"> | number
+  fats?: Prisma.FloatFilter<"Ingredient"> | number
+  fiber?: Prisma.FloatFilter<"Ingredient"> | number
+  sugars?: Prisma.FloatFilter<"Ingredient"> | number
+  sodium?: Prisma.FloatFilter<"Ingredient"> | number
+  saturatedFat?: Prisma.FloatFilter<"Ingredient"> | number
+  transFat?: Prisma.FloatFilter<"Ingredient"> | number
+  monounsaturatedFat?: Prisma.FloatFilter<"Ingredient"> | number
+  polyunsaturatedFat?: Prisma.FloatFilter<"Ingredient"> | number
+  allergens?: Prisma.EnumAllergenNullableListFilter<"Ingredient">
+  dietaryTags?: Prisma.EnumDietaryTagNullableListFilter<"Ingredient">
+  nutritionTags?: Prisma.EnumNutritionTagNullableListFilter<"Ingredient">
+  notes?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  extraAttributes?: Prisma.JsonNullableFilter<"Ingredient">
+  preferredSupplierId?: Prisma.StringNullableFilter<"Ingredient"> | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFilter<"Ingredient"> | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  reorderPointGrams?: Prisma.FloatFilter<"Ingredient"> | number
+  isActive?: Prisma.BoolFilter<"Ingredient"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Ingredient"> | Date | string
+}
+
+export type IngredientCreateWithoutSupplierSourcesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferredSupplier?: Prisma.SupplierCreateNestedOneWithoutPreferredIngredientsInput
+  variants?: Prisma.IngredientVariantCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientUncheckedCreateWithoutSupplierSourcesInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: string | null
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.IngredientVariantUncheckedCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientCreateOrConnectWithoutSupplierSourcesInput = {
+  where: Prisma.IngredientWhereUniqueInput
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutSupplierSourcesInput, Prisma.IngredientUncheckedCreateWithoutSupplierSourcesInput>
+}
+
+export type IngredientUpsertWithoutSupplierSourcesInput = {
+  update: Prisma.XOR<Prisma.IngredientUpdateWithoutSupplierSourcesInput, Prisma.IngredientUncheckedUpdateWithoutSupplierSourcesInput>
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutSupplierSourcesInput, Prisma.IngredientUncheckedCreateWithoutSupplierSourcesInput>
+  where?: Prisma.IngredientWhereInput
+}
+
+export type IngredientUpdateToOneWithWhereWithoutSupplierSourcesInput = {
+  where?: Prisma.IngredientWhereInput
+  data: Prisma.XOR<Prisma.IngredientUpdateWithoutSupplierSourcesInput, Prisma.IngredientUncheckedUpdateWithoutSupplierSourcesInput>
+}
+
+export type IngredientUpdateWithoutSupplierSourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredSupplier?: Prisma.SupplierUpdateOneWithoutPreferredIngredientsNestedInput
+  variants?: Prisma.IngredientVariantUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientUncheckedUpdateWithoutSupplierSourcesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.IngredientVariantUncheckedUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientCreateWithoutInventoryLevelsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferredSupplier?: Prisma.SupplierCreateNestedOneWithoutPreferredIngredientsInput
+  variants?: Prisma.IngredientVariantCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientUncheckedCreateWithoutInventoryLevelsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: string | null
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.IngredientVariantUncheckedCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedCreateNestedManyWithoutIngredientInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientCreateOrConnectWithoutInventoryLevelsInput = {
+  where: Prisma.IngredientWhereUniqueInput
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutInventoryLevelsInput, Prisma.IngredientUncheckedCreateWithoutInventoryLevelsInput>
+}
+
+export type IngredientUpsertWithoutInventoryLevelsInput = {
+  update: Prisma.XOR<Prisma.IngredientUpdateWithoutInventoryLevelsInput, Prisma.IngredientUncheckedUpdateWithoutInventoryLevelsInput>
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutInventoryLevelsInput, Prisma.IngredientUncheckedCreateWithoutInventoryLevelsInput>
+  where?: Prisma.IngredientWhereInput
+}
+
+export type IngredientUpdateToOneWithWhereWithoutInventoryLevelsInput = {
+  where?: Prisma.IngredientWhereInput
+  data: Prisma.XOR<Prisma.IngredientUpdateWithoutInventoryLevelsInput, Prisma.IngredientUncheckedUpdateWithoutInventoryLevelsInput>
+}
+
+export type IngredientUpdateWithoutInventoryLevelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredSupplier?: Prisma.SupplierUpdateOneWithoutPreferredIngredientsNestedInput
+  variants?: Prisma.IngredientVariantUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientUncheckedUpdateWithoutInventoryLevelsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.IngredientVariantUncheckedUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientCreateWithoutPurchaseItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  preferredSupplier?: Prisma.SupplierCreateNestedOneWithoutPreferredIngredientsInput
+  variants?: Prisma.IngredientVariantCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientUncheckedCreateWithoutPurchaseItemsInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: string | null
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  variants?: Prisma.IngredientVariantUncheckedCreateNestedManyWithoutIngredientInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedCreateNestedManyWithoutIngredientInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedCreateNestedManyWithoutIngredientInput
+}
+
+export type IngredientCreateOrConnectWithoutPurchaseItemsInput = {
+  where: Prisma.IngredientWhereUniqueInput
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutPurchaseItemsInput, Prisma.IngredientUncheckedCreateWithoutPurchaseItemsInput>
+}
+
+export type IngredientUpsertWithoutPurchaseItemsInput = {
+  update: Prisma.XOR<Prisma.IngredientUpdateWithoutPurchaseItemsInput, Prisma.IngredientUncheckedUpdateWithoutPurchaseItemsInput>
+  create: Prisma.XOR<Prisma.IngredientCreateWithoutPurchaseItemsInput, Prisma.IngredientUncheckedCreateWithoutPurchaseItemsInput>
+  where?: Prisma.IngredientWhereInput
+}
+
+export type IngredientUpdateToOneWithWhereWithoutPurchaseItemsInput = {
+  where?: Prisma.IngredientWhereInput
+  data: Prisma.XOR<Prisma.IngredientUpdateWithoutPurchaseItemsInput, Prisma.IngredientUncheckedUpdateWithoutPurchaseItemsInput>
+}
+
+export type IngredientUpdateWithoutPurchaseItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  preferredSupplier?: Prisma.SupplierUpdateOneWithoutPreferredIngredientsNestedInput
+  variants?: Prisma.IngredientVariantUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientUncheckedUpdateWithoutPurchaseItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  preferredSupplierId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.IngredientVariantUncheckedUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientCreateManyPreferredSupplierInput = {
+  id?: string
+  name: string
+  description?: string | null
+  category: $Enums.IngredientCategory
+  subCategory?: string | null
+  primaryFlavor?: $Enums.FlavorProfile | null
+  nutritionBasisGrams?: number
+  pricingBasisGrams?: number
+  costPrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: number
+  proteins?: number
+  carbs?: number
+  fats?: number
+  fiber?: number
+  sugars?: number
+  sodium?: number
+  saturatedFat?: number
+  transFat?: number
+  monounsaturatedFat?: number
+  polyunsaturatedFat?: number
+  allergens?: Prisma.IngredientCreateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientCreatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientCreatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: $Enums.StorageType
+  maxStockGrams?: number
+  reorderPointGrams?: number
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type IngredientUpdateWithoutPreferredSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.IngredientVariantUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientUncheckedUpdateWithoutPreferredSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  variants?: Prisma.IngredientVariantUncheckedUpdateManyWithoutIngredientNestedInput
+  inventoryLevels?: Prisma.InventoryLevelUncheckedUpdateManyWithoutIngredientNestedInput
+  supplierSources?: Prisma.SupplierIngredientUncheckedUpdateManyWithoutIngredientNestedInput
+  purchaseItems?: Prisma.PurchaseItemUncheckedUpdateManyWithoutIngredientNestedInput
+}
+
+export type IngredientUncheckedUpdateManyWithoutPreferredSupplierInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  category?: Prisma.EnumIngredientCategoryFieldUpdateOperationsInput | $Enums.IngredientCategory
+  subCategory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryFlavor?: Prisma.NullableEnumFlavorProfileFieldUpdateOperationsInput | $Enums.FlavorProfile | null
+  nutritionBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  pricingBasisGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  costPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  salePrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  calories?: Prisma.FloatFieldUpdateOperationsInput | number
+  proteins?: Prisma.FloatFieldUpdateOperationsInput | number
+  carbs?: Prisma.FloatFieldUpdateOperationsInput | number
+  fats?: Prisma.FloatFieldUpdateOperationsInput | number
+  fiber?: Prisma.FloatFieldUpdateOperationsInput | number
+  sugars?: Prisma.FloatFieldUpdateOperationsInput | number
+  sodium?: Prisma.FloatFieldUpdateOperationsInput | number
+  saturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  transFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  monounsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  polyunsaturatedFat?: Prisma.FloatFieldUpdateOperationsInput | number
+  allergens?: Prisma.IngredientUpdateallergensInput | $Enums.Allergen[]
+  dietaryTags?: Prisma.IngredientUpdatedietaryTagsInput | $Enums.DietaryTag[]
+  nutritionTags?: Prisma.IngredientUpdatenutritionTagsInput | $Enums.NutritionTag[]
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extraAttributes?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  defaultStorageType?: Prisma.EnumStorageTypeFieldUpdateOperationsInput | $Enums.StorageType
+  maxStockGrams?: Prisma.FloatFieldUpdateOperationsInput | number
+  reorderPointGrams?: Prisma.FloatFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1089,10 +2249,16 @@ export type IngredientUncheckedUpdateWithoutVariantsInput = {
 
 export type IngredientCountOutputType = {
   variants: number
+  inventoryLevels: number
+  supplierSources: number
+  purchaseItems: number
 }
 
 export type IngredientCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   variants?: boolean | IngredientCountOutputTypeCountVariantsArgs
+  inventoryLevels?: boolean | IngredientCountOutputTypeCountInventoryLevelsArgs
+  supplierSources?: boolean | IngredientCountOutputTypeCountSupplierSourcesArgs
+  purchaseItems?: boolean | IngredientCountOutputTypeCountPurchaseItemsArgs
 }
 
 /**
@@ -1112,6 +2278,27 @@ export type IngredientCountOutputTypeCountVariantsArgs<ExtArgs extends runtime.T
   where?: Prisma.IngredientVariantWhereInput
 }
 
+/**
+ * IngredientCountOutputType without action
+ */
+export type IngredientCountOutputTypeCountInventoryLevelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InventoryLevelWhereInput
+}
+
+/**
+ * IngredientCountOutputType without action
+ */
+export type IngredientCountOutputTypeCountSupplierSourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupplierIngredientWhereInput
+}
+
+/**
+ * IngredientCountOutputType without action
+ */
+export type IngredientCountOutputTypeCountPurchaseItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PurchaseItemWhereInput
+}
+
 
 export type IngredientSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1121,6 +2308,9 @@ export type IngredientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   subCategory?: boolean
   primaryFlavor?: boolean
   nutritionBasisGrams?: boolean
+  pricingBasisGrams?: boolean
+  costPrice?: boolean
+  salePrice?: boolean
   calories?: boolean
   proteins?: boolean
   carbs?: boolean
@@ -1137,10 +2327,18 @@ export type IngredientSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   nutritionTags?: boolean
   notes?: boolean
   extraAttributes?: boolean
+  preferredSupplierId?: boolean
+  defaultStorageType?: boolean
+  maxStockGrams?: boolean
+  reorderPointGrams?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preferredSupplier?: boolean | Prisma.Ingredient$preferredSupplierArgs<ExtArgs>
   variants?: boolean | Prisma.Ingredient$variantsArgs<ExtArgs>
+  inventoryLevels?: boolean | Prisma.Ingredient$inventoryLevelsArgs<ExtArgs>
+  supplierSources?: boolean | Prisma.Ingredient$supplierSourcesArgs<ExtArgs>
+  purchaseItems?: boolean | Prisma.Ingredient$purchaseItemsArgs<ExtArgs>
   _count?: boolean | Prisma.IngredientCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["ingredient"]>
 
@@ -1152,6 +2350,9 @@ export type IngredientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   subCategory?: boolean
   primaryFlavor?: boolean
   nutritionBasisGrams?: boolean
+  pricingBasisGrams?: boolean
+  costPrice?: boolean
+  salePrice?: boolean
   calories?: boolean
   proteins?: boolean
   carbs?: boolean
@@ -1168,9 +2369,14 @@ export type IngredientSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   nutritionTags?: boolean
   notes?: boolean
   extraAttributes?: boolean
+  preferredSupplierId?: boolean
+  defaultStorageType?: boolean
+  maxStockGrams?: boolean
+  reorderPointGrams?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preferredSupplier?: boolean | Prisma.Ingredient$preferredSupplierArgs<ExtArgs>
 }, ExtArgs["result"]["ingredient"]>
 
 export type IngredientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1181,6 +2387,9 @@ export type IngredientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   subCategory?: boolean
   primaryFlavor?: boolean
   nutritionBasisGrams?: boolean
+  pricingBasisGrams?: boolean
+  costPrice?: boolean
+  salePrice?: boolean
   calories?: boolean
   proteins?: boolean
   carbs?: boolean
@@ -1197,9 +2406,14 @@ export type IngredientSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   nutritionTags?: boolean
   notes?: boolean
   extraAttributes?: boolean
+  preferredSupplierId?: boolean
+  defaultStorageType?: boolean
+  maxStockGrams?: boolean
+  reorderPointGrams?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  preferredSupplier?: boolean | Prisma.Ingredient$preferredSupplierArgs<ExtArgs>
 }, ExtArgs["result"]["ingredient"]>
 
 export type IngredientSelectScalar = {
@@ -1210,6 +2424,9 @@ export type IngredientSelectScalar = {
   subCategory?: boolean
   primaryFlavor?: boolean
   nutritionBasisGrams?: boolean
+  pricingBasisGrams?: boolean
+  costPrice?: boolean
+  salePrice?: boolean
   calories?: boolean
   proteins?: boolean
   carbs?: boolean
@@ -1226,23 +2443,39 @@ export type IngredientSelectScalar = {
   nutritionTags?: boolean
   notes?: boolean
   extraAttributes?: boolean
+  preferredSupplierId?: boolean
+  defaultStorageType?: boolean
+  maxStockGrams?: boolean
+  reorderPointGrams?: boolean
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "category" | "subCategory" | "primaryFlavor" | "nutritionBasisGrams" | "calories" | "proteins" | "carbs" | "fats" | "fiber" | "sugars" | "sodium" | "saturatedFat" | "transFat" | "monounsaturatedFat" | "polyunsaturatedFat" | "allergens" | "dietaryTags" | "nutritionTags" | "notes" | "extraAttributes" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["ingredient"]>
+export type IngredientOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "category" | "subCategory" | "primaryFlavor" | "nutritionBasisGrams" | "pricingBasisGrams" | "costPrice" | "salePrice" | "calories" | "proteins" | "carbs" | "fats" | "fiber" | "sugars" | "sodium" | "saturatedFat" | "transFat" | "monounsaturatedFat" | "polyunsaturatedFat" | "allergens" | "dietaryTags" | "nutritionTags" | "notes" | "extraAttributes" | "preferredSupplierId" | "defaultStorageType" | "maxStockGrams" | "reorderPointGrams" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["ingredient"]>
 export type IngredientInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  preferredSupplier?: boolean | Prisma.Ingredient$preferredSupplierArgs<ExtArgs>
   variants?: boolean | Prisma.Ingredient$variantsArgs<ExtArgs>
+  inventoryLevels?: boolean | Prisma.Ingredient$inventoryLevelsArgs<ExtArgs>
+  supplierSources?: boolean | Prisma.Ingredient$supplierSourcesArgs<ExtArgs>
+  purchaseItems?: boolean | Prisma.Ingredient$purchaseItemsArgs<ExtArgs>
   _count?: boolean | Prisma.IngredientCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type IngredientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type IngredientIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type IngredientIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  preferredSupplier?: boolean | Prisma.Ingredient$preferredSupplierArgs<ExtArgs>
+}
+export type IngredientIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  preferredSupplier?: boolean | Prisma.Ingredient$preferredSupplierArgs<ExtArgs>
+}
 
 export type $IngredientPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Ingredient"
   objects: {
+    preferredSupplier: Prisma.$SupplierPayload<ExtArgs> | null
     variants: Prisma.$IngredientVariantPayload<ExtArgs>[]
+    inventoryLevels: Prisma.$InventoryLevelPayload<ExtArgs>[]
+    supplierSources: Prisma.$SupplierIngredientPayload<ExtArgs>[]
+    purchaseItems: Prisma.$PurchaseItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1252,6 +2485,9 @@ export type $IngredientPayload<ExtArgs extends runtime.Types.Extensions.Internal
     subCategory: string | null
     primaryFlavor: $Enums.FlavorProfile | null
     nutritionBasisGrams: number
+    pricingBasisGrams: number
+    costPrice: runtime.Decimal
+    salePrice: runtime.Decimal
     calories: number
     proteins: number
     carbs: number
@@ -1268,6 +2504,10 @@ export type $IngredientPayload<ExtArgs extends runtime.Types.Extensions.Internal
     nutritionTags: $Enums.NutritionTag[]
     notes: string | null
     extraAttributes: runtime.JsonValue | null
+    preferredSupplierId: string | null
+    defaultStorageType: $Enums.StorageType
+    maxStockGrams: number
+    reorderPointGrams: number
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -1665,7 +2905,11 @@ readonly fields: IngredientFieldRefs;
  */
 export interface Prisma__IngredientClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  preferredSupplier<T extends Prisma.Ingredient$preferredSupplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ingredient$preferredSupplierArgs<ExtArgs>>): Prisma.Prisma__SupplierClient<runtime.Types.Result.GetResult<Prisma.$SupplierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   variants<T extends Prisma.Ingredient$variantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ingredient$variantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$IngredientVariantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  inventoryLevels<T extends Prisma.Ingredient$inventoryLevelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ingredient$inventoryLevelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryLevelPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supplierSources<T extends Prisma.Ingredient$supplierSourcesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ingredient$supplierSourcesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupplierIngredientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  purchaseItems<T extends Prisma.Ingredient$purchaseItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Ingredient$purchaseItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PurchaseItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1702,6 +2946,9 @@ export interface IngredientFieldRefs {
   readonly subCategory: Prisma.FieldRef<"Ingredient", 'String'>
   readonly primaryFlavor: Prisma.FieldRef<"Ingredient", 'FlavorProfile'>
   readonly nutritionBasisGrams: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly pricingBasisGrams: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly costPrice: Prisma.FieldRef<"Ingredient", 'Decimal'>
+  readonly salePrice: Prisma.FieldRef<"Ingredient", 'Decimal'>
   readonly calories: Prisma.FieldRef<"Ingredient", 'Float'>
   readonly proteins: Prisma.FieldRef<"Ingredient", 'Float'>
   readonly carbs: Prisma.FieldRef<"Ingredient", 'Float'>
@@ -1718,6 +2965,10 @@ export interface IngredientFieldRefs {
   readonly nutritionTags: Prisma.FieldRef<"Ingredient", 'NutritionTag[]'>
   readonly notes: Prisma.FieldRef<"Ingredient", 'String'>
   readonly extraAttributes: Prisma.FieldRef<"Ingredient", 'Json'>
+  readonly preferredSupplierId: Prisma.FieldRef<"Ingredient", 'String'>
+  readonly defaultStorageType: Prisma.FieldRef<"Ingredient", 'StorageType'>
+  readonly maxStockGrams: Prisma.FieldRef<"Ingredient", 'Float'>
+  readonly reorderPointGrams: Prisma.FieldRef<"Ingredient", 'Float'>
   readonly isActive: Prisma.FieldRef<"Ingredient", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Ingredient", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Ingredient", 'DateTime'>
@@ -1975,6 +3226,10 @@ export type IngredientCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    */
   data: Prisma.IngredientCreateManyInput | Prisma.IngredientCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IngredientIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2045,6 +3300,10 @@ export type IngredientUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many Ingredients to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.IngredientIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -2114,6 +3373,25 @@ export type IngredientDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * Ingredient.preferredSupplier
+ */
+export type Ingredient$preferredSupplierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Supplier
+   */
+  select?: Prisma.SupplierSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Supplier
+   */
+  omit?: Prisma.SupplierOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupplierInclude<ExtArgs> | null
+  where?: Prisma.SupplierWhereInput
+}
+
+/**
  * Ingredient.variants
  */
 export type Ingredient$variantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2135,6 +3413,78 @@ export type Ingredient$variantsArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.IngredientVariantScalarFieldEnum | Prisma.IngredientVariantScalarFieldEnum[]
+}
+
+/**
+ * Ingredient.inventoryLevels
+ */
+export type Ingredient$inventoryLevelsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InventoryLevel
+   */
+  select?: Prisma.InventoryLevelSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InventoryLevel
+   */
+  omit?: Prisma.InventoryLevelOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InventoryLevelInclude<ExtArgs> | null
+  where?: Prisma.InventoryLevelWhereInput
+  orderBy?: Prisma.InventoryLevelOrderByWithRelationInput | Prisma.InventoryLevelOrderByWithRelationInput[]
+  cursor?: Prisma.InventoryLevelWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InventoryLevelScalarFieldEnum | Prisma.InventoryLevelScalarFieldEnum[]
+}
+
+/**
+ * Ingredient.supplierSources
+ */
+export type Ingredient$supplierSourcesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupplierIngredient
+   */
+  select?: Prisma.SupplierIngredientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupplierIngredient
+   */
+  omit?: Prisma.SupplierIngredientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupplierIngredientInclude<ExtArgs> | null
+  where?: Prisma.SupplierIngredientWhereInput
+  orderBy?: Prisma.SupplierIngredientOrderByWithRelationInput | Prisma.SupplierIngredientOrderByWithRelationInput[]
+  cursor?: Prisma.SupplierIngredientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupplierIngredientScalarFieldEnum | Prisma.SupplierIngredientScalarFieldEnum[]
+}
+
+/**
+ * Ingredient.purchaseItems
+ */
+export type Ingredient$purchaseItemsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PurchaseItem
+   */
+  select?: Prisma.PurchaseItemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PurchaseItem
+   */
+  omit?: Prisma.PurchaseItemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PurchaseItemInclude<ExtArgs> | null
+  where?: Prisma.PurchaseItemWhereInput
+  orderBy?: Prisma.PurchaseItemOrderByWithRelationInput | Prisma.PurchaseItemOrderByWithRelationInput[]
+  cursor?: Prisma.PurchaseItemWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PurchaseItemScalarFieldEnum | Prisma.PurchaseItemScalarFieldEnum[]
 }
 
 /**

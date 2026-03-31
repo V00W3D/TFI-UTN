@@ -140,6 +140,16 @@ export const PlateSize = {
 export type PlateSize = (typeof PlateSize)[keyof typeof PlateSize]
 
 
+export const StorageType = {
+  AMBIENT: 'AMBIENT',
+  COLD: 'COLD',
+  FREEZER: 'FREEZER',
+  PRODUCE: 'PRODUCE'
+} as const
+
+export type StorageType = (typeof StorageType)[keyof typeof StorageType]
+
+
 export const AdjustmentType = {
   ADDITION: 'ADDITION',
   REMOVAL: 'REMOVAL',
@@ -147,6 +157,35 @@ export const AdjustmentType = {
 } as const
 
 export type AdjustmentType = (typeof AdjustmentType)[keyof typeof AdjustmentType]
+
+
+export const PurchaseStatus = {
+  DRAFT: 'DRAFT',
+  RECEIVED: 'RECEIVED',
+  CANCELLED: 'CANCELLED'
+} as const
+
+export type PurchaseStatus = (typeof PurchaseStatus)[keyof typeof PurchaseStatus]
+
+
+export const SaleStatus = {
+  OPEN: 'OPEN',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED',
+  REFUNDED: 'REFUNDED'
+} as const
+
+export type SaleStatus = (typeof SaleStatus)[keyof typeof SaleStatus]
+
+
+export const SaleChannel = {
+  COUNTER: 'COUNTER',
+  TAKEAWAY: 'TAKEAWAY',
+  DELIVERY: 'DELIVERY',
+  ONLINE: 'ONLINE'
+} as const
+
+export type SaleChannel = (typeof SaleChannel)[keyof typeof SaleChannel]
 
 
 export const Allergen = {
