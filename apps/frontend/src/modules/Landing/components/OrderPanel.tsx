@@ -25,7 +25,8 @@ const ParchmentIcon = ({ className }: { className?: string }) => (
 );
 
 const OrderPanel = () => {
-  const { items, isOpen, setOpen, removeItem, updateQuantity, clearOrder } = useOrderStore();
+  const { items, isOpen, setOpen, removeItem, updateQuantity, clearOrder, confirmCurrentOrder } =
+    useOrderStore();
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
   const totalPrice = items.reduce((acc, i) => acc + (i.plate.menuPrice ?? 0) * i.quantity, 0);
 
@@ -161,6 +162,7 @@ const OrderPanel = () => {
                 <button
                   type="button"
                   className="btn-primary w-full justify-center uppercase tracking-widest"
+                  onClick={() => confirmCurrentOrder()}
                 >
                   Confirmar pedido
                 </button>

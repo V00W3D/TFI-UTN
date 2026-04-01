@@ -341,10 +341,16 @@ const ingredientOperationalProfile = (
   ...input,
 });
 
+/**
+ * Costos netos estimados (ARS / pricingBasisGrams) alineados a mayorista + merma y Mano de obra
+ * implícita en punto de equilibrio 2026. Referencia de mercado: guarnición de papas en carta
+ * frecuente ~5.000–13.000 ARS según rubro (p. ej. locales premium CABA); hamburguesa completa
+ * en cadena/segmento medio ~17.000+ ARS. Markup y IVA 21% se aplican en analyzePlatePricing (SDK).
+ */
 const ingredientOperationalProfiles = {
   panSanguchero: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 180,
+    unitCostNet: 580,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -354,7 +360,7 @@ const ingredientOperationalProfiles = {
   }),
   panChia: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 220,
+    unitCostNet: 620,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -364,7 +370,7 @@ const ingredientOperationalProfiles = {
   }),
   masaPizza: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 160,
+    unitCostNet: 480,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -374,7 +380,7 @@ const ingredientOperationalProfiles = {
   }),
   tapaEmpanada: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 190,
+    unitCostNet: 560,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -384,7 +390,7 @@ const ingredientOperationalProfiles = {
   }),
   carneVacuna: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 1100,
+    unitCostNet: 3780,
     purchaseUnitLabel: 'kg',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -394,7 +400,7 @@ const ingredientOperationalProfiles = {
   }),
   carnePollo: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 720,
+    unitCostNet: 2350,
     purchaseUnitLabel: 'kg',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -404,7 +410,7 @@ const ingredientOperationalProfiles = {
   }),
   panceta: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 980,
+    unitCostNet: 1750,
     purchaseUnitLabel: 'kg',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -414,7 +420,7 @@ const ingredientOperationalProfiles = {
   }),
   jamonCocido: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 760,
+    unitCostNet: 1480,
     purchaseUnitLabel: 'kg',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -424,7 +430,7 @@ const ingredientOperationalProfiles = {
   }),
   mozzarella: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 650,
+    unitCostNet: 1380,
     purchaseUnitLabel: 'kg',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -434,7 +440,7 @@ const ingredientOperationalProfiles = {
   }),
   quesoCremoso: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 610,
+    unitCostNet: 1180,
     purchaseUnitLabel: 'kg',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -444,7 +450,7 @@ const ingredientOperationalProfiles = {
   }),
   cheddar: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 780,
+    unitCostNet: 1350,
     purchaseUnitLabel: 'kg',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -454,7 +460,7 @@ const ingredientOperationalProfiles = {
   }),
   tomate: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 180,
+    unitCostNet: 210,
     purchaseUnitLabel: 'kg',
     storageType: 'PRODUCE',
     storageLabel: 'Batea de frescos',
@@ -464,7 +470,7 @@ const ingredientOperationalProfiles = {
   }),
   lechuga: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 90,
+    unitCostNet: 88,
     purchaseUnitLabel: 'kg',
     storageType: 'PRODUCE',
     storageLabel: 'Batea de frescos',
@@ -474,7 +480,7 @@ const ingredientOperationalProfiles = {
   }),
   cebolla: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 70,
+    unitCostNet: 82,
     purchaseUnitLabel: 'kg',
     storageType: 'PRODUCE',
     storageLabel: 'Batea de frescos',
@@ -484,7 +490,7 @@ const ingredientOperationalProfiles = {
   }),
   morron: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 240,
+    unitCostNet: 265,
     purchaseUnitLabel: 'kg',
     storageType: 'PRODUCE',
     storageLabel: 'Batea de frescos',
@@ -494,7 +500,7 @@ const ingredientOperationalProfiles = {
   }),
   papa: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 110,
+    unitCostNet: 1400,
     purchaseUnitLabel: 'kg',
     storageType: 'PRODUCE',
     storageLabel: 'Batea de frescos',
@@ -504,7 +510,7 @@ const ingredientOperationalProfiles = {
   }),
   panRallado: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 120,
+    unitCostNet: 300,
     purchaseUnitLabel: 'kg',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -514,7 +520,7 @@ const ingredientOperationalProfiles = {
   }),
   huevo: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 260,
+    unitCostNet: 400,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -524,7 +530,7 @@ const ingredientOperationalProfiles = {
   }),
   aceite: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 260,
+    unitCostNet: 820,
     purchaseUnitLabel: 'litro equivalente',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -534,7 +540,7 @@ const ingredientOperationalProfiles = {
   }),
   mayonesa: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 240,
+    unitCostNet: 285,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -544,7 +550,7 @@ const ingredientOperationalProfiles = {
   }),
   ketchup: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 180,
+    unitCostNet: 210,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -554,7 +560,7 @@ const ingredientOperationalProfiles = {
   }),
   mostaza: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 170,
+    unitCostNet: 195,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -564,7 +570,7 @@ const ingredientOperationalProfiles = {
   }),
   aji: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 320,
+    unitCostNet: 360,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -574,7 +580,7 @@ const ingredientOperationalProfiles = {
   }),
   salsaPizza: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 140,
+    unitCostNet: 185,
     purchaseUnitLabel: 'kg equivalente',
     storageType: 'COLD',
     storageLabel: 'Camara fria',
@@ -584,7 +590,7 @@ const ingredientOperationalProfiles = {
   }),
   aceitunaVerde: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 360,
+    unitCostNet: 450,
     purchaseUnitLabel: 'kg',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -594,7 +600,7 @@ const ingredientOperationalProfiles = {
   }),
   oregano: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 520,
+    unitCostNet: 620,
     purchaseUnitLabel: 'kg',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -604,7 +610,7 @@ const ingredientOperationalProfiles = {
   }),
   sal: ingredientOperationalProfile({
     pricingBasisGrams: 100,
-    unitCostNet: 45,
+    unitCostNet: 85,
     purchaseUnitLabel: 'kg',
     storageType: 'AMBIENT',
     storageLabel: 'Despensa seca',
@@ -3126,7 +3132,7 @@ async function main() {
       where: { id: plate.id },
       data: {
         costPrice: pricing.costPrice.toFixed(2),
-        menuPrice: pricing.menuPrice.toFixed(2),
+        menuPrice: String(pricing.menuPrice),
       },
     });
 

@@ -364,6 +364,13 @@ const CustomerPlateDetails = ({ plate }: CustomerPlateDetailsProps) => {
               <li key={review.id}>
                 <p>
                   <CustomerDataPoint
+                    icon="info"
+                    label="Cliente"
+                    value={review.reviewer.displayName}
+                  />
+                </p>
+                <p>
+                  <CustomerDataPoint
                     iconNode={<StarRatingDisplay value={review.rating} size={14} showValue={false} />}
                     label="Puntaje"
                     value={formatCustomerMetric(review.rating, '/ 5', 1)}

@@ -79,6 +79,16 @@ const DEFAULT_PRICING_BASIS_GRAMS = 100;
 
 const roundMoney = (value: number) => Number(value.toFixed(2));
 
+/**
+ * Precio de carta en pesos argentinos, redondeado a múltiplos de 100 (sin centavos raros;
+ * alineado a cobro en efectivo sin billetes de $50 según normativa vigente).
+ */
+export const roundPublicMenuPriceARS = (value: number): number => {
+  if (!Number.isFinite(value) || value <= 0) return 0;
+  const step = 100;
+  return Math.max(step, Math.round(value / step) * step);
+};
+
 const asRecord = (value: unknown): UnknownRecord | null =>
   typeof value === 'object' && value !== null && !Array.isArray(value)
     ? (value as UnknownRecord)
@@ -175,10 +185,12 @@ export const calculateIngredientSalePrice = (
     .filter((rule) => rule.isActive && rule.includedInMenuPrice)
     .reduce((total, rule) => total + netPrice * rule.rate, 0);
 
+  const rawSale = netPrice + taxAmount;
+
   return {
     costPrice: roundMoney(procurement.unitCostNet),
     netPrice: roundMoney(netPrice),
-    salePrice: roundMoney(netPrice + taxAmount),
+    salePrice: roundPublicMenuPriceARS(rawSale),
   };
 };
 
@@ -222,22 +234,29 @@ export const analyzePlatePricing = (
   );
   const profitAmount = roundMoney(costPrice * pricingConfig.markupRate);
   const netPrice = roundMoney(costPrice + profitAmount);
-  const taxBreakdown = pricingConfig.taxRules
-    .filter((rule) => rule.isActive)
-    .map((rule) => ({
-      key: rule.key,
-      label: rule.label,
-      rate: rule.rate,
-      amount: roundMoney(netPrice * rule.rate),
-      includedInMenuPrice: rule.includedInMenuPrice,
-      sourceLabel: rule.sourceLabel,
-      note: rule.note,
-    }));
-  const taxAmount = roundMoney(
-    taxBreakdown
+  const activeRules = pricingConfig.taxRules.filter((rule) => rule.isActive);
+  const rawTaxBreakdown = activeRules.map((rule) => ({
+    key: rule.key,
+    label: rule.label,
+    rate: rule.rate,
+    amount: roundMoney(netPrice * rule.rate),
+    includedInMenuPrice: rule.includedInMenuPrice,
+    sourceLabel: rule.sourceLabel,
+    note: rule.note,
+  }));
+  const rawTaxAmount = roundMoney(
+    rawTaxBreakdown
       .filter((rule) => rule.includedInMenuPrice)
       .reduce((total, rule) => total + rule.amount, 0),
   );
+  const rawMenuPrice = roundMoney(netPrice + rawTaxAmount);
+  const menuPrice = roundPublicMenuPriceARS(rawMenuPrice);
+  const taxAmount = roundMoney(menuPrice - netPrice);
+  const taxScale = rawTaxAmount > 0 ? taxAmount / rawTaxAmount : 1;
+  const taxBreakdown = rawTaxBreakdown.map((rule) => ({
+    ...rule,
+    amount: rule.includedInMenuPrice ? roundMoney(rule.amount * taxScale) : 0,
+  }));
 
   return {
     ingredientBreakdown,
@@ -245,7 +264,7 @@ export const analyzePlatePricing = (
     netPrice,
     profitAmount,
     taxAmount,
-    menuPrice: roundMoney(netPrice + taxAmount),
+    menuPrice,
     taxBreakdown,
     missingIngredientIds: Array.from(new Set(missingIngredientIds)),
   };

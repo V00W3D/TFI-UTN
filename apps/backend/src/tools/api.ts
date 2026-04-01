@@ -8,19 +8,28 @@ import { contracts } from '@app/contracts';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { roleMiddleware } from '../middleware/role.middleware';
 import { ErrorTools } from './ErrorTools';
-import { BACKEND_URL, BACKEND_HOST, BACKEND_PORT, BUN_MODE } from '../env';
+import {
+  BACKEND_URL,
+  BACKEND_HOST,
+  BACKEND_PORT,
+  BUN_MODE,
+  FRONTEND_HOST,
+  FRONTEND_PORT,
+  CORS_EXTRA_ORIGINS,
+  REPLIT_DEV_DOMAIN,
+} from '../env';
 
-// Accept localhost, 127.0.0.1, and Replit proxied domains.
-const FRONTEND_PORT = process.env.FRONTEND_PORT ?? '5173';
-const FRONTEND_HOST = process.env.FRONTEND_HOST ?? '100.87.111.94';
-const REPLIT_DEV_DOMAIN = process.env.REPLIT_DEV_DOMAIN;
+const extraOrigins = CORS_EXTRA_ORIGINS.split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const ALLOWED_ORIGINS: (string | RegExp)[] = [
   `http://${FRONTEND_HOST}:${FRONTEND_PORT}`,
   `http://127.0.0.1:${FRONTEND_PORT}`,
+  `http://localhost:${FRONTEND_PORT}`,
+  ...extraOrigins,
   ...(REPLIT_DEV_DOMAIN ? [`https://${REPLIT_DEV_DOMAIN}`] : []),
   /\.replit\.dev$/,
-  `http://192.168.1.11:${FRONTEND_PORT}`,
-  `http://localhost:${FRONTEND_PORT}`,
 ];
 
 /**

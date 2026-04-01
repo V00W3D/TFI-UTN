@@ -71,7 +71,7 @@ const Story = () => {
 
   return (
     <section id="como-funciona" className="py-20 bg-qart-bg relative overflow-hidden">
-      {/* SECTION DIVIDER - Transition to FeaturedDish */}
+      {/* SECTION DIVIDER - Transition to destacados */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0">
         <svg
           className="relative block w-[calc(100%+1.3px)] h-12"

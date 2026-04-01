@@ -126,12 +126,20 @@ export const TagSchema = z.object({
   description: shortNoteField.schema,
 });
 
+export const ReviewerSchema = z.object({
+  id: z.uuid(),
+  displayName: z.string(),
+  /** Avatar generado (sin foto de perfil persistida en el usuario). */
+  avatarUrl: z.string().nullable(),
+});
+
 export const ReviewSchema = z.object({
   id: z.uuid(),
   rating: z.number(),
   comment: reviewCommentField.schema,
   recommends: z.boolean().nullable(),
   createdAt: z.string(),
+  reviewer: ReviewerSchema,
 });
 
 export const PlateAdjustmentSchema = z.object({
@@ -177,4 +185,129 @@ export const GetPlatesContract = defineEndpoint('public', 'GET /customers/plates
   )
   .build();
 
-export const CUSTOMERContract = [GetPlatesContract] as const;
+const qCsv = (val: unknown): string[] | undefined => {
+  if (val == null || val === '') return undefined;
+  if (Array.isArray(val)) {
+    return val.flatMap((v) => String(v).split(',')).map((s) => s.trim()).filter(Boolean);
+  }
+  if (typeof val === 'string') {
+    return val.split(',').map((s) => s.trim()).filter(Boolean);
+  }
+  return undefined;
+};
+
+const asOptNum = z.preprocess(
+  (v) => (v === '' || v == null ? undefined : v),
+  z.coerce.number().optional(),
+);
+
+const asOptInt = z.preprocess(
+  (v) => (v === '' || v == null ? undefined : v),
+  z.coerce.number().int().optional(),
+);
+
+export const SearchPlatesQuerySchema = z.object({
+  q: z.string().optional(),
+  sort: z
+    .enum([
+      'price_asc',
+      'price_desc',
+      'rating_desc',
+      'rating_asc',
+      'name_asc',
+      'name_desc',
+      'popular_desc',
+    ])
+    .default('name_asc'),
+  page: z.coerce.number().int().min(1).catch(1),
+  pageSize: z.coerce.number().int().min(1).max(60).catch(24),
+  minPrice: asOptNum,
+  maxPrice: asOptNum,
+  minCalories: asOptNum,
+  maxCalories: asOptNum,
+  minProtein: asOptNum,
+  maxProtein: asOptNum,
+  minFat: asOptNum,
+  maxFat: asOptNum,
+  minRating: asOptNum,
+  minRatingsCount: asOptInt,
+  minLikes: asOptInt,
+  maxPrepMinutes: asOptInt,
+  maxCookMinutes: asOptInt,
+  minYieldServings: asOptInt,
+  maxYieldServings: asOptInt,
+  minServedWeightGrams: asOptNum,
+  maxServedWeightGrams: asOptNum,
+  recipeTypes: z.preprocess(qCsv, z.array(plateTypeField.schema).optional()),
+  flavors: z.preprocess(qCsv, z.array(flavorProfileField.schema).optional()),
+  difficulties: z.preprocess(qCsv, z.array(difficultyField.schema).optional()),
+  sizes: z.preprocess(qCsv, z.array(plateSizeField.schema).optional()),
+  /** Alérgenos: excluir platos que contengan alguno de estos. */
+  excludeAllergens: z.preprocess(qCsv, z.array(allergenField.schema).optional()),
+  /** Etiquetas dietarias que el plato debe incluir (todas). */
+  dietaryTags: z.preprocess(qCsv, z.array(dietaryTagField.schema).optional()),
+  /** Etiquetas nutricionales que el plato debe incluir (todas). */
+  nutritionTags: z.preprocess(qCsv, z.array(nutritionTagField.schema).optional()),
+  /** Mismas etiquetas a nivel receta (todas). */
+  recipeDietaryTags: z.preprocess(qCsv, z.array(dietaryTagField.schema).optional()),
+  /** Nombres de tags de cartelería (coincidencia sin distinguir mayúsculas). */
+  tagNames: z.preprocess(qCsv, z.array(z.string().min(1)).optional()),
+});
+
+export const SearchPlatesResponseSchema = z.object({
+  items: z.array(PlateSchema),
+  total: z.number().int(),
+  page: z.number().int(),
+  pageSize: z.number().int(),
+});
+
+/** Tipo de entrada ya validada (query parseada en el servidor). */
+export type SearchPlatesQuery = z.output<typeof SearchPlatesQuerySchema>;
+
+export const SearchPlatesContract = defineEndpoint('public', 'GET /customers/search')
+  .IO(SearchPlatesQuerySchema, SearchPlatesResponseSchema)
+  .doc(
+    'Search menu',
+    'Filtered, sortable catalog with URL-friendly query params; totals for pagination.',
+  )
+  .build();
+
+export const FeaturedPlateSchema = PlateSchema.extend({
+  unitsSold: z.number().int(),
+});
+
+export const GetFeaturedPlatesContract = defineEndpoint('public', 'GET /customers/featured')
+  .IO(
+    z.object({
+      limit: z.coerce.number().int().min(1).max(10).catch(3),
+    }),
+    z.array(FeaturedPlateSchema),
+  )
+  .doc(
+    'Featured plates',
+    'Top sellers weighted with review quality; default limit 3.',
+  )
+  .build();
+
+export const UpsertReviewBodySchema = z.object({
+  plateId: z.uuid(),
+  rating: z.number().int().min(1).max(5),
+  comment: reviewCommentField.schema.optional(),
+  recommends: z.boolean().optional(),
+});
+
+/** Alta o edición de la reseña del usuario autenticado para un plato (rol CUSTOMER). */
+export const UpsertReviewContract = defineEndpoint('role', 'POST /customers/reviews')
+  .IO(UpsertReviewBodySchema, ReviewSchema)
+  .doc(
+    'Publicar reseña',
+    'Crea o actualiza la reseña del cliente para un plato; recalcula promedio del plato.',
+  )
+  .build();
+
+export const CUSTOMERContract = [
+  GetPlatesContract,
+  GetFeaturedPlatesContract,
+  SearchPlatesContract,
+  UpsertReviewContract,
+] as const;

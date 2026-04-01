@@ -23,15 +23,14 @@ import type { RouteObject } from 'react-router-dom';
 import { CustomerRoutes } from '@modules/Customer/CustomerRoutes';
 import { IAMRoutes } from '@modules/IAM/IAMRoutes';
 import { LandingRoutes } from '@modules/Landing/LandingRoutes';
+import { SearchRoutes } from '@modules/Search/SearchRoutes';
+import { PUBLIC_APP_SCOPE } from './env';
+
+const shared: RouteObject[] = [LandingRoutes, SearchRoutes, IAMRoutes];
 
 export default function AppRoutes() {
-  const routes: RouteObject[] = [
-    LandingRoutes,
-    CustomerRoutes,
-    IAMRoutes,
-    // POSRoutes,
-    // AdminRoutes,
-  ];
+  const routes: RouteObject[] =
+    PUBLIC_APP_SCOPE === 'full' ? [...shared, CustomerRoutes] : shared;
 
   return useRoutes(routes);
 }

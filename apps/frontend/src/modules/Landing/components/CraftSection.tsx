@@ -8,19 +8,20 @@ import { motion } from 'framer-motion';
 const CraftSection = () => {
   return (
     <section
+      id="craft"
       className="py-20 overflow-hidden relative border-y-4 border-qart-border"
       style={{ background: 'var(--qart-surface-inverse)' }}
     >
       <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
         <motion.h2
-          className="text-4xl md:text-5xl font-display mb-6 leading-none uppercase font-black"
+          className="text-4xl md:text-5xl font-display mb-6 leading-none uppercase font-black landing-welcome-craft-title"
           style={{ color: 'var(--qart-text-on-inverse)' }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          Armá tu pedido <br />
-          <span className="text-qart-accent">cuando quieras.</span>
+          Crafteo <br />
+          <span className="text-qart-accent">sin apuro.</span>
         </motion.h2>
 
         <motion.p
@@ -31,8 +32,8 @@ const CraftSection = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
         >
-          Elegí la base, sumá ingredientes y resolvé tu pedido en pocos pasos, con una experiencia
-          clara de principio a fin.
+          Si querés ver cómo se arma cada cosa, acercate al detalle: es una invitación liviana, no
+          una obligación. El salón sigue siendo el centro; esto suma cuando tenés curiosidad.
         </motion.p>
 
         <motion.div
@@ -42,6 +43,7 @@ const CraftSection = () => {
           transition={{ delay: 0.2 }}
         >
           <button
+            type="button"
             className="px-7 py-3.5 text-base font-black uppercase tracking-[0.16em] border-4 transition-all duration-200"
             style={{
               background: 'var(--qart-bg)',
@@ -59,8 +61,11 @@ const CraftSection = () => {
               b.style.transform = '';
               b.style.boxShadow = 'var(--qart-shadow-sharp)';
             }}
+            onClick={() =>
+              document.getElementById('destacados')?.scrollIntoView({ behavior: 'smooth' })
+            }
           >
-            Empezar ahora
+            Ver favoritos
           </button>
         </motion.div>
       </div>

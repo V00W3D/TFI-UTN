@@ -30,7 +30,6 @@ const App = () => {
   }, [mode]);
 
   useEffect(() => {
-    // Initial Session Hydration
     sdk.iam
       .me()
       .then((res) => {

@@ -1,59 +1,71 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 /**
  * @file Hero.tsx
- * @description Architectural, high-contrast hero with sharp geometry and bold typography.
+ * @description Tono rápido y juvenil (cadena / burger energy), sin perder tokens QART.
  */
 const Hero = () => {
   return (
-    <section className="relative min-h-[84vh] flex items-center pt-20 overflow-hidden bg-qart-bg">
-      {/* Structural Decor (Sharp) */}
+    <section className="relative min-h-[82vh] flex items-center pt-20 overflow-hidden bg-qart-bg">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-qart-bg-warm border-l-4 border-qart-border hidden lg:block" />
 
-      {/* CONTENT GRID */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* TEXT CONTENT */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
         <div className="text-center lg:text-left">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="badge-accent mb-6 uppercase tracking-[0.3em]"
+            transition={{ duration: 0.45 }}
+            className="badge-accent mb-5 uppercase tracking-[0.28em] text-[0.7rem]"
           >
-            Pedí a tu manera
+            Rápido · Rico · Sin drama
           </motion.div>
 
           <motion.h1
-            className="text-5xl md:text-6xl lg:text-[7rem] font-display text-qart-primary leading-[0.86] mb-8 uppercase font-black"
-            initial={{ opacity: 0, y: 30 }}
+            className="text-4xl md:text-5xl lg:text-[4.25rem] font-display text-qart-primary leading-[0.92] mb-6 uppercase font-black"
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            transition={{ delay: 0.12, duration: 0.55 }}
           >
-            Armá tu plato <br />
-            <span className="text-qart-accent">a tu manera.</span>
+            Comé bien,
+            <br />
+            <span className="text-qart-accent">sin complicarte.</span>
           </motion.h1>
 
           <motion.p
-            className="text-lg text-qart-text-muted leading-relaxed mb-10 max-w-lg mx-auto lg:mx-0 font-bold uppercase tracking-tight"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-base md:text-lg text-qart-text-muted leading-snug mb-8 max-w-md mx-auto lg:mx-0 font-semibold"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            transition={{ delay: 0.25, duration: 0.5 }}
           >
-            Elegí la base, sumá ingredientes y definí cada detalle en una experiencia simple,
-            clara y pensada para pedir sin complicaciones.
+            Pedidos claros, precios al frente y el mismo espíritu de barrio. Si te copa el detalle de
+            armado, el crafteo está — suave, nada forzado.
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start"
-            initial={{ opacity: 0, y: 20 }}
+            className="flex flex-col sm:flex-row items-center gap-3 justify-center lg:justify-start"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.6 }}
+            transition={{ delay: 0.38, duration: 0.5 }}
           >
-            <button className="btn-primary w-full sm:w-auto text-base px-8 py-4 uppercase tracking-widest">
-              Empezar pedido
+            <Link
+              to="/search"
+              className="btn-primary w-full sm:w-auto text-sm px-8 py-3.5 uppercase tracking-widest text-center"
+            >
+              Ver menú completo
+            </Link>
+            <button
+              type="button"
+              className="btn-outline w-full sm:w-auto text-sm px-8 py-3.5 uppercase tracking-widest"
+              onClick={() =>
+                document.getElementById('destacados')?.scrollIntoView({ behavior: 'smooth' })
+              }
+            >
+              Favoritos
             </button>
             <button
-              className="btn-outline w-full sm:w-auto text-base px-8 py-4 uppercase tracking-widest"
+              type="button"
+              className="btn-outline w-full sm:w-auto text-sm px-8 py-3.5 uppercase tracking-widest"
               onClick={() =>
                 document.getElementById('como-funciona')?.scrollIntoView({ behavior: 'smooth' })
               }
@@ -62,83 +74,47 @@ const Hero = () => {
             </button>
           </motion.div>
 
-          <motion.div
+          <motion.p
+            className="mt-6 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-qart-text-muted flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-            className="mt-12 flex flex-wrap justify-center lg:justify-start gap-8"
+            transition={{ delay: 0.5, duration: 0.45 }}
           >
-            <div className="flex items-center gap-4 group">
-              <div className="w-12 h-12 bg-qart-surface border-2 border-qart-border flex items-center justify-center transition-all duration-300 group-hover:bg-qart-accent group-hover:text-white">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-              </div>
-              <div className="text-left">
-                <p className="text-xs font-black text-qart-primary uppercase tracking-widest">
-                  Envío
-                </p>
-                <p className="text-xs text-qart-text-muted font-bold">RÁPIDO Y CUIDADO</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 group">
-              <div className="w-12 h-12 bg-qart-surface border-2 border-qart-border flex items-center justify-center transition-all duration-300 group-hover:bg-qart-accent-2 group-hover:text-white">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  />
-                </svg>
-              </div>
-              <div className="text-left">
-                <p className="text-xs font-black text-qart-primary uppercase tracking-widest">
-                  En el Local
-                </p>
-                <p className="text-xs text-qart-text-muted font-bold">CÓMODO Y BIEN ATENDIDO</p>
-              </div>
-            </div>
-          </motion.div>
+            <span className="text-qart-text-subtle">Ingresá</span>
+            <Link to="/iam/login" className="btn-outline text-[0.65rem] px-4 py-2 uppercase tracking-widest">
+              Entrá
+            </Link>
+            <span className="text-qart-border-soft hidden sm:inline" aria-hidden>
+              ·
+            </span>
+            <span className="text-qart-text-subtle">¿Sos nuevo?</span>
+            <Link
+              to="/iam/register"
+              className="btn-primary text-[0.65rem] px-4 py-2 uppercase tracking-widest shadow-none"
+            >
+              Registrate
+            </Link>
+          </motion.p>
         </div>
 
-        {/* HERO IMAGE (Sharp Shadow) */}
         <motion.div
           className="relative lg:flex justify-end"
-          initial={{ opacity: 0, x: 40 }}
+          initial={{ opacity: 0, x: 28 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ duration: 0.65, delay: 0.2 }}
         >
-          <div className="relative w-full aspect-square max-w-[29rem] border-8 border-qart-border bg-qart-bg-warm">
+          <div className="relative w-full aspect-square max-w-[26rem] border-[6px] border-qart-border bg-qart-bg-warm mx-auto lg:mx-0">
             <img
               src="/hero.png"
-              alt="Plato personalizado"
-              className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-500"
+              alt="Plato del menú"
+              className="w-full h-full object-cover grayscale-[0.15] hover:grayscale-0 transition-all duration-500"
             />
-            {/* Absolute accent strip */}
-            <div className="absolute -bottom-5 -right-5 w-24 h-24 bg-qart-accent border-4 border-qart-border z-0" />
+            <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-qart-accent border-4 border-qart-border z-0" />
           </div>
         </motion.div>
       </div>
 
-      {/* SHARP BOTTOM DIVIDER */}
-      <div className="absolute bottom-0 left-0 w-full h-8 bg-qart-border" />
+      <div className="absolute bottom-0 left-0 w-full h-6 bg-qart-border" />
     </section>
   );
 };

@@ -3,8 +3,9 @@ import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Story from '../components/Story';
 import HowWeServe from '../components/HowWeServe';
-import FeaturedDish from '../components/FeaturedDish';
+import FeaturedSpotlight from '../components/FeaturedSpotlight';
 import CraftSection from '../components/CraftSection';
+import OrderHistorySection from '../components/OrderHistorySection';
 import Contact from '../components/Contact';
 import OrderPanel from '../components/OrderPanel';
 import { useAppStore } from '../../../appStore';
@@ -27,8 +28,9 @@ const LandingPage = () => {
       <Hero />
       <HowWeServe />
       <Story />
-      <FeaturedDish />
+      <FeaturedSpotlight />
       <CraftSection />
+      <OrderHistorySection />
       <Contact />
       <OrderPanel />
     </div>

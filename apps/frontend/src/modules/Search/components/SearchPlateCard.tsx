@@ -1,0 +1,93 @@
+import { useState } from 'react';
+import { formatLandingEnum, formatLandingPrice, type LandingPlate } from '../../Landing/components/landingPlateNutrition';
+import { useOrderStore } from '../../../orderStore';
+
+interface SearchPlateCardProps {
+  plate: LandingPlate;
+  onNutrition: () => void;
+  onRecipe: () => void;
+  onReviews: () => void;
+}
+
+const IconNutrition = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+    <path d="M4 12h4l2-8 4 16 2-8h4" strokeLinecap="square" />
+  </svg>
+);
+
+const IconList = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+    <line x1="8" y1="6" x2="21" y2="6" />
+    <line x1="8" y1="12" x2="21" y2="12" />
+    <line x1="8" y1="18" x2="21" y2="18" />
+    <line x1="3" y1="6" x2="3.01" y2="6" />
+    <line x1="3" y1="12" x2="3.01" y2="12" />
+    <line x1="3" y1="18" x2="3.01" y2="18" />
+  </svg>
+);
+
+const IconReviews = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+    <path d="M4 5h13v10H8l-3 3V5z" strokeLinejoin="miter" />
+    <path d="M8 9h8M8 12h5" strokeLinecap="square" />
+  </svg>
+);
+
+const IconPlus = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden>
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+);
+
+/**
+ * Card mínima para grilla de /search — sin ruido visual.
+ */
+export const SearchPlateCard = ({ plate, onNutrition, onRecipe, onReviews }: SearchPlateCardProps) => {
+  const [imgErr, setImgErr] = useState(false);
+  const { addItem, setOpen } = useOrderStore();
+
+  return (
+    <article className="search-plate-card">
+      <div className="search-plate-card__media">
+        {plate.imageUrl && !imgErr ? (
+          <img src={plate.imageUrl} alt="" loading="lazy" onError={() => setImgErr(true)} />
+        ) : (
+          <div className="search-plate-card__ph" aria-hidden />
+        )}
+      </div>
+      <div className="search-plate-card__body">
+        <p className="search-plate-card__meta">{formatLandingEnum(plate.recipe.type)}</p>
+        <h3 className="search-plate-card__title">{plate.name}</h3>
+        <p className="search-plate-card__price">{formatLandingPrice(plate.menuPrice)}</p>
+        <div className="search-plate-card__actions">
+          <button type="button" className="search-plate-card__icon-btn" onClick={onNutrition} aria-label="Info nutricional">
+            <IconNutrition className="search-plate-card__ico" />
+          </button>
+          <button type="button" className="search-plate-card__icon-btn" onClick={onRecipe} aria-label="Receta">
+            <IconList className="search-plate-card__ico" />
+          </button>
+          <button
+            type="button"
+            className="search-plate-card__icon-btn"
+            onClick={onReviews}
+            aria-label="Ver reseñas"
+          >
+            <IconReviews className="search-plate-card__ico" />
+          </button>
+          <button
+            type="button"
+            className="search-plate-card__add"
+            onClick={() => {
+              addItem(plate, 1);
+              setOpen(true);
+            }}
+          >
+            <IconPlus className="search-plate-card__ico-add" />
+            Sumar
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+};

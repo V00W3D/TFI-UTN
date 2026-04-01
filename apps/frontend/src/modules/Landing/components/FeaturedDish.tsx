@@ -1,6 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
+import { PUBLIC_APP_SCOPE } from '../../../env';
 import { sdk } from '../../../tools/sdk';
 import PlateCard from './PlateCard';
 import PlateNutritionModal from './PlateNutritionModal';
@@ -67,20 +68,33 @@ const FeaturedDish = () => {
               Nuestros <br /> platos
             </h2>
             <p className="text-qart-text-muted text-base leading-snug font-bold uppercase tracking-tight max-w-2xl">
-              Explorá los destacados, movete por páginas de hasta tres platos y saltá al espacio
-              customer para ver el catálogo completo.
+              {PUBLIC_APP_SCOPE === 'full'
+                ? 'Explorá los destacados, movete por páginas de hasta tres platos y abrí el espacio customer para el catálogo completo.'
+                : 'Quedate en esta página: recorré los destacados de a tres y, si querés más detalle de armado, usá las fichas y el crafteo más abajo.'}
             </p>
           </div>
 
-          <Link
-            to="/customer"
-            className="btn-outline shrink-0 group uppercase tracking-widest py-3 px-7"
-          >
-            Ver menú completo
-            <span className="ml-4 group-hover:translate-x-2 transition-transform inline-block">
-              →
-            </span>
-          </Link>
+          {PUBLIC_APP_SCOPE === 'full' ? (
+            <Link
+              to="/customer"
+              className="btn-outline shrink-0 group uppercase tracking-widest py-3 px-7"
+            >
+              Ver menú completo
+              <span className="ml-4 group-hover:translate-x-2 transition-transform inline-block">
+                →
+              </span>
+            </Link>
+          ) : (
+            <button
+              type="button"
+              className="btn-outline shrink-0 uppercase tracking-widest py-3 px-7"
+              onClick={() =>
+                document.getElementById('craft')?.scrollIntoView({ behavior: 'smooth' })
+              }
+            >
+              Crafteo y detalle
+            </button>
+          )}
         </div>
 
         {isFetching && (

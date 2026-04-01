@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
 import { useOrderStore } from '../../../orderStore';
 import { sdk } from '../../../tools/sdk';
@@ -7,10 +7,11 @@ import { ParchmentIcon } from './OrderPanel';
 
 /**
  * @file Navbar.tsx
- * @description Sharp, architectural navigation with high-contrast geometry.
+ * @description Navegación principal: menú público, orden e ingreso IAM (login / registro).
  */
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, setUser } = useAppStore();
   const { toggleOpen, items } = useOrderStore();
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
@@ -22,8 +23,7 @@ const Navbar = () => {
       transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
       className="fixed top-0 left-0 w-full z-50 glass-header"
     >
-      <div className="max-w-7xl mx-auto px-6 h-[4rem] flex items-center justify-between">
-        {/* LEFT: LOGO & BRAND */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-[4rem] py-2 sm:py-0 flex flex-wrap items-center justify-between gap-y-2 gap-x-2">
         <div className="flex items-center gap-3">
           <div
             className="flex items-center gap-2 group cursor-pointer"
@@ -38,27 +38,42 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* DESKTOP LINKS */}
         <div className="hidden md:flex items-center gap-6">
-          {['Menú', 'Cómo Funciona', 'Locales'].map((item) => (
-            <a
-              key={item}
-              href={`#${item
-                .toLowerCase()
-                .replace(/\s+/g, '-')
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '')}`}
-              className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
-            >
-              {item}
-              <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full"></span>
-            </a>
-          ))}
+          <Link
+            to="/search"
+            className={`text-[0.84rem] font-bold transition-all duration-200 relative group uppercase tracking-widest px-2 ${
+              location.pathname === '/search'
+                ? 'text-qart-accent'
+                : 'text-qart-primary/80 hover:text-qart-accent'
+            }`}
+          >
+            Menú
+            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
+          </Link>
+          <a
+            href="#como-funciona"
+            className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
+          >
+            Cómo funciona
+            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a
+            href="#locales"
+            className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
+          >
+            Locales
+            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a
+            href="#mis-pedidos"
+            className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
+          >
+            Mis pedidos
+            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
+          </a>
         </div>
 
-        {/* ACTIONS */}
-        <div className="flex items-center gap-2.5">
-          {/* ORDEN button */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 ml-auto">
           <button
             type="button"
             className="nav-orden-btn"
@@ -76,7 +91,7 @@ const Navbar = () => {
 
           {user ? (
             <>
-              <span className="hidden sm:block text-[0.68rem] font-black uppercase tracking-widest text-qart-primary border-b-2 border-qart-accent px-1">
+              <span className="hidden sm:inline-flex items-center text-[0.68rem] font-black uppercase tracking-widest text-qart-primary border-2 border-qart-border bg-qart-surface px-2.5 py-1.5 max-w-[9rem] truncate">
                 {user.username}
               </span>
               <button
@@ -85,7 +100,7 @@ const Navbar = () => {
                   setUser(null);
                   navigate('/iam/login');
                 }}
-                className="btn-outline py-2 px-5 text-[0.82rem]"
+                className="btn-outline py-2 px-4 sm:px-5 text-[0.72rem] sm:text-[0.82rem] uppercase tracking-widest"
               >
                 Salir
               </button>
@@ -93,16 +108,18 @@ const Navbar = () => {
           ) : (
             <>
               <button
+                type="button"
                 onClick={() => navigate('/iam/login')}
-                className="hidden sm:block text-[0.68rem] font-black uppercase tracking-widest text-qart-primary hover:text-qart-accent transition-colors duration-300 cursor-pointer"
+                className="nav-auth-btn nav-auth-btn--ghost"
               >
-                Ingresar
+                Ingresá
               </button>
               <button
+                type="button"
                 onClick={() => navigate('/iam/register')}
-                className="btn-primary py-2 px-6 uppercase text-[0.82rem] tracking-widest"
+                className="nav-auth-btn nav-auth-btn--solid"
               >
-                Crear cuenta
+                Registrate
               </button>
             </>
           )}

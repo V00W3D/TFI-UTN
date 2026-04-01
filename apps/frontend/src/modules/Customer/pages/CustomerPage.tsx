@@ -44,7 +44,7 @@ const CustomerPage = () => {
     const selectionStillVisible = filteredPlates.some((plate) => plate.id === selectedPlateId);
 
     if (!selectionStillVisible) {
-      setSelectedPlateId(filteredPlates[0].id);
+      setSelectedPlateId(filteredPlates[0]?.id ?? null);
     }
   }, [filteredPlates, selectedPlateId]);
 
