@@ -10,8 +10,8 @@ export const UpsertReviewHandler = api.handler('POST /customers/reviews', { role
       userId: req.user!.id,
       plateId: input.plateId,
       rating: input.rating,
-      comment: input.comment,
-      recommends: input.recommends,
+      ...(input.comment !== undefined ? { comment: input.comment } : {}),
+      ...(input.recommends !== undefined ? { recommends: input.recommends } : {}),
     });
   },
 );

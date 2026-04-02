@@ -1,8 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
-import { useOrderStore } from '../../../orderStore';
+import { useOrderStore, type OrderFulfillment } from '../../../orderStore';
 import { formatLandingPrice } from './landingPlateNutrition';
+
+const fulfillmentShort: Record<OrderFulfillment, string> = {
+  dine_in: 'En el local',
+  pickup: 'Retiro',
+  delivery: 'Delivery',
+};
 
 interface OrderHistoryPanelProps {
   open: boolean;
@@ -99,6 +105,25 @@ const OrderHistoryPanel = ({ open, onClose }: OrderHistoryPanelProps) => {
                         </time>
                         <span className="order-history-card-total">{formatLandingPrice(entry.total)}</span>
                       </div>
+                      {(entry.saleId || entry.fulfillment || entry.lifecycleStatus) && (
+                        <div className="order-history-card-meta">
+                          {entry.saleId && (
+                            <span className="order-history-card-pill order-history-card-pill--id">
+                              #{entry.saleId.slice(0, 8)}
+                            </span>
+                          )}
+                          {entry.fulfillment && (
+                            <span className="order-history-card-pill">{fulfillmentShort[entry.fulfillment]}</span>
+                          )}
+                          {entry.lifecycleStatus && (
+                            <span
+                              className={`order-history-card-pill order-history-card-pill--status order-history-card-pill--${entry.lifecycleStatus.toLowerCase()}`}
+                            >
+                              {entry.lifecycleStatus}
+                            </span>
+                          )}
+                        </div>
+                      )}
                       <ul className="order-history-lines">
                         {entry.lines.map((line) => (
                           <li key={`${entry.id}-${line.plateId}`} className="order-history-line">

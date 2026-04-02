@@ -305,9 +305,38 @@ export const UpsertReviewContract = defineEndpoint('role', 'POST /customers/revi
   )
   .build();
 
+export const CreateCustomerOrderLineSchema = z.object({
+  plateId: z.uuid(),
+  quantity: z.number().int().min(1).max(99),
+});
+
+export const CreateCustomerOrderBodySchema = z.object({
+  lines: z.array(CreateCustomerOrderLineSchema).min(1).max(40),
+  fulfillment: z.enum(['dine_in', 'pickup', 'delivery']),
+});
+
+export const CreateCustomerOrderResponseSchema = z.object({
+  saleId: z.uuid(),
+  totalAmount: z.number(),
+  status: z.enum(['OPEN', 'CONFIRMED', 'CANCELLED', 'REFUNDED']),
+  channel: z.enum(['COUNTER', 'TAKEAWAY', 'DELIVERY', 'ONLINE']),
+  fulfillment: z.enum(['dine_in', 'pickup', 'delivery']),
+  lifecycleStatus: z.enum(['PENDIENTE', 'COMPLETADO']),
+});
+
+/** Pedido web con precios de menú desde DB; sesión opcional para asociar la venta al usuario. */
+export const CreateCustomerOrderContract = defineEndpoint('public', 'POST /customers/orders')
+  .IO(CreateCustomerOrderBodySchema, CreateCustomerOrderResponseSchema)
+  .doc(
+    'Registrar pedido',
+    'Crea una Sale con ítems; consume en local, retiro o delivery. Estado acorde a la modalidad.',
+  )
+  .build();
+
 export const CUSTOMERContract = [
   GetPlatesContract,
   GetFeaturedPlatesContract,
   SearchPlatesContract,
   UpsertReviewContract,
+  CreateCustomerOrderContract,
 ] as const;

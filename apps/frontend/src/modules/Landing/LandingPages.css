@@ -1949,6 +1949,220 @@
   line-height: 1;
 }
 
+/* Checkout modal (pedido real → API) */
+.order-checkout-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  background: color-mix(in srgb, var(--qart-ink) 42%, transparent);
+}
+
+.order-checkout-modal {
+  position: fixed;
+  z-index: 141;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(26rem, calc(100vw - 1.5rem));
+  max-height: min(85vh, 36rem);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--qart-border);
+  background: var(--qart-surface);
+  box-shadow: var(--qart-shadow-sharp);
+}
+
+.order-checkout-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1rem 0.5rem;
+  border-bottom: 2px solid var(--qart-border-subtle);
+}
+
+.order-checkout-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--qart-text);
+}
+
+.order-checkout-close {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 2px solid var(--qart-border);
+  background: var(--qart-surface);
+  color: var(--qart-text-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.order-checkout-close:hover:not(:disabled) {
+  border-color: var(--qart-accent);
+  color: var(--qart-accent);
+}
+
+.order-checkout-close:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.order-checkout-body {
+  padding: 1rem 1.05rem 1.15rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.order-checkout-lead {
+  margin: 0 0 0.85rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--qart-text-muted);
+}
+
+.order-checkout-lines {
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.order-checkout-line {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--qart-border-subtle);
+}
+
+.order-checkout-line:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.order-checkout-line-name {
+  font-weight: 800;
+  font-size: 0.88rem;
+  color: var(--qart-text);
+}
+
+.order-checkout-line-meta {
+  font-size: 0.78rem;
+  color: var(--qart-text-muted);
+  font-weight: 600;
+}
+
+.order-checkout-total-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  background: color-mix(in srgb, var(--qart-bg-warm) 50%, var(--qart-surface));
+  border: 2px solid var(--qart-border);
+}
+
+.order-checkout-total-lbl {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--qart-text-muted);
+}
+
+.order-checkout-total-val {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--qart-primary);
+}
+
+.order-checkout-error {
+  margin: 0 0 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border: 2px solid var(--qart-error);
+  background: color-mix(in srgb, var(--qart-error) 12%, var(--qart-surface));
+  color: var(--qart-error);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.order-checkout-fulfillment-grid {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.order-checkout-fulfillment-btn {
+  text-align: left;
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--qart-border);
+  background: var(--qart-surface);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.order-checkout-fulfillment-btn:hover:not(:disabled) {
+  border-color: var(--qart-primary);
+  background: color-mix(in srgb, var(--qart-primary) 8%, var(--qart-surface));
+}
+
+.order-checkout-fulfillment-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.order-checkout-fulfillment-title {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--qart-text);
+}
+
+.order-checkout-pending {
+  margin: 0.75rem 0 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--qart-text-muted);
+}
+
+.order-checkout-done-highlight {
+  margin: 0 0 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--qart-accent);
+}
+
+.order-checkout-done-msg {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--qart-text);
+}
+
+.order-checkout-done-foot {
+  margin: 1rem 0 0;
+  font-size: 0.78rem;
+  color: var(--qart-text-muted);
+  font-weight: 600;
+}
+
 /* =============================================================================
    REVIEWS MODAL
    ============================================================================= */
@@ -2379,6 +2593,39 @@
   font-size: 1.05rem;
   font-weight: 900;
   color: var(--qart-primary);
+}
+
+.order-history-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.65rem;
+}
+
+.order-history-card-pill {
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.45rem;
+  border: 2px solid var(--qart-border);
+  background: color-mix(in srgb, var(--qart-bg-warm) 40%, var(--qart-surface));
+  color: var(--qart-text-muted);
+}
+
+.order-history-card-pill--id {
+  font-family: ui-monospace, monospace;
+  letter-spacing: 0.08em;
+}
+
+.order-history-card-pill--pendiente {
+  border-color: color-mix(in srgb, var(--qart-accent) 45%, var(--qart-border));
+  color: var(--qart-accent);
+}
+
+.order-history-card-pill--completado {
+  border-color: color-mix(in srgb, #2e7d32 35%, var(--qart-border));
+  color: #2e7d32;
 }
 
 .order-history-lines {

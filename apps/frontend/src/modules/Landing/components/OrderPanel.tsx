@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 import { useOrderStore } from '../../../orderStore';
+import OrderCheckoutModal from './OrderCheckoutModal';
 import { formatLandingPrice } from './landingPlateNutrition';
 
 const ParchmentIcon = ({ className }: { className?: string }) => (
@@ -25,12 +27,18 @@ const ParchmentIcon = ({ className }: { className?: string }) => (
 );
 
 const OrderPanel = () => {
-  const { items, isOpen, setOpen, removeItem, updateQuantity, clearOrder, confirmCurrentOrder } =
-    useOrderStore();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const { items, isOpen, setOpen, removeItem, updateQuantity, clearOrder } = useOrderStore();
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
   const totalPrice = items.reduce((acc, i) => acc + (i.plate.menuPrice ?? 0) * i.quantity, 0);
 
   return (
+    <>
+    <OrderCheckoutModal
+      open={checkoutOpen}
+      onClose={() => setCheckoutOpen(false)}
+      items={items}
+    />
     <AnimatePresence>
       {isOpen && (
         <>
@@ -162,9 +170,9 @@ const OrderPanel = () => {
                 <button
                   type="button"
                   className="btn-primary w-full justify-center uppercase tracking-widest"
-                  onClick={() => confirmCurrentOrder()}
+                  onClick={() => setCheckoutOpen(true)}
                 >
-                  Confirmar pedido
+                  Realizar pedido
                 </button>
               </div>
             )}
@@ -172,6 +180,7 @@ const OrderPanel = () => {
         </>
       )}
     </AnimatePresence>
+    </>
   );
 };
 

@@ -27,6 +27,8 @@ model User {
   staff     StaffProfile?
   authority AuthorityProfile?
   reviews   Review[]
+  /** Ventas registradas desde el canal web (opcional). */
+  customerSales Sale[] @relation("CustomerSale")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -397,12 +399,16 @@ model Sale {
   taxAmount    Decimal     @default(0) @db.Decimal(12, 2)
   totalAmount  Decimal     @default(0) @db.Decimal(12, 2)
   notes        String?     @db.VarChar(255)
+  /** Cliente logueado al momento del pedido (web); invitados en null. */
+  customerUserId String?
+  customerUser   User?     @relation("CustomerSale", fields: [customerUserId], references: [id], onDelete: SetNull)
   items        SaleItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([soldAt, status])
+  @@index([customerUserId])
 }
 
 model SaleItem {

@@ -13,11 +13,19 @@ export interface OrderHistoryLine {
   unitPrice: number;
 }
 
+export type OrderFulfillment = 'dine_in' | 'pickup' | 'delivery';
+
+export type OrderLifecycleStatus = 'PENDIENTE' | 'COMPLETADO';
+
 export interface OrderHistoryEntry {
   id: string;
+  /** Id de Sale en backend cuando el pedido se persistió en DB. */
+  saleId?: string;
   completedAt: string;
   lines: OrderHistoryLine[];
   total: number;
+  fulfillment?: OrderFulfillment;
+  lifecycleStatus?: OrderLifecycleStatus;
 }
 
 const ORDER_HISTORY_KEY = 'qart-order-history-v1';
@@ -74,6 +82,8 @@ interface OrderState {
   clearOrder: () => void;
   /** Confirma el carrito actual: guarda historial, marca platos probados y vacía la orden. */
   confirmCurrentOrder: () => void;
+  /** Tras checkout en servidor: historial + probados + limpia el carrito y cierra el panel. */
+  finalizeRemoteOrder: (entry: OrderHistoryEntry) => void;
   totalItems: () => number;
   totalPrice: () => number;
   hasTriedPlate: (plateId: string) => boolean;
@@ -144,6 +154,24 @@ export const useOrderStore = create<OrderState>((set, get) => ({
     set((state) => {
       const nextTried = new Set(state.triedPlateIds);
       for (const line of lines) {
+        nextTried.add(line.plateId);
+      }
+      saveTriedPlateIds(nextTried);
+      const nextHistory = [entry, ...state.orderHistory].slice(0, 50);
+      saveHistory(nextHistory);
+      return {
+        orderHistory: nextHistory,
+        triedPlateIds: nextTried,
+        items: [],
+        isOpen: false,
+      };
+    });
+  },
+
+  finalizeRemoteOrder: (entry) => {
+    set((state) => {
+      const nextTried = new Set(state.triedPlateIds);
+      for (const line of entry.lines) {
         nextTried.add(line.plateId);
       }
       saveTriedPlateIds(nextTried);
