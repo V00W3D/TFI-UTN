@@ -5,7 +5,6 @@ import Story from '../components/Story';
 import HowWeServe from '../components/HowWeServe';
 import FeaturedSpotlight from '../components/FeaturedSpotlight';
 import CraftSection from '../components/CraftSection';
-import OrderHistorySection from '../components/OrderHistorySection';
 import Contact from '../components/Contact';
 import OrderPanel from '../components/OrderPanel';
 import { useAppStore } from '../../../appStore';
@@ -30,7 +29,6 @@ const LandingPage = () => {
       <Story />
       <FeaturedSpotlight />
       <CraftSection />
-      <OrderHistorySection />
       <Contact />
       <OrderPanel />
     </div>

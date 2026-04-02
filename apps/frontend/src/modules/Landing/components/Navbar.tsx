@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
 import { useOrderStore } from '../../../orderStore';
 import { sdk } from '../../../tools/sdk';
 import { ParchmentIcon } from './OrderPanel';
+import OrderHistoryPanel from './OrderHistoryPanel';
 
 /**
  * @file Navbar.tsx
@@ -14,6 +16,7 @@ const Navbar = () => {
   const location = useLocation();
   const { user, setUser } = useAppStore();
   const { toggleOpen, items } = useOrderStore();
+  const [historyOpen, setHistoryOpen] = useState(false);
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
@@ -61,19 +64,28 @@ const Navbar = () => {
             href="#locales"
             className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
           >
-            Locales
+            Delivery y local
             <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
           </a>
-          <a
-            href="#mis-pedidos"
-            className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
+          <button
+            type="button"
+            className="relative text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 group uppercase tracking-widest px-2 cursor-pointer bg-transparent border-0"
+            onClick={() => setHistoryOpen(true)}
           >
-            Mis pedidos
+            Historial
             <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
-          </a>
+          </button>
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 ml-auto">
+          <button
+            type="button"
+            className="nav-historial-compact md:hidden"
+            onClick={() => setHistoryOpen(true)}
+            aria-label="Historial de pedidos"
+          >
+            Hist.
+          </button>
           <button
             type="button"
             className="nav-orden-btn"
@@ -125,6 +137,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      <OrderHistoryPanel open={historyOpen} onClose={() => setHistoryOpen(false)} />
     </motion.nav>
   );
 };

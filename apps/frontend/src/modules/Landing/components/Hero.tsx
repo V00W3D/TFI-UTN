@@ -52,7 +52,7 @@ const Hero = () => {
               to="/search"
               className="btn-primary w-full sm:w-auto text-sm px-8 py-3.5 uppercase tracking-widest text-center"
             >
-              Ver menú completo
+              Pedir ahora
             </Link>
             <button
               type="button"
@@ -73,28 +73,6 @@ const Hero = () => {
               Cómo funciona
             </button>
           </motion.div>
-
-          <motion.p
-            className="mt-6 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-qart-text-muted flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.45 }}
-          >
-            <span className="text-qart-text-subtle">Ingresá</span>
-            <Link to="/iam/login" className="btn-outline text-[0.65rem] px-4 py-2 uppercase tracking-widest">
-              Entrá
-            </Link>
-            <span className="text-qart-border-soft hidden sm:inline" aria-hidden>
-              ·
-            </span>
-            <span className="text-qart-text-subtle">¿Sos nuevo?</span>
-            <Link
-              to="/iam/register"
-              className="btn-primary text-[0.65rem] px-4 py-2 uppercase tracking-widest shadow-none"
-            >
-              Registrate
-            </Link>
-          </motion.p>
         </div>
 
         <motion.div
