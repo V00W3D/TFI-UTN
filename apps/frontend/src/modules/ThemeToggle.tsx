@@ -13,34 +13,38 @@ const ThemeToggle = () => {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-9999">
+    <div className="fixed bottom-8 left-8 z-9999">
       <motion.button
-        whileHover={{ scale: 1.1, rotate: 12 }}
-        whileTap={{ scale: 0.9, rotate: -12 }}
+        whileHover={{ scale: 1.12, rotate: 8 }}
+        whileTap={{ scale: 0.88, rotate: -8 }}
         onClick={toggleTheme}
-        className="relative w-16 h-16 rounded-none bg-qart-surface border-2 border-qart-border shadow-warm flex items-center justify-center cursor-pointer group overflow-hidden"
+        className="relative w-16 h-16 rounded-none bg-qart-surface border-4 border-qart-border shadow-sharp flex items-center justify-center cursor-pointer group overflow-hidden"
         aria-label="Cambiar tema"
       >
-        <div className="absolute inset-0 bg-qart-accent/0 group-hover:bg-qart-accent/5 transition-colors" />
+        <div className="absolute inset-0 bg-qart-accent/0 group-hover:bg-qart-accent/10 transition-colors duration-300" />
 
         <AnimatePresence mode="wait">
           {mode === 'light' ? (
             <motion.div
               key="sun"
-              initial={{ y: 20, opacity: 0, rotate: -45 }}
-              animate={{ y: 0, opacity: 1, rotate: 0 }}
-              exit={{ y: -20, opacity: 0, rotate: 45 }}
-              transition={{ duration: 0.3, type: 'spring', stiffness: 200 }}
+              initial={{ y: 24, opacity: 0, rotate: -90, scale: 0.5 }}
+              animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ y: -24, opacity: 0, rotate: 90, scale: 0.5 }}
+              transition={{ 
+                duration: 0.45, 
+                ease: [0.23, 1, 0.32, 1],
+                opacity: { duration: 0.2 }
+              }}
               className="text-qart-accent-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="28"
-                height="28"
+                width="30"
+                height="30"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2.5"
+                strokeWidth="2.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
@@ -58,20 +62,24 @@ const ThemeToggle = () => {
           ) : (
             <motion.div
               key="moon"
-              initial={{ y: 20, opacity: 0, rotate: 45 }}
-              animate={{ y: 0, opacity: 1, rotate: 0 }}
-              exit={{ y: -20, opacity: 0, rotate: -45 }}
-              transition={{ duration: 0.3, type: 'spring', stiffness: 200 }}
+              initial={{ y: 24, opacity: 0, rotate: 90, scale: 0.5 }}
+              animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ y: -24, opacity: 0, rotate: -90, scale: 0.5 }}
+              transition={{ 
+                duration: 0.45, 
+                ease: [0.23, 1, 0.32, 1],
+                opacity: { duration: 0.2 }
+              }}
               className="text-qart-accent"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="28"
-                height="28"
+                width="30"
+                height="30"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2.5"
+                strokeWidth="2.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >

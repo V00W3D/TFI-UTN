@@ -188,10 +188,16 @@ export const GetPlatesContract = defineEndpoint('public', 'GET /customers/plates
 const qCsv = (val: unknown): string[] | undefined => {
   if (val == null || val === '') return undefined;
   if (Array.isArray(val)) {
-    return val.flatMap((v) => String(v).split(',')).map((s) => s.trim()).filter(Boolean);
+    return val
+      .flatMap((v) => String(v).split(','))
+      .map((s) => s.trim())
+      .filter(Boolean);
   }
   if (typeof val === 'string') {
-    return val.split(',').map((s) => s.trim()).filter(Boolean);
+    return val
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
   }
   return undefined;
 };
@@ -283,10 +289,7 @@ export const GetFeaturedPlatesContract = defineEndpoint('public', 'GET /customer
     }),
     z.array(FeaturedPlateSchema),
   )
-  .doc(
-    'Featured plates',
-    'Top sellers weighted with review quality; default limit 3.',
-  )
+  .doc('Featured plates', 'Top sellers weighted with review quality; default limit 3.')
   .build();
 
 export const UpsertReviewBodySchema = z.object({
@@ -324,6 +327,28 @@ export const CreateCustomerOrderResponseSchema = z.object({
   lifecycleStatus: z.enum(['PENDIENTE', 'COMPLETADO']),
 });
 
+export const OrderHistoryLineSchema = z.object({
+  plateId: z.uuid(),
+  name: z.string(),
+  quantity: z.number().int().min(1),
+  unitPrice: z.number(),
+});
+
+export const OrderHistoryEntrySchema = z.object({
+  id: z.string(),
+  saleId: z.string().optional(),
+  completedAt: z.string(),
+  lines: z.array(OrderHistoryLineSchema),
+  total: z.number(),
+  fulfillment: z.enum(['dine_in', 'pickup', 'delivery']).optional(),
+  lifecycleStatus: z.enum(['PENDIENTE', 'COMPLETADO']).optional(),
+});
+
+export const GetCustomerOrderHistoryContract = defineEndpoint('public', 'GET /customers/history')
+  .IO(z.object({}), z.array(OrderHistoryEntrySchema))
+  .doc('Historial de pedidos', 'Retorna los pedidos del cliente según sesión/cookie y cache local.')
+  .build();
+
 /** Pedido web con precios de menú desde DB; sesión opcional para asociar la venta al usuario. */
 export const CreateCustomerOrderContract = defineEndpoint('public', 'POST /customers/orders')
   .IO(CreateCustomerOrderBodySchema, CreateCustomerOrderResponseSchema)
@@ -339,4 +364,5 @@ export const CUSTOMERContract = [
   SearchPlatesContract,
   UpsertReviewContract,
   CreateCustomerOrderContract,
+  GetCustomerOrderHistoryContract,
 ] as const;

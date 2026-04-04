@@ -48,6 +48,7 @@ export type SaleMinAggregateOutputType = {
   taxAmount: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
   notes: string | null
+  customerUserId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +63,7 @@ export type SaleMaxAggregateOutputType = {
   taxAmount: runtime.Decimal | null
   totalAmount: runtime.Decimal | null
   notes: string | null
+  customerUserId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -76,6 +78,7 @@ export type SaleCountAggregateOutputType = {
   taxAmount: number
   totalAmount: number
   notes: number
+  customerUserId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -104,6 +107,7 @@ export type SaleMinAggregateInputType = {
   taxAmount?: true
   totalAmount?: true
   notes?: true
+  customerUserId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -118,6 +122,7 @@ export type SaleMaxAggregateInputType = {
   taxAmount?: true
   totalAmount?: true
   notes?: true
+  customerUserId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -132,6 +137,7 @@ export type SaleCountAggregateInputType = {
   taxAmount?: true
   totalAmount?: true
   notes?: true
+  customerUserId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -233,6 +239,7 @@ export type SaleGroupByOutputType = {
   taxAmount: runtime.Decimal
   totalAmount: runtime.Decimal
   notes: string | null
+  customerUserId: string | null
   createdAt: Date
   updatedAt: Date
   _count: SaleCountAggregateOutputType | null
@@ -270,8 +277,10 @@ export type SaleWhereInput = {
   taxAmount?: Prisma.DecimalFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: Prisma.DecimalFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: Prisma.StringNullableFilter<"Sale"> | string | null
+  customerUserId?: Prisma.StringNullableFilter<"Sale"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
+  customerUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   items?: Prisma.SaleItemListRelationFilter
 }
 
@@ -285,8 +294,10 @@ export type SaleOrderByWithRelationInput = {
   taxAmount?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  customerUser?: Prisma.UserOrderByWithRelationInput
   items?: Prisma.SaleItemOrderByRelationAggregateInput
 }
 
@@ -303,8 +314,10 @@ export type SaleWhereUniqueInput = Prisma.AtLeast<{
   taxAmount?: Prisma.DecimalFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: Prisma.DecimalFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: Prisma.StringNullableFilter<"Sale"> | string | null
+  customerUserId?: Prisma.StringNullableFilter<"Sale"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
+  customerUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   items?: Prisma.SaleItemListRelationFilter
 }, "id">
 
@@ -318,6 +331,7 @@ export type SaleOrderByWithAggregationInput = {
   taxAmount?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.SaleCountOrderByAggregateInput
@@ -340,6 +354,7 @@ export type SaleScalarWhereWithAggregatesInput = {
   taxAmount?: Prisma.DecimalWithAggregatesFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: Prisma.DecimalWithAggregatesFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: Prisma.StringNullableWithAggregatesFilter<"Sale"> | string | null
+  customerUserId?: Prisma.StringNullableWithAggregatesFilter<"Sale"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Sale"> | Date | string
 }
@@ -356,6 +371,7 @@ export type SaleCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerUser?: Prisma.UserCreateNestedOneWithoutCustomerSalesInput
   items?: Prisma.SaleItemCreateNestedManyWithoutSaleInput
 }
 
@@ -369,6 +385,7 @@ export type SaleUncheckedCreateInput = {
   taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: string | null
+  customerUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutSaleInput
@@ -386,6 +403,7 @@ export type SaleUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerUser?: Prisma.UserUpdateOneWithoutCustomerSalesNestedInput
   items?: Prisma.SaleItemUpdateManyWithoutSaleNestedInput
 }
 
@@ -399,6 +417,7 @@ export type SaleUncheckedUpdateInput = {
   taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.SaleItemUncheckedUpdateManyWithoutSaleNestedInput
@@ -414,6 +433,7 @@ export type SaleCreateManyInput = {
   taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: string | null
+  customerUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -442,8 +462,19 @@ export type SaleUncheckedUpdateManyInput = {
   taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SaleListRelationFilter = {
+  every?: Prisma.SaleWhereInput
+  some?: Prisma.SaleWhereInput
+  none?: Prisma.SaleWhereInput
+}
+
+export type SaleOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type SaleCountOrderByAggregateInput = {
@@ -456,6 +487,7 @@ export type SaleCountOrderByAggregateInput = {
   taxAmount?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  customerUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -476,6 +508,7 @@ export type SaleMaxOrderByAggregateInput = {
   taxAmount?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  customerUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -490,6 +523,7 @@ export type SaleMinOrderByAggregateInput = {
   taxAmount?: Prisma.SortOrder
   totalAmount?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  customerUserId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -503,6 +537,48 @@ export type SaleSumOrderByAggregateInput = {
 export type SaleScalarRelationFilter = {
   is?: Prisma.SaleWhereInput
   isNot?: Prisma.SaleWhereInput
+}
+
+export type SaleCreateNestedManyWithoutCustomerUserInput = {
+  create?: Prisma.XOR<Prisma.SaleCreateWithoutCustomerUserInput, Prisma.SaleUncheckedCreateWithoutCustomerUserInput> | Prisma.SaleCreateWithoutCustomerUserInput[] | Prisma.SaleUncheckedCreateWithoutCustomerUserInput[]
+  connectOrCreate?: Prisma.SaleCreateOrConnectWithoutCustomerUserInput | Prisma.SaleCreateOrConnectWithoutCustomerUserInput[]
+  createMany?: Prisma.SaleCreateManyCustomerUserInputEnvelope
+  connect?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+}
+
+export type SaleUncheckedCreateNestedManyWithoutCustomerUserInput = {
+  create?: Prisma.XOR<Prisma.SaleCreateWithoutCustomerUserInput, Prisma.SaleUncheckedCreateWithoutCustomerUserInput> | Prisma.SaleCreateWithoutCustomerUserInput[] | Prisma.SaleUncheckedCreateWithoutCustomerUserInput[]
+  connectOrCreate?: Prisma.SaleCreateOrConnectWithoutCustomerUserInput | Prisma.SaleCreateOrConnectWithoutCustomerUserInput[]
+  createMany?: Prisma.SaleCreateManyCustomerUserInputEnvelope
+  connect?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+}
+
+export type SaleUpdateManyWithoutCustomerUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SaleCreateWithoutCustomerUserInput, Prisma.SaleUncheckedCreateWithoutCustomerUserInput> | Prisma.SaleCreateWithoutCustomerUserInput[] | Prisma.SaleUncheckedCreateWithoutCustomerUserInput[]
+  connectOrCreate?: Prisma.SaleCreateOrConnectWithoutCustomerUserInput | Prisma.SaleCreateOrConnectWithoutCustomerUserInput[]
+  upsert?: Prisma.SaleUpsertWithWhereUniqueWithoutCustomerUserInput | Prisma.SaleUpsertWithWhereUniqueWithoutCustomerUserInput[]
+  createMany?: Prisma.SaleCreateManyCustomerUserInputEnvelope
+  set?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  disconnect?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  delete?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  connect?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  update?: Prisma.SaleUpdateWithWhereUniqueWithoutCustomerUserInput | Prisma.SaleUpdateWithWhereUniqueWithoutCustomerUserInput[]
+  updateMany?: Prisma.SaleUpdateManyWithWhereWithoutCustomerUserInput | Prisma.SaleUpdateManyWithWhereWithoutCustomerUserInput[]
+  deleteMany?: Prisma.SaleScalarWhereInput | Prisma.SaleScalarWhereInput[]
+}
+
+export type SaleUncheckedUpdateManyWithoutCustomerUserNestedInput = {
+  create?: Prisma.XOR<Prisma.SaleCreateWithoutCustomerUserInput, Prisma.SaleUncheckedCreateWithoutCustomerUserInput> | Prisma.SaleCreateWithoutCustomerUserInput[] | Prisma.SaleUncheckedCreateWithoutCustomerUserInput[]
+  connectOrCreate?: Prisma.SaleCreateOrConnectWithoutCustomerUserInput | Prisma.SaleCreateOrConnectWithoutCustomerUserInput[]
+  upsert?: Prisma.SaleUpsertWithWhereUniqueWithoutCustomerUserInput | Prisma.SaleUpsertWithWhereUniqueWithoutCustomerUserInput[]
+  createMany?: Prisma.SaleCreateManyCustomerUserInputEnvelope
+  set?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  disconnect?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  delete?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  connect?: Prisma.SaleWhereUniqueInput | Prisma.SaleWhereUniqueInput[]
+  update?: Prisma.SaleUpdateWithWhereUniqueWithoutCustomerUserInput | Prisma.SaleUpdateWithWhereUniqueWithoutCustomerUserInput[]
+  updateMany?: Prisma.SaleUpdateManyWithWhereWithoutCustomerUserInput | Prisma.SaleUpdateManyWithWhereWithoutCustomerUserInput[]
+  deleteMany?: Prisma.SaleScalarWhereInput | Prisma.SaleScalarWhereInput[]
 }
 
 export type EnumSaleStatusFieldUpdateOperationsInput = {
@@ -527,6 +603,80 @@ export type SaleUpdateOneRequiredWithoutItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SaleUpdateToOneWithWhereWithoutItemsInput, Prisma.SaleUpdateWithoutItemsInput>, Prisma.SaleUncheckedUpdateWithoutItemsInput>
 }
 
+export type SaleCreateWithoutCustomerUserInput = {
+  id?: string
+  soldAt?: Date | string
+  status?: $Enums.SaleStatus
+  channel?: $Enums.SaleChannel
+  currencyCode?: string
+  subtotalNet?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.SaleItemCreateNestedManyWithoutSaleInput
+}
+
+export type SaleUncheckedCreateWithoutCustomerUserInput = {
+  id?: string
+  soldAt?: Date | string
+  status?: $Enums.SaleStatus
+  channel?: $Enums.SaleChannel
+  currencyCode?: string
+  subtotalNet?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  items?: Prisma.SaleItemUncheckedCreateNestedManyWithoutSaleInput
+}
+
+export type SaleCreateOrConnectWithoutCustomerUserInput = {
+  where: Prisma.SaleWhereUniqueInput
+  create: Prisma.XOR<Prisma.SaleCreateWithoutCustomerUserInput, Prisma.SaleUncheckedCreateWithoutCustomerUserInput>
+}
+
+export type SaleCreateManyCustomerUserInputEnvelope = {
+  data: Prisma.SaleCreateManyCustomerUserInput | Prisma.SaleCreateManyCustomerUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type SaleUpsertWithWhereUniqueWithoutCustomerUserInput = {
+  where: Prisma.SaleWhereUniqueInput
+  update: Prisma.XOR<Prisma.SaleUpdateWithoutCustomerUserInput, Prisma.SaleUncheckedUpdateWithoutCustomerUserInput>
+  create: Prisma.XOR<Prisma.SaleCreateWithoutCustomerUserInput, Prisma.SaleUncheckedCreateWithoutCustomerUserInput>
+}
+
+export type SaleUpdateWithWhereUniqueWithoutCustomerUserInput = {
+  where: Prisma.SaleWhereUniqueInput
+  data: Prisma.XOR<Prisma.SaleUpdateWithoutCustomerUserInput, Prisma.SaleUncheckedUpdateWithoutCustomerUserInput>
+}
+
+export type SaleUpdateManyWithWhereWithoutCustomerUserInput = {
+  where: Prisma.SaleScalarWhereInput
+  data: Prisma.XOR<Prisma.SaleUpdateManyMutationInput, Prisma.SaleUncheckedUpdateManyWithoutCustomerUserInput>
+}
+
+export type SaleScalarWhereInput = {
+  AND?: Prisma.SaleScalarWhereInput | Prisma.SaleScalarWhereInput[]
+  OR?: Prisma.SaleScalarWhereInput[]
+  NOT?: Prisma.SaleScalarWhereInput | Prisma.SaleScalarWhereInput[]
+  id?: Prisma.StringFilter<"Sale"> | string
+  soldAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
+  status?: Prisma.EnumSaleStatusFilter<"Sale"> | $Enums.SaleStatus
+  channel?: Prisma.EnumSaleChannelFilter<"Sale"> | $Enums.SaleChannel
+  currencyCode?: Prisma.StringFilter<"Sale"> | string
+  subtotalNet?: Prisma.DecimalFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalAmount?: Prisma.DecimalFilter<"Sale"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.StringNullableFilter<"Sale"> | string | null
+  customerUserId?: Prisma.StringNullableFilter<"Sale"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
+}
+
 export type SaleCreateWithoutItemsInput = {
   id?: string
   soldAt?: Date | string
@@ -539,6 +689,7 @@ export type SaleCreateWithoutItemsInput = {
   notes?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  customerUser?: Prisma.UserCreateNestedOneWithoutCustomerSalesInput
 }
 
 export type SaleUncheckedCreateWithoutItemsInput = {
@@ -551,6 +702,7 @@ export type SaleUncheckedCreateWithoutItemsInput = {
   taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
   notes?: string | null
+  customerUserId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -583,9 +735,69 @@ export type SaleUpdateWithoutItemsInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerUser?: Prisma.UserUpdateOneWithoutCustomerSalesNestedInput
 }
 
 export type SaleUncheckedUpdateWithoutItemsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  soldAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  channel?: Prisma.EnumSaleChannelFieldUpdateOperationsInput | $Enums.SaleChannel
+  currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotalNet?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type SaleCreateManyCustomerUserInput = {
+  id?: string
+  soldAt?: Date | string
+  status?: $Enums.SaleStatus
+  channel?: $Enums.SaleChannel
+  currencyCode?: string
+  subtotalNet?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalAmount?: runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type SaleUpdateWithoutCustomerUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  soldAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  channel?: Prisma.EnumSaleChannelFieldUpdateOperationsInput | $Enums.SaleChannel
+  currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotalNet?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.SaleItemUpdateManyWithoutSaleNestedInput
+}
+
+export type SaleUncheckedUpdateWithoutCustomerUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  soldAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
+  channel?: Prisma.EnumSaleChannelFieldUpdateOperationsInput | $Enums.SaleChannel
+  currencyCode?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotalNet?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  taxAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  totalAmount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  items?: Prisma.SaleItemUncheckedUpdateManyWithoutSaleNestedInput
+}
+
+export type SaleUncheckedUpdateManyWithoutCustomerUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   soldAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumSaleStatusFieldUpdateOperationsInput | $Enums.SaleStatus
@@ -640,8 +852,10 @@ export type SaleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   taxAmount?: boolean
   totalAmount?: boolean
   notes?: boolean
+  customerUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  customerUser?: boolean | Prisma.Sale$customerUserArgs<ExtArgs>
   items?: boolean | Prisma.Sale$itemsArgs<ExtArgs>
   _count?: boolean | Prisma.SaleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sale"]>
@@ -656,8 +870,10 @@ export type SaleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   taxAmount?: boolean
   totalAmount?: boolean
   notes?: boolean
+  customerUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  customerUser?: boolean | Prisma.Sale$customerUserArgs<ExtArgs>
 }, ExtArgs["result"]["sale"]>
 
 export type SaleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -670,8 +886,10 @@ export type SaleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   taxAmount?: boolean
   totalAmount?: boolean
   notes?: boolean
+  customerUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  customerUser?: boolean | Prisma.Sale$customerUserArgs<ExtArgs>
 }, ExtArgs["result"]["sale"]>
 
 export type SaleSelectScalar = {
@@ -684,21 +902,28 @@ export type SaleSelectScalar = {
   taxAmount?: boolean
   totalAmount?: boolean
   notes?: boolean
+  customerUserId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type SaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "soldAt" | "status" | "channel" | "currencyCode" | "subtotalNet" | "taxAmount" | "totalAmount" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["sale"]>
+export type SaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "soldAt" | "status" | "channel" | "currencyCode" | "subtotalNet" | "taxAmount" | "totalAmount" | "notes" | "customerUserId" | "createdAt" | "updatedAt", ExtArgs["result"]["sale"]>
 export type SaleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  customerUser?: boolean | Prisma.Sale$customerUserArgs<ExtArgs>
   items?: boolean | Prisma.Sale$itemsArgs<ExtArgs>
   _count?: boolean | Prisma.SaleCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type SaleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type SaleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type SaleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  customerUser?: boolean | Prisma.Sale$customerUserArgs<ExtArgs>
+}
+export type SaleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  customerUser?: boolean | Prisma.Sale$customerUserArgs<ExtArgs>
+}
 
 export type $SalePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Sale"
   objects: {
+    customerUser: Prisma.$UserPayload<ExtArgs> | null
     items: Prisma.$SaleItemPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -711,6 +936,10 @@ export type $SalePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     taxAmount: runtime.Decimal
     totalAmount: runtime.Decimal
     notes: string | null
+    /**
+     * * Cliente logueado al momento del pedido (web); invitados en null.
+     */
+    customerUserId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["sale"]>
@@ -1107,6 +1336,7 @@ readonly fields: SaleFieldRefs;
  */
 export interface Prisma__SaleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  customerUser<T extends Prisma.Sale$customerUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Sale$customerUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.Sale$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Sale$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SaleItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1146,6 +1376,7 @@ export interface SaleFieldRefs {
   readonly taxAmount: Prisma.FieldRef<"Sale", 'Decimal'>
   readonly totalAmount: Prisma.FieldRef<"Sale", 'Decimal'>
   readonly notes: Prisma.FieldRef<"Sale", 'String'>
+  readonly customerUserId: Prisma.FieldRef<"Sale", 'String'>
   readonly createdAt: Prisma.FieldRef<"Sale", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Sale", 'DateTime'>
 }
@@ -1402,6 +1633,10 @@ export type SaleCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.SaleCreateManyInput | Prisma.SaleCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1472,6 +1707,10 @@ export type SaleUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Sales to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SaleIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1538,6 +1777,25 @@ export type SaleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Sales to delete.
    */
   limit?: number
+}
+
+/**
+ * Sale.customerUser
+ */
+export type Sale$customerUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

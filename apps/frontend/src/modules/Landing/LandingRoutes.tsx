@@ -1,5 +1,7 @@
 import type { RouteObject } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
+import CraftPage from './pages/CraftPage';
+import ConfigPage from './pages/ConfigPage';
 
 /**
  * @file LandingRoutes.tsx
@@ -7,5 +9,9 @@ import LandingPage from './pages/LandingPage';
  */
 export const LandingRoutes: RouteObject = {
   path: '/',
-  element: <LandingPage />,
+  children: [
+    { index: true, element: <LandingPage /> },
+    { path: 'craft', element: <CraftPage /> },
+    { path: 'config', element: <ConfigPage /> },
+  ],
 };

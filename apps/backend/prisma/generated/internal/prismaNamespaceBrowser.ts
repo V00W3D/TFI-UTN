@@ -424,6 +424,7 @@ export const SaleScalarFieldEnum = {
   taxAmount: 'taxAmount',
   totalAmount: 'totalAmount',
   notes: 'notes',
+  customerUserId: 'customerUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

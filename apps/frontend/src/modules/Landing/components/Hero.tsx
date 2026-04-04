@@ -38,8 +38,8 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25, duration: 0.5 }}
           >
-            Pedidos claros, precios al frente y el mismo espíritu de barrio. Si te copa el detalle de
-            armado, el crafteo está — suave, nada forzado.
+            Pedidos claros, precios al frente y el mismo espíritu de barrio. Si te copa el detalle
+            de armado, el crafteo está — suave, nada forzado.
           </motion.p>
 
           <motion.div
@@ -81,7 +81,7 @@ const Hero = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.65, delay: 0.2 }}
         >
-          <div className="relative w-full aspect-square max-w-[26rem] border-[6px] border-qart-border bg-qart-bg-warm mx-auto lg:mx-0">
+          <div className="relative w-full aspect-square max-w-104 border-[6px] border-qart-border bg-qart-bg-warm mx-auto lg:mx-0">
             <img
               src="/hero.png"
               alt="Plato del menú"

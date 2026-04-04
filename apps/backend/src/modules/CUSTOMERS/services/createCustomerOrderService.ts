@@ -102,7 +102,8 @@ export const createCustomerOrderService = async (
       fulfillment: input.fulfillment,
       lifecycleStatus,
     };
-  } catch {
+  } catch (err) {
+    console.error('[createCustomerOrderService] DATABASE_ERROR', err);
     throw ERR.INTERNAL(['DATABASE_ERROR']);
   }
 };

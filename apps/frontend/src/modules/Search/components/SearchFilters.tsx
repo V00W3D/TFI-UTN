@@ -25,13 +25,13 @@ const toggleArray = <T extends string>(list: T[] | undefined, value: T): T[] | u
 };
 
 const Section = ({ id, title, children }: { id: string; title: string; children: ReactNode }) => (
-  <details className="search-filter-section" open id={id}>
-    <summary className="search-filter-section__title">
+  <div className="search-filter-section" id={id}>
+    <h3 className="search-filter-section__title">
       <span className="search-filter-section__marker" aria-hidden />
       {title}
-    </summary>
+    </h3>
     <div className="search-filter-section__body">{children}</div>
-  </details>
+  </div>
 );
 
 const chipLabel = (v: string) => formatLandingEnum(v);
@@ -83,21 +83,23 @@ export const SearchFilters = ({ searchParams, onReplaceParams }: Props) => {
       <Section id="filtros-orden" title="Orden">
         <label className="search-filter-field">
           <span className="search-filter-field__label">Ordenar</span>
-          <select
-            className="search-filter-input"
-            value={state.sort}
-            onChange={(e) =>
-              patch({ sort: e.target.value as SearchPlatesQuery['sort'], page: 1 })
-            }
-          >
-            <option value="name_asc">Nombre A–Z</option>
-            <option value="name_desc">Nombre Z–A</option>
-            <option value="price_asc">Precio ↑</option>
-            <option value="price_desc">Precio ↓</option>
-            <option value="rating_desc">Mejor puntaje</option>
-            <option value="rating_asc">Menor puntaje</option>
-            <option value="popular_desc">Más pedidos</option>
-          </select>
+          <div className="custom-select-container">
+            <select
+              className="custom-select"
+              value={state.sort}
+              onChange={(e) =>
+                patch({ sort: e.target.value as SearchPlatesQuery['sort'], page: 1 })
+              }
+            >
+              <option value="name_asc">Nombre A–Z</option>
+              <option value="name_desc">Nombre Z–A</option>
+              <option value="price_asc">Precio ↑</option>
+              <option value="price_desc">Precio ↓</option>
+              <option value="rating_desc">Mejor puntaje</option>
+              <option value="rating_asc">Menor puntaje</option>
+              <option value="popular_desc">Más pedidos</option>
+            </select>
+          </div>
         </label>
       </Section>
 
@@ -109,61 +111,69 @@ export const SearchFilters = ({ searchParams, onReplaceParams }: Props) => {
       </Section>
 
       <Section id="filtros-tipo" title="Tipo de plato">
-        <div className="search-filter-chips">
+        <div className="search-filter-list">
           {PLATE_TYPE_VALUES.map((v) => (
-            <label key={v} className="search-filter-chip">
+            <label key={v} className="custom-checkbox-container">
               <input
                 type="checkbox"
+                className="custom-checkbox-input"
                 checked={state.recipeTypes?.includes(v) ?? false}
                 onChange={() => patch({ recipeTypes: toggleArray(state.recipeTypes, v), page: 1 })}
               />
-              <span>{chipLabel(v)}</span>
+              <div className="custom-checkbox-box" />
+              <span className="custom-checkbox-label">{chipLabel(v)}</span>
             </label>
           ))}
         </div>
       </Section>
 
       <Section id="filtros-tamano" title="Tamaño">
-        <div className="search-filter-chips">
+        <div className="search-filter-list">
           {PLATE_SIZE_VALUES.map((v) => (
-            <label key={v} className="search-filter-chip">
+            <label key={v} className="custom-checkbox-container">
               <input
                 type="checkbox"
+                className="custom-checkbox-input"
                 checked={state.sizes?.includes(v) ?? false}
                 onChange={() => patch({ sizes: toggleArray(state.sizes, v), page: 1 })}
               />
-              <span>{chipLabel(v)}</span>
+              <div className="custom-checkbox-box" />
+              <span className="custom-checkbox-label">{chipLabel(v)}</span>
             </label>
           ))}
         </div>
       </Section>
 
       <Section id="filtros-sabor" title="Sabor / receta">
-        <div className="search-filter-chips search-filter-chips--compact">
+        <div className="search-filter-list">
           {FLAVOR_PROFILE_VALUES.map((v) => (
-            <label key={v} className="search-filter-chip">
+            <label key={v} className="custom-checkbox-container">
               <input
                 type="checkbox"
+                className="custom-checkbox-input"
                 checked={state.flavors?.includes(v) ?? false}
                 onChange={() => patch({ flavors: toggleArray(state.flavors, v), page: 1 })}
               />
-              <span>{chipLabel(v)}</span>
+              <div className="custom-checkbox-box" />
+              <span className="custom-checkbox-label">{chipLabel(v)}</span>
             </label>
           ))}
         </div>
         <label className="search-filter-field">
           <span className="search-filter-field__label">Dificultad</span>
-          <div className="search-filter-chips search-filter-chips--compact">
+          <div className="search-filter-list mt-2">
             {DIFFICULTY_VALUES.map((v) => (
-              <label key={v} className="search-filter-chip">
+              <label key={v} className="custom-checkbox-container">
                 <input
                   type="checkbox"
+                  className="custom-checkbox-input"
                   checked={state.difficulties?.includes(v) ?? false}
                   onChange={() =>
                     patch({ difficulties: toggleArray(state.difficulties, v), page: 1 })
                   }
                 />
-                <span>{chipLabel(v)}</span>
+                <div className="custom-checkbox-box" />
+                <span className="custom-checkbox-label">{chipLabel(v)}</span>
               </label>
             ))}
           </div>
@@ -205,66 +215,74 @@ export const SearchFilters = ({ searchParams, onReplaceParams }: Props) => {
       </Section>
 
       <Section id="filtros-alergenos" title="Sin alérgenos">
-        <div className="search-filter-chips search-filter-chips--wrap">
+        <div className="search-filter-list">
           {ALLERGEN_VALUES.map((v) => (
-            <label key={v} className="search-filter-chip">
+            <label key={v} className="custom-checkbox-container">
               <input
                 type="checkbox"
+                className="custom-checkbox-input"
                 checked={state.excludeAllergens?.includes(v) ?? false}
                 onChange={() =>
                   patch({ excludeAllergens: toggleArray(state.excludeAllergens, v), page: 1 })
                 }
               />
-              <span>{chipLabel(v)}</span>
+              <div className="custom-checkbox-box" />
+              <span className="custom-checkbox-label">{chipLabel(v)}</span>
             </label>
           ))}
         </div>
       </Section>
 
       <Section id="filtros-dieta" title="Etiquetas dieta (plato)">
-        <div className="search-filter-chips search-filter-chips--wrap">
+        <div className="search-filter-list">
           {DIETARY_TAG_VALUES.map((v) => (
-            <label key={v} className="search-filter-chip">
+            <label key={v} className="custom-checkbox-container">
               <input
                 type="checkbox"
+                className="custom-checkbox-input"
                 checked={state.dietaryTags?.includes(v) ?? false}
                 onChange={() => patch({ dietaryTags: toggleArray(state.dietaryTags, v), page: 1 })}
               />
-              <span>{chipLabel(v)}</span>
+              <div className="custom-checkbox-box" />
+              <span className="custom-checkbox-label">{chipLabel(v)}</span>
             </label>
           ))}
         </div>
       </Section>
 
       <Section id="filtros-nutri-tags" title="Highlights nutrición">
-        <div className="search-filter-chips search-filter-chips--wrap">
+        <div className="search-filter-list">
           {NUTRITION_TAG_VALUES.map((v) => (
-            <label key={v} className="search-filter-chip">
+            <label key={v} className="custom-checkbox-container">
               <input
                 type="checkbox"
+                className="custom-checkbox-input"
                 checked={state.nutritionTags?.includes(v) ?? false}
                 onChange={() =>
                   patch({ nutritionTags: toggleArray(state.nutritionTags, v), page: 1 })
                 }
               />
-              <span>{chipLabel(v)}</span>
+              <div className="custom-checkbox-box" />
+              <span className="custom-checkbox-label">{chipLabel(v)}</span>
             </label>
           ))}
         </div>
       </Section>
 
       <Section id="filtros-receta-dieta" title="Dieta a nivel receta">
-        <div className="search-filter-chips search-filter-chips--wrap">
+        <div className="search-filter-list">
           {DIETARY_TAG_VALUES.map((v) => (
-            <label key={v} className="search-filter-chip">
+            <label key={v} className="custom-checkbox-container">
               <input
                 type="checkbox"
+                className="custom-checkbox-input"
                 checked={state.recipeDietaryTags?.includes(v) ?? false}
                 onChange={() =>
                   patch({ recipeDietaryTags: toggleArray(state.recipeDietaryTags, v), page: 1 })
                 }
               />
-              <span>{chipLabel(v)}</span>
+              <div className="custom-checkbox-box" />
+              <span className="custom-checkbox-label">{chipLabel(v)}</span>
             </label>
           ))}
         </div>

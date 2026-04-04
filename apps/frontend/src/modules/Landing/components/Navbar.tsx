@@ -1,144 +1,124 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
-import { useOrderStore } from '../../../orderStore';
 import { sdk } from '../../../tools/sdk';
-import { ParchmentIcon } from './OrderPanel';
-import OrderHistoryPanel from './OrderHistoryPanel';
+import NavSearchBar from './NavSearchBar';
+import NavProfile from './NavProfile';
 
 /**
  * @file Navbar.tsx
- * @description Navegación principal: menú público, orden e ingreso IAM (login / registro).
+ * @description Navegación pública reutilizable — Landing + /search.
+ * Los links de anclaje usan `/#id` para funcionar desde cualquier ruta.
  */
+
+/* ── Secciones del landing side (siempre visibles, llevan a /#id) ── */
+const LANDING_SECTIONS = [
+  { label: 'Cómo funciona', href: '/#como-funciona' },
+  { label: 'Locales',       href: '/#locales'       },
+  { label: 'Destacados',    href: '/#destacados'    },
+  { label: 'Contacto',      href: '/#contact'       },
+] as const;
+
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, setUser } = useAppStore();
-  const { toggleOpen, items } = useOrderStore();
-  const [historyOpen, setHistoryOpen] = useState(false);
-  const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
+
+  const isSearch = location.pathname === '/search';
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-      className="fixed top-0 left-0 w-full z-50 glass-header"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-[4rem] py-2 sm:py-0 flex flex-wrap items-center justify-between gap-y-2 gap-x-2">
-        <div className="flex items-center gap-3">
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        className="fixed top-0 left-0 w-full z-50 glass-header"
+      >
+        <div className="navbar-inner">
+          {/* ── Logo ── */}
           <div
-            className="flex items-center gap-2 group cursor-pointer"
+            className="navbar-logo group"
             onClick={() => navigate('/')}
+            role="link"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && navigate('/')}
+            aria-label="Ir al inicio"
           >
-            <div className="w-7 h-7 bg-qart-accent border-2 border-qart-border flex items-center justify-center -rotate-3 group-hover:rotate-0 transition-transform duration-300">
-              <div className="w-1.5 h-[0.95rem] bg-qart-bg border border-qart-border" />
+            <div className="navbar-logo__mark">
+              <div className="navbar-logo__bar" />
             </div>
-            <span className="text-lg font-display text-qart-primary tracking-tighter uppercase font-black">
-              QART.
+            <span className="navbar-logo__text">
+              QART<span className="text-qart-accent">.</span>
             </span>
           </div>
-        </div>
 
-        <div className="hidden md:flex items-center gap-6">
-          <Link
-            to="/search"
-            className={`text-[0.84rem] font-bold transition-all duration-200 relative group uppercase tracking-widest px-2 ${
-              location.pathname === '/search'
-                ? 'text-qart-accent'
-                : 'text-qart-primary/80 hover:text-qart-accent'
-            }`}
-          >
-            Menú
-            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
-          </Link>
-          <a
-            href="#como-funciona"
-            className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
-          >
-            Cómo funciona
-            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
-          </a>
-          <a
-            href="#locales"
-            className="text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 relative group uppercase tracking-widest px-2"
-          >
-            Delivery y local
-            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
-          </a>
-          <button
-            type="button"
-            className="relative text-[0.84rem] font-bold text-qart-primary/80 hover:text-qart-accent transition-all duration-200 group uppercase tracking-widest px-2 cursor-pointer bg-transparent border-0"
-            onClick={() => setHistoryOpen(true)}
-          >
-            Historial
-            <span className="absolute -bottom-1 left-0 w-0 h-1 bg-qart-accent transition-all duration-300 group-hover:w-full" />
-          </button>
-        </div>
+          {/* ── Search bar (centro) ── */}
+          <div className="navbar-search-zone">
+            <NavSearchBar />
+          </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0 ml-auto">
-          <button
-            type="button"
-            className="nav-historial-compact md:hidden"
-            onClick={() => setHistoryOpen(true)}
-            aria-label="Historial de pedidos"
-          >
-            Hist.
-          </button>
-          <button
-            type="button"
-            className="nav-orden-btn"
-            onClick={toggleOpen}
-            aria-label="Ver orden"
-          >
-            <span className="nav-orden-icon-wrap">
-              <ParchmentIcon className="nav-orden-icon" />
-              {totalItems > 0 && (
-                <span className="nav-orden-badge">{totalItems > 99 ? '99+' : totalItems}</span>
+          {/* ── Nav links + auth (derecha) ── */}
+          <div className="navbar-right">
+            {/* ── App Actions (Iconos Invitativos) ── */}
+            <div className="flex items-center gap-2 mr-2">
+              <Link to="/search" className="nav-action-btn" title="Menú Completo">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square">
+                  <rect x="3" y="3" width="7" height="7" />
+                  <rect x="14" y="3" width="7" height="7" />
+                  <rect x="14" y="14" width="7" height="7" />
+                  <rect x="3" y="14" width="7" height="7" />
+                </svg>
+              </Link>
+              <Link to="/craft" className="nav-action-btn" title="Craftear">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+              </Link>
+              <Link to="/config" className="nav-action-btn" title="Ajustes">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+              </Link>
+            </div>
+
+            {/* Section anchors */}
+            <nav className="navbar-links" aria-label="Secciones">
+              {LANDING_SECTIONS.map(({ label, href }) => (
+                <a key={href} href={href} className="navbar-link">
+                  {label}
+                </a>
+              ))}
+            </nav>
+
+            {/* Auth area / Profile */}
+            <div className="navbar-auth">
+              {user ? (
+                <NavProfile />
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/iam/login')}
+                    className="nav-auth-btn nav-auth-btn--ghost"
+                  >
+                    Ingresá
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/iam/register')}
+                    className="nav-auth-btn nav-auth-btn--solid"
+                  >
+                    Registrate
+                  </button>
+                </>
               )}
-            </span>
-            <span className="nav-orden-label">Orden</span>
-          </button>
-
-          {user ? (
-            <>
-              <span className="hidden sm:inline-flex items-center text-[0.68rem] font-black uppercase tracking-widest text-qart-primary border-2 border-qart-border bg-qart-surface px-2.5 py-1.5 max-w-[9rem] truncate">
-                {user.username}
-              </span>
-              <button
-                onClick={async () => {
-                  await sdk.iam.logout();
-                  setUser(null);
-                  navigate('/iam/login');
-                }}
-                className="btn-outline py-2 px-4 sm:px-5 text-[0.72rem] sm:text-[0.82rem] uppercase tracking-widest"
-              >
-                Salir
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                onClick={() => navigate('/iam/login')}
-                className="nav-auth-btn nav-auth-btn--ghost"
-              >
-                Ingresá
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate('/iam/register')}
-                className="nav-auth-btn nav-auth-btn--solid"
-              >
-                Registrate
-              </button>
-            </>
-          )}
+            </div>
+          </div>
         </div>
-      </div>
-      <OrderHistoryPanel open={historyOpen} onClose={() => setHistoryOpen(false)} />
-    </motion.nav>
+      </motion.nav>
+    </>
   );
 };
 

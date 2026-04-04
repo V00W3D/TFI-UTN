@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
 import { form, sdk } from '../../../tools/sdk';
 import {
@@ -15,6 +15,7 @@ import {
   usernameField,
 } from '@app/sdk';
 import {
+  ArrowLeftIcon,
   ArrowRightIcon,
   FemaleIcon,
   LockIcon,
@@ -130,6 +131,13 @@ const RegisterPage = () => {
         transition={{ duration: 0.45, ease: 'easeOut' }}
         className="auth-panel auth-panel--register"
       >
+        <div className="auth-back-home auth-back-home--register">
+          <Link to="/" className="auth-back-link-top">
+            <ArrowLeftIcon className="size-[1.05rem]" />
+            <span>VOLVER AL INICIO</span>
+          </Link>
+        </div>
+
         <div className="auth-hero">
           <div className="auth-badge">NUEVA CUENTA</div>
 

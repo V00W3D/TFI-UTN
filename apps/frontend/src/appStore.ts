@@ -16,8 +16,9 @@
  * - Planning Poker: 1
  */
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { z } from 'zod';
-import type { AuthUserSchema } from '@app/contracts'; // ajustá el path
+import type { AuthUserSchema } from '@app/contracts';
 
 export type AppMode = 'dark' | 'light';
 export type AppModule = 'IAM' | 'POS' | 'ADMIN' | 'CORE' | 'LANDING' | 'CUSTOMER';
@@ -33,17 +34,21 @@ interface AppState {
   setUser: (user: AppUser | null) => void;
 }
 
-const savedMode = (localStorage.getItem('qart-mode') as AppMode) ?? 'light';
+export const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      mode: 'light',
+      module: 'CORE',
+      user: null,
 
-export const useAppStore = create<AppState>((set) => ({
-  mode: savedMode,
-  module: 'CORE',
-  user: null,
+      setMode: (mode) => set({ mode }),
+      setModule: (module) => set({ module }),
+      setUser: (user) => set({ user }),
+    }),
+    {
+      name: 'qart-app-storage',
+      partialize: (state) => ({ mode: state.mode, user: state.user }),
+    },
+  ),
+);
 
-  setMode: (mode) => {
-    set({ mode });
-    localStorage.setItem('qart-mode', mode);
-  },
-  setModule: (module) => set({ module }),
-  setUser: (user) => set({ user }),
-}));

@@ -61,17 +61,17 @@ export const SearchPlateCard = ({ plate, onNutrition, onRecipe, onReviews }: Sea
         <h3 className="search-plate-card__title">{plate.name}</h3>
         <p className="search-plate-card__price">{formatLandingPrice(plate.menuPrice)}</p>
         <div className="search-plate-card__actions">
-          <button type="button" className="search-plate-card__icon-btn" onClick={onNutrition} aria-label="Info nutricional">
+          <button type="button" className="search-plate-card__icon-btn" onClick={onNutrition} title="Info nutricional">
             <IconNutrition className="search-plate-card__ico" />
           </button>
-          <button type="button" className="search-plate-card__icon-btn" onClick={onRecipe} aria-label="Receta">
+          <button type="button" className="search-plate-card__icon-btn" onClick={onRecipe} title="Receta">
             <IconList className="search-plate-card__ico" />
           </button>
           <button
             type="button"
             className="search-plate-card__icon-btn"
             onClick={onReviews}
-            aria-label="Ver reseñas"
+            title="Ver reseñas"
           >
             <IconReviews className="search-plate-card__ico" />
           </button>
@@ -84,7 +84,7 @@ export const SearchPlateCard = ({ plate, onNutrition, onRecipe, onReviews }: Sea
             }}
           >
             <IconPlus className="search-plate-card__ico-add" />
-            Sumar
+            <span>SUMAR</span>
           </button>
         </div>
       </div>

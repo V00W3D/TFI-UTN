@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 import AppRoutes from './AppRoutes';
 import { sdk } from './tools/sdk';
 import { useAppStore } from './appStore';
-import ThemeToggle from './modules/ThemeToggle';
+import FloatingActions from './modules/Landing/components/FloatingActions';
 
 const App = () => {
   const setUser = useAppStore((s) => s.setUser);
@@ -45,7 +45,7 @@ const App = () => {
   return (
     <>
       <AppRoutes />
-      <ThemeToggle />
+      <FloatingActions />
     </>
   );
 };

@@ -14,16 +14,11 @@ import type { LandingPlate } from '../../Landing/components/landingPlateNutritio
 import { mergeSearchPayload, stringifySearchUrl } from '../searchUrl';
 import { SearchFilters } from '../components/SearchFilters';
 import { SearchPlateCard } from '../components/SearchPlateCard';
+import { ArrowLeftIcon } from '../../../components/shared/AppIcons';
 import '../../Landing/LandingPages.css';
 
 type ModalState = { plateId: string; view: 'nutrition' | 'recipe' | 'reviews' } | null;
 
-const IconSearch = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-    <circle cx="11" cy="11" r="7" />
-    <line x1="16.5" y1="16.5" x2="21" y2="21" strokeLinecap="square" />
-  </svg>
-);
 
 /**
  * Catálogo completo con filtros; estado en la query string.
@@ -31,7 +26,7 @@ const IconSearch = ({ className }: { className?: string }) => (
 const SearchPage = () => {
   const { setModule } = useAppStore();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [qDraft, setQDraft] = useState(() => searchParams.get('q') ?? '');
+
   const [modal, setModal] = useState<ModalState>(null);
 
   const queryKey = searchParams.toString();
@@ -41,23 +36,6 @@ const SearchPage = () => {
     setModule('LANDING');
   }, [setModule]);
 
-  useEffect(() => {
-    setQDraft(searchParams.get('q') ?? '');
-  }, [searchParams]);
-
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setSearchParams((prev) => {
-        const currentQ = prev.get('q') ?? '';
-        if (qDraft === currentQ) return prev;
-        const next = mergeSearchPayload(prev);
-        next.q = qDraft.trim() || undefined;
-        next.page = 1;
-        return new URLSearchParams(stringifySearchUrl(next));
-      });
-    }, 420);
-    return () => clearTimeout(t);
-  }, [qDraft, setSearchParams]);
 
   useEffect(() => {
     void sdk.customers.search(mergeSearchPayload(searchParams) as InferRequest<typeof SearchPlatesContract>);
@@ -100,25 +78,14 @@ const SearchPage = () => {
           <header className="search-main-header">
             <div className="search-main-header__row">
               <Link to="/" className="search-back-link">
-                ← Inicio
+                <ArrowLeftIcon className="size-[1.05rem]" />
+                <span>Inicio</span>
               </Link>
             </div>
             <h1 className="search-main-title">Menú completo</h1>
             <p className="search-main-lead">
-              Pedidos rápidos, sin vueltas. Filtrá por tipo, precio y más; compartí el link con lo que
-              buscás.
+              Filtrá por tipo, precio y más. Usá el buscador del menú superior para buscar por nombre.
             </p>
-            <div className="search-bar-wrap">
-              <IconSearch className="search-bar-ico" />
-              <input
-                type="search"
-                className="search-bar-input"
-                placeholder="Buscar por nombre o descripción…"
-                value={qDraft}
-                onChange={(e) => setQDraft(e.target.value)}
-                aria-label="Buscar en el menú"
-              />
-            </div>
             <p className="search-results-meta">
               {res.isFetching ? 'Buscando…' : `${total} resultado${total === 1 ? '' : 's'}`}
             </p>

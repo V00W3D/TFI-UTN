@@ -4,6 +4,7 @@ import { GetFeaturedPlatesHandler } from './handlers/GetFeaturedPlatesHandler';
 import { SearchPlatesHandler } from './handlers/SearchPlatesHandler';
 import { UpsertReviewHandler } from './handlers/UpsertReviewHandler';
 import { CreateCustomerOrderHandler } from './handlers/CreateCustomerOrderHandler';
+import { GetCustomerOrderHistoryHandler } from './handlers/GetCustomerOrderHistoryHandler';
 
 /**
  * @description CUSTOMERS Module Router.
@@ -14,5 +15,6 @@ export const CUSTOMERSRouter = api.router([
   SearchPlatesHandler,
   GetPlatesHandler,
   CreateCustomerOrderHandler,
+  GetCustomerOrderHistoryHandler,
   UpsertReviewHandler,
 ]);

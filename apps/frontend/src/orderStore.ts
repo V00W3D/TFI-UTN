@@ -1,4 +1,7 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { sdk } from './tools/sdk';
+import { isSuccessResponse } from '@app/sdk';
 import type { LandingPlate } from './modules/Landing/components/landingPlateNutrition';
 
 export interface OrderItem {
@@ -20,175 +23,157 @@ export type OrderLifecycleStatus = 'PENDIENTE' | 'COMPLETADO';
 export interface OrderHistoryEntry {
   id: string;
   /** Id de Sale en backend cuando el pedido se persistió en DB. */
-  saleId?: string;
+  saleId?: string | undefined;
   completedAt: string;
   lines: OrderHistoryLine[];
   total: number;
-  fulfillment?: OrderFulfillment;
-  lifecycleStatus?: OrderLifecycleStatus;
+  fulfillment?: OrderFulfillment | undefined;
+  lifecycleStatus?: OrderLifecycleStatus | undefined;
 }
-
-const ORDER_HISTORY_KEY = 'qart-order-history-v1';
-const ORDER_TRIED_KEY = 'qart-tried-plates-v1';
-
-const loadHistory = (): OrderHistoryEntry[] => {
-  try {
-    const raw = localStorage.getItem(ORDER_HISTORY_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? (parsed as OrderHistoryEntry[]) : [];
-  } catch {
-    return [];
-  }
-};
-
-const saveHistory = (entries: OrderHistoryEntry[]) => {
-  try {
-    localStorage.setItem(ORDER_HISTORY_KEY, JSON.stringify(entries.slice(0, 50)));
-  } catch {
-    /* ignore quota */
-  }
-};
-
-const loadTriedPlateIds = (): Set<string> => {
-  try {
-    const raw = localStorage.getItem(ORDER_TRIED_KEY);
-    if (!raw) return new Set();
-    const parsed = JSON.parse(raw) as unknown;
-    return new Set(Array.isArray(parsed) ? (parsed as string[]) : []);
-  } catch {
-    return new Set();
-  }
-};
-
-const saveTriedPlateIds = (ids: Set<string>) => {
-  try {
-    localStorage.setItem(ORDER_TRIED_KEY, JSON.stringify([...ids]));
-  } catch {
-    /* ignore */
-  }
-};
 
 interface OrderState {
   items: OrderItem[];
   isOpen: boolean;
   orderHistory: OrderHistoryEntry[];
+  activeTab: 'cart' | 'history';
   triedPlateIds: Set<string>;
+  isFetchingHistory: boolean;
   addItem: (plate: LandingPlate, quantity: number) => void;
   removeItem: (plateId: string) => void;
   updateQuantity: (plateId: string, quantity: number) => void;
   toggleOpen: () => void;
   setOpen: (open: boolean) => void;
+  setActiveTab: (tab: 'cart' | 'history') => void;
   clearOrder: () => void;
-  /** Confirma el carrito actual: guarda historial, marca platos probados y vacía la orden. */
-  confirmCurrentOrder: () => void;
-  /** Tras checkout en servidor: historial + probados + limpia el carrito y cierra el panel. */
+  /** Busca el historial desde el servidor y refresca triedPlateIds. */
+  fetchHistory: () => Promise<void>;
+  /** Tras checkout en servidor: historial + limpia el carrito y cierra el panel. */
   finalizeRemoteOrder: (entry: OrderHistoryEntry) => void;
   totalItems: () => number;
   totalPrice: () => number;
   hasTriedPlate: (plateId: string) => boolean;
 }
 
-const initialHistory = loadHistory();
-const initialTried = loadTriedPlateIds();
-for (const entry of initialHistory) {
-  for (const line of entry.lines) {
-    initialTried.add(line.plateId);
-  }
-}
+export const useOrderStore = create<OrderState>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      isOpen: false,
+      activeTab: 'cart',
+      orderHistory: [],
+      triedPlateIds: new Set(),
+      isFetchingHistory: false,
 
-export const useOrderStore = create<OrderState>((set, get) => ({
-  items: [],
-  isOpen: false,
-  orderHistory: initialHistory,
-  triedPlateIds: initialTried,
+      addItem: (plate, quantity) => {
+        if (quantity <= 0) return;
+        set((state) => {
+          const existing = state.items.find((i) => i.plate.id === plate.id);
+          if (existing) {
+            return {
+              items: state.items.map((i) =>
+                i.plate.id === plate.id ? { ...i, quantity: i.quantity + quantity } : i,
+              ),
+            };
+          }
+          return { items: [...state.items, { plate, quantity }] };
+        });
+      },
 
-  addItem: (plate, quantity) => {
-    if (quantity <= 0) return;
-    set((state) => {
-      const existing = state.items.find((i) => i.plate.id === plate.id);
-      if (existing) {
-        return {
-          items: state.items.map((i) =>
-            i.plate.id === plate.id ? { ...i, quantity: i.quantity + quantity } : i,
-          ),
-        };
-      }
-      return { items: [...state.items, { plate, quantity }] };
-    });
-  },
+      removeItem: (plateId) =>
+        set((state) => ({ items: state.items.filter((i) => i.plate.id !== plateId) })),
 
-  removeItem: (plateId) =>
-    set((state) => ({ items: state.items.filter((i) => i.plate.id !== plateId) })),
+      updateQuantity: (plateId, quantity) => {
+        if (quantity <= 0) {
+          get().removeItem(plateId);
+          return;
+        }
+        set((state) => ({
+          items: state.items.map((i) => (i.plate.id === plateId ? { ...i, quantity } : i)),
+        }));
+      },
 
-  updateQuantity: (plateId, quantity) => {
-    if (quantity <= 0) {
-      get().removeItem(plateId);
-      return;
-    }
-    set((state) => ({
-      items: state.items.map((i) => (i.plate.id === plateId ? { ...i, quantity } : i)),
-    }));
-  },
+      toggleOpen: () => set((state) => ({ isOpen: !state.isOpen })),
+      setOpen: (open) => set({ isOpen: open }),
+      setActiveTab: (tab) => set({ activeTab: tab }),
+      clearOrder: () => set({ items: [] }),
 
-  toggleOpen: () => set((state) => ({ isOpen: !state.isOpen })),
-  setOpen: (open) => set({ isOpen: open }),
-  clearOrder: () => set({ items: [] }),
+      fetchHistory: async () => {
+        set({ isFetchingHistory: true });
+        try {
+          const res = await sdk.customers.history({});
+          if (isSuccessResponse(res)) {
+            const history = res.data;
+            const tried = new Set<string>();
+            for (const entry of history) {
+              for (const line of entry.lines) {
+                tried.add(line.plateId);
+              }
+            }
+            set({ orderHistory: history, triedPlateIds: tried });
+          }
+        } finally {
+          set({ isFetchingHistory: false });
+        }
+      },
 
-  confirmCurrentOrder: () => {
-    const { items } = get();
-    if (!items.length) return;
-    const lines: OrderHistoryLine[] = items.map(({ plate, quantity }) => ({
-      plateId: plate.id,
-      name: plate.name,
-      quantity,
-      unitPrice: plate.menuPrice ?? 0,
-    }));
-    const total = lines.reduce((acc, l) => acc + l.unitPrice * l.quantity, 0);
-    const entry: OrderHistoryEntry = {
-      id: crypto.randomUUID(),
-      completedAt: new Date().toISOString(),
-      lines,
-      total,
-    };
-    set((state) => {
-      const nextTried = new Set(state.triedPlateIds);
-      for (const line of lines) {
-        nextTried.add(line.plateId);
-      }
-      saveTriedPlateIds(nextTried);
-      const nextHistory = [entry, ...state.orderHistory].slice(0, 50);
-      saveHistory(nextHistory);
-      return {
-        orderHistory: nextHistory,
-        triedPlateIds: nextTried,
-        items: [],
-        isOpen: false,
-      };
-    });
-  },
+      finalizeRemoteOrder: (entry) => {
+        set((state) => {
+          const nextTried = new Set(state.triedPlateIds);
+          for (const line of entry.lines) {
+            nextTried.add(line.plateId);
+          }
+          return {
+            orderHistory: [entry, ...state.orderHistory].slice(0, 50),
+            triedPlateIds: nextTried,
+            items: [],
+            isOpen: false,
+          };
+        });
+      },
 
-  finalizeRemoteOrder: (entry) => {
-    set((state) => {
-      const nextTried = new Set(state.triedPlateIds);
-      for (const line of entry.lines) {
-        nextTried.add(line.plateId);
-      }
-      saveTriedPlateIds(nextTried);
-      const nextHistory = [entry, ...state.orderHistory].slice(0, 50);
-      saveHistory(nextHistory);
-      return {
-        orderHistory: nextHistory,
-        triedPlateIds: nextTried,
-        items: [],
-        isOpen: false,
-      };
-    });
-  },
+      totalItems: () => get().items.reduce((acc, i) => acc + i.quantity, 0),
+      totalPrice: () =>
+        get().items.reduce((acc, i) => acc + (i.plate.menuPrice ?? 0) * i.quantity, 0),
 
-  totalItems: () => get().items.reduce((acc, i) => acc + i.quantity, 0),
-  totalPrice: () =>
-    get().items.reduce((acc, i) => acc + (i.plate.menuPrice ?? 0) * i.quantity, 0),
+      hasTriedPlate: (plateId) => get().triedPlateIds.has(plateId),
+    }),
+    {
+      name: 'qart-order-storage',
+      // Personalizamos el storage para manejar el Set de triedPlateIds
+      storage: createJSONStorage(() => ({
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          if (!str) return null;
+          const { state, version } = JSON.parse(str);
+          return JSON.stringify({
+            state: {
+              ...state,
+              triedPlateIds: new Set(state.triedPlateIds),
+            },
+            version,
+          });
+        },
+        setItem: (name, value) => {
+          const { state, version } = JSON.parse(value);
+          localStorage.setItem(
+            name,
+            JSON.stringify({
+              state: {
+                ...state,
+                triedPlateIds: Array.from(state.triedPlateIds as Set<string>),
+              },
+              version,
+            }),
+          );
+        },
+        removeItem: (name) => localStorage.removeItem(name),
+      })),
+      partialize: (state) => ({
+        items: state.items,
+        orderHistory: state.orderHistory,
+        triedPlateIds: state.triedPlateIds,
+      }),
+    },
+  ),
+);
 
-  hasTriedPlate: (plateId) => get().triedPlateIds.has(plateId),
-}));
