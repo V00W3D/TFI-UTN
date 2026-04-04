@@ -47,10 +47,7 @@ const OrderCheckoutModal = ({ open, onClose, items }: OrderCheckoutModalProps) =
     }
   }, [open]);
 
-  const totalPreview = items.reduce(
-    (acc, i) => acc + (i.plate.menuPrice ?? 0) * i.quantity,
-    0,
-  );
+  const totalPreview = items.reduce((acc, i) => acc + (i.plate.menuPrice ?? 0) * i.quantity, 0);
 
   const submit = useCallback(
     async (fulfillment: OrderFulfillment) => {
@@ -140,7 +137,8 @@ const OrderCheckoutModal = ({ open, onClose, items }: OrderCheckoutModalProps) =
               {phase === 'review' && (
                 <>
                   <p className="order-checkout-lead">
-                    Revisá el total antes de confirmar. Los precios se validan al registrar el pedido.
+                    Revisá el total antes de confirmar. Los precios se validan al registrar el
+                    pedido.
                   </p>
                   <ul className="order-checkout-lines">
                     {items.map(({ plate, quantity }) => (
@@ -155,7 +153,9 @@ const OrderCheckoutModal = ({ open, onClose, items }: OrderCheckoutModalProps) =
                   </ul>
                   <div className="order-checkout-total-bar">
                     <span className="order-checkout-total-lbl">Total estimado</span>
-                    <strong className="order-checkout-total-val">{formatLandingPrice(totalPreview)}</strong>
+                    <strong className="order-checkout-total-val">
+                      {formatLandingPrice(totalPreview)}
+                    </strong>
                   </div>
                   <button
                     type="button"
@@ -169,7 +169,9 @@ const OrderCheckoutModal = ({ open, onClose, items }: OrderCheckoutModalProps) =
 
               {phase === 'fulfillment' && (
                 <>
-                  <p className="order-checkout-lead">Elegí una opción. Con esto guardamos tu pedido en el sistema.</p>
+                  <p className="order-checkout-lead">
+                    Elegí una opción. Con esto guardamos tu pedido en el sistema.
+                  </p>
                   {error && <p className="order-checkout-error">{error}</p>}
                   <div className="order-checkout-fulfillment-grid">
                     {(['dine_in', 'pickup', 'delivery'] as const).map((key) => (
@@ -180,7 +182,9 @@ const OrderCheckoutModal = ({ open, onClose, items }: OrderCheckoutModalProps) =
                         disabled={submitting}
                         onClick={() => void submit(key)}
                       >
-                        <span className="order-checkout-fulfillment-title">{fulfillmentLabel[key]}</span>
+                        <span className="order-checkout-fulfillment-title">
+                          {fulfillmentLabel[key]}
+                        </span>
                       </button>
                     ))}
                   </div>

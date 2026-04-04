@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
+import { useToastStore } from '../../../toastStore';
 import { form, sdk } from '../../../tools/sdk';
 import {
   cpasswordField,
@@ -94,6 +95,7 @@ const DEFAULT_REGISTER_HELP = {
 
 const RegisterPage = () => {
   const { setModule } = useAppStore();
+  const { success } = useToastStore();
   const navigate = useNavigate();
   const [activeField, setActiveField] = useState<RegisterFieldKey | null>(null);
 
@@ -102,15 +104,18 @@ const RegisterPage = () => {
 
   useEffect(() => {
     setModule('IAM');
-    sdk.iam.register.$reset();
-    $form.getState().reset();
+    return () => {
+      sdk.iam.register.$reset();
+      $form.getState().reset();
+    };
   }, [$form, setModule]);
 
   useEffect(() => {
     if (data && 'data' in data) {
+      success('¡CUENTA CREADA CON ÉXITO! AHORA PODÉS INGRESAR.');
       navigate('/iam/login', { replace: true });
     }
-  }, [data, navigate]);
+  }, [data, navigate, success]);
 
   const handleSubmit = submit(async (values) => {
     if (isFetching) return;
@@ -131,14 +136,13 @@ const RegisterPage = () => {
         transition={{ duration: 0.45, ease: 'easeOut' }}
         className="auth-panel auth-panel--register"
       >
-        <div className="auth-back-home auth-back-home--register">
-          <Link to="/" className="auth-back-link-top">
-            <ArrowLeftIcon className="size-[1.05rem]" />
-            <span>VOLVER AL INICIO</span>
-          </Link>
-        </div>
-
         <div className="auth-hero">
+          <div className="auth-back-home auth-back-home--register">
+            <Link to="/" className="auth-back-link-top">
+              <ArrowLeftIcon className="size-[1.05rem]" />
+              <span>VOLVER AL INICIO</span>
+            </Link>
+          </div>
           <div className="auth-badge">NUEVA CUENTA</div>
 
           <div className="auth-hero-copy">

@@ -670,10 +670,7 @@ export const StarRatingDisplay = ({
   const safeValue = clamp(value, 0, 5);
 
   return (
-    <span
-      className={className}
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
-    >
+    <span className={className} style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
       <span style={{ display: 'inline-flex', alignItems: 'center', gap: 2 }} aria-hidden="true">
         {Array.from({ length: 5 }, (_, index) => {
           const fillRatio = clamp(safeValue - index, 0, 1);

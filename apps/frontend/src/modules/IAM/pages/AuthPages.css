@@ -11,7 +11,11 @@
   overflow: hidden;
   border: 3px solid var(--qart-border);
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--qart-accent) 8%, transparent), transparent 34%),
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--qart-accent) 8%, transparent),
+      transparent 34%
+    ),
     linear-gradient(135deg, var(--qart-surface) 0%, var(--qart-surface-raised) 100%);
   box-shadow: 12px 12px 0 color-mix(in srgb, var(--qart-border) 90%, transparent);
 }
@@ -60,15 +64,13 @@
 }
 
 .auth-back-home {
-  position: absolute;
-  top: 1.15rem;
-  left: 1.15rem;
+  position: relative;
+  margin-bottom: 1.5rem;
   z-index: 50;
 }
 
 .auth-back-home--register {
-  top: 1.25rem;
-  left: 1.25rem;
+  margin-bottom: 2rem;
 }
 
 .auth-back-link-top {
@@ -108,7 +110,7 @@
 .auth-hero {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1.8rem;
   padding: clamp(1.55rem, 2.8vw, 2.45rem);
   background:

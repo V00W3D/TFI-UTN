@@ -62,6 +62,16 @@ export type StaffProfile = Prisma.StaffProfileModel
  */
 export type AuthorityProfile = Prisma.AuthorityProfileModel
 /**
+ * Model Address
+ * 
+ */
+export type Address = Prisma.AddressModel
+/**
+ * Model VerificationToken
+ * 
+ */
+export type VerificationToken = Prisma.VerificationTokenModel
+/**
  * Model Ingredient
  * 
  */

@@ -358,6 +358,42 @@ export const CreateCustomerOrderContract = defineEndpoint('public', 'POST /custo
   )
   .build();
 
+export const AddressSchema = z.object({
+  id: z.string().uuid(),
+  street: z.string().min(1).max(128),
+  number: z.string().min(1).max(16),
+  floorApt: z.string().max(32).nullable(),
+  notes: z.string().max(255).nullable(),
+  isDefault: z.boolean(),
+});
+
+export const CreateAddressSchema = z.object({
+  street: z.string().min(1).max(128),
+  number: z.string().min(1).max(16),
+  floorApt: z.string().max(32).optional(),
+  notes: z.string().max(255).optional(),
+  isDefault: z.boolean().optional(),
+});
+
+export const UpdateAddressSchema = CreateAddressSchema.extend({
+  id: z.string().uuid(),
+});
+
+export const GetAddressesContract = defineEndpoint('auth', 'GET /customers/addresses')
+  .IO(z.object({}), z.array(AddressSchema))
+  .doc('Get Addresses', 'Returns all addresses for the authenticated customer.')
+  .build();
+
+export const CreateAddressContract = defineEndpoint('auth', 'POST /customers/addresses')
+  .IO(CreateAddressSchema, AddressSchema)
+  .doc('Create Address', 'Creates a new address for the authenticated customer.')
+  .build();
+
+export const UpdateAddressContract = defineEndpoint('auth', 'PUT /customers/addresses')
+  .IO(UpdateAddressSchema, AddressSchema)
+  .doc('Update Address', 'Updates an existing address.')
+  .build();
+
 export const CUSTOMERContract = [
   GetPlatesContract,
   GetFeaturedPlatesContract,
@@ -365,4 +401,7 @@ export const CUSTOMERContract = [
   UpsertReviewContract,
   CreateCustomerOrderContract,
   GetCustomerOrderHistoryContract,
+  GetAddressesContract,
+  CreateAddressContract,
+  UpdateAddressContract,
 ] as const;

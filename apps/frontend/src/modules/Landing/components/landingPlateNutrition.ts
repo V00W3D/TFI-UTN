@@ -131,7 +131,11 @@ const metricIconMap: Record<NutritionKey, PlateDataIconKey> = {
 const formatMetricNumber = (value: number | null | undefined, digits = 0) => {
   if (value == null) return 'No informado';
 
-  return digits > 0 ? value.toFixed(digits) : Number.isInteger(value) ? String(value) : value.toFixed(1);
+  return digits > 0
+    ? value.toFixed(digits)
+    : Number.isInteger(value)
+      ? String(value)
+      : value.toFixed(1);
 };
 
 const formatReferenceValue = (value: number | null, unit: string) => {
@@ -192,14 +196,20 @@ const mapMetricCard = (metric: SharedNutritionMetricAnalysis): NutritionMetricCa
   total: metric.total,
   perPortion: metric.perServing,
   percentDailyValue: metric.percentDailyValue,
-  totalValue: formatLandingMetric(metric.total, metric.unit, metric.unit === 'mg' || metric.unit === 'kcal' ? 0 : 1),
+  totalValue: formatLandingMetric(
+    metric.total,
+    metric.unit,
+    metric.unit === 'mg' || metric.unit === 'kcal' ? 0 : 1,
+  ),
   perPortionValue: formatLandingMetric(
     metric.perServing,
     metric.unit,
     metric.unit === 'mg' || metric.unit === 'kcal' ? 0 : 1,
   ),
   dailyValueLabel:
-    metric.percentDailyValue == null ? metric.reference.note : `${metric.percentDailyValue}% del valor diario`,
+    metric.percentDailyValue == null
+      ? metric.reference.note
+      : `${metric.percentDailyValue}% del valor diario`,
   note: metric.note,
 });
 
@@ -266,7 +276,8 @@ export const selectFeaturedMetrics = <TMetric extends { key: NutritionKey; tone:
   return picked.slice(0, limit);
 };
 
-const selectIngredientMetrics = (metrics: NutritionMetricCard[]) => selectFeaturedMetrics(metrics, 4);
+const selectIngredientMetrics = (metrics: NutritionMetricCard[]) =>
+  selectFeaturedMetrics(metrics, 4);
 
 export const getPlateIngredientAnalysis = (plate: LandingPlate): PlateNutritionAnalysis => {
   const sharedAnalysis = analyzePlateNutrition(plate);
@@ -362,7 +373,9 @@ export const getPlateRecipeGuide = (plate: LandingPlate): PlateRecipeGuide => {
     .sort((left, right) => Number(right.isMainComponent) - Number(left.isMainComponent));
 
   const mainComponents = sharedAnalysis.components.filter((component) => component.isMainComponent);
-  const supportComponents = sharedAnalysis.components.filter((component) => !component.isMainComponent);
+  const supportComponents = sharedAnalysis.components.filter(
+    (component) => !component.isMainComponent,
+  );
   const steps: PlateRecipeStep[] = [];
   const ingredientSummary = joinHumanList(
     ingredientLines.slice(0, 5).map((ingredient) => ingredient.name.toLowerCase()),

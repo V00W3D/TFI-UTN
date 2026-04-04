@@ -103,6 +103,21 @@
     transition:
       background-color 0.3s ease,
       color 0.3s ease;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
 
   h1,
@@ -179,7 +194,7 @@
   .nav-user-badge {
     @apply inline-flex items-center justify-center px-4 py-2.5
            font-black uppercase tracking-widest text-[0.72rem]
-           border-y-[var(--qart-border-width)] border-l-[var(--qart-border-width)]
+           border-y-(--qart-border-width) border-l-(--qart-border-width)
            bg-qart-surface text-qart-primary truncate;
     border-color: var(--qart-border);
     min-height: 3.2rem;
@@ -1301,7 +1316,9 @@
   align-items: center;
   border: 2px solid var(--qart-border);
   background: var(--qart-surface-sunken);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .nav-search-field--open,
 .nav-search-field:focus-within {
@@ -1335,7 +1352,9 @@
   color: var(--qart-text-subtle);
 }
 /* Hide native search cancel button */
-.nav-search-input::-webkit-search-cancel-button { display: none; }
+.nav-search-input::-webkit-search-cancel-button {
+  display: none;
+}
 
 /* Dropdown */
 .nav-search-dropdown {
@@ -1456,7 +1475,9 @@
   background: var(--qart-bg-warm);
   border-top: 2px solid var(--qart-border-subtle);
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
   list-style: none;
 }
 .nav-search-dropdown__footer:hover {
@@ -1502,7 +1523,11 @@
   background: var(--qart-surface);
   color: var(--qart-text);
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.23,1,0.32,1), box-shadow 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
   box-shadow: 4px 4px 0px var(--qart-border);
 }
 .floating-action-btn:hover {
@@ -1567,7 +1592,10 @@
   border: none;
   border-bottom: 3px solid transparent;
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 .order-panel-tab:hover {
   color: var(--qart-primary);
@@ -1606,7 +1634,9 @@
   color: var(--qart-text-muted);
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 .order-panel-close-btn:hover {
   background: var(--qart-error-bg);
@@ -1642,7 +1672,10 @@
   border: 1.5px solid var(--qart-border-soft);
   padding: 0.3rem 0.6rem;
   cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease;
 }
 .order-panel-clear-btn:hover {
   color: var(--qart-error);
@@ -1683,7 +1716,10 @@
   color: var(--qart-text-muted);
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 .order-panel-item-remove:hover {
   background: var(--qart-error-bg);
@@ -1716,7 +1752,9 @@
   background: transparent;
   color: var(--qart-text-muted);
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
   flex-shrink: 0;
 }
 .order-panel-qty-btn:hover {
@@ -1783,7 +1821,9 @@
   cursor: pointer;
   padding: 0.4rem 0.5rem;
   border: 1.5px solid transparent;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 .custom-checkbox-container:hover {
   background: color-mix(in srgb, var(--qart-accent-soft) 20%, transparent);
@@ -1803,7 +1843,9 @@
   background: var(--qart-surface);
   flex-shrink: 0;
   position: relative;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
   box-shadow: 1.5px 1.5px 0px var(--qart-border);
 }
 .custom-checkbox-input:checked + .custom-checkbox-box {

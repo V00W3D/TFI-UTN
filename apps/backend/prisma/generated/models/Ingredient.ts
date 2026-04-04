@@ -1161,10 +1161,6 @@ export type EnumStorageTypeFieldUpdateOperationsInput = {
   set?: $Enums.StorageType
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type IngredientCreateNestedOneWithoutVariantsInput = {
   create?: Prisma.XOR<Prisma.IngredientCreateWithoutVariantsInput, Prisma.IngredientUncheckedCreateWithoutVariantsInput>
   connectOrCreate?: Prisma.IngredientCreateOrConnectWithoutVariantsInput

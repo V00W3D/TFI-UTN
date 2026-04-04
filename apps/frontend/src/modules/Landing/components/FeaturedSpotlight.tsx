@@ -3,11 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { sdk } from '../../../tools/sdk';
 import { useOrderStore } from '../../../orderStore';
-import {
-  formatLandingEnum,
-  formatLandingPrice,
-  type LandingPlate,
-} from './landingPlateNutrition';
+import { formatLandingEnum, formatLandingPrice, type LandingPlate } from './landingPlateNutrition';
 import PlateNutritionModal from './PlateNutritionModal';
 import PlateRecipeModal from './PlateRecipeModal';
 import PlateReviewsModal from './PlateReviewsModal';
@@ -21,20 +17,41 @@ const IconStar = ({ className }: { className?: string }) => (
 );
 
 const IconFlame = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    aria-hidden
+  >
     <path d="M12 2c2 4 6 5 6 10a6 6 0 1 1-12 0c0-3 2-6 2-8 2 2 4 4 4 8" strokeLinecap="round" />
   </svg>
 );
 
 const IconPlus = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" aria-hidden>
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    aria-hidden
+  >
     <line x1="12" y1="5" x2="12" y2="19" />
     <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
 );
 
 const IconReviews = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    aria-hidden
+  >
     <path d="M4 5h13v10H8l-3 3V5z" strokeLinejoin="miter" />
     <path d="M8 9h8M8 12h5" strokeLinecap="square" />
   </svg>
@@ -55,7 +72,7 @@ const FeaturedSpotlight = () => {
   const { data, isFetching, error } = sdk.customers.featured.$use();
   const plates =
     data && 'data' in data ? (data.data as (LandingPlate & { unitsSold: number })[]) : [];
-  const selected = modal ? plates.find((p) => p.id === modal.plateId) ?? null : null;
+  const selected = modal ? (plates.find((p) => p.id === modal.plateId) ?? null) : null;
 
   const refreshFeatured = () => {
     void sdk.customers.featured({ limit: 3 });
@@ -68,10 +85,13 @@ const FeaturedSpotlight = () => {
           <span className="spotlight-kicker">Lo que más se pide</span>
           <h2 className="spotlight-title">Favoritos de la casa</h2>
           <p className="spotlight-sub">
-            Tres clásicos que la gente repite: buen puntaje, buenas ventas. El resto del menú está a un
-            click, sin vueltas.
+            Tres clásicos que la gente repite: buen puntaje, buenas ventas. El resto del menú está a
+            un click, sin vueltas.
           </p>
-          <Link to="/search" className="btn-outline spotlight-cta-link uppercase tracking-widest text-xs py-3 px-6 mt-6 inline-flex">
+          <Link
+            to="/search"
+            className="btn-outline spotlight-cta-link uppercase tracking-widest text-xs py-3 px-6 mt-6 inline-flex"
+          >
             Ver menú completo
           </Link>
         </div>
@@ -163,8 +183,8 @@ const FeaturedSpotlight = () => {
         </div>
 
         <p className="spotlight-hint text-center text-qart-text-subtle text-xs font-semibold uppercase tracking-wide mt-12 max-w-xl mx-auto">
-          ¿Querés ver cómo se compone un plato? Tocá <strong>Arma</strong> — es el camino al crafteo,
-          sin perder el estilo del local.
+          ¿Querés ver cómo se compone un plato? Tocá <strong>Arma</strong> — es el camino al
+          crafteo, sin perder el estilo del local.
         </p>
       </div>
 

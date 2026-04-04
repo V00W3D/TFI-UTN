@@ -2,11 +2,18 @@ import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
+import { useToastStore } from '../../../toastStore';
 import { form, sdk } from '../../../tools/sdk';
-import { ArrowLeftIcon, ArrowRightIcon, IdentityIcon, LockIcon } from '../../../components/shared/AppIcons';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  IdentityIcon,
+  LockIcon,
+} from '../../../components/shared/AppIcons';
 
 const LoginPage = () => {
   const { setModule, setUser } = useAppStore();
+  const { success } = useToastStore();
   const navigate = useNavigate();
 
   const { data, error, isFetching, isFormValid } = sdk.iam.login.$use();
@@ -14,16 +21,19 @@ const LoginPage = () => {
 
   useEffect(() => {
     setModule('IAM');
-    sdk.iam.login.$reset();
-    $form.getState().reset();
+    return () => {
+      sdk.iam.login.$reset();
+      $form.getState().reset();
+    };
   }, [$form, setModule]);
 
   useEffect(() => {
     if (data && 'data' in data) {
       setUser(data.data);
+      success(`¡HOLA DE VUESTA, ${data.data.name.toUpperCase()}!`);
       navigate('/', { replace: true });
     }
-  }, [data, navigate, setUser]);
+  }, [data, navigate, setUser, success]);
 
   const handleSubmit = submit(async (values) => {
     if (isFetching) return;
@@ -42,14 +52,13 @@ const LoginPage = () => {
         transition={{ duration: 0.45, ease: 'easeOut' }}
         className="auth-panel auth-panel--login"
       >
-        <div className="auth-back-home">
-          <Link to="/" className="auth-back-link-top">
-            <ArrowLeftIcon className="size-[1.05rem]" />
-            <span>VOLVER AL INICIO</span>
-          </Link>
-        </div>
-
         <div className="auth-hero">
+          <div className="auth-back-home">
+            <Link to="/" className="auth-back-link-top">
+              <ArrowLeftIcon className="size-[1.05rem]" />
+              <span>VOLVER AL INICIO</span>
+            </Link>
+          </div>
           <div className="auth-badge">INGRESO A QART</div>
 
           <div className="auth-hero-copy">

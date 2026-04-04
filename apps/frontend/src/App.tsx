@@ -12,6 +12,7 @@ import AppRoutes from './AppRoutes';
 import { sdk } from './tools/sdk';
 import { useAppStore } from './appStore';
 import FloatingActions from './modules/Landing/components/FloatingActions';
+import { ToastProvider } from './components/shared/ToastProvider';
 
 const App = () => {
   const setUser = useAppStore((s) => s.setUser);
@@ -46,6 +47,7 @@ const App = () => {
     <>
       <AppRoutes />
       <FloatingActions />
+      <ToastProvider />
     </>
   );
 };

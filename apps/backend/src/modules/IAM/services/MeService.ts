@@ -9,16 +9,24 @@ import type { MeContract } from '@app/contracts';
 export async function meService(req: Request): Promise<InferSuccess<typeof MeContract>> {
   if (!req.user) throw ERR.UNAUTHORIZED();
 
+  const user = req.user;
+
   return {
-    id: req.user.id,
-    username: req.user.username,
-    email: req.user.email,
-    phone: req.user.phone ?? null,
-    role: req.user.role,
+    id: user.id,
+    username: user.username,
+    name: user.name,
+    sname: user.sname,
+    lname: user.lname,
+    sex: user.sex,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    phone: user.phone,
+    phoneVerified: user.phoneVerified,
+    role: user.role,
     profile: {
-      ...(req.user.profile.tier ? { tier: req.user.profile.tier } : {}),
-      ...(req.user.profile.post ? { post: req.user.profile.post } : {}),
-      ...(req.user.profile.rank ? { rank: req.user.profile.rank } : {}),
+      ...(user.profile.tier ? { tier: user.profile.tier } : {}),
+      ...(user.profile.post ? { post: user.profile.post } : {}),
+      ...(user.profile.rank ? { rank: user.profile.rank } : {}),
     },
   };
 }

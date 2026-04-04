@@ -28,7 +28,7 @@ const FeaturedDish = () => {
   const currentSliceStart = (currentPage - 1) * PLATES_PER_PAGE;
   const visiblePlates = plates.slice(currentSliceStart, currentSliceStart + PLATES_PER_PAGE);
   const selectedPlate = selectedModal
-    ? plates.find((plate) => plate.id === selectedModal.plateId) ?? null
+    ? (plates.find((plate) => plate.id === selectedModal.plateId) ?? null)
     : null;
 
   useEffect(() => {
@@ -100,9 +100,7 @@ const FeaturedDish = () => {
         {isFetching && (
           <div className="banner-info max-w-3xl">
             <span className="font-black uppercase tracking-[0.2em]">Cargando</span>
-            <p className="font-semibold">
-              Estamos cargando el menú destacado.
-            </p>
+            <p className="font-semibold">Estamos cargando el menú destacado.</p>
           </div>
         )}
 
@@ -135,7 +133,10 @@ const FeaturedDish = () => {
               </div>
 
               {totalPages > 1 && (
-                <div className="featured-pagination-slider" aria-label="Paginación del menú destacado">
+                <div
+                  className="featured-pagination-slider"
+                  aria-label="Paginación del menú destacado"
+                >
                   <button
                     type="button"
                     className="btn-outline uppercase tracking-widest py-3 px-5"

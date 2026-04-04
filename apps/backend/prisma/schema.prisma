@@ -7,32 +7,37 @@ datasource db {
   provider = "postgresql"
 }
 
-// ═══════════════════════════════════════════════════════════════
-// USUARIOS Y ACCESO
-// ═══════════════════════════════════════════════════════════════
+  // ═══════════════════════════════════════════════════════════════
+  // USUARIOS Y ACCESO
+  // ═══════════════════════════════════════════════════════════════
 
-model User {
-  id       String   @id @default(uuid())
-  name     String   @db.VarChar(128)
-  sname    String?  @db.VarChar(128)
-  lname    String   @db.VarChar(128)
-  sex      Sex      @default(OTHER)
-  username String   @unique @db.VarChar(32)
-  password String   @db.VarChar(128)
-  email    String   @unique @db.VarChar(128)
-  phone    String?  @unique @db.VarChar(15)
-  role     UserRole @default(CUSTOMER)
+  model User {
+    id       String   @id @default(uuid())
+    name     String   @db.VarChar(128)
+    sname    String?  @db.VarChar(128)
+    lname    String   @db.VarChar(128)
+    sex      Sex      @default(OTHER)
+    username String   @unique @db.VarChar(32)
+    password String   @db.VarChar(128)
+    email          String   @unique @db.VarChar(128)
+    emailVerified  Boolean  @default(false)
+    phone          String?  @unique @db.VarChar(15)
+    phoneVerified  Boolean  @default(false)
+    role           UserRole @default(CUSTOMER)
 
-  customer  CustomerProfile?
-  staff     StaffProfile?
-  authority AuthorityProfile?
-  reviews   Review[]
-  /** Ventas registradas desde el canal web (opcional). */
-  customerSales Sale[] @relation("CustomerSale")
+    customer  CustomerProfile?
+    staff     StaffProfile?
+    authority AuthorityProfile?
+    reviews   Review[]
+    /** Ventas registradas desde el canal web (opcional). */
+    customerSales Sale[] @relation("CustomerSale")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
+    addresses Address[]
+    tokens    VerificationToken[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+  }
 
 model CustomerProfile {
   userId String @id
@@ -50,6 +55,36 @@ model AuthorityProfile {
   userId String @id
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   rank   AuthorityRank
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  street    String   @db.VarChar(128)
+  number    String   @db.VarChar(16)
+  floorApt  String?  @db.VarChar(32)
+  notes     String?  @db.VarChar(255)
+  isDefault Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      TokenType
+  token     String   @unique @db.VarChar(64)
+  payload   String?  @db.Text
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, type])
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -508,6 +543,12 @@ enum AuthorityRank {
   MANAGER
   DIRECTOR
   OWNER
+}
+
+enum TokenType {
+  EMAIL_CHANGE
+  PHONE_CHANGE
+  PASSWORD_CHANGE
 }
 
 enum IngredientCategory {

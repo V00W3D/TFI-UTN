@@ -149,6 +149,7 @@ Usar siempre esta misma logica visual para que Nano Banana no cambie el estilo e
 ## Nota para prompts
 
 Para Nano Banana conviene describir:
+
 - plato exacto
 - ingredientes visibles
 - textura

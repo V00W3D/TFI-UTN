@@ -19,7 +19,6 @@ import '../../Landing/LandingPages.css';
 
 type ModalState = { plateId: string; view: 'nutrition' | 'recipe' | 'reviews' } | null;
 
-
 /**
  * Catálogo completo con filtros; estado en la query string.
  */
@@ -36,9 +35,10 @@ const SearchPage = () => {
     setModule('LANDING');
   }, [setModule]);
 
-
   useEffect(() => {
-    void sdk.customers.search(mergeSearchPayload(searchParams) as InferRequest<typeof SearchPlatesContract>);
+    void sdk.customers.search(
+      mergeSearchPayload(searchParams) as InferRequest<typeof SearchPlatesContract>,
+    );
   }, [queryKey, searchParams]);
 
   const res = sdk.customers.search.$use();
@@ -49,9 +49,7 @@ const SearchPage = () => {
   const pageSize = data?.pageSize ?? payload.pageSize;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
 
-  const selectedPlate = modal
-    ? plates.find((p) => p.id === modal.plateId) ?? null
-    : null;
+  const selectedPlate = modal ? (plates.find((p) => p.id === modal.plateId) ?? null) : null;
 
   const goPage = (p: number) => {
     setSearchParams((prev) => {
@@ -61,7 +59,9 @@ const SearchPage = () => {
   };
 
   const refreshSearch = () => {
-    void sdk.customers.search(mergeSearchPayload(searchParams) as InferRequest<typeof SearchPlatesContract>);
+    void sdk.customers.search(
+      mergeSearchPayload(searchParams) as InferRequest<typeof SearchPlatesContract>,
+    );
   };
 
   return (
@@ -84,7 +84,8 @@ const SearchPage = () => {
             </div>
             <h1 className="search-main-title">Menú completo</h1>
             <p className="search-main-lead">
-              Filtrá por tipo, precio y más. Usá el buscador del menú superior para buscar por nombre.
+              Filtrá por tipo, precio y más. Usá el buscador del menú superior para buscar por
+              nombre.
             </p>
             <p className="search-results-meta">
               {res.isFetching ? 'Buscando…' : `${total} resultado${total === 1 ? '' : 's'}`}

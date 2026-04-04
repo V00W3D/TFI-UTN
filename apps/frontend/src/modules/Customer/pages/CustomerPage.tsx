@@ -49,9 +49,7 @@ const CustomerPage = () => {
   }, [filteredPlates, selectedPlateId]);
 
   const selectedPlate =
-    filteredPlates.find((plate) => plate.id === selectedPlateId) ??
-    filteredPlates[0] ??
-    null;
+    filteredPlates.find((plate) => plate.id === selectedPlateId) ?? filteredPlates[0] ?? null;
 
   const availablePlates = plates.filter((plate) => plate.isAvailable).length;
   const reviewedPlates = plates.filter((plate) => plate.reviews.length > 0).length;

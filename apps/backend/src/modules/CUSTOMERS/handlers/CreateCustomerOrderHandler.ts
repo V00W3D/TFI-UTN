@@ -5,9 +5,10 @@ import { createCustomerOrderService } from '../services/createCustomerOrderServi
 /**
  * @description POST /customers/orders — público; asocia usuario si hay cookies de sesión.
  */
-export const CreateCustomerOrderHandler = api.handler('POST /customers/orders')(
-  async (input, { req }) => {
-    const customerUserId = readOptionalUserId(req);
-    return createCustomerOrderService(input, { customerUserId });
-  },
-);
+export const CreateCustomerOrderHandler = api.handler('POST /customers/orders')(async (
+  input,
+  { req },
+) => {
+  const customerUserId = readOptionalUserId(req);
+  return createCustomerOrderService(input, { customerUserId });
+});

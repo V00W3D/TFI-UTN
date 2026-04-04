@@ -18,13 +18,7 @@ import type {
 import { prisma } from '@tools/db';
 import { PLATE_IMAGES } from './catalog/plateImages';
 
-type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JsonValue }
-  | JsonValue[];
+type JsonValue = string | number | boolean | null | { [key: string]: JsonValue } | JsonValue[];
 
 type ReviewSeed = {
   userId: string;
@@ -1676,8 +1670,8 @@ async function main() {
         ? extraAttributes
         : {
             ...((extraAttributes &&
-              typeof extraAttributes === 'object' &&
-              !Array.isArray(extraAttributes)
+            typeof extraAttributes === 'object' &&
+            !Array.isArray(extraAttributes)
               ? extraAttributes
               : {}) as Record<string, JsonValue>),
             procurement: {
@@ -1786,7 +1780,9 @@ async function main() {
 
   for (const [ingredientKey, profile] of Object.entries(ingredientOperationalProfiles)) {
     const ingredientId = requireIngredientId(ingredientKey);
-    const storageLocationId = storageLocationIds.get(getStorageLocationKeyForType(profile.storageType));
+    const storageLocationId = storageLocationIds.get(
+      getStorageLocationKeyForType(profile.storageType),
+    );
 
     if (!storageLocationId) {
       throw new Error(`Missing storage location for ${profile.storageType}.`);
@@ -2945,8 +2941,7 @@ async function main() {
     allergens: ['GLUTEN', 'MILK'],
     dietaryTags: [],
     nutritionTags: ['HIGH_PROTEIN', 'ENERGY_DENSE', 'SATIATING'],
-    nutritionNotes:
-      'El foco esta en el relleno bien cremoso y en una porcion rapida de mostrador.',
+    nutritionNotes: 'El foco esta en el relleno bien cremoso y en una porcion rapida de mostrador.',
     calories: 980,
     proteins: 41,
     carbs: 68,
@@ -3148,27 +3143,31 @@ async function main() {
 
   const vatRate = TAX_RULE_SEEDS.find((rule) => rule.key === 'vat' && rule.isActive)?.rate ?? 0;
   const purchaseCreatedAt = new Date('2026-03-22T10:15:00.000Z');
-  const purchaseItemPayloads = Object.entries(ingredientOperationalProfiles).map(([ingredientKey, profile]) => {
-    const quantityGrams = profile.currentStockGrams;
-    const lineNetAmount = Number(
-      ((profile.unitCostNet * quantityGrams) / profile.pricingBasisGrams).toFixed(2),
-    );
-    const lineTaxAmount = Number((lineNetAmount * vatRate).toFixed(2));
-    const lineTotalAmount = Number((lineNetAmount + lineTaxAmount).toFixed(2));
+  const purchaseItemPayloads = Object.entries(ingredientOperationalProfiles).map(
+    ([ingredientKey, profile]) => {
+      const quantityGrams = profile.currentStockGrams;
+      const lineNetAmount = Number(
+        ((profile.unitCostNet * quantityGrams) / profile.pricingBasisGrams).toFixed(2),
+      );
+      const lineTaxAmount = Number((lineNetAmount * vatRate).toFixed(2));
+      const lineTotalAmount = Number((lineNetAmount + lineTaxAmount).toFixed(2));
 
-    return {
-      id: randomUUID(),
-      ingredientId: requireIngredientId(ingredientKey),
-      storageLocationId: storageLocationIds.get(getStorageLocationKeyForType(profile.storageType)),
-      quantityGrams,
-      pricingBasisGrams: profile.pricingBasisGrams,
-      unitCostNet: profile.unitCostNet,
-      taxRate: vatRate,
-      lineNetAmount,
-      lineTaxAmount,
-      lineTotalAmount,
-    };
-  });
+      return {
+        id: randomUUID(),
+        ingredientId: requireIngredientId(ingredientKey),
+        storageLocationId: storageLocationIds.get(
+          getStorageLocationKeyForType(profile.storageType),
+        ),
+        quantityGrams,
+        pricingBasisGrams: profile.pricingBasisGrams,
+        unitCostNet: profile.unitCostNet,
+        taxRate: vatRate,
+        lineNetAmount,
+        lineTaxAmount,
+        lineTotalAmount,
+      };
+    },
+  );
   const purchaseSubtotalNet = Number(
     purchaseItemPayloads.reduce((total, item) => total + item.lineNetAmount, 0).toFixed(2),
   );
@@ -3312,7 +3311,9 @@ async function main() {
   console.log('✅ Seeding Complete!');
   console.log(`   • ${ingredientSeeds.length} ingredientes de cocina clasica argentina`);
   console.log(`   • ${variantSeeds.length} variantes listas para recetas y ajustes`);
-  console.log('   • 7 recetas base para pizza, sanguches, milanesas, hamburguesas, empanadas y papas');
+  console.log(
+    '   • 7 recetas base para pizza, sanguches, milanesas, hamburguesas, empanadas y papas',
+  );
   console.log('   • 11 platos finales con tags, reviews y variantes utiles');
   console.log(
     `   • 1 proveedor generalista, ${STORAGE_LOCATIONS.length} ubicaciones de stock y ${TAX_RULE_SEEDS.length} reglas fiscales`,

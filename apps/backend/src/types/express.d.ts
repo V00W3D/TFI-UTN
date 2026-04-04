@@ -25,8 +25,14 @@ declare global {
       user?: {
         id: string;
         username: string;
+        name: string;
+        sname: string | null;
+        lname: string;
+        sex: 'MALE' | 'FEMALE' | 'OTHER';
         email: string;
+        emailVerified: boolean;
         phone: string | null;
+        phoneVerified: boolean;
         role: UserRole;
         profile: {
           tier?: CustomerTier;

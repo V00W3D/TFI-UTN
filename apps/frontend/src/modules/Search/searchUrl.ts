@@ -64,7 +64,10 @@ export function parseSearchUrl(sp: URLSearchParams): Partial<SearchPlatesQuery> 
   for (const key of ARRAY_KEYS) {
     const raw = sp.get(String(key));
     if (raw?.trim()) {
-      const arr = raw.split(',').map((s) => s.trim()).filter(Boolean);
+      const arr = raw
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
       if (arr.length) setArr(key, arr);
     }
   }

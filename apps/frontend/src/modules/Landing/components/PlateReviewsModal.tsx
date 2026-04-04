@@ -33,10 +33,16 @@ const PanelGateAuth = ({ onBack }: { onBack: () => void }) => (
       <li>Tener una sesión iniciada en QART.</li>
     </ul>
     <div className="reviews-gate-actions">
-      <Link to="/iam/login" className="btn-outline reviews-gate-btn uppercase tracking-widest text-xs">
+      <Link
+        to="/iam/login"
+        className="btn-outline reviews-gate-btn uppercase tracking-widest text-xs"
+      >
         Ingresar
       </Link>
-      <Link to="/iam/register" className="btn-primary reviews-gate-btn uppercase tracking-widest text-xs">
+      <Link
+        to="/iam/register"
+        className="btn-primary reviews-gate-btn uppercase tracking-widest text-xs"
+      >
         Crear cuenta
       </Link>
     </div>
@@ -53,11 +59,15 @@ const PanelGateTried = ({ onBack }: { onBack: () => void }) => (
     </div>
     <h4 className="reviews-gate-title">Todavía no registramos que hayas pedido este plato</h4>
     <p className="reviews-gate-lead">
-      Confirmá un pedido que lo incluya para poder dejar tu opinión. Así mantenemos reseñas con contexto
-      real de la experiencia en el salón.
+      Confirmá un pedido que lo incluya para poder dejar tu opinión. Así mantenemos reseñas con
+      contexto real de la experiencia en el salón.
     </p>
     <div className="reviews-gate-actions">
-      <button type="button" className="btn-primary reviews-gate-btn uppercase tracking-widest text-xs" onClick={onBack}>
+      <button
+        type="button"
+        className="btn-primary reviews-gate-btn uppercase tracking-widest text-xs"
+        onClick={onBack}
+      >
         Entendido
       </button>
     </div>
@@ -107,7 +117,9 @@ const PlateReviewsModal = ({ plate, onClose, onReviewsChanged }: PlateReviewsMod
         setFormError('No pudimos guardar tu reseña. Revisá tu sesión o probá de nuevo.');
       }
     } catch {
-      setFormError('Error de red o sesión. Si no estás logueado, iniciá sesión e intentá otra vez.');
+      setFormError(
+        'Error de red o sesión. Si no estás logueado, iniciá sesión e intentá otra vez.',
+      );
     } finally {
       setSubmitting(false);
     }
@@ -136,10 +148,19 @@ const PlateReviewsModal = ({ plate, onClose, onReviewsChanged }: PlateReviewsMod
               <h3 className="featured-modal-title">{plate.name}</h3>
               <p className="featured-modal-description">
                 {formatLandingPrice(plate.menuPrice)} ·{' '}
-                <StarRatingDisplay value={plate.avgRating} size={13} reviewCount={plate.ratingsCount} />
+                <StarRatingDisplay
+                  value={plate.avgRating}
+                  size={13}
+                  reviewCount={plate.ratingsCount}
+                />
               </p>
             </div>
-            <button type="button" className="reviews-modal-close" onClick={onClose} aria-label="Cerrar">
+            <button
+              type="button"
+              className="reviews-modal-close"
+              onClick={onClose}
+              aria-label="Cerrar"
+            >
               ✕
             </button>
           </div>
@@ -150,7 +171,11 @@ const PlateReviewsModal = ({ plate, onClose, onReviewsChanged }: PlateReviewsMod
 
             {panel === 'compose' && (
               <div className="reviews-compose">
-                <button type="button" className="reviews-gate-back" onClick={() => setPanel('list')}>
+                <button
+                  type="button"
+                  className="reviews-gate-back"
+                  onClick={() => setPanel('list')}
+                >
                   ← Volver al listado
                 </button>
                 <p className="reviews-compose-hint">Tu voz suma al menú. Sé honesto y concreto.</p>
@@ -180,7 +205,11 @@ const PlateReviewsModal = ({ plate, onClose, onReviewsChanged }: PlateReviewsMod
                   />
                 </label>
                 <label className="reviews-compose-check">
-                  <input type="checkbox" checked={recommends} onChange={(e) => setRecommends(e.target.checked)} />
+                  <input
+                    type="checkbox"
+                    checked={recommends}
+                    onChange={(e) => setRecommends(e.target.checked)}
+                  />
                   <span>Lo recomendaría</span>
                 </label>
                 {formError && <p className="reviews-compose-error">{formError}</p>}
@@ -199,7 +228,9 @@ const PlateReviewsModal = ({ plate, onClose, onReviewsChanged }: PlateReviewsMod
               <>
                 <ul className="reviews-thread">
                   {plate.reviews.length === 0 ? (
-                    <li className="reviews-thread-empty">Todavía no hay reseñas. ¡Sé el primero en contar tu experiencia!</li>
+                    <li className="reviews-thread-empty">
+                      Todavía no hay reseñas. ¡Sé el primero en contar tu experiencia!
+                    </li>
                   ) : (
                     plate.reviews.map((r) => (
                       <li key={r.id} className="reviews-thread-item">
@@ -243,7 +274,11 @@ const PlateReviewsModal = ({ plate, onClose, onReviewsChanged }: PlateReviewsMod
                   )}
                 </ul>
                 <div className="reviews-modal-footer">
-                  <button type="button" className="btn-primary w-full justify-center uppercase tracking-widest text-xs" onClick={startCompose}>
+                  <button
+                    type="button"
+                    className="btn-primary w-full justify-center uppercase tracking-widest text-xs"
+                    onClick={startCompose}
+                  >
                     Publicar mi reseña
                   </button>
                 </div>

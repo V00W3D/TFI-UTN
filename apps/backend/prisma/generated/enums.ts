@@ -58,6 +58,15 @@ export const AuthorityRank = {
 export type AuthorityRank = (typeof AuthorityRank)[keyof typeof AuthorityRank]
 
 
+export const TokenType = {
+  EMAIL_CHANGE: 'EMAIL_CHANGE',
+  PHONE_CHANGE: 'PHONE_CHANGE',
+  PASSWORD_CHANGE: 'PASSWORD_CHANGE'
+} as const
+
+export type TokenType = (typeof TokenType)[keyof typeof TokenType]
+
+
 export const IngredientCategory = {
   PROTEIN_ANIMAL: 'PROTEIN_ANIMAL',
   PROTEIN_PLANT: 'PROTEIN_PLANT',

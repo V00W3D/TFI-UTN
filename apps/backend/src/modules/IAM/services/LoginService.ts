@@ -10,7 +10,13 @@ type AuthRow = {
   id: string;
   username: string;
   email: string;
+  name: string;
+  sname: string | null;
+  lname: string;
+  sex: 'MALE' | 'FEMALE' | 'OTHER';
+  emailVerified?: Date | string | boolean | null;
   phone: string | null;
+  phoneVerified?: Date | string | boolean | null;
   role: InferSuccess<typeof LoginContract>['role'];
   customer: { tier: InferSuccess<typeof LoginContract>['profile']['tier'] } | null;
   staff: { post: InferSuccess<typeof LoginContract>['profile']['post'] } | null;
@@ -20,8 +26,14 @@ type AuthRow = {
 const buildAuthUser = (row: AuthRow): InferSuccess<typeof LoginContract> => ({
   id: row.id,
   username: row.username,
+  name: row.name,
+  sname: row.sname ?? null,
+  lname: row.lname,
+  sex: row.sex,
   email: row.email,
+  emailVerified: !!row.emailVerified,
   phone: row.phone ?? null,
+  phoneVerified: !!row.phoneVerified,
   role: row.role,
   profile: {
     ...(row.customer?.tier ? { tier: row.customer.tier } : {}),
@@ -63,8 +75,14 @@ export async function loginService(
     select: {
       id: true,
       username: true,
+      name: true,
+      sname: true,
+      lname: true,
+      sex: true,
       email: true,
+      emailVerified: true,
       phone: true,
+      phoneVerified: true,
       role: true,
       customer: { select: { tier: true } },
       staff: { select: { post: true } },

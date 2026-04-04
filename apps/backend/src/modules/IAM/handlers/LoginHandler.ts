@@ -12,11 +12,18 @@ const COOKIE_BASE = { httpOnly: true, secure: BUN_MODE === 'prod', sameSite: 'st
  */
 export const LoginHandler = api.handler('POST /iam/login')(async (input, { res }) => {
   const user = await loginService(input);
+
   const tokenPayload = {
     id: user.id,
     username: user.username,
+    name: user.name,
+    sname: user.sname ?? null,
+    lname: user.lname,
+    sex: user.sex,
     email: user.email,
+    emailVerified: user.emailVerified,
     phone: user.phone ?? null,
+    phoneVerified: user.phoneVerified,
     role: user.role,
     profile: { ...user.profile },
   };

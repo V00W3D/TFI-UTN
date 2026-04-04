@@ -85,14 +85,14 @@ export type CallableEndpoint<C extends AnyContract> = CallableFn<C> & CallableEn
 type ModulesOf<TContracts extends readonly AnyContract[]> =
   TContracts[number]['__path'] extends `/${infer M}/${string}` ? M : never;
 
-/** @internal Union de nombres de acción para un módulo dado. */
+/** @internal Union of names de acción para un módulo dado. */
 type ActionsOf<
   TContracts extends readonly AnyContract[],
   TModule extends string,
 > = TContracts[number] extends infer C
   ? C extends AnyContract
     ? C['__path'] extends `/${TModule}/${infer A}`
-      ? A
+      ? A | `${Lowercase<C['__verb']>}${Capitalize<A>}`
       : never
     : never
   : never;
@@ -102,7 +102,18 @@ type ContractAt<
   TContracts extends readonly AnyContract[],
   TModule extends string,
   TAction extends string,
-> = Extract<TContracts[number], { __path: `/${TModule}/${TAction}` }>;
+> = Extract<
+  TContracts[number],
+  { __path: `/${TModule}/${string}`; __verb: string }
+> extends infer C
+  ? C extends AnyContract
+    ? C['__path'] extends `/${TModule}/${TAction}`
+      ? C
+      : TAction extends `${Lowercase<C['__verb']>}${Capitalize<C['__path'] extends `/${TModule}/${infer A}` ? A : never>}`
+      ? C
+      : never
+    : never
+  : never;
 
 /**
  * @public
@@ -272,6 +283,7 @@ export const createClientApi = <const TContracts extends readonly AnyContract[]>
     const parts = contract.__path.split('/');
     const moduleName = parts[1]!;
     const actionName = parts[2]!;
+    const verb = contract.__verb.toLowerCase();
 
     if (!seen.has(moduleName)) {
       seen.add(moduleName);
@@ -279,7 +291,14 @@ export const createClientApi = <const TContracts extends readonly AnyContract[]>
       modules[moduleName] = {};
     }
 
-    modules[moduleName]![actionName] = buildEndpoint(contract, resolved);
+    const targetModule = modules[moduleName]!;
+    // If the action name already exists, we prefix with the verb to avoid collision.
+    // Example: GET /customers/addresses -> addresses, POST /customers/addresses -> postAddresses
+    const finalActionName = targetModule[actionName]
+      ? `${verb}${actionName.charAt(0).toUpperCase()}${actionName.slice(1)}`
+      : actionName;
+
+    targetModule[finalActionName] = buildEndpoint(contract, resolved);
   }
 
   return Object.freeze({

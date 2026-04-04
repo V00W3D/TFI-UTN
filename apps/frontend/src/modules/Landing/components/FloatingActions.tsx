@@ -76,11 +76,7 @@ const FloatingActions = () => {
             >
               <div className="relative">
                 <ParchmentIcon className="w-6 h-6" />
-                {badgeCount > 0 && (
-                  <span className="floating-btn-badge">
-                    {badgeCount}
-                  </span>
-                )}
+                {badgeCount > 0 && <span className="floating-btn-badge">{badgeCount}</span>}
               </div>
             </motion.button>
           )}
@@ -99,11 +95,7 @@ const FloatingActions = () => {
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ type: 'spring', damping: 12, stiffness: 200 }}
           >
-            {mode === 'light' ? (
-              <MoonIcon className="w-6 h-6" />
-            ) : (
-              <SunIcon className="w-6 h-6" />
-            )}
+            {mode === 'light' ? <MoonIcon className="w-6 h-6" /> : <SunIcon className="w-6 h-6" />}
           </motion.div>
         </motion.button>
       </div>

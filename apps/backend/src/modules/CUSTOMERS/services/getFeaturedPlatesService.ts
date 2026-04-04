@@ -38,8 +38,7 @@ export const getFeaturedPlatesService = async (input: {
 
     const scored: Scored[] = candidates.map((p) => {
       const units = soldByPlate.get(p.id) ?? 0;
-      const reviewBoost =
-        p.ratingsCount > 0 ? p.avgRating * Math.log10(p.ratingsCount + 1) * 4 : 0;
+      const reviewBoost = p.ratingsCount > 0 ? p.avgRating * Math.log10(p.ratingsCount + 1) * 4 : 0;
       const score = units * 12 + reviewBoost;
 
       return { id: p.id, score, units };

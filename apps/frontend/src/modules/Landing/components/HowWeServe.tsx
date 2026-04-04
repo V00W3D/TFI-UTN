@@ -35,7 +35,8 @@ const HowWeServe = () => {
               Delivery
             </p>
             <p className="text-[0.95rem] text-qart-text-muted mb-6 font-bold uppercase tracking-tight leading-snug">
-              Recibí QART en la puerta: mismo menú, tiempos claros y encargo simple desde el celular.
+              Recibí QART en la puerta: mismo menú, tiempos claros y encargo simple desde el
+              celular.
             </p>
             <div className="space-y-3 flex-1">
               {[
@@ -127,8 +128,8 @@ const HowWeServe = () => {
                   className="text-[0.92rem] font-bold uppercase tracking-tight leading-snug"
                   style={{ color: 'var(--qart-text-on-inverse-dim)' }}
                 >
-                  Pedí online, pasá a retirar cuando avisemos y llevate todo listo. Perfecto si vivís cerca
-                  o salís de la facu.
+                  Pedí online, pasá a retirar cuando avisemos y llevate todo listo. Perfecto si
+                  vivís cerca o salís de la facu.
                 </p>
               </div>
             </div>

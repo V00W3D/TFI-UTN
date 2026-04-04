@@ -6,11 +6,7 @@ import {
   getPlateSizeIconKey,
   getPlateTypeIconKey,
 } from '../../../components/shared/PlateDataIcons';
-import {
-  formatLandingEnum,
-  formatLandingPrice,
-  type LandingPlate,
-} from './landingPlateNutrition';
+import { formatLandingEnum, formatLandingPrice, type LandingPlate } from './landingPlateNutrition';
 import { useOrderStore } from '../../../orderStore';
 
 interface PlateCardProps {
@@ -145,11 +141,7 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
         </div>
 
         <div className="featured-card-actions featured-card-actions--pair">
-          <button
-            type="button"
-            className="featured-card-action"
-            onClick={onOpenNutrition}
-          >
+          <button type="button" className="featured-card-action" onClick={onOpenNutrition}>
             <PlateDataIcon icon="info" className="featured-card-action-icon" />
             <span>Informacion nutricional</span>
           </button>
@@ -175,9 +167,7 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
               <span>{plate.isAvailable ? 'Disponible hoy' : 'Consultar disponibilidad'}</span>
             </span>
             <span className="featured-footer-item">
-              <PlateDataIcon
-                icon={plate.recipe.prepTimeMinutes != null ? 'time' : 'ingredient'}
-              />
+              <PlateDataIcon icon={plate.recipe.prepTimeMinutes != null ? 'time' : 'ingredient'} />
               <span>
                 {plate.recipe.prepTimeMinutes != null
                   ? `${plate.recipe.prepTimeMinutes} min de prep`

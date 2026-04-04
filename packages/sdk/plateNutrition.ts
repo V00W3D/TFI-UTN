@@ -330,13 +330,14 @@ export const createEmptyNutrition = (): NutritionSnapshot => ({
 export const dedupeStrings = (values: Array<string | null | undefined>) =>
   Array.from(
     new Set(
-      values
-        .map((value) => value?.trim())
-        .filter((value): value is string => Boolean(value)),
+      values.map((value) => value?.trim()).filter((value): value is string => Boolean(value)),
     ),
   );
 
-export const addNutrition = (left: NutritionSnapshot, right: NutritionSnapshot): NutritionSnapshot => {
+export const addNutrition = (
+  left: NutritionSnapshot,
+  right: NutritionSnapshot,
+): NutritionSnapshot => {
   const next = createEmptyNutrition();
 
   for (const key of NUTRITION_KEYS) {
@@ -549,7 +550,10 @@ export const getNutritionMetricAnalyses = (
 ): NutritionMetricAnalysis[] =>
   NUTRITION_METRIC_DEFINITIONS.map((definition) => {
     const total = roundValue(nutrition[definition.key], metricDigits(definition.key));
-    const perServing = roundValue(total / (servings > 0 ? servings : 1), metricDigits(definition.key));
+    const perServing = roundValue(
+      total / (servings > 0 ? servings : 1),
+      metricDigits(definition.key),
+    );
     const tone = classifyNutritionMetric(definition.key, total, nutrition);
 
     return {
@@ -569,7 +573,10 @@ export const getNutritionMetricAnalyses = (
 const getVariantNutritionValue = (variant: PlateNutritionVariantLike, key: NutritionKey) =>
   variant.overrideNutrition[key] ?? variant.ingredient.nutrition[key];
 
-const getEffectiveQuantityGrams = (variant: PlateNutritionVariantLike, requestedQuantityGrams: number) => {
+const getEffectiveQuantityGrams = (
+  variant: PlateNutritionVariantLike,
+  requestedQuantityGrams: number,
+) => {
   const safeYield = variant.yieldFactor > 0 ? variant.yieldFactor : 1;
   return requestedQuantityGrams * safeYield;
 };
@@ -578,7 +585,8 @@ const getComponentNutrition = (
   variant: PlateNutritionVariantLike,
   quantityGrams: number,
 ): NutritionSnapshot => {
-  const basis = variant.ingredient.nutritionBasisGrams > 0 ? variant.ingredient.nutritionBasisGrams : 100;
+  const basis =
+    variant.ingredient.nutritionBasisGrams > 0 ? variant.ingredient.nutritionBasisGrams : 100;
   const scaled = createEmptyNutrition();
 
   for (const key of NUTRITION_KEYS) {
@@ -589,10 +597,15 @@ const getComponentNutrition = (
 };
 
 const refreshComponentQuantity = (component: ResolvedPlateComponent) => {
-  component.quantityGrams = getEffectiveQuantityGrams(component.variant, component.requestedQuantityGrams);
+  component.quantityGrams = getEffectiveQuantityGrams(
+    component.variant,
+    component.requestedQuantityGrams,
+  );
 };
 
-const createComponentFromRecipeItem = (item: PlateNutritionRecipeItemLike): ResolvedPlateComponent => {
+const createComponentFromRecipeItem = (
+  item: PlateNutritionRecipeItemLike,
+): ResolvedPlateComponent => {
   const component: ResolvedPlateComponent = {
     id: item.id,
     baseRecipeItemId: item.id,
@@ -643,7 +656,9 @@ const createComponentFromAdjustment = (
   return component;
 };
 
-export const resolvePlateComponents = (plate: PlateNutritionPlateLike): ResolvedPlateComponent[] => {
+export const resolvePlateComponents = (
+  plate: PlateNutritionPlateLike,
+): ResolvedPlateComponent[] => {
   const components = plate.recipe.items.map(createComponentFromRecipeItem);
   const componentMap = new Map(
     components.map((component) => [component.baseRecipeItemId ?? component.id, component]),
@@ -690,7 +705,11 @@ export const resolvePlateComponents = (plate: PlateNutritionPlateLike): Resolved
       const quantityToRemove = adjustment.quantityGrams ?? target.requestedQuantityGrams;
 
       target.requestedQuantityGrams = Math.max(0, target.requestedQuantityGrams - quantityToRemove);
-      target.notes = dedupeStrings([...target.notes, adjustment.notes, 'Se ajusto la cantidad final.']);
+      target.notes = dedupeStrings([
+        ...target.notes,
+        adjustment.notes,
+        'Se ajusto la cantidad final.',
+      ]);
       refreshComponentQuantity(target);
       continue;
     }
@@ -745,7 +764,9 @@ const getToneScore = (metric: NutritionMetricAnalysis) => {
 };
 
 export const summarizeNutritionTone = (metrics: NutritionMetricAnalysis[]): NutritionTone => {
-  const visibleMetrics = metrics.filter((metric) => shouldShowNutritionMetric(metric.key, metric.total));
+  const visibleMetrics = metrics.filter((metric) =>
+    shouldShowNutritionMetric(metric.key, metric.total),
+  );
   const score = visibleMetrics.reduce((total, metric) => total + getToneScore(metric), 0);
   const dangerCount = visibleMetrics.filter((metric) => metric.tone === 'danger').length;
   const benefitCount = visibleMetrics.filter((metric) => metric.tone === 'benefit').length;
@@ -794,7 +815,10 @@ export const analyzePlateNutrition = (plate: PlateNutritionPlateLike): PlateNutr
 
     existing.quantityGrams += component.quantityGrams;
     existing.variants = dedupeStrings([...existing.variants, component.variant.name]);
-    existing.preparations = dedupeStrings([...existing.preparations, component.variant.preparationMethod]);
+    existing.preparations = dedupeStrings([
+      ...existing.preparations,
+      component.variant.preparationMethod,
+    ]);
     existing.notes = dedupeStrings([...existing.notes, ...component.notes]);
     existing.totalNutrition = addNutrition(existing.totalNutrition, componentNutrition);
     existing.perServingNutrition = divideNutrition(existing.totalNutrition, servings);
@@ -802,8 +826,8 @@ export const analyzePlateNutrition = (plate: PlateNutritionPlateLike): PlateNutr
 
   const ingredients = Array.from(groupedIngredients.values())
     .map((ingredient) => {
-      const metrics = getNutritionMetricAnalyses(ingredient.totalNutrition, servings).filter((metric) =>
-        shouldShowNutritionMetric(metric.key, metric.total),
+      const metrics = getNutritionMetricAnalyses(ingredient.totalNutrition, servings).filter(
+        (metric) => shouldShowNutritionMetric(metric.key, metric.total),
       );
 
       return {

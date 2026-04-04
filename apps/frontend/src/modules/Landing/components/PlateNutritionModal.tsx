@@ -66,9 +66,7 @@ const PlateNutritionModal = ({ plate, onClose }: PlateNutritionModalProps) => {
                   {formatLandingMetric(plate.servedWeightGrams, 'g', 0)}
                 </span>
                 <span className="featured-chip">
-                  {analysis.servings === 1
-                    ? '1 porcion servida'
-                    : `${analysis.servings} porciones`}
+                  {analysis.servings === 1 ? '1 porcion servida' : `${analysis.servings} porciones`}
                 </span>
               </div>
             </div>
@@ -238,7 +236,9 @@ const PlateNutritionModal = ({ plate, onClose }: PlateNutritionModalProps) => {
               <div className="featured-section-heading">
                 <div>
                   <p className="featured-kicker">Tabla base</p>
-                  <h4>Valores de referencia usados para leer lo que si tiene objetivo diario claro</h4>
+                  <h4>
+                    Valores de referencia usados para leer lo que si tiene objetivo diario claro
+                  </h4>
                 </div>
                 <strong>Base de referencia</strong>
               </div>

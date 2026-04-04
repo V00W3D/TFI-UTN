@@ -10,8 +10,13 @@ import { formatLandingPrice } from './landingPlateNutrition';
 const ParchmentIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}
-    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" aria-hidden="true"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+    aria-hidden="true"
   >
     <rect x="4" y="2" width="16" height="20" />
     <line x1="4" y1="6" x2="8" y2="6" />
@@ -27,8 +32,13 @@ const ParchmentIcon = ({ className }: { className?: string }) => (
 const ClockIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}
-    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" aria-hidden="true"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+    aria-hidden="true"
   >
     <circle cx="12" cy="12" r="10" />
     <polyline points="12 6 12 12 16 14" />
@@ -38,8 +48,13 @@ const ClockIcon = ({ className }: { className?: string }) => (
 const TrashIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}
-    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" aria-hidden="true"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="square"
+    strokeLinejoin="miter"
+    aria-hidden="true"
   >
     <polyline points="3 6 5 6 21 6" />
     <path d="M19 6l-1 14H6L5 6" />
@@ -51,8 +66,12 @@ const TrashIcon = ({ className }: { className?: string }) => (
 const XIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}
-    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="2.5" strokeLinecap="square" aria-hidden="true"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="square"
+    aria-hidden="true"
   >
     <line x1="18" y1="6" x2="6" y2="18" />
     <line x1="6" y1="6" x2="18" y2="18" />
@@ -60,13 +79,29 @@ const XIcon = ({ className }: { className?: string }) => (
 );
 
 const MinusIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" aria-hidden>
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="square"
+    aria-hidden
+  >
     <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
 );
 
 const PlusSmIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" aria-hidden>
+  <svg
+    className={className}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="square"
+    aria-hidden
+  >
     <line x1="12" y1="5" x2="12" y2="19" />
     <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
@@ -75,7 +110,7 @@ const PlusSmIcon = ({ className }: { className?: string }) => (
 /* ─── Data ─── */
 const fulfillmentShort: Record<OrderFulfillment, string> = {
   dine_in: 'En el local',
-  pickup:  'Retiro',
+  pickup: 'Retiro',
   delivery: 'Delivery',
 };
 
@@ -83,8 +118,17 @@ const fulfillmentShort: Record<OrderFulfillment, string> = {
 const OrderPanel = () => {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const {
-    items, isOpen, setOpen, removeItem, updateQuantity, clearOrder,
-    activeTab, setActiveTab, orderHistory, fetchHistory, isFetchingHistory,
+    items,
+    isOpen,
+    setOpen,
+    removeItem,
+    updateQuantity,
+    clearOrder,
+    activeTab,
+    setActiveTab,
+    orderHistory,
+    fetchHistory,
+    isFetchingHistory,
   } = useOrderStore();
 
   const totalItems = items.reduce((acc, i) => acc + i.quantity, 0);
@@ -96,14 +140,20 @@ const OrderPanel = () => {
 
   return (
     <>
-      <OrderCheckoutModal open={checkoutOpen} onClose={() => setCheckoutOpen(false)} items={items} />
+      <OrderCheckoutModal
+        open={checkoutOpen}
+        onClose={() => setCheckoutOpen(false)}
+        items={items}
+      />
 
       <AnimatePresence>
         {isOpen && (
           <>
             <motion.div
               key="order-backdrop"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               className="order-panel-backdrop"
               onClick={() => setOpen(false)}
@@ -111,7 +161,9 @@ const OrderPanel = () => {
 
             <motion.aside
               key="order-panel"
-              initial={{ x: '-100%' }} animate={{ x: 0 }} exit={{ x: '-100%' }}
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
               transition={{ duration: 0.32, ease: [0.23, 1, 0.32, 1] }}
               className="order-panel"
               aria-label="Gestión de pedidos"
@@ -125,9 +177,7 @@ const OrderPanel = () => {
                   >
                     <ParchmentIcon className="w-3.5 h-3.5 shrink-0" />
                     <span>Tu Pedido</span>
-                    {totalItems > 0 && (
-                      <span className="order-panel-tab-badge">{totalItems}</span>
-                    )}
+                    {totalItems > 0 && <span className="order-panel-tab-badge">{totalItems}</span>}
                   </button>
                   <button
                     onClick={() => setActiveTab('history')}
@@ -196,7 +246,9 @@ const OrderPanel = () => {
                                   <button
                                     type="button"
                                     className="order-panel-qty-btn"
-                                    onClick={() => updateQuantity(plate.id, Math.max(1, quantity - 1))}
+                                    onClick={() =>
+                                      updateQuantity(plate.id, Math.max(1, quantity - 1))
+                                    }
                                     aria-label="Reducir cantidad"
                                   >
                                     <MinusIcon className="w-3 h-3" />
@@ -265,7 +317,8 @@ const OrderPanel = () => {
                             <div className="order-history-card-head">
                               <time className="order-history-card-date">
                                 {new Date(entry.completedAt).toLocaleString('es-AR', {
-                                  dateStyle: 'medium', timeStyle: 'short',
+                                  dateStyle: 'medium',
+                                  timeStyle: 'short',
                                 })}
                               </time>
                               <span className="order-history-card-total">
@@ -284,14 +337,19 @@ const OrderPanel = () => {
                                 </span>
                               )}
                               {entry.lifecycleStatus && (
-                                <span className={`order-history-card-pill order-history-card-pill--status order-history-card-pill--${entry.lifecycleStatus.toLowerCase()}`}>
+                                <span
+                                  className={`order-history-card-pill order-history-card-pill--status order-history-card-pill--${entry.lifecycleStatus.toLowerCase()}`}
+                                >
                                   {entry.lifecycleStatus}
                                 </span>
                               )}
                             </div>
                             <ul className="order-history-lines">
                               {entry.lines.map((line) => (
-                                <li key={`${entry.id}-${line.plateId}`} className="order-history-line">
+                                <li
+                                  key={`${entry.id}-${line.plateId}`}
+                                  className="order-history-line"
+                                >
                                   <span className="order-history-line-name">{line.name}</span>
                                   <span className="order-history-line-qty">×{line.quantity}</span>
                                 </li>

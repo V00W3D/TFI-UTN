@@ -29,8 +29,7 @@ import { PUBLIC_APP_SCOPE } from './env';
 const shared: RouteObject[] = [LandingRoutes, SearchRoutes, IAMRoutes];
 
 export default function AppRoutes() {
-  const routes: RouteObject[] =
-    PUBLIC_APP_SCOPE === 'full' ? [...shared, CustomerRoutes] : shared;
+  const routes: RouteObject[] = PUBLIC_APP_SCOPE === 'full' ? [...shared, CustomerRoutes] : shared;
 
   return useRoutes(routes);
 }

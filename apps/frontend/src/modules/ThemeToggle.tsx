@@ -30,10 +30,10 @@ const ThemeToggle = () => {
               initial={{ y: 24, opacity: 0, rotate: -90, scale: 0.5 }}
               animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
               exit={{ y: -24, opacity: 0, rotate: 90, scale: 0.5 }}
-              transition={{ 
-                duration: 0.45, 
+              transition={{
+                duration: 0.45,
                 ease: [0.23, 1, 0.32, 1],
-                opacity: { duration: 0.2 }
+                opacity: { duration: 0.2 },
               }}
               className="text-qart-accent-2"
             >
@@ -65,10 +65,10 @@ const ThemeToggle = () => {
               initial={{ y: 24, opacity: 0, rotate: 90, scale: 0.5 }}
               animate={{ y: 0, opacity: 1, rotate: 0, scale: 1 }}
               exit={{ y: -24, opacity: 0, rotate: -90, scale: 0.5 }}
-              transition={{ 
-                duration: 0.45, 
+              transition={{
+                duration: 0.45,
                 ease: [0.23, 1, 0.32, 1],
-                opacity: { duration: 0.2 }
+                opacity: { duration: 0.2 },
               }}
               className="text-qart-accent"
             >

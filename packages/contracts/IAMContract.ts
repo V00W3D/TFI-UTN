@@ -58,8 +58,14 @@ export const ProfileSchema = z.object({
 export const AuthUserSchema = z.object({
   id: z.uuid(),
   username: usernameField.schema,
+  name: nameField.schema,
+  sname: snameField.schema.nullable(),
+  lname: lnameField.schema,
+  sex: sexField.schema,
   email: emailField.schema,
-  phone: phoneField.schema,
+  emailVerified: z.boolean(),
+  phone: phoneField.schema.nullable(),
+  phoneVerified: z.boolean(),
   role: userRoleField.schema,
   profile: ProfileSchema,
 });
@@ -76,12 +82,12 @@ export const LoginContract = defineEndpoint('public', 'POST /iam/login')
 export const RegisterInputSchema = z
   .object({
     name: nameField.schema,
-    sname: snameField.schema,
+    sname: snameField.schema.optional(),
     lname: lnameField.schema,
     sex: sexField.schema,
     username: usernameField.schema,
     email: emailField.schema,
-    phone: phoneField.schema,
+    phone: phoneField.schema.optional(),
     password: passwordField.schema,
     cpassword: cpasswordField.schema,
   })
@@ -109,4 +115,59 @@ export const MeContract = defineEndpoint('auth', 'GET /iam/me')
   .doc('Session reader', 'Returns the currently authenticated user with their sub-profile.')
   .build();
 
-export const IAMContract = [LoginContract, RegisterContract, LogoutContract, MeContract] as const;
+export const UpdateMeInputSchema = z.object({
+  username: usernameField.schema.optional(),
+  name: nameField.schema.optional(),
+  sname: snameField.schema.optional(),
+  lname: lnameField.schema.optional(),
+  sex: sexField.schema.optional(),
+});
+
+export const UpdateMeContract = defineEndpoint('auth', 'PATCH /iam/me')
+  .IO(UpdateMeInputSchema, AuthUserSchema)
+  .doc('Update profile', 'Updates non-sensitive profile information.')
+  .build();
+
+export const RequestTokenInputSchema = z.object({
+  type: z.enum(['EMAIL_CHANGE', 'PHONE_CHANGE', 'PASSWORD_CHANGE']),
+  targetVal: z.string().optional().describe('Email/Phone nuevo, si aplica.'),
+});
+
+export const RequestTokenContract = defineEndpoint('auth', 'POST /iam/request-token')
+  .IO(RequestTokenInputSchema, z.void())
+  .doc('Request token', 'Generates and sends a 6-digit PIN for sensitive updates.')
+  .build();
+
+export const VerifyUpdateInputSchema = z
+  .object({
+    type: z.enum(['EMAIL_CHANGE', 'PHONE_CHANGE', 'PASSWORD_CHANGE']),
+    token: z.string().length(6),
+    newPassword: passwordField.schema.optional(),
+    cpassword: cpasswordField.schema.optional(),
+  })
+  .superRefine(({ type, newPassword, cpassword }, ctx) => {
+    if (type === 'PASSWORD_CHANGE') {
+      if (!newPassword || newPassword !== cpassword) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['cpassword'],
+          message: 'Las contraseñas no coinciden o están vacías.',
+        });
+      }
+    }
+  });
+
+export const VerifyUpdateContract = defineEndpoint('auth', 'POST /iam/verify-update')
+  .IO(VerifyUpdateInputSchema, AuthUserSchema)
+  .doc('Verify update', 'Validates PIN and applies sensitive changes.')
+  .build();
+
+export const IAMContract = [
+  LoginContract,
+  RegisterContract,
+  LogoutContract,
+  MeContract,
+  UpdateMeContract,
+  RequestTokenContract,
+  VerifyUpdateContract,
+] as const;

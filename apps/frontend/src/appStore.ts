@@ -29,9 +29,11 @@ interface AppState {
   mode: AppMode;
   module: AppModule;
   user: AppUser | null;
+  simpleMode: boolean;
   setMode: (mode: AppMode) => void;
   setModule: (module: AppModule) => void;
   setUser: (user: AppUser | null) => void;
+  setSimpleMode: (simpleMode: boolean) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -40,15 +42,16 @@ export const useAppStore = create<AppState>()(
       mode: 'light',
       module: 'CORE',
       user: null,
+      simpleMode: false,
 
       setMode: (mode) => set({ mode }),
       setModule: (module) => set({ module }),
       setUser: (user) => set({ user }),
+      setSimpleMode: (simpleMode) => set({ simpleMode }),
     }),
     {
       name: 'qart-app-storage',
-      partialize: (state) => ({ mode: state.mode, user: state.user }),
+      partialize: (state) => ({ mode: state.mode, user: state.user, simpleMode: state.simpleMode }),
     },
   ),
 );
-

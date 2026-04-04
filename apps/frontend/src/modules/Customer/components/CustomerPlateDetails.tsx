@@ -305,7 +305,9 @@ const CustomerPlateDetails = ({ plate }: CustomerPlateDetailsProps) => {
                 <CustomerDataPoint
                   icon="preparation"
                   label={formatCustomerEnum(item.variant.preparationMethod)}
-                  value={item.prepNotes || item.variant.preparationNotes || 'Sin notas adicionales.'}
+                  value={
+                    item.prepNotes || item.variant.preparationNotes || 'Sin notas adicionales.'
+                  }
                 />
               </p>
               {item.isMainComponent && (
@@ -332,9 +334,7 @@ const CustomerPlateDetails = ({ plate }: CustomerPlateDetailsProps) => {
           <ul>
             {plate.adjustments.map((adjustment) => {
               const adjustmentIngredient =
-                adjustment.variant?.ingredient ??
-                adjustment.recipeItem?.variant.ingredient ??
-                null;
+                adjustment.variant?.ingredient ?? adjustment.recipeItem?.variant.ingredient ?? null;
               const adjustmentIcon = adjustmentIngredient
                 ? getIngredientIconKey(adjustmentIngredient.name, adjustmentIngredient.category)
                 : 'ingredient';
@@ -371,7 +371,9 @@ const CustomerPlateDetails = ({ plate }: CustomerPlateDetailsProps) => {
                 </p>
                 <p>
                   <CustomerDataPoint
-                    iconNode={<StarRatingDisplay value={review.rating} size={14} showValue={false} />}
+                    iconNode={
+                      <StarRatingDisplay value={review.rating} size={14} showValue={false} />
+                    }
                     label="Puntaje"
                     value={formatCustomerMetric(review.rating, '/ 5', 1)}
                   />

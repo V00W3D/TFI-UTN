@@ -55,6 +55,8 @@ export const ModelName = {
   CustomerProfile: 'CustomerProfile',
   StaffProfile: 'StaffProfile',
   AuthorityProfile: 'AuthorityProfile',
+  Address: 'Address',
+  VerificationToken: 'VerificationToken',
   Ingredient: 'Ingredient',
   IngredientVariant: 'IngredientVariant',
   Recipe: 'Recipe',
@@ -100,7 +102,9 @@ export const UserScalarFieldEnum = {
   username: 'username',
   password: 'password',
   email: 'email',
+  emailVerified: 'emailVerified',
   phone: 'phone',
+  phoneVerified: 'phoneVerified',
   role: 'role',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -131,6 +135,34 @@ export const AuthorityProfileScalarFieldEnum = {
 } as const
 
 export type AuthorityProfileScalarFieldEnum = (typeof AuthorityProfileScalarFieldEnum)[keyof typeof AuthorityProfileScalarFieldEnum]
+
+
+export const AddressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  street: 'street',
+  number: 'number',
+  floorApt: 'floorApt',
+  notes: 'notes',
+  isDefault: 'isDefault',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AddressScalarFieldEnum = (typeof AddressScalarFieldEnum)[keyof typeof AddressScalarFieldEnum]
+
+
+export const VerificationTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  token: 'token',
+  payload: 'payload',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
 
 
 export const IngredientScalarFieldEnum = {

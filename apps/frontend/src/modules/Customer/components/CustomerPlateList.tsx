@@ -1,8 +1,4 @@
-import {
-  formatCustomerEnum,
-  formatCustomerPrice,
-  type CustomerPlate,
-} from '../customerPlate';
+import { formatCustomerEnum, formatCustomerPrice, type CustomerPlate } from '../customerPlate';
 import {
   PlateDataIcon,
   StarRatingDisplay,

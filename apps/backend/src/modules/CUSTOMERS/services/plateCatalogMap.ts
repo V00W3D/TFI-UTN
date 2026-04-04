@@ -57,7 +57,9 @@ const mapVariantOverrideNutrition = (variant: {
   polyunsaturatedFat: variant.overridePolyunsaturatedFat ?? null,
 });
 
-const mapIngredient = (ingredient: PlateCatalogRecord['recipe']['items'][number]['variant']['ingredient']): PlateDto['recipe']['items'][number]['variant']['ingredient'] => ({
+const mapIngredient = (
+  ingredient: PlateCatalogRecord['recipe']['items'][number]['variant']['ingredient'],
+): PlateDto['recipe']['items'][number]['variant']['ingredient'] => ({
   id: ingredient.id,
   name: ingredient.name,
   description: ingredient.description ?? null,
@@ -73,7 +75,9 @@ const mapIngredient = (ingredient: PlateCatalogRecord['recipe']['items'][number]
   extraAttributes: ingredient.extraAttributes ?? null,
 });
 
-const mapVariant = (variant: PlateCatalogRecord['recipe']['items'][number]['variant']): PlateDto['recipe']['items'][number]['variant'] => ({
+const mapVariant = (
+  variant: PlateCatalogRecord['recipe']['items'][number]['variant'],
+): PlateDto['recipe']['items'][number]['variant'] => ({
   id: variant.id,
   name: variant.name,
   description: variant.description ?? null,
@@ -86,7 +90,9 @@ const mapVariant = (variant: PlateCatalogRecord['recipe']['items'][number]['vari
   ingredient: mapIngredient(variant.ingredient),
 });
 
-const mapRecipeItem = (item: PlateCatalogRecord['recipe']['items'][number]): PlateDto['recipe']['items'][number] => ({
+const mapRecipeItem = (
+  item: PlateCatalogRecord['recipe']['items'][number],
+): PlateDto['recipe']['items'][number] => ({
   id: item.id,
   quantityGrams: item.quantityGrams,
   prepNotes: item.prepNotes ?? null,
@@ -101,8 +107,10 @@ export type ReviewUserSelect = PlateCatalogRecord['reviews'][number]['user'];
 export const reviewerFromUser = (u: ReviewUserSelect): PlateDto['reviews'][number]['reviewer'] => ({
   id: u.id,
   displayName:
-    [u.name, u.sname, u.lname].filter((p): p is string => Boolean(p?.trim())).join(' ').trim() ||
-    u.username,
+    [u.name, u.sname, u.lname]
+      .filter((p): p is string => Boolean(p?.trim()))
+      .join(' ')
+      .trim() || u.username,
   avatarUrl: `https://api.dicebear.com/7.x/notionists/svg?seed=${encodeURIComponent(u.username)}`,
 });
 
@@ -131,7 +139,9 @@ const mapTag = (entry: PlateCatalogRecord['tags'][number]): PlateDto['tags'][num
   description: entry.tag.description ?? null,
 });
 
-const mapAdjustment = (adjustment: PlateCatalogRecord['adjustments'][number]): PlateDto['adjustments'][number] => ({
+const mapAdjustment = (
+  adjustment: PlateCatalogRecord['adjustments'][number],
+): PlateDto['adjustments'][number] => ({
   id: adjustment.id,
   adjustmentType: adjustment.adjustmentType,
   quantityGrams: adjustment.quantityGrams ?? null,

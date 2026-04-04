@@ -7,15 +7,22 @@ import type { SearchPlatesContract } from '@app/contracts';
 
 /* ─── Icons ─── */
 const SearchIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" aria-hidden>
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.2"
+    strokeLinecap="square"
+    aria-hidden
+  >
     <circle cx="11" cy="11" r="7" />
     <line x1="16.5" y1="16.5" x2="21" y2="21" />
   </svg>
 );
 
-const ImagePlaceholder = () => (
-  <div className="nav-search-suggestion__ph" aria-hidden />
-);
+const ImagePlaceholder = () => <div className="nav-search-suggestion__ph" aria-hidden />;
 
 /* ─── Debounce hook ─── */
 function useDebounce<T>(value: T, delay: number): T {
@@ -42,12 +49,13 @@ const NavSearchBar = () => {
   const res = sdk.customers.search.$use();
   useEffect(() => {
     if (!shouldSearch) return;
-    void sdk.customers.search({ q: debouncedQuery, pageSize: 6 } as InferRequest<typeof SearchPlatesContract>);
+    void sdk.customers.search({ q: debouncedQuery, pageSize: 6 } as InferRequest<
+      typeof SearchPlatesContract
+    >);
   }, [debouncedQuery, shouldSearch]);
 
-  const suggestions = shouldSearch && res.data && 'data' in res.data
-    ? (res.data.data?.items ?? []).slice(0, 6)
-    : [];
+  const suggestions =
+    shouldSearch && res.data && 'data' in res.data ? (res.data.data?.items ?? []).slice(0, 6) : [];
 
   /* Close on outside click */
   useEffect(() => {
@@ -58,14 +66,20 @@ const NavSearchBar = () => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const handleSelect = useCallback((name: string) => {
-    setOpen(false);
-    setQuery('');
-    navigate(`/search?q=${encodeURIComponent(name)}`);
-  }, [navigate]);
+  const handleSelect = useCallback(
+    (name: string) => {
+      setOpen(false);
+      setQuery('');
+      navigate(`/search?q=${encodeURIComponent(name)}`);
+    },
+    [navigate],
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') { setOpen(false); setQuery(''); }
+    if (e.key === 'Escape') {
+      setOpen(false);
+      setQuery('');
+    }
     if (e.key === 'Enter' && query.trim()) {
       setOpen(false);
       navigate(`/search?q=${encodeURIComponent(query.trim())}`);
@@ -76,7 +90,9 @@ const NavSearchBar = () => {
   return (
     <div ref={containerRef} className="nav-search-wrap">
       <div className={`nav-search-field ${open ? 'nav-search-field--open' : ''}`}>
-        <span className="nav-search-ico"><SearchIcon /></span>
+        <span className="nav-search-ico">
+          <SearchIcon />
+        </span>
         <input
           ref={inputRef}
           type="search"
@@ -84,7 +100,10 @@ const NavSearchBar = () => {
           placeholder="Buscar platos…"
           autoComplete="off"
           value={query}
-          onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
           aria-label="Buscar platos en el menú"
@@ -113,7 +132,9 @@ const NavSearchBar = () => {
             )}
             {!res.isFetching && suggestions.length === 0 && (
               <li className="nav-search-suggestion nav-search-suggestion--state">
-                <span className="nav-search-state-text">Sin resultados para "{debouncedQuery}"</span>
+                <span className="nav-search-state-text">
+                  Sin resultados para "{debouncedQuery}"
+                </span>
               </li>
             )}
             {suggestions.map((plate) => (
@@ -125,10 +146,15 @@ const NavSearchBar = () => {
                 onMouseDown={() => handleSelect(plate.name)}
               >
                 <div className="nav-search-suggestion__img-wrap">
-                  {plate.imageUrl
-                    ? <img src={plate.imageUrl} alt={plate.name} className="nav-search-suggestion__img" />
-                    : <ImagePlaceholder />
-                  }
+                  {plate.imageUrl ? (
+                    <img
+                      src={plate.imageUrl}
+                      alt={plate.name}
+                      className="nav-search-suggestion__img"
+                    />
+                  ) : (
+                    <ImagePlaceholder />
+                  )}
                 </div>
                 <div className="nav-search-suggestion__body">
                   <span className="nav-search-suggestion__name">{plate.name}</span>
@@ -146,12 +172,17 @@ const NavSearchBar = () => {
               </li>
             ))}
             {suggestions.length > 0 && (
-              <li className="nav-search-dropdown__footer" onMouseDown={() => {
-                setOpen(false);
-                navigate(`/search?q=${encodeURIComponent(query.trim())}`);
-                setQuery('');
-              }}>
-                <span>Ver todos los resultados para "<strong>{debouncedQuery}</strong>"</span>
+              <li
+                className="nav-search-dropdown__footer"
+                onMouseDown={() => {
+                  setOpen(false);
+                  navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+                  setQuery('');
+                }}
+              >
+                <span>
+                  Ver todos los resultados para "<strong>{debouncedQuery}</strong>"
+                </span>
                 <span className="nav-search-dropdown__arrow">→</span>
               </li>
             )}
