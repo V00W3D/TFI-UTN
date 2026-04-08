@@ -1,7 +1,37 @@
+/**
+ * @file Navbar.tsx
+ * @module Landing
+ * @description Archivo Navbar alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-18
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
 import { motion } from 'framer-motion';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
-import { sdk } from '../../../tools/sdk';
 import NavSearchBar from './NavSearchBar';
 import NavProfile from './NavProfile';
 
@@ -21,10 +51,7 @@ const LANDING_SECTIONS = [
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user, setUser } = useAppStore();
-
-  const isSearch = location.pathname === '/search';
+  const { user } = useAppStore();
 
   return (
     <>
@@ -93,7 +120,10 @@ const Navbar = () => {
               </Link>
               <Link to="/config" className="nav-action-btn relative" title="Ajustes">
                 {user && (!user.emailVerified || !user.phoneVerified) && (
-                  <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-qart-error rounded-full border border-qart-surface shadow-sharp" title="Datos no verificados"></span>
+                  <span
+                    className="absolute top-1 right-1 w-2.5 h-2.5 bg-qart-error rounded-full border border-qart-surface shadow-sharp"
+                    title="Datos no verificados"
+                  ></span>
                 )}
                 <svg
                   width="18"

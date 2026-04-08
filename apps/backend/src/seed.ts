@@ -1,3 +1,34 @@
+/**
+ * @file seed.ts
+ * @module Backend
+ * @description Inicializa catalogo, inventario, precios, usuarios demo y ventas semilla para QART.
+ *
+ * @tfi
+ * section: IEEE 830 13 / 15
+ * rf: RF-18
+ * rnf: RNF-10
+ *
+ * @business
+ * inputs: configuracion de pricing, recetas, ingredientes y datos demo
+ * outputs: base de datos poblada con catalogo operativo y trazabilidad inicial
+ * rules: mantener relaciones validas; respetar 3NF; cargar datos consistentes para pruebas y reportes
+ *
+ * @technical
+ * dependencies: prisma, argon2, crypto, @app/sdk, catalog/plateImages
+ * flow: limpia catalogo; crea entidades base; calcula pricing; inserta compras, ventas y reviews; cierra conexiones
+ *
+ * @estimation
+ * complexity: High
+ * fpa: ILF
+ * story_points: 8
+ * estimated_hours: 6
+ *
+ * @testing
+ * cases: TC-SEED-01
+ *
+ * @notes
+ * decisions: se mantienen helpers funcionales y sin classes para alinear el seed con context.md
+ */
 import { randomUUID } from 'crypto';
 import * as argon2 from 'argon2';
 import {
@@ -653,7 +684,7 @@ const recipeItem = (
   return item;
 };
 
-async function resetCatalog() {
+const resetCatalog = async () => {
   await prisma.$executeRawUnsafe('DELETE FROM "SaleItem"');
   await prisma.$executeRawUnsafe('DELETE FROM "Sale"');
   await prisma.$executeRawUnsafe('DELETE FROM "PurchaseItem"');
@@ -672,7 +703,7 @@ async function resetCatalog() {
   await prisma.ingredientVariant.deleteMany();
   await prisma.ingredient.deleteMany();
   await prisma.tag.deleteMany();
-}
+};
 
 const mapIngredientForPricing = (ingredient: {
   id: string;
@@ -854,7 +885,7 @@ const loadPlatesForPricing = async () => {
   }));
 };
 
-async function upsertCustomer(input: {
+const upsertCustomer = async (input: {
   name: string;
   sname?: string | null;
   lname: string;
@@ -864,7 +895,7 @@ async function upsertCustomer(input: {
   phone: string;
   tier: CustomerTier;
   password: string;
-}) {
+}) => {
   return prisma.user.upsert({
     where: { username: input.username },
     update: {
@@ -898,9 +929,9 @@ async function upsertCustomer(input: {
       },
     },
   });
-}
+};
 
-async function main() {
+const main = async () => {
   console.log('🌱 Starting Database Seeding...');
 
   await resetCatalog();
@@ -3320,7 +3351,7 @@ async function main() {
   );
   console.log(`   • 1 compra inicial y ${saleSeeds.length} ventas demo para operaciones`);
   console.log(`   • ${reviewPayloads.length} reviews repartidas entre clientes seed`);
-}
+};
 
 main()
   .catch((error) => {

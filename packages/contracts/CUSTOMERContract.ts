@@ -1,5 +1,36 @@
 /**
  * @file CUSTOMERContract.ts
+ * @module Contracts
+ * @description Archivo CUSTOMERContract alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-18
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
+/**
+ * @file CUSTOMERContract.ts
  * @author Victor
  * @description Customer-facing contracts for the restaurant catalog.
  * @remarks Exposes a rich plate payload aligned with the current Prisma restaurant schema.

@@ -1,3 +1,34 @@
+/**
+ * @file FeaturedDish.tsx
+ * @module Landing
+ * @description Archivo FeaturedDish alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-18
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
@@ -25,17 +56,12 @@ const FeaturedDish = () => {
 
   const plates = data && 'data' in data ? data.data : [];
   const totalPages = Math.max(1, Math.ceil(plates.length / PLATES_PER_PAGE));
-  const currentSliceStart = (currentPage - 1) * PLATES_PER_PAGE;
+  const visiblePage = Math.min(currentPage, totalPages);
+  const currentSliceStart = (visiblePage - 1) * PLATES_PER_PAGE;
   const visiblePlates = plates.slice(currentSliceStart, currentSliceStart + PLATES_PER_PAGE);
   const selectedPlate = selectedModal
     ? (plates.find((plate) => plate.id === selectedModal.plateId) ?? null)
     : null;
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
 
   useEffect(() => {
     if (!selectedPlate) return undefined;
@@ -127,7 +153,7 @@ const FeaturedDish = () => {
             <div className="featured-pagination">
               <div className="featured-pagination-status">
                 <span>
-                  Página {currentPage} de {totalPages}
+                  Página {visiblePage} de {totalPages}
                 </span>
                 <span>{plates.length} platos cargados</span>
               </div>
@@ -140,7 +166,7 @@ const FeaturedDish = () => {
                   <button
                     type="button"
                     className="btn-outline uppercase tracking-widest py-3 px-5"
-                    disabled={currentPage === 1}
+                    disabled={visiblePage === 1}
                     onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
                   >
                     Anterior
@@ -155,9 +181,9 @@ const FeaturedDish = () => {
                           key={pageNumber}
                           type="button"
                           className={`featured-pagination-page ${
-                            pageNumber === currentPage ? 'featured-pagination-page--active' : ''
+                            pageNumber === visiblePage ? 'featured-pagination-page--active' : ''
                           }`}
-                          aria-current={pageNumber === currentPage ? 'page' : undefined}
+                          aria-current={pageNumber === visiblePage ? 'page' : undefined}
                           onClick={() => setCurrentPage(pageNumber)}
                         >
                           {pageNumber}
@@ -169,7 +195,7 @@ const FeaturedDish = () => {
                   <button
                     type="button"
                     className="btn-outline uppercase tracking-widest py-3 px-5"
-                    disabled={currentPage === totalPages}
+                    disabled={visiblePage === totalPages}
                     onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
                   >
                     Siguiente

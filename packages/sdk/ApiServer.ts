@@ -1,4 +1,35 @@
 /**
+ * @file ApiServer.ts
+ * @module SDK
+ * @description Expone la fabrica funcional del servidor tipado que conecta contratos, middleware y handlers.
+ *
+ * @tfi
+ * section: IEEE 830 12.1
+ * rf: RF-10
+ * rnf: RNF-02
+ *
+ * @business
+ * inputs: contratos, adapters, routers y handlers
+ * outputs: servidor HTTP inicializable y routers tipados
+ * rules: req.user proviene del JWT; validar entradas; aplicar roles; no depender de clases
+ *
+ * @technical
+ * dependencies: express types, zod, ./Contracts, ./ErrorCodes
+ * flow: registra contratos; resuelve seguridad; valida input; ejecuta handler; serializa respuesta o error
+ *
+ * @estimation
+ * complexity: High
+ * fpa: EO
+ * story_points: 5
+ * estimated_hours: 4
+ *
+ * @testing
+ * cases: TC-IAM-ROLE-01
+ *
+ * @notes
+ * decisions: toda la orquestacion del servidor permanece en factories funcionales para cumplir context.md
+ */
+/**
  * @file packages/sdk/ApiServer.ts
  * @description Backend server factory — fully decoupled from Express, env vars,
  * auth middleware, and error utilities. The backend injects all of those as adapters.
@@ -194,22 +225,22 @@ const colorVerb = (v: string) => `${VERB_COLORS[v] ?? ANSI.white}${v.padEnd(6)}$
 const colorAccess = (a: string) => `${ACCESS_COLORS[a] ?? ANSI.white}${a.padEnd(8)}${ANSI.reset}`;
 const elapsedMs = (t: number) => `${ANSI.cyan}⧗ ${Date.now() - t}ms${ANSI.reset}`;
 
-function safeJson(val: unknown): string {
+const safeJson = (val: unknown): string => {
   try {
     const s = JSON.stringify(val);
     return s.length > 200 ? `${s.slice(0, 200)}${ANSI.dim}…${ANSI.reset}` : s;
   } catch {
     return String(val);
   }
-}
+};
 
-function logStartup(
+const logStartup = (
   entries: ReadonlyArray<RouteEntry>,
   adapters: readonly DatabaseAdapter[],
   env: ServerEnv,
   start: number,
   err?: unknown,
-): void {
+): void => {
   if (env.mode === 'dev' && process.stdout.isTTY) {
     process.stdout.write(process.platform === 'win32' ? '\x1B[2J\x1B[0f' : '\x1Bc');
     console.clear();
@@ -252,16 +283,16 @@ function logStartup(
   }
 
   console.log(`  ${DIVIDER}`);
-}
+};
 
-function logRequest(
+const logRequest = (
   verb: string,
   path: string,
   input: unknown,
   start: number,
   result: unknown,
   ok: boolean,
-): void {
+): void => {
   const icon = ok ? `${ANSI.green}✓${ANSI.reset}` : `${ANSI.red}✗${ANSI.reset}`;
   const body = ok
     ? `${ANSI.dim}${safeJson(result)}${ANSI.reset}`
@@ -272,15 +303,15 @@ function logRequest(
   console.log(`     ${ANSI.dim}↳${ANSI.reset} ${body}`);
   console.log(`     ${ANSI.dim}· input ${safeJson(input)}${ANSI.reset}`);
   console.log(`  ${DIVIDER}`);
-}
+};
 //#endregion
 
 //#region SECURITY
-function resolveSecurityChain(
+const resolveSecurityChain = (
   access: AnyContract['__access'],
   security: SecurityAdapter,
   roles?: string[],
-): Middleware[] {
+): Middleware[] => {
   switch (access) {
     case 'public':
       return [];
@@ -292,30 +323,32 @@ function resolveSecurityChain(
       if (!roles?.length) throw ERR.INTERNAL(['roles option required for access: "role"']);
       return [security.auth, security.role(roles)];
   }
-}
+};
 
-async function runMiddlewareChain(mws: Middleware[], req: Request, res: Response): Promise<void> {
+const runMiddlewareChain = async (
+  mws: Middleware[],
+  req: Request,
+  res: Response,
+): Promise<void> => {
   for (const mw of mws) {
     await new Promise<void>((resolve, reject) =>
       mw(req, res, (err?: unknown) => (err ? reject(err) : resolve())),
     );
   }
-}
+};
 
-function isBodylessVerb(verb: string): verb is 'GET' | 'DELETE' {
-  return verb === 'GET' || verb === 'DELETE';
-}
+const isBodylessVerb = (verb: string): verb is 'GET' | 'DELETE' =>
+  verb === 'GET' || verb === 'DELETE';
 
-function extractRawInput(verb: string, req: Request): unknown {
-  return isBodylessVerb(verb) ? req.query : req.body;
-}
+const extractRawInput = (verb: string, req: Request): unknown =>
+  isBodylessVerb(verb) ? req.query : req.body;
 //#endregion
 
 //#region INTERNAL_BUILDERS
-function buildRouterInternal(
+const buildRouterInternal = (
   entries: readonly RouteEntry[],
   adapters: ServerAdapters,
-): ModuleRouter {
+): ModuleRouter => {
   const router = adapters.routerFactory() as ModuleRouter;
 
   for (const { contract, execute, roles } of entries) {
@@ -373,7 +406,7 @@ function buildRouterInternal(
   });
 
   return router;
-}
+};
 //#endregion
 
 //#region CREATE_SERVER_API
@@ -398,16 +431,18 @@ function buildRouterInternal(
  * api.init({ app, routers: [IAMRouter, StaffRouter], db: [prismaAdapter] }).start();
  * ```
  */
-export function createServerApi<const TContracts extends readonly AnyContract[]>(
+export const createServerApi = <const TContracts extends readonly AnyContract[]>(
   contracts: TContracts,
   adapters: ServerAdapters,
-): ServerApiInstance<TContracts> {
+): ServerApiInstance<TContracts> => {
   const contractMap = new Map<string, AnyContract>(contracts.map((c) => [c.__id, c]));
 
-  function handler<TId extends TContracts[number]['__id']>(
+  const handler = <TId extends TContracts[number]['__id']>(
     id: TId,
     options?: RoleOptions,
-  ): (fn: Handler<ContractById<TContracts, TId>>) => RouteEntry<ContractById<TContracts, TId>> {
+  ): ((
+    fn: Handler<ContractById<TContracts, TId>>,
+  ) => RouteEntry<ContractById<TContracts, TId>>) => {
     const contract = contractMap.get(id);
     if (!contract) throw ERR.INTERNAL([`[createServerApi] No contract found for id "${id}"`]);
     return (fn) =>
@@ -416,7 +451,7 @@ export function createServerApi<const TContracts extends readonly AnyContract[]>
         execute: fn as ExecuteFn,
         ...(options?.roles && { roles: options.roles }),
       }) satisfies RouteEntry<ContractById<TContracts, TId>>;
-  }
+  };
 
   return {
     handler,
@@ -459,5 +494,5 @@ export function createServerApi<const TContracts extends readonly AnyContract[]>
       };
     },
   };
-}
+};
 //#endregion

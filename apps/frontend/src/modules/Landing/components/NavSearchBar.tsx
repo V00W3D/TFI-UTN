@@ -1,3 +1,34 @@
+/**
+ * @file NavSearchBar.tsx
+ * @module Landing
+ * @description Renderiza la barra de busqueda del navbar con sugerencias y navegacion rapida.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-19
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: texto de busqueda del usuario y resultados del SDK
+ * outputs: sugerencias navegables y redireccion al buscador
+ * rules: buscar desde 2 caracteres; cerrar dropdown fuera del componente; conservar feedback de carga
+ *
+ * @technical
+ * dependencies: react, framer-motion, react-router-dom, @app/sdk
+ * flow: debouncea query; consulta SDK; muestra sugerencias; navega al search page
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-SEARCH-UI-01
+ *
+ * @notes
+ * decisions: el hook debounce se expresa como arrow function para cumplir context.md
+ */
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -25,14 +56,14 @@ const SearchIcon = () => (
 const ImagePlaceholder = () => <div className="nav-search-suggestion__ph" aria-hidden />;
 
 /* ─── Debounce hook ─── */
-function useDebounce<T>(value: T, delay: number): T {
+const useDebounce = <T,>(value: T, delay: number): T => {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
     const t = setTimeout(() => setDebounced(value), delay);
     return () => clearTimeout(t);
   }, [value, delay]);
   return debounced;
-}
+};
 
 /* ─── Component ─── */
 const NavSearchBar = () => {

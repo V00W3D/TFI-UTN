@@ -1,3 +1,34 @@
+/**
+ * @file auth.middleware.ts
+ * @module Backend
+ * @description Archivo auth.middleware alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 12.1
+ * rf: RF-10
+ * rnf: RNF-02
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
 import type { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { SESSION_SECRET, REFRESH_SECRET, BUN_MODE } from '../env';
@@ -14,8 +45,14 @@ interface TokenPayload {
   id: string;
   role: UserRole;
   username?: string;
+  name?: string;
+  sname?: string | null;
+  lname?: string;
+  sex?: 'MALE' | 'FEMALE' | 'OTHER';
   email?: string;
+  emailVerified?: boolean;
   phone?: string | null;
+  phoneVerified?: boolean;
   profile?: { tier?: CustomerTier; post?: StaffPost; rank?: AuthorityRank };
   iat?: number;
   exp?: number;
@@ -30,8 +67,14 @@ const mapUser = (req: Request, p: TokenPayload) =>
     id: p.id,
     role: p.role,
     username: p.username ?? '',
+    name: p.name ?? '',
+    sname: p.sname ?? null,
+    lname: p.lname ?? '',
+    sex: p.sex ?? 'OTHER',
     email: p.email ?? '',
+    emailVerified: p.emailVerified ?? false,
     phone: p.phone ?? null,
+    phoneVerified: p.phoneVerified ?? false,
     profile: p.profile ?? {},
   });
 
@@ -58,8 +101,14 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
           id: decoded.id,
           role: decoded.role,
           username: decoded.username,
+          name: decoded.name,
+          sname: decoded.sname,
+          lname: decoded.lname,
+          sex: decoded.sex,
           email: decoded.email,
+          emailVerified: decoded.emailVerified,
           phone: decoded.phone,
+          phoneVerified: decoded.phoneVerified,
           profile: decoded.profile,
         },
         SESSION_SECRET,

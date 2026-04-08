@@ -1,3 +1,34 @@
+/**
+ * @file searchUrl.ts
+ * @module Search
+ * @description Convierte el estado de filtros de busqueda en query string y viceversa.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-19
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: URLSearchParams y estado parcial de busqueda
+ * outputs: payloads de filtros y query strings compactos
+ * rules: omitir defaults; preservar arrays y numeros validos; aceptar solo sorts conocidos
+ *
+ * @technical
+ * dependencies: @app/contracts
+ * flow: parsea valores; normaliza tipos; mezcla defaults; serializa estado limpio
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 2
+ * estimated_hours: 1
+ *
+ * @testing
+ * cases: TC-SEARCH-01
+ *
+ * @notes
+ * decisions: se usan helpers funcionales para mantener URLs cortas y predecibles
+ */
 import type { SearchPlatesQuery } from '@app/contracts';
 
 const ARRAY_KEYS = new Set<keyof SearchPlatesQuery>([
@@ -51,7 +82,7 @@ export const DEFAULT_SEARCH: Pick<SearchPlatesQuery, 'sort' | 'page' | 'pageSize
 };
 
 /** Lee query string del navegador → payload parcial (solo lo presente en la URL). */
-export function parseSearchUrl(sp: URLSearchParams): Partial<SearchPlatesQuery> {
+export const parseSearchUrl = (sp: URLSearchParams): Partial<SearchPlatesQuery> => {
   const out: Partial<SearchPlatesQuery> = {};
 
   const setArr = (key: keyof SearchPlatesQuery, arr: string[]) => {
@@ -86,14 +117,15 @@ export function parseSearchUrl(sp: URLSearchParams): Partial<SearchPlatesQuery> 
   if (sort && SORTS.has(sort)) out.sort = sort as SearchPlatesQuery['sort'];
 
   return out;
-}
+};
 
-export function mergeSearchPayload(sp: URLSearchParams): SearchPlatesQuery {
-  return { ...DEFAULT_SEARCH, ...parseSearchUrl(sp) };
-}
+export const mergeSearchPayload = (sp: URLSearchParams): SearchPlatesQuery => ({
+  ...DEFAULT_SEARCH,
+  ...parseSearchUrl(sp),
+});
 
 /** Serializa a query string (sin `?`). Omite valores por defecto para URLs cortas. */
-export function stringifySearchUrl(state: Partial<SearchPlatesQuery>): string {
+export const stringifySearchUrl = (state: Partial<SearchPlatesQuery>): string => {
   const sp = new URLSearchParams();
 
   const put = (key: string, value: string) => {
@@ -120,4 +152,4 @@ export function stringifySearchUrl(state: Partial<SearchPlatesQuery>): string {
   }
 
   return sp.toString();
-}
+};

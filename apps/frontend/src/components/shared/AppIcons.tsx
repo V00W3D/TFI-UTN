@@ -1,3 +1,34 @@
+/**
+ * @file AppIcons.tsx
+ * @module Frontend
+ * @description Archivo AppIcons alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-18
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
 import type { SVGProps } from 'react';
 
 type IconProps = SVGProps<SVGSVGElement>;
@@ -159,5 +190,12 @@ export const ClockIcon = (props: IconProps) => (
 export const EditIcon = (props: IconProps) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" {...strokeDefaults} {...props}>
     <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+  </svg>
+);
+
+export const CopyIcon = (props: IconProps) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" {...strokeDefaults} {...props}>
+    <rect x="9" y="9" width="10" height="10" rx="1.5" />
+    <path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" />
   </svg>
 );

@@ -1,41 +1,43 @@
+/**
+ * @file UpdateMeHandler.ts
+ * @module IAM
+ * @description Archivo UpdateMeHandler alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 12.1
+ * rf: RF-05
+ * rnf: RNF-05
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
 import { api } from '../../../tools/api';
 import { updateMeService } from '../services/UpdateMeService';
 import { ERR } from '@app/sdk';
-import * as jwt from 'jsonwebtoken';
-import { SESSION_SECRET, REFRESH_SECRET, BUN_MODE } from '../../../env';
-
-const COOKIE_BASE = { httpOnly: true, secure: BUN_MODE === 'prod', sameSite: 'strict' as const };
+import { issueAuthCookies } from '../services/issueAuthCookies';
 
 export const UpdateMeHandler = api.handler('PATCH /iam/me')(async (input, { req, res }) => {
   if (!req.user) throw ERR.UNAUTHORIZED();
 
   const updatedUser = await updateMeService(req.user.id, input);
-
-  // Remint the tokens to include the updated profile information in the payload
-  const tokenPayload = {
-    id: updatedUser.id,
-    username: updatedUser.username,
-    name: updatedUser.name,
-    sname: updatedUser.sname,
-    lname: updatedUser.lname,
-    sex: updatedUser.sex,
-    email: updatedUser.email,
-    emailVerified: updatedUser.emailVerified,
-    phone: updatedUser.phone,
-    phoneVerified: updatedUser.phoneVerified,
-    role: updatedUser.role,
-    profile: { ...updatedUser.profile },
-  };
-
-  res.cookie('CupCake', jwt.sign(tokenPayload, SESSION_SECRET, { expiresIn: '1h' }), {
-    ...COOKIE_BASE,
-    maxAge: 3600000,
-  });
-
-  res.cookie('Cake', jwt.sign(tokenPayload, REFRESH_SECRET, { expiresIn: '7d' }), {
-    ...COOKIE_BASE,
-    maxAge: 604800000,
-  });
-
+  issueAuthCookies(res, updatedUser);
   return updatedUser;
 });

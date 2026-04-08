@@ -1,5 +1,36 @@
 /**
  * @file Contracts.ts
+ * @module SDK
+ * @description Define el sistema de contratos tipados compartidos entre frontend y backend.
+ *
+ * @tfi
+ * section: IEEE 830 11 / 12.1
+ * rf: RF-18
+ * rnf: RNF-05
+ *
+ * @business
+ * inputs: schemas Zod, verbos HTTP y metadata de endpoints
+ * outputs: contratos tipados, inferencias y builders de endpoints
+ * rules: preservar tipos literales; compartir contratos via SDK; validar envelopes consistentes
+ *
+ * @technical
+ * dependencies: zod, ./ErrorCodes
+ * flow: define tipos base; arma schemas de respuesta; colecta contratos; construye endpoints inmutables
+ *
+ * @estimation
+ * complexity: High
+ * fpa: EIF
+ * story_points: 5
+ * estimated_hours: 4
+ *
+ * @testing
+ * cases: TC-CONTRACT-01
+ *
+ * @notes
+ * decisions: se usan builders funcionales y overloads tipados sin clases ni function keyword
+ */
+/**
+ * @file Contracts.ts
  * @author Victor
  * @description Automatically enforced JSDoc header according to context.md guidelines.
  * @param null
@@ -64,16 +95,13 @@ export type ApiFailure = PublicErrorEnvelope;
 export type ApiResponse<TData> = ApiSuccess<TData> | ApiFailure;
 
 /** @public Narrows an {@link ApiResponse} to the success variant. */
-export function isSuccessResponse<TData>(
+export const isSuccessResponse = <TData>(
   response: ApiResponse<TData>,
-): response is ApiSuccess<TData> {
-  return 'data' in response;
-}
+): response is ApiSuccess<TData> => 'data' in response;
 
 /** @public Narrows an {@link ApiResponse} to the failure variant. */
-export function isFailureResponse<TData>(response: ApiResponse<TData>): response is ApiFailure {
-  return 'error' in response;
-}
+export const isFailureResponse = <TData>(response: ApiResponse<TData>): response is ApiFailure =>
+  'error' in response;
 //#endregion
 
 //#region CONTRACT_TYPES
@@ -155,9 +183,8 @@ const FULL_SCHEMA: unique symbol = Symbol('fullResponseSchema');
 type ContractWithSchema = AnyContract & { readonly [FULL_SCHEMA]: z.ZodType };
 
 /** @internal Retrieves the hidden full response schema. Used by ApiClient/ApiServer only. */
-export function getFullResponseSchema(contract: AnyContract): z.ZodType {
-  return (contract as ContractWithSchema)[FULL_SCHEMA];
-}
+export const getFullResponseSchema = (contract: AnyContract): z.ZodType =>
+  (contract as ContractWithSchema)[FULL_SCHEMA];
 //#endregion
 
 //#region COLLECT_CONTRACTS
@@ -217,24 +244,15 @@ type Flatten<TArrays extends readonly (readonly AnyContract[])[]> = TArrays exte
  * `AnyContract[]` and destroys all literal type information downstream.
  */
 // Overload 1 — single const tuple
-export function collectContracts<const TTuple extends readonly AnyContract[]>(
-  tuple: TTuple,
-): TTuple;
+type CollectContracts = {
+  <const TTuple extends readonly AnyContract[]>(tuple: TTuple): TTuple;
+  <const TItems extends readonly AnyContract[]>(...items: TItems): TItems;
+  <const TArrays extends readonly (readonly AnyContract[])[]>(...arrays: TArrays): Flatten<TArrays>;
+};
 
-// Overload 2 — spread of individual contracts
-export function collectContracts<const TItems extends readonly AnyContract[]>(
-  ...items: TItems
-): TItems;
-
-// Overload 3 — spread of module arrays → flat tuple
-export function collectContracts<const TArrays extends readonly (readonly AnyContract[])[]>(
-  ...arrays: TArrays
-): Flatten<TArrays>;
-
-// Implementation
-export function collectContracts(
+export const collectContracts = ((
   ...args: AnyContract[] | [readonly AnyContract[]] | (readonly AnyContract[])[]
-): readonly AnyContract[] {
+): readonly AnyContract[] => {
   // Overload 1: single array argument
   if (args.length === 1 && Array.isArray(args[0])) {
     return Object.freeze(args[0]);
@@ -245,12 +263,12 @@ export function collectContracts(
   }
   // Overload 2: spread of individual contracts
   return Object.freeze(args as AnyContract[]);
-}
+}) as CollectContracts;
 //#endregion
 
 //#region RUNTIME_GUARD
 /** @public Returns `true` when `value` is an {@link AnyContract}. */
-export function isContract(value: unknown): value is AnyContract {
+export const isContract = (value: unknown): value is AnyContract => {
   return (
     typeof value === 'object' &&
     value !== null &&
@@ -258,7 +276,7 @@ export function isContract(value: unknown): value is AnyContract {
     '__verb' in value &&
     '__path' in value
   );
-}
+};
 //#endregion
 
 //#region CONTRACT_BUILDER
@@ -266,9 +284,8 @@ const errorSchema = createPublicErrorSchema();
 
 type SuccessWrapper<TOut extends z.ZodType> = z.ZodObject<{ data: TOut }>;
 
-function wrapAsSuccess<TOut extends z.ZodType>(output: TOut): SuccessWrapper<TOut> {
-  return z.object({ data: output }).strict() as SuccessWrapper<TOut>;
-}
+const wrapAsSuccess = <TOut extends z.ZodType>(output: TOut): SuccessWrapper<TOut> =>
+  z.object({ data: output }).strict() as SuccessWrapper<TOut>;
 
 type DocBuilder<
   TId extends ContractId,
@@ -313,10 +330,10 @@ type EndpointBuilder<TId extends ContractId, TAccess extends AccessLevel> = {
  *   .build();
  * ```
  */
-export function defineEndpoint<const TAccess extends AccessLevel, const TId extends ContractId>(
+export const defineEndpoint = <const TAccess extends AccessLevel, const TId extends ContractId>(
   access: TAccess,
   id: TId,
-): EndpointBuilder<TId, TAccess> {
+): EndpointBuilder<TId, TAccess> => {
   const spaceIndex = id.indexOf(' ');
   const verb = id.slice(0, spaceIndex) as VerbOf<TId>;
   const path = id.slice(spaceIndex + 1) as PathOf<TId>;
@@ -335,56 +352,54 @@ export function defineEndpoint<const TAccess extends AccessLevel, const TId exte
         ): DocBuilder<TId, TAccess, false, TSummary, TDescription, TIn, TOut> {
           let isDeprecated = false;
 
-          function makeBuilder<const TDep extends boolean>(
+          const makeBuilder = <const TDep extends boolean>(
             _dep: TDep,
-          ): DocBuilder<TId, TAccess, TDep, TSummary, TDescription, TIn, TOut> {
-            return {
-              deprecated() {
-                isDeprecated = true;
-                return makeBuilder<true>(true);
-              },
-              build(): Contract<TId, TAccess, TDep, TSummary, TDescription, TIn, TOut> {
-                const contractShape = {
-                  __id: id,
-                  __verb: verb,
-                  __path: path,
-                  __access: access,
-                  __deprecated: (isDeprecated ? true : false) as TDep,
-                  __doc: Object.freeze({ summary, description }) as Readonly<{
-                    summary: TSummary;
-                    description: TDescription;
-                  }>,
-                  __requestSchema: inputSchema,
-                  __responseSchema: outputSchema,
-                  __phantomRequest: undefined as unknown as z.input<TIn>,
-                  __phantomResponse: undefined as unknown as ApiResponse<z.output<TOut>>,
-                  $type: undefined as unknown as ContractPhantomTypes<TIn, TOut>,
-                } satisfies Contract<TId, TAccess, TDep, TSummary, TDescription, TIn, TOut>;
+          ): DocBuilder<TId, TAccess, TDep, TSummary, TDescription, TIn, TOut> => ({
+            deprecated() {
+              isDeprecated = true;
+              return makeBuilder<true>(true);
+            },
+            build(): Contract<TId, TAccess, TDep, TSummary, TDescription, TIn, TOut> {
+              const contractShape = {
+                __id: id,
+                __verb: verb,
+                __path: path,
+                __access: access,
+                __deprecated: (isDeprecated ? true : false) as TDep,
+                __doc: Object.freeze({ summary, description }) as Readonly<{
+                  summary: TSummary;
+                  description: TDescription;
+                }>,
+                __requestSchema: inputSchema,
+                __responseSchema: outputSchema,
+                __phantomRequest: undefined as unknown as z.input<TIn>,
+                __phantomResponse: undefined as unknown as ApiResponse<z.output<TOut>>,
+                $type: undefined as unknown as ContractPhantomTypes<TIn, TOut>,
+              } satisfies Contract<TId, TAccess, TDep, TSummary, TDescription, TIn, TOut>;
 
-                Object.defineProperty(contractShape, FULL_SCHEMA, {
-                  value: fullSchema,
-                  writable: false,
-                  enumerable: false,
-                  configurable: false,
-                });
+              Object.defineProperty(contractShape, FULL_SCHEMA, {
+                value: fullSchema,
+                writable: false,
+                enumerable: false,
+                configurable: false,
+              });
 
-                return Object.freeze(contractShape) as unknown as Contract<
-                  TId,
-                  TAccess,
-                  TDep,
-                  TSummary,
-                  TDescription,
-                  TIn,
-                  TOut
-                >;
-              },
-            };
-          }
+              return Object.freeze(contractShape) as unknown as Contract<
+                TId,
+                TAccess,
+                TDep,
+                TSummary,
+                TDescription,
+                TIn,
+                TOut
+              >;
+            },
+          });
 
           return makeBuilder<false>(false);
         },
       };
     },
   };
-}
+};
 //#endregion

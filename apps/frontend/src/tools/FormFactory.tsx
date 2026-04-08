@@ -1,8 +1,34 @@
 /**
  * @file FormFactory.tsx
+ * @module Frontend
  * @description Fábrica de formularios reactivos tipados sobre el SDK de contratos.
  * Genera automáticamente campos, validación, envío y UI a partir de contratos Zod.
- * @module FormFactory
+ *
+ * @tfi
+ * section: IEEE 830 11 / 12.1
+ * rf: RF-01
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: contratos del SDK, valores del usuario y estado de formulario
+ * outputs: componentes de formulario, campos enlazados y submit tipado
+ * rules: mantener formularios reactivos; reutilizar validacion compartida; evitar any
+ *
+ * @technical
+ * dependencies: react, zustand, @app/sdk, react-router-dom
+ * flow: crea stores; vincula campos; valida input; envia requests; refleja feedback visual
+ *
+ * @estimation
+ * complexity: High
+ * fpa: EI
+ * story_points: 5
+ * estimated_hours: 4
+ *
+ * @testing
+ * cases: TC-IAM-01
+ *
+ * @notes
+ * decisions: se tipan endpoints opacos con unknown para cumplir la politica de cero any
  */
 
 import { useId, useState, useCallback, useEffect, memo } from 'react';
@@ -204,21 +230,17 @@ interface NativeInputProps {
 }
 
 interface BoundFieldProps extends FieldProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  store: StoreApi<FormState<any>>;
+  store: StoreApi<FormState<Record<string, unknown>>>;
   name: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type FormStore = UseBoundStore<StoreApi<FormState<any>>>;
+type FormStore = UseBoundStore<StoreApi<FormState<Record<string, unknown>>>>;
 
 type OpaqueEndpoint = {
   $form: FormStore;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  $use: UseBoundStore<StoreApi<RequestState<any, any>>>;
+  $use: UseBoundStore<StoreApi<RequestState<unknown, unknown>>>;
   $reset: () => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (input: any): Promise<any>;
+  (input: Record<string, unknown>): Promise<unknown>;
 };
 
 type SDKModules<TContracts extends readonly AnyContract[]> =
@@ -650,10 +672,6 @@ const buildForm =
     }, []);
 
     useEffect(() => {
-      // eslint-disable-next-line no-console
-      if (data) console.log('[FormFactory] respuesta exitosa:', data);
-      // eslint-disable-next-line no-console
-      if (error) console.log('[FormFactory] error de servidor:', error);
       if (data && !error) {
         if (onSuccess) onSuccess(data);
         if (redirectTo) navigate(redirectTo, redirectOptions);

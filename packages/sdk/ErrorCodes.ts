@@ -1,5 +1,36 @@
 /**
  * @file ErrorCodes.ts
+ * @module SDK
+ * @description Centraliza codigos de error publicos, fabricas tipadas y utilidades de traduccion HTTP.
+ *
+ * @tfi
+ * section: IEEE 830 11 / 12.1
+ * rf: RF-10
+ * rnf: RNF-08
+ *
+ * @business
+ * inputs: errores de dominio y validacion
+ * outputs: envelopes de error publicos y status HTTP
+ * rules: mantener codigos consistentes; no filtrar detalles internos; reutilizar fabricas compartidas
+ *
+ * @technical
+ * dependencies: zod
+ * flow: define codigos; crea errores tipados; expone factories; normaliza envelopes y status
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EO
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-ERR-01
+ *
+ * @notes
+ * decisions: se reemplaza la clase por un factory funcional para cumplir context.md
+ */
+/**
+ * @file ErrorCodes.ts
  * @author Victor
  * @description Automatically enforced JSDoc header according to context.md guidelines.
  * @param null
@@ -52,31 +83,44 @@ export const ErrorCodeEnum = z.enum(Object.values(ERROR_CODES) as [ErrorCode, ..
  * `ApiServer` catches it and converts it to the `PublicErrorEnvelope` shape.
  * `status` drives the HTTP response code.
  */
-export class AppError extends Error {
-  public readonly code: ErrorCode;
-  public readonly status: number;
-  public readonly params: readonly string[];
+export type AppError = Error & {
+  readonly code: ErrorCode;
+  readonly status: number;
+  readonly params: readonly string[];
+  toEnvelope: () => PublicErrorEnvelope;
+};
 
-  constructor(code: ErrorCode, status: number, params: readonly string[] = []) {
-    super(code);
-    this.name = 'AppError';
-    this.code = code;
-    this.status = status;
-    this.params = params;
-  }
+const createAppError = (
+  code: ErrorCode,
+  status: number,
+  params: readonly string[] = [],
+): AppError => {
+  const error = new Error(code) as Error & {
+    code: ErrorCode;
+    status: number;
+    params: readonly string[];
+    toEnvelope: () => PublicErrorEnvelope;
+  };
+  error.name = 'AppError';
+  error.code = code;
+  error.status = status;
+  error.params = params;
+  error.toEnvelope = () =>
+    params.length ? { error: { code, params: [...params] } } : { error: { code } };
+  return error as AppError;
+};
 
-  /** @public Returns `true` when `value` is an {@link AppError}. */
-  static is(value: unknown): value is AppError {
-    return value instanceof AppError;
-  }
+const isAppError = (value: unknown): value is AppError =>
+  value instanceof Error &&
+  value.name === 'AppError' &&
+  'code' in value &&
+  'status' in value &&
+  'params' in value;
 
-  /** @public Converts this error to the public envelope shape. */
-  toEnvelope(): PublicErrorEnvelope {
-    return this.params.length
-      ? { error: { code: this.code, params: [...this.params] } }
-      : { error: { code: this.code } };
-  }
-}
+export const AppError = {
+  create: createAppError,
+  is: isAppError,
+} as const;
 //#endregion
 
 //#region ERROR_FACTORY
@@ -86,7 +130,7 @@ type ErrorFactory = (params?: readonly string[]) => AppError;
 const E =
   (code: ErrorCode, status: number): ErrorFactory =>
   (params = []) =>
-    new AppError(code, status, params);
+    AppError.create(code, status, params);
 
 /**
  * @public
@@ -163,26 +207,26 @@ export const createPublicErrorSchema = (): typeof publicErrorSchema => publicErr
  * @summary Returns `true` when `response` is a {@link PublicErrorEnvelope}.
  * Useful in frontend code to distinguish success from error responses.
  */
-export function isErrorEnvelope(response: unknown): response is PublicErrorEnvelope {
+export const isErrorEnvelope = (response: unknown): response is PublicErrorEnvelope => {
   return (
     typeof response === 'object' &&
     response !== null &&
     'error' in response &&
     typeof (response as PublicErrorEnvelope).error?.code === 'string'
   );
-}
+};
 
 /**
  * @public
  * @summary Extracts the HTTP status that should be returned for a given error.
  * Falls back to 400 for unknown error shapes.
  */
-export function httpStatusFrom(error: unknown): number {
+export const httpStatusFrom = (error: unknown): number => {
   if (AppError.is(error)) return error.status;
   if (typeof error === 'object' && error !== null && 'status' in error) {
     const s = (error as Record<string, unknown>).status;
     if (typeof s === 'number') return s;
   }
   return 400;
-}
+};
 //#endregion

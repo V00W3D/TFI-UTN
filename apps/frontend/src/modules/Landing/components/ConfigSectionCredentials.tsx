@@ -1,35 +1,285 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * @file ConfigSectionCredentials.tsx
+ * @module Landing
+ * @description Archivo ConfigSectionCredentials alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-18
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
+import { useCallback, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import { useAppStore } from '../../../appStore';
+import { MODE } from '../../../env';
+import { SectionFactory } from '../../../components/shared/SectionFactory';
+import { GlobalProfileCard } from '../../../components/shared/GlobalProfileCard';
+import { ArrowRightIcon, CopyIcon, EditIcon } from '../../../components/shared/AppIcons';
 import { useToastStore } from '../../../toastStore';
 import { sdk } from '../../../tools/sdk';
-import { GlobalProfileCard } from '../../../components/shared/GlobalProfileCard';
-import { EditIcon } from '../../../components/shared/AppIcons';
 
-type EditingState =
-  | null
-  | 'name'
-  | 'sname'
-  | 'lname'
-  | 'username'
-  | 'sex'
-  | 'EMAIL_CHANGE'
-  | 'PHONE_CHANGE'
-  | 'PASSWORD_CHANGE';
+type ProfileFieldKey = 'name' | 'sname' | 'lname' | 'username' | 'sex';
+type SecurityFieldType = 'EMAIL_CHANGE' | 'PHONE_CHANGE' | 'PASSWORD_CHANGE';
+type EditingState = null | ProfileFieldKey;
+type SecurityIntent = 'verify' | 'change' | 'password';
+type ConfigViewMode = 'view' | 'requesting' | 'verifying' | 'plans';
 
 interface Address {
   id: string;
   street: string;
   number: string;
-  floorApt?: string;
-  notes?: string;
+  floorApt: string | null;
+  notes: string | null;
   isDefault: boolean;
 }
 
+interface AddressDraft {
+  id: string | null;
+  street: string;
+  number: string;
+  floorApt: string;
+  notes: string;
+  isDefault: boolean;
+}
+
+interface SecurityFlow {
+  type: SecurityFieldType;
+  intent: SecurityIntent;
+}
+
+interface CredentialAction {
+  key: string;
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'ghost';
+  icon?: ReactNode;
+  disabled?: boolean;
+}
+
+interface CredentialRowProps {
+  label: string;
+  value: string;
+  helper?: string;
+  badge?: ReactNode;
+  actions?: CredentialAction[];
+}
+
+const EMPTY_ADDRESS_DRAFT: AddressDraft = {
+  id: null,
+  street: '',
+  number: '',
+  floorApt: '',
+  notes: '',
+  isDefault: false,
+};
+
+const PLAN_CARDS = [
+  {
+    tier: 'REGULAR',
+    title: 'Cliente Regular',
+    accent: 'bg-qart-primary',
+    summary: 'Entrada base al ecosistema QART con acceso completo al menu y pedidos web.',
+    bullets: ['Acceso estandar al catalogo', 'Historial de pedidos', 'Gestion de datos personales'],
+  },
+  {
+    tier: 'VIP',
+    title: 'Cliente VIP',
+    accent: 'bg-qart-accent',
+    summary: 'Pensado para clientes frecuentes que quieren mas prioridad y beneficios.',
+    bullets: [
+      'Atencion prioritaria en promos',
+      'Beneficios por recurrencia',
+      'Experiencias y lanzamientos',
+    ],
+  },
+  {
+    tier: 'PREMIUM',
+    title: 'Cliente Premium',
+    accent: 'bg-qart-success',
+    summary: 'La capa alta del programa de cliente para quienes quieren trato diferencial.',
+    bullets: [
+      'Beneficios exclusivos',
+      'Mayor reconocimiento en campanas',
+      'Acceso preferente a novedades',
+    ],
+  },
+] as const;
+
+const SECURITY_COPY = {
+  EMAIL_CHANGE: {
+    verify: {
+      title: 'Verificar correo electronico',
+      lead: 'Vamos a enviarte un codigo por email para confirmar que ese canal te pertenece.',
+      deliveryLabel: 'email',
+      codeLabel: 'Codigo enviado por email',
+    },
+    change: {
+      title: 'Cambiar correo electronico',
+      lead: 'Primero indica el nuevo correo y luego confirmalo con un codigo de verificacion.',
+      targetLabel: 'Nuevo correo electronico',
+      targetPlaceholder: 'correo@dominio.com',
+      deliveryLabel: 'email',
+      codeLabel: 'Codigo enviado por email',
+    },
+    password: {
+      title: 'Correo electronico',
+      lead: '',
+      deliveryLabel: 'email',
+      codeLabel: 'Codigo',
+    },
+  },
+  PHONE_CHANGE: {
+    verify: {
+      title: 'Verificar telefono',
+      lead: 'Te vamos a mandar un SMS con un codigo para validar el numero actual.',
+      deliveryLabel: 'SMS',
+      codeLabel: 'Codigo enviado por SMS',
+    },
+    change: {
+      title: 'Cambiar telefono',
+      lead: 'Indica el nuevo numero y validalo con un SMS antes de guardarlo.',
+      targetLabel: 'Nuevo telefono',
+      targetPlaceholder: '+54 9 ...',
+      deliveryLabel: 'SMS',
+      codeLabel: 'Codigo enviado por SMS',
+    },
+    password: {
+      title: 'Telefono',
+      lead: '',
+      deliveryLabel: 'SMS',
+      codeLabel: 'Codigo',
+    },
+  },
+  PASSWORD_CHANGE: {
+    verify: {
+      title: 'Contrasena',
+      lead: '',
+      deliveryLabel: 'canal seguro',
+      codeLabel: 'Codigo',
+    },
+    change: {
+      title: 'Contrasena',
+      lead: '',
+      deliveryLabel: 'canal seguro',
+      codeLabel: 'Codigo',
+    },
+    password: {
+      title: 'Cambiar contrasena',
+      lead: 'Te pedimos un codigo de seguridad antes de permitir la actualizacion de tu contrasena.',
+      deliveryLabel: 'canal seguro',
+      codeLabel: 'Codigo de seguridad',
+    },
+  },
+} as const;
+
+const formatSex = (sex: 'MALE' | 'FEMALE' | 'OTHER') =>
+  sex === 'MALE' ? 'Masculino' : sex === 'FEMALE' ? 'Femenino' : 'Otro';
+
+const formatTier = (tier?: string) =>
+  tier === 'PREMIUM' ? 'Cliente Premium' : tier === 'VIP' ? 'Cliente VIP' : 'Cliente Regular';
+
+const VerificationBadge = ({ verified }: { verified: boolean }) =>
+  verified ? (
+    <span className="border border-qart-border bg-qart-success px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white">
+      Verificado
+    </span>
+  ) : (
+    <span className="border border-qart-border bg-qart-error px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white">
+      Pendiente
+    </span>
+  );
+
+const ActionButton = ({
+  label,
+  onClick,
+  variant = 'ghost',
+  icon,
+  disabled = false,
+}: CredentialAction) => (
+  <button
+    type="button"
+    onClick={onClick}
+    disabled={disabled}
+    className={
+      variant === 'primary'
+        ? 'btn-primary min-h-0! px-4! py-2.5! text-[10px]! tracking-[0.12em]! cursor-pointer disabled:cursor-not-allowed'
+        : variant === 'secondary'
+          ? 'btn-outline min-h-0! px-4! py-2.5! text-[10px]! tracking-[0.12em]! cursor-pointer disabled:cursor-not-allowed'
+          : 'inline-flex cursor-pointer items-center gap-2 border border-qart-border bg-qart-bg-warm px-3 py-2 text-[10px] font-black uppercase tracking-[0.12em] text-qart-primary transition-colors hover:bg-qart-primary hover:text-white disabled:cursor-not-allowed'
+    }
+  >
+    {icon}
+    {label}
+  </button>
+);
+
+const CredentialRow = ({ label, value, helper, badge, actions = [] }: CredentialRowProps) => (
+  <article className="overflow-hidden rounded-none border border-qart-border bg-qart-surface">
+    <div className="grid grid-cols-1 lg:grid-cols-[190px_minmax(0,1fr)]">
+      <div className="border-b border-qart-border bg-qart-bg-warm px-4 py-3.5 lg:border-b-0 lg:border-r">
+        <p className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+          {label}
+        </p>
+      </div>
+
+      <div className="space-y-3 px-4 py-4 md:px-5">
+        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+          <div className="min-w-0 space-y-1.5">
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="break-words text-base font-black tracking-tight text-qart-primary md:text-lg">
+                {value}
+              </p>
+              {badge}
+            </div>
+            {helper && (
+              <p className="text-sm font-medium leading-relaxed text-qart-text-muted">{helper}</p>
+            )}
+          </div>
+
+          {actions.length > 0 && (
+            <div className="flex flex-wrap gap-2 xl:justify-end">
+              {actions.map(({ key, ...action }) => (
+                <ActionButton key={key} {...action} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  </article>
+);
+
 export const ConfigSectionCredentials = () => {
   const { user, setUser } = useAppStore();
-  const { error, success } = useToastStore();
+  const { error, success, warning } = useToastStore();
 
   const [editing, setEditing] = useState<EditingState>(null);
+  const [securityFlow, setSecurityFlow] = useState<SecurityFlow | null>(null);
+  const [mode, setMode] = useState<ConfigViewMode>('view');
+  const [loading, setLoading] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false);
+
   const [form, setForm] = useState({
     name: '',
     sname: '',
@@ -37,10 +287,13 @@ export const ConfigSectionCredentials = () => {
     username: '',
     sex: 'OTHER' as 'MALE' | 'FEMALE' | 'OTHER',
   });
+  const [targetVal, setTargetVal] = useState('');
+  const [token, setToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [cpassword, setCpassword] = useState('');
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [addressDraft, setAddressDraft] = useState<AddressDraft>(EMPTY_ADDRESS_DRAFT);
 
-  const [loading, setLoading] = useState(false);
-
-  // Sync form with user data
   useEffect(() => {
     if (user && !editing) {
       setForm({
@@ -51,78 +304,97 @@ export const ConfigSectionCredentials = () => {
         sex: user.sex || 'OTHER',
       });
     }
-  }, [user, editing]);
+  }, [editing, user]);
 
-  // Security flows
-  const [targetVal, setTargetVal] = useState('');
-  const [token, setToken] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [cpassword, setCpassword] = useState('');
-
-  const [mode, setMode] = useState<'view' | 'requesting' | 'verifying'>('view');
-
-  // Addresses State
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [showAddressForm, setShowAddressForm] = useState(false);
-  const [addressForm, setAddressForm] = useState({
-    street: '',
-    number: '',
-    floorApt: '',
-    notes: '',
-    isDefault: false,
-  });
-
-  useEffect(() => {
-    if (user) {
-      fetchAddresses();
-    }
-  }, [user]);
-
-  const fetchAddresses = async () => {
+  const fetchAddresses = useCallback(async () => {
     try {
       const res = await sdk.customers.addresses({});
       if ('data' in res && res.data) setAddresses(res.data as Address[]);
     } catch {
-      // Fallback
+      error('No pudimos cargar tus direcciones.');
     }
-  };
+  }, [error]);
 
-  const handleCreateAddress = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  useEffect(() => {
+    if (!user) return;
+    void fetchAddresses();
+  }, [fetchAddresses, user]);
+
+  const copyValue = async (label: string, value: string) => {
+    if (!value) {
+      warning(`No hay valor para copiar en ${label.toLowerCase()}.`);
+      return;
+    }
+
     try {
-      const res = await sdk.customers.postAddresses(addressForm);
-      if ('data' in res) {
-        success('Domicilio agregado exitosamente');
-        setShowAddressForm(false);
-        setAddressForm({ street: '', number: '', floorApt: '', notes: '', isDefault: false });
-        fetchAddresses();
+      if (navigator.clipboard?.writeText && window.isSecureContext) {
+        await navigator.clipboard.writeText(value);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        textarea.setAttribute('readonly', 'true');
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        const copied = document.execCommand('copy');
+        document.body.removeChild(textarea);
+
+        if (!copied) throw new Error('copy_failed');
       }
+
+      success(`${label} copiado.`);
     } catch {
-      error('Hubo un error al guardar el domicilio');
-    } finally {
-      setLoading(false);
+      error(`No pudimos copiar ${label.toLowerCase()}.`);
     }
   };
 
-  const updateSimpleField = async (field: keyof typeof form) => {
+  const resetSecurityFlow = () => {
+    setMode('view');
+    setSecurityFlow(null);
+    setTargetVal('');
+    setToken('');
+    setNewPassword('');
+    setCpassword('');
+  };
+
+  const resetAddressDraft = () => {
+    setAddressDraft(EMPTY_ADDRESS_DRAFT);
+    setShowAddressForm(false);
+  };
+
+  const startProfileEdit = (field: ProfileFieldKey) => {
+    if (!user) return;
+    setMode('view');
+    setSecurityFlow(null);
+    setEditing(field);
+    setForm((current) => ({
+      ...current,
+      [field]: field === 'sex' ? user.sex || 'OTHER' : (user[field] as string | null) || '',
+    }));
+  };
+
+  const updateSimpleField = async (field: ProfileFieldKey) => {
     setLoading(true);
     try {
       const res = await sdk.iam.patchMe({ [field]: form[field] });
       if ('data' in res && res.data) {
         setUser(res.data);
-        success('Dato actualizado');
+        success('Dato actualizado.');
         setEditing(null);
       }
     } catch {
-      error('Hubo un error al actualizar el dato');
+      error('No pudimos actualizar ese dato.');
     } finally {
       setLoading(false);
     }
   };
 
-  const startSecurityChange = (type: 'EMAIL_CHANGE' | 'PHONE_CHANGE' | 'PASSWORD_CHANGE') => {
-    setEditing(type);
+  const startSecurity = (type: SecurityFieldType, intent: SecurityIntent) => {
+    setEditing(null);
+    setSecurityFlow({ type, intent });
     setMode('requesting');
     setTargetVal('');
     setToken('');
@@ -130,436 +402,829 @@ export const ConfigSectionCredentials = () => {
     setCpassword('');
   };
 
-  const cancel = () => {
-    setMode('view');
-    setEditing(null);
-  };
-
   const requestToken = async () => {
+    if (!securityFlow) return;
+    if (
+      securityFlow.intent === 'change' &&
+      securityFlow.type !== 'PASSWORD_CHANGE' &&
+      !targetVal.trim()
+    ) {
+      warning('Necesitamos el nuevo valor antes de pedir el token.');
+      return;
+    }
+
     setLoading(true);
     try {
-      await sdk.iam['request-token']({ type: editing as 'EMAIL_CHANGE' | 'PHONE_CHANGE' | 'PASSWORD_CHANGE', targetVal });
+      await sdk.iam['request-token']({
+        type: securityFlow.type,
+        targetVal:
+          securityFlow.intent === 'change' && securityFlow.type !== 'PASSWORD_CHANGE'
+            ? targetVal.trim()
+            : undefined,
+      });
       setMode('verifying');
-      success('Se ha enviado un token/link de verificación.');
+      success(
+        `Te enviamos un codigo por ${SECURITY_COPY[securityFlow.type][securityFlow.intent].deliveryLabel}.`,
+      );
     } catch {
-      error('Ocurrió un error al solicitar la verificación.');
+      error('No pudimos generar el codigo de verificacion.');
     } finally {
       setLoading(false);
     }
   };
 
   const verifyToken = async () => {
+    if (!securityFlow) return;
+    if (securityFlow.type === 'PASSWORD_CHANGE' && newPassword !== cpassword) {
+      warning('Las contrasenas no coinciden.');
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await sdk.iam['verify-update']({
-        type: editing as 'EMAIL_CHANGE' | 'PHONE_CHANGE' | 'PASSWORD_CHANGE',
+        type: securityFlow.type,
         token,
-        newPassword,
-        cpassword,
+        newPassword: securityFlow.type === 'PASSWORD_CHANGE' ? newPassword : undefined,
+        cpassword: securityFlow.type === 'PASSWORD_CHANGE' ? cpassword : undefined,
       });
       if ('data' in res && res.data) setUser(res.data);
-      setMode('view');
-      success('Actualización completada exitosamente.');
-      setEditing(null);
+      success('Validacion completada.');
+      resetSecurityFlow();
     } catch {
-      error('El token ingresado es inválido o se produjo un error al actualizar datos.');
+      error('El codigo es invalido o vencio.');
     } finally {
       setLoading(false);
     }
   };
 
-  const renderFieldRow = (label: string, field: keyof typeof form) => {
-    const isEditing = editing === field;
-    if (!user) return null;
-
-    const displayValue = field === 'sex'
-      ? (user.sex === 'MALE' ? 'MASCULINO' : user.sex === 'FEMALE' ? 'FEMENINO' : 'OTRO')
-      : (user[field as keyof typeof user] as string) || 'NO DEFINIDO';
-
-    return (
-      <div key={field} className="p-5 border-4 border-qart-border bg-qart-surface flex flex-col gap-2 relative group shadow-sharp hover:translate-y-[-2px] transition-transform">
-        <div className="flex justify-between items-start">
-          <div className="w-full">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-qart-text-muted mb-2">{label}</h3>
-            {isEditing ? (
-              <div className="flex flex-col sm:flex-row items-center gap-3 mt-2 w-full">
-                {field === 'sex' ? (
-                  <select
-                    className="input-base flex-1"
-                    value={form[field]}
-                    onChange={(e) => setForm({ ...form, [field]: e.target.value as 'MALE' | 'FEMALE' | 'OTHER' })}
-                  >
-                    <option value="MALE">MASCULINO</option>
-                    <option value="FEMALE">FEMENINO</option>
-                    <option value="OTHER">OTRO</option>
-                  </select>
-                ) : (
-                  <input
-                    className="input-base flex-1"
-                    value={form[field]}
-                    onChange={(e) => setForm({ ...form, [field]: e.target.value })}
-                    autoFocus
-                  />
-                )}
-                <div className="flex gap-2 w-full sm:w-auto">
-                  <button
-                    onClick={() => updateSimpleField(field)}
-                    disabled={loading}
-                    className="btn-primary flex-1 sm:flex-initial py-2! px-6! min-h-0! text-[11px]!"
-                  >
-                    LISTO
-                  </button>
-                  <button onClick={cancel} className="btn-outline flex-1 sm:flex-initial py-2! px-6! min-h-0! text-[11px]!">
-                    X
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-between group/row min-h-8">
-                <span className="text-xl font-black uppercase tracking-tighter text-qart-primary truncate">
-                  {displayValue}
-                </span>
-                <button
-                  onClick={() => {
-                    setForm({ ...form, [field]: (user as unknown as Record<string, string | null>)[field] || '' });
-                    setEditing(field);
-                  }}
-                  className="w-10 h-10 flex items-center justify-center border-2 border-qart-border bg-qart-bg-warm hover:bg-qart-primary hover:text-white transition-all opacity-0 group-hover/row:opacity-100"
-                >
-                  <EditIcon className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
+  const openAddressForm = (address?: Address) => {
+    if (!address) {
+      setAddressDraft(EMPTY_ADDRESS_DRAFT);
+      setShowAddressForm(true);
+      return;
+    }
+    setAddressDraft({
+      id: address.id,
+      street: address.street,
+      number: address.number,
+      floorApt: address.floorApt ?? '',
+      notes: address.notes ?? '',
+      isDefault: address.isDefault,
+    });
+    setShowAddressForm(true);
   };
 
-  const renderSecurityRow = (
-    label: string,
-    fieldType: 'EMAIL_CHANGE' | 'PHONE_CHANGE' | 'PASSWORD_CHANGE',
-    value: string,
-    badge?: React.ReactNode,
-  ) => {
-    if (!user) return null;
+  const handleAddressSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const payload = {
+        street: addressDraft.street,
+        number: addressDraft.number,
+        floorApt: addressDraft.floorApt || undefined,
+        notes: addressDraft.notes || undefined,
+        isDefault: addressDraft.isDefault,
+      };
+      const res = addressDraft.id
+        ? await sdk.customers.putAddresses({ id: addressDraft.id, ...payload })
+        : await sdk.customers.postAddresses(payload);
 
-    return (
-      <div key={fieldType} className="p-6 border-4 border-qart-border bg-qart-surface flex flex-col gap-4 relative group shadow-sharp hover:translate-y-[-2px] transition-transform">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="w-full">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-qart-text-muted mb-2">
-              {label}
-            </h3>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4 overflow-hidden">
-                <span className="text-xl font-black uppercase tracking-tighter text-qart-primary truncate">
-                  {value}
-                </span>
-                {badge}
-              </div>
-              <button
-                onClick={() => startSecurityChange(fieldType)}
-                className="w-10 h-10 flex items-center justify-center border-2 border-qart-border bg-qart-bg-warm hover:bg-qart-primary hover:text-white transition-all opacity-0 group-hover:opacity-100"
-              >
-                <EditIcon className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+      if ('data' in res && res.data) {
+        success(addressDraft.id ? 'Direccion actualizada.' : 'Direccion agregada.');
+        resetAddressDraft();
+        await fetchAddresses();
+      }
+    } catch {
+      error('No pudimos guardar la direccion.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const openPlansView = () => {
+    setEditing(null);
+    setSecurityFlow(null);
+    setMode('plans');
   };
 
   if (!user) {
     return (
       <div className="p-20 flex flex-col items-center justify-center border-4 border-dashed border-qart-primary bg-qart-bg-warm animate-pulse">
-        <span className="text-2xl font-black uppercase tracking-[0.3em] text-qart-primary">Cargando Datos...</span>
+        <span className="text-2xl font-black uppercase tracking-[0.3em] text-qart-primary">
+          Cargando datos...
+        </span>
       </div>
     );
   }
 
-  return (
-    <div className="grid grid-cols-1 xl:grid-cols-[1fr_400px] gap-12 items-start relative pb-20">
-      <div className="order-2 xl:order-1 space-y-16">
-        {mode === 'view' ? (
-          <>
-            <section className="space-y-8">
-              <div className="flex items-center gap-4">
-                <div className="w-2.5 h-10 bg-qart-accent shadow-sharp" />
-                <h2 className="text-3xl font-black uppercase tracking-tight text-qart-primary">
-                  Mis Datos <span className="text-qart-accent">Personales</span>
-                </h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {renderFieldRow('Nombre', 'name')}
-                {renderFieldRow('Segundo Nombre', 'sname')}
-                {renderFieldRow('Apellido', 'lname')}
-                {renderFieldRow('Género', 'sex')}
-                {renderFieldRow('Nombre de Usuario', 'username')}
-              </div>
-            </section>
+  const sidePanel = (
+    <aside className="space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="h-1.5 w-8 bg-qart-primary" />
+        <h3 className="text-xs font-black uppercase tracking-[0.18em] text-qart-text-muted">
+          Perfil activo
+        </h3>
+      </div>
 
-            <section className="space-y-8">
-              <div className="flex items-center gap-4">
-                <div className="w-2.5 h-10 bg-qart-accent shadow-sharp" />
-                <h2 className="text-3xl font-black uppercase tracking-tight text-qart-primary">
-                  Seguridad <span className="text-qart-accent">&</span> Acceso
-                </h2>
-              </div>
-              <div className="grid grid-cols-1 gap-6">
-                {renderSecurityRow(
-                  'Correo Electrónico',
-                  'EMAIL_CHANGE',
-                  user.email,
-                  user.emailVerified ? (
-                    <div className="w-6 h-6 bg-qart-success border-2 border-qart-border flex items-center justify-center shadow-[2px_2px_0_var(--qart-border)]">
-                      <span className="text-white text-[10px] font-black">✓</span>
-                    </div>
-                  ) : (
-                    <span className="text-[9px] font-black bg-qart-error text-white px-2 py-0.5 border-2 border-qart-border shadow-[2px_2px_0_var(--qart-border)] uppercase tracking-tighter">
-                      POR VERIFICAR
-                    </span>
-                  ),
-                )}
-                {renderSecurityRow(
-                  'Número de Teléfono',
-                  'PHONE_CHANGE',
-                  user.phone || 'NO REGISTRADO',
-                  user.phone ? (
-                    user.phoneVerified ? (
-                      <div className="w-6 h-6 bg-qart-success border-2 border-qart-border flex items-center justify-center shadow-[2px_2px_0_var(--qart-border)]">
-                        <span className="text-white text-[10px] font-black">✓</span>
-                      </div>
-                    ) : (
-                      <span className="text-[9px] font-black bg-qart-error text-white px-2 py-0.5 border-2 border-qart-border shadow-[2px_2px_0_var(--qart-border)] uppercase tracking-tighter">
-                        POR VERIFICAR
-                      </span>
-                    )
-                  ) : null,
-                )}
-                {renderSecurityRow('Contraseña', 'PASSWORD_CHANGE', '••••••••••••')}
-              </div>
-            </section>
+      <GlobalProfileCard />
+    </aside>
+  );
 
-            <section className="space-y-8">
-              <div className="flex items-center gap-4">
-                <div className="w-2.5 h-10 bg-qart-accent shadow-sharp" />
-                <h2 className="text-3xl font-black uppercase tracking-tight text-qart-primary">
-                  Mis <span className="text-qart-accent">Direcciones</span>
-                </h2>
-              </div>
-              <div className="space-y-6">
-                {addresses.length === 0 && !showAddressForm ? (
-                  <div className="p-12 bg-qart-bg-warm border-4 border-dashed border-qart-border text-qart-text-muted text-xs font-black uppercase tracking-[0.3em] text-center">
-                    No hay direcciones registradas
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-4">
-                    {addresses.map((addr) => (
-                      <div
-                        key={addr.id}
-                        className="p-6 border-4 border-qart-border bg-qart-surface flex justify-between items-center group shadow-sharp hover:translate-x-2 transition-transform"
-                      >
-                        <div>
-                          <div className="font-black text-2xl uppercase tracking-tighter text-qart-primary leading-none mb-2">
-                            {addr.street} {addr.number}
-                          </div>
-                          <div className="text-[10px] font-black text-qart-text-muted uppercase tracking-widest flex items-center gap-3">
-                            {addr.floorApt && (
-                              <span className="bg-qart-bg-warm px-2 py-0.5 border border-qart-border">PISO/DEPTO: {addr.floorApt}</span>
-                            )}
-                            {addr.notes && (
-                              <span className="opacity-70 italic tracking-tight">{addr.notes}</span>
-                            )}
-                          </div>
-                        </div>
-                        {addr.isDefault && (
-                          <span className="text-[9px] font-black bg-qart-accent text-white px-3 py-1 border-2 border-qart-border shadow-sharp uppercase tracking-widest">
-                            PRINCIPAL
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
+  const fullName = [user.name, user.sname, user.lname].filter(Boolean).join(' ');
+  const customerTier = user.profile.tier;
+  const rankLabel = formatTier(customerTier);
+  const activePlan = PLAN_CARDS.find((card) => card.tier === (customerTier ?? 'REGULAR'));
+  const activeSecurityCopy = securityFlow
+    ? SECURITY_COPY[securityFlow.type][securityFlow.intent]
+    : null;
 
-                {!showAddressForm ? (
-                  <button
-                    onClick={() => setShowAddressForm(true)}
-                    className="btn-outline w-full text-xs! font-black! tracking-[0.2em]!"
-                  >
-                    + AGREGAR NUEVA DIRECCIÓN
-                  </button>
-                ) : (
-                  <form
-                    onSubmit={handleCreateAddress}
-                    className="p-10 border-4 border-qart-primary bg-qart-surface space-y-8 mt-6 relative shadow-[12px_12px_0_var(--qart-primary)]"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setShowAddressForm(false)}
-                      className="absolute top-6 right-8 w-10 h-10 border-2 border-qart-border bg-qart-bg-warm font-black text-qart-text-muted hover:text-qart-error hover:border-qart-error transition-all"
-                    >
-                      X
-                    </button>
-                    <h3 className="text-xl font-black uppercase tracking-tighter text-qart-primary border-b-4 border-qart-accent w-fit pr-8 pb-1">
-                      Nuevo Domicilio
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                      <div className="space-y-3">
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                          Calle
-                        </label>
-                        <input
-                          required
-                          className="input-base"
-                          value={addressForm.street}
-                          onChange={(e) =>
-                            setAddressForm({ ...addressForm, street: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="space-y-3">
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                          Número
-                        </label>
-                        <input
-                          required
-                          className="input-base"
-                          value={addressForm.number}
-                          onChange={(e) =>
-                            setAddressForm({ ...addressForm, number: e.target.value })
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                      <div className="space-y-3">
-                        <label className="block text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                          Piso / Depto
-                        </label>
-                        <input
-                          className="input-base"
-                          value={addressForm.floorApt}
-                          onChange={(e) =>
-                            setAddressForm({ ...addressForm, floorApt: e.target.value })
-                          }
-                        />
-                      </div>
-                      <div className="flex items-center gap-6 pt-6">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                          ¿Es tu dirección principal?
-                        </label>
-                        <input
-                          type="checkbox"
-                          checked={addressForm.isDefault}
-                          onChange={(e) =>
-                            setAddressForm({ ...addressForm, isDefault: e.target.checked })
-                          }
-                          className="w-8 h-8 border-4 border-qart-border accent-qart-accent cursor-pointer"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                        Indicaciones para el repartidor
-                      </label>
-                      <input
-                        className="input-base"
-                        placeholder="EJ: TIMBRE ROTO, LLAMAR AL LLEGAR..."
-                        value={addressForm.notes}
-                        onChange={(e) => setAddressForm({ ...addressForm, notes: e.target.value })}
-                      />
-                    </div>
-                    <div className="pt-6 flex justify-end">
-                      <button type="submit" disabled={loading} className="btn-primary w-full sm:w-auto px-16!">
-                        GUARDAR DIRECCIÓN
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </div>
-            </section>
-          </>
-        ) : (
-          <div className="p-10 border-4 border-qart-primary bg-qart-surface space-y-10 shadow-[16px_16px_0_var(--qart-primary)] relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-2 bg-qart-accent" />
-            <div className="flex items-center gap-4">
-               <div className="w-12 h-12 bg-qart-accent border-2 border-qart-border shadow-sharp flex items-center justify-center shrink-0">
-                  <span className="text-white text-2xl font-black">!</span>
-               </div>
-               <h2 className="text-3xl font-black uppercase tracking-tighter text-qart-primary leading-none">
-                 Validación de Seguridad
-               </h2>
-            </div>
-            
-            {mode === 'requesting' && (
-              <div className="space-y-10">
-                <div className="p-6 bg-qart-bg-warm border-l-8 border-qart-accent text-sm font-black text-qart-primary leading-relaxed uppercase tracking-tight">
-                  Para tu seguridad, necesitamos enviarte un código de 6 dígitos antes de realizar este cambio.
+  const fieldEditor = (field: ProfileFieldKey) => (
+    <div className="grid grid-cols-1 sm:grid-cols-[minmax(0,1fr)_auto] gap-3 pt-2 border-t border-qart-border-subtle">
+      {field === 'sex' ? (
+        <select
+          className="input-base"
+          value={form[field]}
+          onChange={(e) =>
+            setForm((current) => ({
+              ...current,
+              [field]: e.target.value as 'MALE' | 'FEMALE' | 'OTHER',
+            }))
+          }
+        >
+          <option value="MALE">Masculino</option>
+          <option value="FEMALE">Femenino</option>
+          <option value="OTHER">Otro</option>
+        </select>
+      ) : (
+        <input
+          className="input-base"
+          value={form[field]}
+          onChange={(e) => setForm((current) => ({ ...current, [field]: e.target.value }))}
+          autoFocus
+        />
+      )}
+
+      <div className="flex flex-wrap gap-2">
+        <ActionButton
+          key={`save-${field}`}
+          label="Guardar"
+          variant="primary"
+          onClick={() => void updateSimpleField(field)}
+          disabled={loading}
+        />
+        <ActionButton
+          key={`cancel-${field}`}
+          label="Cancelar"
+          variant="secondary"
+          onClick={() => setEditing(null)}
+        />
+      </div>
+    </div>
+  );
+
+  const editingLabelMap: Record<ProfileFieldKey, string> = {
+    name: 'Nombre',
+    sname: 'Otros nombres',
+    lname: 'Apellido',
+    username: 'Nombre de usuario',
+    sex: 'Sexo',
+  };
+
+  const editPanel = editing ? (
+    <div className="overflow-hidden border-2 border-qart-primary bg-qart-surface shadow-[12px_12px_0_var(--qart-primary)]">
+      <div className="space-y-4 p-5 md:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+              Editar dato
+            </p>
+            <h3 className="mt-2 text-2xl font-black uppercase tracking-tight text-qart-primary">
+              {editingLabelMap[editing]}
+            </h3>
+            <p className="mt-2 text-sm text-qart-text-muted">
+              La edición reemplaza temporalmente la ficha para que el cambio se haga con más foco.
+            </p>
+          </div>
+          <ActionButton
+            key="close-edit-panel"
+            label="Cerrar"
+            variant="secondary"
+            onClick={() => setEditing(null)}
+          />
+        </div>
+
+        {fieldEditor(editing)}
+      </div>
+    </div>
+  ) : null;
+
+  const plansPanel = (
+    <div className="space-y-6">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+            Rango actual
+          </p>
+          <h2 className="mt-2 text-2xl font-black uppercase tracking-tight text-qart-primary md:text-3xl">
+            Planes
+          </h2>
+          <p className="mt-2 text-sm text-qart-text-muted">
+            Tu cuenta está en <span className="font-bold text-qart-primary">{rankLabel}</span>.
+          </p>
+        </div>
+        <ActionButton
+          key="close-plans"
+          label="Volver"
+          variant="secondary"
+          onClick={() => setMode('view')}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        {PLAN_CARDS.map((plan) => {
+          const isActive = activePlan?.tier === plan.tier;
+
+          return (
+            <article
+              key={plan.tier}
+              className={`border-2 p-5 ${
+                isActive
+                  ? 'border-qart-primary bg-qart-surface'
+                  : 'border-qart-border bg-qart-surface-sunken/70'
+              }`}
+            >
+              <div className={`mb-4 h-1.5 w-14 ${plan.accent}`} />
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                    {plan.tier}
+                  </p>
+                  <h3 className="mt-2 text-xl font-black uppercase tracking-tight text-qart-primary">
+                    {plan.title}
+                  </h3>
                 </div>
-                {editing !== 'PASSWORD_CHANGE' && (
-                  <div className="space-y-4">
-                    <label className="block text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                      Ingresa el nuevo {editing === 'EMAIL_CHANGE' ? 'Email' : 'Teléfono'} (Opcional)
+                {isActive && (
+                  <span className="border border-qart-border bg-qart-primary px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white">
+                    Actual
+                  </span>
+                )}
+              </div>
+
+              <p className="mt-3 text-sm leading-relaxed text-qart-text-muted">{plan.summary}</p>
+
+              <div className="mt-4 space-y-2">
+                {plan.bullets.map((bullet) => (
+                  <p
+                    key={bullet}
+                    className="border border-qart-border bg-qart-bg-warm px-3 py-2 text-xs font-medium text-qart-primary"
+                  >
+                    {bullet}
+                  </p>
+                ))}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const identityRows = [
+    {
+      label: 'Nombre',
+      value: user.name,
+      actions: [
+        {
+          key: 'copy-name',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Nombre', user.name),
+        },
+        {
+          key: 'edit-name',
+          label: 'Editar',
+          variant: 'secondary' as const,
+          icon: <EditIcon className="w-3.5 h-3.5" />,
+          onClick: () => startProfileEdit('name'),
+        },
+      ],
+    },
+    {
+      label: 'Otros nombres',
+      value: user.sname || 'No definido',
+      actions: [
+        {
+          key: 'copy-sname',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Otros nombres', user.sname || ''),
+          disabled: !user.sname,
+        },
+        {
+          key: 'edit-sname',
+          label: user.sname ? 'Editar' : 'Agregar',
+          variant: 'secondary' as const,
+          icon: <EditIcon className="w-3.5 h-3.5" />,
+          onClick: () => startProfileEdit('sname'),
+        },
+      ],
+    },
+    {
+      label: 'Apellido',
+      value: user.lname,
+      actions: [
+        {
+          key: 'copy-lname',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Apellido', user.lname),
+        },
+        {
+          key: 'edit-lname',
+          label: 'Editar',
+          variant: 'secondary' as const,
+          icon: <EditIcon className="w-3.5 h-3.5" />,
+          onClick: () => startProfileEdit('lname'),
+        },
+      ],
+    },
+    {
+      label: 'Nombre completo',
+      value: fullName,
+      actions: [
+        {
+          key: 'copy-fullname',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Nombre completo', fullName),
+        },
+      ],
+    },
+    {
+      label: 'Nombre de usuario',
+      value: `@${user.username}`,
+      actions: [
+        {
+          key: 'copy-username',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Nombre de usuario', user.username),
+        },
+        {
+          key: 'edit-username',
+          label: 'Editar',
+          variant: 'secondary' as const,
+          icon: <EditIcon className="w-3.5 h-3.5" />,
+          onClick: () => startProfileEdit('username'),
+        },
+      ],
+    },
+    {
+      label: 'Sexo',
+      value: formatSex(user.sex),
+      actions: [
+        {
+          key: 'copy-sex',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Sexo', formatSex(user.sex)),
+        },
+        {
+          key: 'edit-sex',
+          label: 'Editar',
+          variant: 'secondary' as const,
+          icon: <EditIcon className="w-3.5 h-3.5" />,
+          onClick: () => startProfileEdit('sex'),
+        },
+      ],
+    },
+  ];
+
+  const securityRows = [
+    {
+      label: 'Correo electronico',
+      value: user.email,
+      badge: <VerificationBadge verified={user.emailVerified} />,
+      actions: [
+        {
+          key: 'copy-email',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Correo electronico', user.email),
+        },
+        ...(!user.emailVerified
+          ? [
+              {
+                key: 'verify-email',
+                label: 'Verificar correo',
+                variant: 'secondary' as const,
+                onClick: () => startSecurity('EMAIL_CHANGE', 'verify'),
+              },
+            ]
+          : []),
+        {
+          key: 'change-email',
+          label: 'Cambiar correo',
+          variant: 'primary' as const,
+          onClick: () => startSecurity('EMAIL_CHANGE', 'change'),
+        },
+      ],
+    },
+    {
+      label: 'Telefono',
+      value: user.phone || 'No registrado',
+      badge: user.phone ? <VerificationBadge verified={user.phoneVerified} /> : undefined,
+      actions: [
+        {
+          key: 'copy-phone',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Telefono', user.phone || ''),
+          disabled: !user.phone,
+        },
+        ...(user.phone && !user.phoneVerified
+          ? [
+              {
+                key: 'verify-phone',
+                label: 'Verificar telefono',
+                variant: 'secondary' as const,
+                onClick: () => startSecurity('PHONE_CHANGE', 'verify'),
+              },
+            ]
+          : []),
+        {
+          key: 'change-phone',
+          label: user.phone ? 'Cambiar telefono' : 'Agregar telefono',
+          variant: 'primary' as const,
+          onClick: () => startSecurity('PHONE_CHANGE', 'change'),
+        },
+      ],
+    },
+    {
+      label: 'Contrasena',
+      value: 'Protegida por seguridad',
+      actions: [
+        {
+          key: 'change-password',
+          label: 'Cambiar contrasena',
+          variant: 'primary' as const,
+          onClick: () => startSecurity('PASSWORD_CHANGE', 'password'),
+        },
+      ],
+    },
+    {
+      label: 'Rango',
+      value: rankLabel,
+      actions: [
+        {
+          key: 'copy-rank',
+          label: 'Copiar',
+          icon: <CopyIcon className="w-3.5 h-3.5" />,
+          onClick: () => void copyValue('Rango', rankLabel),
+        },
+        {
+          key: 'plans-rank',
+          label: 'Ver planes',
+          variant: 'secondary' as const,
+          icon: <ArrowRightIcon className="w-3.5 h-3.5" />,
+          onClick: openPlansView,
+        },
+      ],
+    },
+  ];
+
+  const sections = [
+    {
+      key: 'identity',
+      content: (
+        <div className="space-y-6">
+          <div className="flex items-start gap-4">
+            <div className="mt-1 h-8 w-1.5 bg-qart-accent" />
+            <div>
+              <h2 className="text-2xl font-black uppercase tracking-tight text-qart-primary md:text-3xl">
+                Datos de la cuenta
+              </h2>
+              <p className="mt-2 text-sm text-qart-text-muted">
+                Vista ordenada de la información que devuelve <code>/iam/me</code>.
+              </p>
+            </div>
+          </div>
+
+          <div className="overflow-hidden border-2 border-qart-primary bg-qart-surface shadow-[10px_10px_0_var(--qart-primary)]">
+            <div className="space-y-3 p-4 md:p-5">
+              {editPanel}
+              {identityRows.map((row) => (
+                <CredentialRow key={row.label} {...row} />
+              ))}
+              {securityRows.map((row) => (
+                <CredentialRow key={row.label} {...row} />
+              ))}
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'addresses',
+      content: (
+        <div className="space-y-6">
+          <div className="flex items-start gap-4">
+            <div className="mt-1 h-8 w-1.5 bg-qart-accent" />
+            <div>
+              <h2 className="text-2xl font-black uppercase tracking-tight text-qart-primary md:text-3xl">
+                Direcciones
+              </h2>
+              <p className="mt-2 text-sm text-qart-text-muted">
+                Guardá y editá tus domicilios para delivery.
+              </p>
+            </div>
+          </div>
+
+          {addresses.length === 0 && !showAddressForm ? (
+            <div className="border-2 border-dashed border-qart-border bg-qart-bg-warm p-10 text-center text-xs font-black uppercase tracking-[0.18em] text-qart-text-muted">
+              No hay direcciones registradas
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4">
+              {addresses.map((address) => (
+                <article
+                  key={address.id}
+                  className="flex flex-col gap-4 border border-qart-border bg-qart-surface p-5 md:flex-row md:items-start md:justify-between"
+                >
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-black uppercase tracking-tight text-qart-primary">
+                      {address.street} {address.number}
+                    </h3>
+                    <div className="flex flex-wrap gap-2 text-[10px] font-black uppercase tracking-[0.12em] text-qart-text-muted">
+                      {address.floorApt && (
+                        <span className="border border-qart-border bg-qart-bg-warm px-2 py-1">
+                          Piso/Depto: {address.floorApt}
+                        </span>
+                      )}
+                      {address.notes && (
+                        <span className="border border-qart-border bg-qart-bg-warm px-2 py-1">
+                          {address.notes}
+                        </span>
+                      )}
+                      {address.isDefault && (
+                        <span className="border border-qart-border bg-qart-accent px-2 py-1 text-white">
+                          Principal
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <ActionButton
+                      key={`copy-address-${address.id}`}
+                      label="Copiar"
+                      icon={<CopyIcon className="w-3.5 h-3.5" />}
+                      onClick={() =>
+                        void copyValue(
+                          'Direccion',
+                          `${address.street} ${address.number}${address.floorApt ? `, ${address.floorApt}` : ''}${address.notes ? `, ${address.notes}` : ''}`,
+                        )
+                      }
+                    />
+                    <ActionButton
+                      key={`edit-address-${address.id}`}
+                      label="Editar direccion"
+                      variant="secondary"
+                      onClick={() => openAddressForm(address)}
+                    />
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+
+          {!showAddressForm ? (
+            <ActionButton
+              key="add-address"
+              label="Agregar direccion"
+              variant="primary"
+              onClick={() => openAddressForm()}
+            />
+          ) : (
+            <form
+              onSubmit={handleAddressSubmit}
+              className="space-y-6 border-2 border-qart-primary bg-qart-surface p-6 shadow-[10px_10px_0_var(--qart-primary)]"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-black uppercase tracking-tight text-qart-primary">
+                    {addressDraft.id ? 'Editar direccion' : 'Nueva direccion'}
+                  </h3>
+                  <p className="mt-2 text-sm text-qart-text-muted">
+                    Podés marcarla como principal para delivery.
+                  </p>
+                </div>
+                <ActionButton key="close-address-form" label="Cerrar" onClick={resetAddressDraft} />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                    Calle
+                  </label>
+                  <input
+                    required
+                    className="input-base"
+                    value={addressDraft.street}
+                    onChange={(e) =>
+                      setAddressDraft((current) => ({ ...current, street: e.target.value }))
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                    Numero
+                  </label>
+                  <input
+                    required
+                    className="input-base"
+                    value={addressDraft.number}
+                    onChange={(e) =>
+                      setAddressDraft((current) => ({ ...current, number: e.target.value }))
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                    Piso / Depto
+                  </label>
+                  <input
+                    className="input-base"
+                    value={addressDraft.floorApt}
+                    onChange={(e) =>
+                      setAddressDraft((current) => ({ ...current, floorApt: e.target.value }))
+                    }
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                    Indicaciones
+                  </label>
+                  <input
+                    className="input-base"
+                    value={addressDraft.notes}
+                    onChange={(e) =>
+                      setAddressDraft((current) => ({ ...current, notes: e.target.value }))
+                    }
+                    placeholder="TIMBRE ROTO, LLAMAR AL LLEGAR..."
+                  />
+                </div>
+              </div>
+
+              <label className="flex items-center gap-4 border border-qart-border bg-qart-bg-warm p-4">
+                <input
+                  type="checkbox"
+                  checked={addressDraft.isDefault}
+                  onChange={(e) =>
+                    setAddressDraft((current) => ({ ...current, isDefault: e.target.checked }))
+                  }
+                  className="w-6 h-6 accent-qart-accent"
+                />
+                <span className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-primary">
+                  Usar como direccion principal
+                </span>
+              </label>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn-primary py-3! px-5! min-h-0! text-[10px]! tracking-[0.18em]!"
+                >
+                  {addressDraft.id ? 'Guardar cambios' : 'Guardar direccion'}
+                </button>
+                <ActionButton
+                  key="cancel-address"
+                  label="Cancelar"
+                  variant="secondary"
+                  onClick={resetAddressDraft}
+                />
+              </div>
+            </form>
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="grid grid-cols-1 items-start gap-6 pb-20 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-8 2xl:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="order-2 min-w-0 space-y-8 xl:order-1">
+        {editing ? (
+          editPanel
+        ) : mode === 'view' ? (
+          <SectionFactory sections={sections} className="space-y-10" />
+        ) : mode === 'plans' ? (
+          <div className="space-y-6 border-2 border-qart-primary bg-qart-surface p-6 shadow-[12px_12px_0_var(--qart-primary)]">
+            {plansPanel}
+          </div>
+        ) : (
+          <div className="space-y-6 border-2 border-qart-primary bg-qart-surface p-6 shadow-[12px_12px_0_var(--qart-primary)]">
+            <div className="flex items-center gap-4">
+              <div className="flex h-11 w-11 items-center justify-center border border-qart-border bg-qart-accent">
+                <span className="text-white text-2xl font-black">!</span>
+              </div>
+              <div>
+                <h2 className="text-2xl font-black uppercase tracking-tight text-qart-primary md:text-3xl">
+                  {activeSecurityCopy?.title}
+                </h2>
+                <p className="mt-2 text-sm text-qart-text-muted">
+                  Verificación y cambio se manejan por separado.
+                </p>
+              </div>
+            </div>
+
+            {mode === 'requesting' && activeSecurityCopy && (
+              <div className="space-y-6">
+                <div className="border-l-4 border-qart-accent bg-qart-bg-warm p-5">
+                  <p className="text-sm font-black text-qart-primary leading-relaxed">
+                    {activeSecurityCopy.lead}
+                  </p>
+                  {MODE === 'dev' && (
+                    <p className="mt-3 text-xs text-qart-text-muted">
+                      En desarrollo, el codigo tambien se imprime en la consola del backend.
+                    </p>
+                  )}
+                </div>
+
+                {'targetLabel' in activeSecurityCopy && activeSecurityCopy.targetLabel && (
+                  <div className="space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                      {activeSecurityCopy.targetLabel}
                     </label>
                     <input
-                      className="input-base text-xl font-bold"
+                      className="input-base"
                       value={targetVal}
                       onChange={(e) => setTargetVal(e.target.value)}
-                      placeholder="Dejar vacío para verificar el actual..."
+                      placeholder={activeSecurityCopy.targetPlaceholder}
                     />
                   </div>
                 )}
-                <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                  <button onClick={requestToken} disabled={loading} className="btn-primary flex-1 py-5!">
-                    ENVIAR CÓDIGO
-                  </button>
-                  <button onClick={cancel} className="btn-outline flex-1 py-5!">
-                    VOLVER
-                  </button>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <ActionButton
+                    key="request-token"
+                    label="Solicitar token"
+                    variant="primary"
+                    onClick={() => void requestToken()}
+                    disabled={loading}
+                  />
+                  <ActionButton
+                    key="cancel-security-request"
+                    label="Volver"
+                    variant="secondary"
+                    onClick={resetSecurityFlow}
+                  />
                 </div>
               </div>
             )}
-            {mode === 'verifying' && (
-              <div className="space-y-10">
-                <div className="p-6 bg-qart-success/10 border-l-8 border-qart-success text-sm font-black text-qart-success leading-relaxed uppercase tracking-tight">
-                  TE HEMOS ENVIADO UN PIN POR CORREO. POR FAVOR, INGRÉSALO DEBAJO.
+
+            {mode === 'verifying' && activeSecurityCopy && (
+              <div className="space-y-6">
+                <div className="border-l-4 border-qart-success bg-qart-success/10 p-5">
+                  <p className="text-sm font-black text-qart-success leading-relaxed">
+                    Ingresa el codigo recibido para confirmar la operacion.
+                  </p>
                 </div>
-                <div className="space-y-6">
-                  <label className="block text-xs font-black uppercase tracking-[0.4em] text-center text-qart-text-muted">
-                    PIN DE 6 DÍGITOS
+
+                <div className="space-y-3">
+                  <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                    {activeSecurityCopy.codeLabel}
                   </label>
                   <input
-                    className="input-base font-mono tracking-[1em] text-5xl text-center font-black h-24! border-4! shadow-sharp"
+                    className="input-base font-mono tracking-[0.6em] text-3xl text-center font-black h-20!"
                     maxLength={6}
                     value={token}
-                    onChange={(e) => setToken(e.target.value.toUpperCase())}
+                    onChange={(e) => setToken(e.target.value.replace(/\D/g, '').slice(0, 6))}
                     placeholder="000000"
                   />
                 </div>
-                {editing === 'PASSWORD_CHANGE' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                        Nueva Contraseña
+
+                {securityFlow?.type === 'PASSWORD_CHANGE' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                        Nueva contrasena
                       </label>
                       <input
                         type="password"
-                        placeholder="••••••••"
                         className="input-base"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                       />
                     </div>
-                    <div className="space-y-3">
-                      <label className="block text-[10px] font-black uppercase tracking-widest text-qart-text-muted">
-                        Confirmar Nueva Contraseña
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
+                        Confirmar contrasena
                       </label>
                       <input
                         type="password"
-                        placeholder="••••••••"
                         className="input-base"
                         value={cpassword}
                         onChange={(e) => setCpassword(e.target.value)}
@@ -567,38 +1232,29 @@ export const ConfigSectionCredentials = () => {
                     </div>
                   </div>
                 )}
-                <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                  <button
-                    onClick={verifyToken}
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <ActionButton
+                    key="confirm-security"
+                    label="Confirmar"
+                    variant="primary"
+                    onClick={() => void verifyToken()}
                     disabled={loading || token.length !== 6}
-                    className="btn-primary flex-1 py-5!"
-                  >
-                    CONFIRMAR CAMBIO
-                  </button>
-                  <button onClick={cancel} className="btn-outline flex-1 py-5!">
-                    CANCELAR
-                  </button>
+                  />
+                  <ActionButton
+                    key="cancel-security"
+                    label="Cancelar"
+                    variant="secondary"
+                    onClick={resetSecurityFlow}
+                  />
                 </div>
               </div>
             )}
           </div>
         )}
       </div>
-
-      <div className="order-1 xl:order-2 sticky top-[120px] transition-all hover:translate-y-[-5px]">
-        <div className="flex items-center gap-3 mb-6">
-           <div className="w-8 h-1.5 bg-qart-primary" />
-           <h3 className="text-sm font-black uppercase text-qart-text-muted tracking-[0.3em] overflow-hidden whitespace-nowrap">
-             Mi Perfil Actual
-           </h3>
-        </div>
-        <GlobalProfileCard />
-        
-        <div className="mt-8 p-6 border-4 border-dashed border-qart-border-subtle bg-qart-bg-warm/30">
-           <p className="text-[10px] font-black text-qart-text-muted uppercase leading-relaxed tracking-widest">
-             <span className="text-qart-accent">NOTA:</span> El sistema de restaurant no es una red social. Tus datos son privados y solo se utilizan para facturación y envío.
-           </p>
-        </div>
+      <div className="order-1 min-w-0 xl:order-2 xl:self-start xl:sticky xl:top-[112px]">
+        {sidePanel}
       </div>
     </div>
   );

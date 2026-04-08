@@ -1,5 +1,36 @@
 /**
  * @file FieldDef.ts
+ * @module SDK
+ * @description Declara el sistema compartido de campos tipados y validaciones reutilizables.
+ *
+ * @tfi
+ * section: IEEE 830 11 / 12.1
+ * rf: RF-18
+ * rnf: RNF-05
+ *
+ * @business
+ * inputs: configuraciones declarativas de campos
+ * outputs: schemas Zod reutilizables con reglas de UI
+ * rules: mantener validaciones compartidas; evitar duplicacion; producir defaults seguros
+ *
+ * @technical
+ * dependencies: zod
+ * flow: define tipos base; resuelve defaults; aplica formatos; genera FieldDef reutilizable
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EIF
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-FIELD-01
+ *
+ * @notes
+ * decisions: se reemplazan function declarations por arrows para cumplir context.md
+ */
+/**
+ * @file FieldDef.ts
  * @author Victor
  * @description Automatically enforced JSDoc header according to context.md guidelines.
  * @param null
@@ -133,7 +164,7 @@ export const PASSWORD_LENGTH = {
  * Resolves the initial default value for a field schema.
  * String fields always default to `''` — the form layer never stores null.
  */
-export function resolveFieldDefault(fieldSchema: z.ZodType): unknown {
+export const resolveFieldDefault = (fieldSchema: z.ZodType): unknown => {
   type ZodWithDefault = { _def?: { defaultValue?: () => unknown } };
   const defaultFn = (fieldSchema as ZodWithDefault)._def?.defaultValue;
   if (typeof defaultFn === 'function') return defaultFn();
@@ -144,7 +175,7 @@ export function resolveFieldDefault(fieldSchema: z.ZodType): unknown {
     if (result.success) return result.data;
   }
   return '';
-}
+};
 //#endregion
 
 //#region APPLY_FORMAT
@@ -167,7 +198,7 @@ type FormatSchema = z.ZodEmail | z.ZodURL | z.ZodUUID | z.ZodE164;
  * inside superRefine. The schema is never used as the field type — it is
  * only called via .safeParse() to produce error messages.
  */
-function getFormatSchema(format: FieldFormat): FormatSchema {
+const getFormatSchema = (format: FieldFormat): FormatSchema => {
   switch (format) {
     case 'email':
       return z.email();
@@ -178,7 +209,7 @@ function getFormatSchema(format: FieldFormat): FormatSchema {
     case 'phone':
       return z.e164();
   }
-}
+};
 //#endregion
 
 //#region DEFINE_FIELD
@@ -196,9 +227,9 @@ function getFormatSchema(format: FieldFormat): FormatSchema {
  *  3. .superRefine(format + checks) → still ZodString (Zod v4 — no ZodEffects)
  *  4. .nullable()                   → ZodNullable<ZodString> (only when nullable: true)
  */
-export function defineField<const TConfig extends FieldDefConfig>(
+export const defineField = <const TConfig extends FieldDefConfig>(
   config: TConfig,
-): FieldDefReturn<TConfig['nullable'] extends true ? true : false> {
+): FieldDefReturn<TConfig['nullable'] extends true ? true : false> => {
   // Base is always ZodString — format validation happens inside superRefine.
   let base: z.ZodString = z.string();
   if (config.trim !== false) base = base.trim() as z.ZodString;
@@ -245,5 +276,5 @@ export function defineField<const TConfig extends FieldDefConfig>(
     schema: withConstraints,
     rules: config.rules,
   } as FieldDefReturn<TConfig['nullable'] extends true ? true : false>;
-}
+};
 //#endregion

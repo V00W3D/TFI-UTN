@@ -1,3 +1,34 @@
+/**
+ * @file GlobalProfileCard.tsx
+ * @module Frontend
+ * @description Archivo GlobalProfileCard alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-05
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
 import { useAppStore } from '../../appStore';
 import { MailIcon, PhoneIcon, UsernameIcon } from './AppIcons';
 import type { AuthUserSchema } from '@app/contracts';
@@ -11,15 +42,27 @@ export const GlobalProfileCard = ({ profile }: { profile?: UserData; isOwner?: b
 
   if (!user) return null;
 
+  const tierLabel =
+    user.profile.tier === 'PREMIUM'
+      ? 'Cliente Premium'
+      : user.profile.tier === 'VIP'
+        ? 'Cliente VIP'
+        : 'Cliente Regular';
+
   return (
     <div className="border-[3px] border-qart-border bg-qart-surface p-6 shadow-[6px_6px_0_var(--qart-primary)] w-full font-sans flex flex-col gap-4 relative overflow-hidden group">
       {/* Decorative architectural line */}
       <div className="absolute top-0 left-0 w-full h-1.5 bg-qart-accent" />
 
-      <div className="flex gap-1.5 absolute top-4 right-4">
+      <div className="flex flex-wrap justify-end gap-1.5 absolute top-4 right-4">
         <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-primary text-white px-3 py-1 border border-white/20 shadow-sharp">
           {user.role}
         </span>
+        {user.profile.tier && (
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-accent text-white px-3 py-1 border border-white/20 shadow-sharp">
+            {tierLabel}
+          </span>
+        )}
       </div>
 
       <div className="flex gap-5 items-center border-b-2 border-qart-border pb-6 mt-4">

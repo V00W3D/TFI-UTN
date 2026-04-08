@@ -1,9 +1,42 @@
+/**
+ * @file RegisterPage.tsx
+ * @module IAM
+ * @description Archivo RegisterPage alineado a la arquitectura y trazabilidad QART.
+ *
+ * @tfi
+ * section: IEEE 830 11
+ * rf: RF-01
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: datos del modulo y dependencias compartidas
+ * outputs: comportamiento o estructuras del modulo
+ * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ *
+ * @technical
+ * dependencies: dependencias locales del archivo
+ * flow: inicializa, transforma y expone la logica del modulo
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EQ
+ * story_points: 3
+ * estimated_hours: 2
+ *
+ * @testing
+ * cases: TC-AUDIT-01
+ *
+ * @notes
+ * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ */
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
+import { SectionFactory } from '../../../components/shared/SectionFactory';
 import { useToastStore } from '../../../toastStore';
 import { form, sdk } from '../../../tools/sdk';
+import type { FieldProps } from '../../../tools/FormFactory';
 import {
   cpasswordField,
   emailField,
@@ -93,6 +126,94 @@ const DEFAULT_REGISTER_HELP = {
   ],
 } as const;
 
+const REGISTER_FORM_SECTIONS = [
+  {
+    key: 'profile',
+    eyebrow: 'PERFIL',
+    title: 'DATOS PERSONALES',
+    fieldKeys: ['name', 'sname', 'lname', 'sex'] as const,
+  },
+  {
+    key: 'account',
+    eyebrow: 'CUENTA',
+    title: 'ACCESO Y CONTACTO',
+    fieldKeys: ['username', 'email', 'phone', 'password', 'cpassword'] as const,
+  },
+] as const;
+
+const REGISTER_FIELD_CONFIG: Record<RegisterFieldKey, FieldProps> = {
+  name: {
+    label: 'Nombre',
+    placeholder: 'TU NOMBRE',
+    required: true,
+    fieldMode: 'register' as const,
+    addons: [{ type: 'icon' as const, icon: <ProfileIcon className="size-[1.05rem]" /> }],
+  },
+  sname: {
+    label: 'Segundo nombre',
+    placeholder: 'OPCIONAL',
+    fieldMode: 'register' as const,
+    addons: [{ type: 'icon' as const, icon: <ProfileIcon className="size-[1.05rem]" /> }],
+  },
+  lname: {
+    label: 'Apellido',
+    placeholder: 'TU APELLIDO',
+    required: true,
+    fieldMode: 'register' as const,
+    addons: [{ type: 'icon' as const, icon: <ProfileIcon className="size-[1.05rem]" /> }],
+  },
+  sex: {
+    label: 'Sexo',
+    control: ['radio', [...SEX_OPTIONS]] as const,
+    required: true,
+    fieldMode: 'register' as const,
+  },
+  username: {
+    label: 'Usuario',
+    placeholder: 'TU_USUARIO',
+    required: true,
+    fieldMode: 'register' as const,
+    addons: [{ type: 'icon' as const, icon: <UsernameIcon className="size-[1.05rem]" /> }],
+  },
+  email: {
+    label: 'Email',
+    placeholder: 'CORREO@DOMINIO.COM',
+    control: 'email' as const,
+    required: true,
+    fieldMode: 'register' as const,
+    addons: [{ type: 'icon' as const, icon: <MailIcon className="size-[1.05rem]" /> }],
+  },
+  phone: {
+    label: 'Teléfono',
+    control: 'phone' as const,
+    placeholder: '+54 9 381 ...',
+    fieldMode: 'register' as const,
+    addons: [{ type: 'icon' as const, icon: <PhoneIcon className="size-[1.05rem]" /> }],
+  },
+  password: {
+    label: 'Contraseña',
+    control: 'password' as const,
+    placeholder: 'CREÁ UNA CONTRASEÑA',
+    required: true,
+    fieldMode: 'register' as const,
+    addons: [
+      { type: 'icon' as const, icon: <LockIcon className="size-[1.05rem]" /> },
+      { type: 'passwordToggle' as const },
+    ],
+  },
+  cpassword: {
+    label: 'Confirmar contraseña',
+    control: 'password' as const,
+    placeholder: 'REPETILA ACÁ',
+    required: true,
+    fieldMode: 'register' as const,
+    addons: [
+      { type: 'icon' as const, icon: <LockIcon className="size-[1.05rem]" /> },
+      { type: 'passwordToggle' as const },
+    ],
+  },
+};
+
 const RegisterPage = () => {
   const { setModule } = useAppStore();
   const { success } = useToastStore();
@@ -127,6 +248,26 @@ const RegisterPage = () => {
   });
 
   const activeHelp = activeField ? REGISTER_FIELD_HELP[activeField] : DEFAULT_REGISTER_HELP;
+  const registerSections = REGISTER_FORM_SECTIONS.map((section) => ({
+    key: section.key,
+    eyebrow: section.eyebrow,
+    title: section.title,
+    className: 'auth-form-section',
+    content: (
+      <>
+        {section.fieldKeys.map((fieldKey) => {
+          const FieldComponent = fields[fieldKey];
+          const fieldProps = REGISTER_FIELD_CONFIG[fieldKey];
+
+          return (
+            <div key={fieldKey} onFocusCapture={() => setActiveField(fieldKey)}>
+              <FieldComponent {...fieldProps} />
+            </div>
+          );
+        })}
+      </>
+    ),
+  }));
 
   return (
     <section className="auth-shell auth-shell--register">
@@ -198,109 +339,13 @@ const RegisterPage = () => {
 
           <form onSubmit={handleSubmit} className="auth-page-form">
             <div className="auth-form-grid auth-form-grid--sections">
-              <section className="auth-form-section">
-                <div className="auth-form-section-header">
-                  <p className="auth-form-section-eyebrow">PERFIL</p>
-                  <h3 className="auth-form-section-title">DATOS PERSONALES</h3>
-                </div>
-
-                <div onFocusCapture={() => setActiveField('name')}>
-                  <fields.name
-                    label="Nombre"
-                    placeholder="TU NOMBRE"
-                    required
-                    fieldMode="register"
-                    addons={[{ type: 'icon', icon: <ProfileIcon className="size-[1.05rem]" /> }]}
-                  />
-                </div>
-                <div onFocusCapture={() => setActiveField('sname')}>
-                  <fields.sname
-                    label="Segundo nombre"
-                    placeholder="OPCIONAL"
-                    fieldMode="register"
-                    addons={[{ type: 'icon', icon: <ProfileIcon className="size-[1.05rem]" /> }]}
-                  />
-                </div>
-                <div onFocusCapture={() => setActiveField('lname')}>
-                  <fields.lname
-                    label="Apellido"
-                    placeholder="TU APELLIDO"
-                    required
-                    fieldMode="register"
-                    addons={[{ type: 'icon', icon: <ProfileIcon className="size-[1.05rem]" /> }]}
-                  />
-                </div>
-                <div onFocusCapture={() => setActiveField('sex')}>
-                  <fields.sex
-                    label="Sexo"
-                    control={['radio', [...SEX_OPTIONS]]}
-                    required
-                    fieldMode="register"
-                  />
-                </div>
-              </section>
-
-              <section className="auth-form-section">
-                <div className="auth-form-section-header">
-                  <p className="auth-form-section-eyebrow">CUENTA</p>
-                  <h3 className="auth-form-section-title">ACCESO Y CONTACTO</h3>
-                </div>
-
-                <div onFocusCapture={() => setActiveField('username')}>
-                  <fields.username
-                    label="Usuario"
-                    placeholder="TU_USUARIO"
-                    required
-                    fieldMode="register"
-                    addons={[{ type: 'icon', icon: <UsernameIcon className="size-[1.05rem]" /> }]}
-                  />
-                </div>
-                <div onFocusCapture={() => setActiveField('email')}>
-                  <fields.email
-                    label="Email"
-                    placeholder="CORREO@DOMINIO.COM"
-                    control="email"
-                    required
-                    fieldMode="register"
-                    addons={[{ type: 'icon', icon: <MailIcon className="size-[1.05rem]" /> }]}
-                  />
-                </div>
-                <div onFocusCapture={() => setActiveField('phone')}>
-                  <fields.phone
-                    label="Teléfono"
-                    control="phone"
-                    placeholder="+54 9 381 ..."
-                    fieldMode="register"
-                    addons={[{ type: 'icon', icon: <PhoneIcon className="size-[1.05rem]" /> }]}
-                  />
-                </div>
-                <div onFocusCapture={() => setActiveField('password')}>
-                  <fields.password
-                    label="Contraseña"
-                    control="password"
-                    placeholder="CREÁ UNA CONTRASEÑA"
-                    required
-                    fieldMode="register"
-                    addons={[
-                      { type: 'icon', icon: <LockIcon className="size-[1.05rem]" /> },
-                      { type: 'passwordToggle' },
-                    ]}
-                  />
-                </div>
-                <div onFocusCapture={() => setActiveField('cpassword')}>
-                  <fields.cpassword
-                    label="Confirmar contraseña"
-                    control="password"
-                    placeholder="REPETILA ACÁ"
-                    required
-                    fieldMode="register"
-                    addons={[
-                      { type: 'icon', icon: <LockIcon className="size-[1.05rem]" /> },
-                      { type: 'passwordToggle' },
-                    ]}
-                  />
-                </div>
-              </section>
+              <SectionFactory
+                sections={registerSections}
+                className="contents"
+                headerClassName="auth-form-section-header"
+                eyebrowClassName="auth-form-section-eyebrow"
+                titleClassName="auth-form-section-title"
+              />
             </div>
 
             <button
