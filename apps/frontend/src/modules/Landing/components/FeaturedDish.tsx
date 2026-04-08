@@ -32,7 +32,7 @@
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
-import { PUBLIC_APP_SCOPE } from '../../../env';
+import { PUBLIC_APP_SCOPE } from '../../../qartEnv';
 import { sdk } from '../../../tools/sdk';
 import PlateCard from './PlateCard';
 import PlateNutritionModal from './PlateNutritionModal';

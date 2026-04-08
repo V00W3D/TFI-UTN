@@ -33,7 +33,7 @@ import { useCallback, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
-import { MODE } from '../../../env';
+import { MODE } from '../../../qartEnv';
 import { SectionFactory } from '../../../components/shared/SectionFactory';
 import { GlobalProfileCard } from '../../../components/shared/GlobalProfileCard';
 import { ArrowRightIcon, CopyIcon, EditIcon } from '../../../components/shared/AppIcons';

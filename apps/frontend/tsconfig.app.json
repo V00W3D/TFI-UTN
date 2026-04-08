@@ -35,7 +35,7 @@
     // @app/sdk y @app/contracts se resuelven via workspace — NO van acá.
     "paths": {
       "@store": ["./src/appStore.ts"],
-      "@env": ["./src/env.ts"],
+      "@env": ["./src/qartEnv.ts"],
       "@tools/*": ["./src/tools/*"],
       "@modules/*": ["./src/modules/*"]
     },

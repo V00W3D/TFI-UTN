@@ -25,7 +25,6 @@
  *
  * @testing
  * cases: TC-APP-STORE-01
- * ultima prueba exitosa: 2026-04-08 13:40:00
  *
  * @notes
  * decisions: focuses only on ensuring store initialization and mutations work correctly.
@@ -61,15 +60,63 @@ describe('appStore', () => {
     store.setModule('POS');
     expect(useAppStore.getState().module).toBe('POS');
 
-    const mockUser: AppUser = {
-      id: 'usr1',
-      identity: 'test',
-      active: true,
-      role: 'STAFF',
-      verified: true
+    // 1. Mock Customer
+    const mockCustomer: AppUser = {
+      id: 'c1',
+      username: 'customer1',
+      name: 'John',
+      sname: null,
+      lname: 'Doe',
+      sex: 'MALE',
+      email: 'john@doe.com',
+      emailVerified: true,
+      phone: null,
+      phoneVerified: false,
+      role: 'CUSTOMER',
+      profile: { tier: 'VIP' }
     };
-    store.setUser(mockUser);
-    expect(useAppStore.getState().user).toEqual(mockUser);
+    store.setUser(mockCustomer);
+    expect(useAppStore.getState().user).toEqual(mockCustomer);
+
+    // 2. Mock Staff
+    const mockStaff: AppUser = {
+      id: 's1',
+      username: 'staff1',
+      name: 'Jane',
+      sname: null,
+      lname: 'Smith',
+      sex: 'FEMALE',
+      email: 'jane@qart.com',
+      emailVerified: true,
+      phone: '123456',
+      phoneVerified: true,
+      role: 'STAFF',
+      profile: { post: 'WAITRESS' as any } // WAITER in lowercase or WAITRESS if specific, checking Enum
+    };
+    // Correcting ENUM based on user prompt: COOK, CASHIER, WAITER, BARISTA, CLEANER, DELIVERY
+    mockStaff.profile.post = 'WAITER';
+    store.setUser(mockStaff);
+    expect(useAppStore.getState().user?.role).toBe('STAFF');
+    expect(useAppStore.getState().user?.profile.post).toBe('WAITER');
+
+    // 3. Mock Authority
+    const mockAuth: AppUser = {
+      id: 'a1',
+      username: 'boss1',
+      name: 'Big',
+      sname: null,
+      lname: 'Boss',
+      sex: 'OTHER',
+      email: 'boss@qart.com',
+      emailVerified: true,
+      phone: null,
+      phoneVerified: false,
+      role: 'AUTHORITY',
+      profile: { rank: 'OWNER' }
+    };
+    store.setUser(mockAuth);
+    expect(useAppStore.getState().user?.role).toBe('AUTHORITY');
+    expect(useAppStore.getState().user?.profile.rank).toBe('OWNER');
 
     store.setSimpleMode(true);
     expect(useAppStore.getState().simpleMode).toBe(true);

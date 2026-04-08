@@ -38,7 +38,7 @@ import { CustomerRoutes } from '@modules/Customer/CustomerRoutes';
 import { IAMRoutes } from '@modules/IAM/IAMRoutes';
 import { LandingRoutes } from '@modules/Landing/LandingRoutes';
 import { SearchRoutes } from '@modules/Search/SearchRoutes';
-import { PUBLIC_APP_SCOPE } from './env';
+import { PUBLIC_APP_SCOPE } from './qartEnv';
 
 const shared: RouteObject[] = [LandingRoutes, SearchRoutes, IAMRoutes];
 

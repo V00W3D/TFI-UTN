@@ -12,13 +12,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@store': path.resolve(rootDir, 'src/appStore.ts'),
-      '@env': path.resolve(rootDir, 'src/env.ts'),
+      '@env': path.resolve(rootDir, 'src/qartEnv.ts'),
       '@tools': path.resolve(rootDir, 'src/tools'),
       '@modules': path.resolve(rootDir, 'src/modules'),
     },
   },
   test: {
-    name: 'frontend',
+    name: 'frontend-v2',
     environment: 'jsdom',
     globals: true,
     setupFiles: [path.resolve(rootDir, 'tests/setup.ts')],

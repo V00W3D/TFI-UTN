@@ -29,7 +29,7 @@
  * @notes
  * decisions: las integraciones transversales se encapsulan en herramientas reutilizables
  */
-import { BACKEND_URL } from '../env';
+import { BACKEND_URL } from '../qartEnv';
 import { createClientApi } from '@app/sdk/ApiClient';
 import { contracts } from '@app/contracts';
 import { FormFactory } from './FormFactory';
