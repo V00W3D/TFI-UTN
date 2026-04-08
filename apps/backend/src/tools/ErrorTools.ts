@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: infraestructura compartida, variables de entorno y adapters del backend
+ * outputs: helpers reutilizables para bootstrap, errores, DB o lectura de usuario
+ * rules: centralizar infraestructura y evitar duplicacion entre modulos
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: client, zod, @app/sdk
+ * flow: recibe configuracion o dependencias compartidas; resuelve la tarea transversal del backend; expone helpers reutilizables para el resto del servidor.
  *
  * @estimation
  * complexity: Medium
@@ -27,10 +27,11 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la infraestructura comun se centraliza en tools para simplificar mantenimiento
  */
 import { Prisma } from '../../prisma/generated/client';
-import { z, ZodError } from 'zod';
+import * as z from 'zod';
+import { ZodError } from 'zod';
 import { ERROR_CODES, AppError, ERR, type ErrorCode, type PublicErrorEnvelope } from '@app/sdk';
 
 /** @description Reserved system identifiers that cannot be used as input values in specific contexts. */
@@ -42,7 +43,8 @@ const RESERVED_WORDS = ['admin', 'root', 'system'] as const;
  */
 const getSchemaFields = (schema?: z.ZodType): string[] => {
   if (!schema) return [];
-  const base = schema instanceof z.ZodReadonly ? schema.unwrap() : schema;
+  const maybeWrapped = schema as z.ZodType & { unwrap?: () => z.ZodType };
+  const base = typeof maybeWrapped.unwrap === 'function' ? maybeWrapped.unwrap() : schema;
   return base instanceof z.ZodObject ? Object.keys(base.shape) : [];
 };
 

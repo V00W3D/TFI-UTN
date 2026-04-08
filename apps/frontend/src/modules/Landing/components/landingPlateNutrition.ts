@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: datos nutricionales de platos mostrados en la landing
+ * outputs: helpers y etiquetas derivados para cards y modales publicos
+ * rules: mantener criterios de presentacion nutricional consistentes en la landing
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: @app/contracts, @app/sdk, PlateDataIcons
+ * flow: recibe datos nutricionales de platos; calcula etiquetas o valores de presentacion; exporta helpers reutilizados por cards y modales del modulo Landing.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la logica de presentacion nutricional de la landing se centraliza para evitar duplicacion
  */
 import { GetPlatesContract } from '@app/contracts';
 import {
@@ -44,6 +44,7 @@ import {
   getIngredientIconKey,
   type PlateDataIconKey,
 } from '../../../components/shared/PlateDataIcons';
+import { formatEnumLabel } from '../../../tools/enumLabels';
 
 export type LandingPlate = InferSuccess<typeof GetPlatesContract>[number];
 export type { NutritionSnapshot, NutritionTone };
@@ -142,7 +143,7 @@ export interface PlateRecipeGuide {
 }
 
 const SIZE_LABELS: Record<string, string> = {
-  REGULAR: 'Medium',
+  REGULAR: 'Regular',
 };
 
 const metricIconMap: Record<NutritionKey, PlateDataIconKey> = {
@@ -483,11 +484,7 @@ export const formatLandingEnum = (value: string | null | undefined) => {
 
   if (SIZE_LABELS[value]) return SIZE_LABELS[value];
 
-  return value
-    .toLowerCase()
-    .split('_')
-    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-    .join(' ');
+  return formatEnumLabel(value);
 };
 
 export const formatLandingPrice = (value: number) =>

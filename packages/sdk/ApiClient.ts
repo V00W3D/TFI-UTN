@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: schemas, contratos, adapters y utilidades tipadas compartidas
+ * outputs: infraestructura tipada reutilizable del workspace
+ * rules: preservar una unica fuente de verdad y API funcional tipada
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: zustand, zod, Contracts, FormStore
+ * flow: define artefactos compartidos del workspace; compone tipos, contratos o runtime reutilizable; exporta piezas consumidas por frontend y backend.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: las piezas compartidas viven en packages para evitar duplicacion
  */
 /**
  * @file packages/sdk/ApiClient.ts
@@ -37,7 +37,7 @@
 
 import { create } from 'zustand';
 import type { UseBoundStore, StoreApi } from 'zustand';
-import { z } from 'zod';
+import * as z from 'zod';
 import type { AnyContract, InferError } from './Contracts';
 import { getFullResponseSchema } from './Contracts';
 import { createFormStore } from './FormStore';
@@ -169,7 +169,8 @@ const isBodylessVerb = (verb: string): verb is 'GET' | 'DELETE' =>
   verb === 'GET' || verb === 'DELETE';
 
 /** @internal Serializa un objeto plano a query string, saltando null/undefined. */
-const buildQueryString = (params: Record<string, unknown>): string => {
+const buildQueryString = (params: Record<string, unknown> | null | undefined): string => {
+  if (!params) return '';
   const sp = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     if (value !== null && value !== undefined) sp.append(key, String(value));
@@ -183,7 +184,8 @@ const buildQueryString = (params: Record<string, unknown>): string => {
  * El formulario siempre guarda `''` para evitar warnings de inputs controlados.
  * Las columnas nullable de Prisma reciben `null` — nunca `''`.
  */
-const coerceEmptyStrings = (payload: Record<string, unknown>): Record<string, unknown> => {
+const coerceEmptyStrings = (payload: Record<string, unknown> | null | undefined): Record<string, unknown> => {
+  if (!payload) return payload as any;
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(payload)) {
     result[key] = value === '' ? null : value;

@@ -9,13 +9,13 @@
  * rnf: RNF-02
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: request, response, next y configuracion de seguridad
+ * outputs: contexto HTTP enriquecido o corte temprano de la request
+ * rules: validar autenticacion o autorizacion antes del handler
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: express, jsonwebtoken, env, @app/sdk
+ * flow: inspecciona el request y sus credenciales o roles; valida la condicion de seguridad correspondiente; modifica el contexto o rechaza la request; delega al siguiente eslabon cuando pasa la validacion.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la seguridad se implementa como middlewares composables reutilizables
  */
 import type { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';

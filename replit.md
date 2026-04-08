@@ -1,3 +1,35 @@
+<!--
+@file replit.md
+@module Documentation
+@description Describe el entorno operativo del proyecto QART en Replit y resume arquitectura, workflows y despliegue.
+
+@tfi
+section: IEEE 830 11 / 12.1
+rf: RF-18
+rnf: RNF-05
+
+@business
+inputs: informacion operativa del workspace, stack, variables de entorno y comandos de desarrollo
+outputs: documentacion de onboarding tecnico y operacion diaria del proyecto
+rules: mantener instrucciones concretas, actualizadas y alineadas a la arquitectura real del repositorio
+
+@technical
+dependencies: documentacion del workspace, comandos Bun y Vite, consumido como guia de desarrollo del proyecto
+flow: resume el objetivo del sistema; describe arquitectura y tecnologias; enumera workflows y variables; documenta despliegue y notas de estilos para el equipo.
+
+@estimation
+complexity: Low
+fpa: EO
+story_points: 2
+estimated_hours: 1
+
+@testing
+cases: TC-DOC-01
+
+@notes
+decisions: la documentacion de entorno se mantiene separada del context global para facilitar onboarding operativo.
+-->
+
 # QART — Digital Restaurant Platform
 
 ## Overview

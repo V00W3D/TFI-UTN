@@ -19,7 +19,7 @@
   "compilerOptions": {
     // ── Ambiente Node/Bun ────────────────────────────────────────
     "lib": ["ESNext"],
-    "types": ["bun", "node"],
+    "types": ["bun", "node", "vitest/globals"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 

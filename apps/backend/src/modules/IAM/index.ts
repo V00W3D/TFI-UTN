@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: handlers del modulo y la factory api.router
+ * outputs: router tipado listo para montarse en el backend
+ * rules: registrar solo endpoints del dominio y preservar su ensamblado declarativo
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: api, LoginHandler, RegisterHandler, LogoutHandler, MeHandler, UpdateMeHandler, RequestTokenHandler, VerifyUpdateHandler
+ * flow: importa los handlers del modulo; los agrupa en api.router; exporta el router que monta el backend principal.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: cada modulo expone un router compuesto para aislar su superficie HTTP
  */
 import { api } from '../../tools/api';
 import { LoginHandler } from './handlers/LoginHandler';

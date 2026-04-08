@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: stores, hooks, params de ruta, modales y componentes del modulo
+ * outputs: pantalla completa renderizada con sus flujos de interaccion
+ * rules: coordinar estado de pagina sin duplicar logica de dominio
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: framer-motion, react, react-router-dom, sdk, @app/sdk, @app/contracts, appStore, Navbar, OrderPanel, PlateNutritionModal, PlateRecipeModal, PlateReviewsModal, landingPlateNutrition, searchUrl, SearchFilters, SearchPlateCard, AppIcons, LandingPages.css
+ * flow: lee estado global y local de la pantalla; coordina formularios, fetches o modales; compone secciones reutilizables; renderiza la experiencia completa de la pagina.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la pagina orquesta estado y delega presentacion fina a componentes especializados
  */
 import { AnimatePresence } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';

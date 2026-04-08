@@ -1,3 +1,35 @@
+/**
+ * @file AuthPages.css
+ * @module IAM
+ * @description Estilos de layout y componentes visuales para las paginas de autenticacion.
+ *
+ * @tfi
+ * section: IEEE 830 12.1
+ * rf: RF-01
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: clases CSS aplicadas por LoginPage, RegisterPage y AuthLayout
+ * outputs: presentacion visual consistente para los flujos IAM del frontend
+ * rules: sostener legibilidad, jerarquia visual y coherencia entre login y registro
+ *
+ * @technical
+ * dependencies: CSS, LoginPage.tsx, RegisterPage.tsx, AuthLayout.tsx, consumido por las rutas IAM
+ * flow: define la estructura visual de los shells auth; estiliza paneles, grids y ayudas; acompana transiciones y variantes de login y registro.
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EO
+ * story_points: 2
+ * estimated_hours: 1
+ *
+ * @testing
+ * cases: TC-IAM-UI-01
+ *
+ * @notes
+ * decisions: se concentran los estilos auth en una hoja comun para reutilizar patrones y facilitar ajustes visuales.
+ */
+
 @import 'tailwindcss';
 
 .auth-shell {

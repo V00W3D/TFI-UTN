@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: stores, hooks, params de ruta, modales y componentes del modulo
+ * outputs: pantalla completa renderizada con sus flujos de interaccion
+ * rules: coordinar estado de pagina sin duplicar logica de dominio
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react, react-router-dom, appStore, sdk, CustomerFilters, CustomerPlateDetails, CustomerPlateList, customerPlate
+ * flow: lee estado global y local de la pantalla; coordina formularios, fetches o modales; compone secciones reutilizables; renderiza la experiencia completa de la pagina.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la pagina orquesta estado y delega presentacion fina a componentes especializados
  */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -72,17 +72,17 @@ const CustomerPage = () => {
   return (
     <main className="customer-page">
       <header className="customer-page__hero">
-        <p>QART customer</p>
+        <p>QART clientes</p>
         <h1>Explorador de platos</h1>
         <p>
-          Boceto funcional para la experiencia customer. No reutiliza la landing ni los builders
-          anteriores, y queda listo para vestirlo con otra identidad visual después.
+          Vista funcional para clientes. No reutiliza la landing ni los builders anteriores, y queda
+          lista para vestirla con otra identidad visual despues.
         </p>
 
-        <nav aria-label="Accesos rápidos customer">
+        <nav aria-label="Accesos rapidos para clientes">
           <Link to="/">Ir a la landing</Link>
           <span> | </span>
-          <Link to="/iam/login">Iniciar sesión</Link>
+          <Link to="/iam/login">Iniciar sesion</Link>
         </nav>
       </header>
 
@@ -97,7 +97,7 @@ const CustomerPage = () => {
         </article>
         <article>
           <h2>Con reseñas</h2>
-          <p>{reviewedPlates} platos con feedback</p>
+          <p>{reviewedPlates} platos con resenas</p>
         </article>
       </section>
 
@@ -113,14 +113,14 @@ const CustomerPage = () => {
       {isFetching && (
         <section className="customer-page__state">
           <h2>Cargando catálogo</h2>
-          <p>Estamos trayendo los platos para la vista customer.</p>
+          <p>Estamos trayendo los platos para la vista de clientes.</p>
         </section>
       )}
 
       {!isFetching && error && (
         <section className="customer-page__state">
           <h2>No se pudo cargar el catálogo</h2>
-          <p>La vista customer quedó montada, pero la API no respondió correctamente.</p>
+          <p>La vista de clientes quedo montada, pero la API no respondio correctamente.</p>
         </section>
       )}
 

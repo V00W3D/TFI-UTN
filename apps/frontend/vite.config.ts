@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: configuracion de Vite, plugins y rutas base del frontend
+ * outputs: configuracion de build y dev server del frontend
+ * rules: mantener el bundler alineado al stack React y al workspace
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: vite, @vitejs/plugin-react, @tailwindcss/vite, node:path, node:url
+ * flow: define la configuracion de Vite; registra plugins y aliases necesarios; expone el comportamiento de build y desarrollo del frontend.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la configuracion de Vite se mantiene acotada y explicita para facilitar build y DX
  */
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';

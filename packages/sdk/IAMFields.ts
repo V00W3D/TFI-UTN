@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: schemas, contratos, adapters y utilidades tipadas compartidas
+ * outputs: infraestructura tipada reutilizable del workspace
+ * rules: preservar una unica fuente de verdad y API funcional tipada
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: zod, FieldDef
+ * flow: define artefactos compartidos del workspace; compone tipos, contratos o runtime reutilizable; exporta piezas consumidas por frontend y backend.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: las piezas compartidas viven en packages para evitar duplicacion
  */
 /**
  * @file IAMFields.ts
@@ -43,7 +43,7 @@
  * - PERT: 35m
  * - Planning Poker: 2
  */
-import { z } from 'zod';
+import * as z from 'zod';
 import { defineField, NAME_BASE, PASSWORD_LENGTH } from './FieldDef';
 
 // ═══════════════════════════════════════════════════════════════

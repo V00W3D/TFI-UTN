@@ -154,6 +154,20 @@ Every file MUST start with:
  */
 ```
 
+Additional mandatory interpretation for metadata fields:
+
+- `@technical.dependencies` MUST list the real technical dependencies used by the file.
+  - Include external libraries/packages actually imported in the file.
+  - Include internal files/modules directly consumed by the file when relevant.
+  - When useful for traceability, also mention the main file/module that consumes or wires this file.
+  - Avoid placeholders such as `dependencias locales del archivo`.
+- `@technical.flow` MUST describe the concrete process executed by the file.
+  - Write the real sequence of steps performed by the file.
+  - Prefer 3 to 6 short actions in order.
+  - Mention validation, transformations, delegation, persistence, rendering, or returned output when applicable.
+  - Avoid generic phrases such as `inicializa, transforma y expone la logica del modulo`.
+- `@business.inputs`, `@business.outputs`, `@business.rules`, and `@notes.decisions` should be specific to the file responsibility and must not be left as generic template text.
+
 ---
 
 ## 6. REQUIREMENTS MAPPING (IEEE 830 · 11)
@@ -232,8 +246,12 @@ Each implementation must include:
 
 ## 10. HARD RULES FOR AI AGENTS
 
-### ALWAYS:
+### 10.1 Mandatory Workflow after each change:
+- **ALWAYS** perform a typecheck (`bun run typecheck:backend` or `bun run typecheck:frontend` as applicable).
+- **ALWAYS** run unit tests in the affected areas to ensure no regressions.
+- **NEVER** commit/finish a task without verifying these two steps.
 
+### ALWAYS:
 - Add metadata block
 - Map to RF or RNF
 - Define inputs/outputs

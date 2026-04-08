@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: props de presentacion, estado derivado y callbacks
+ * outputs: bloques de UI interactivos reutilizables
+ * rules: mantener componentes composables y sin logica persistente
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react, @app/contracts, @app/sdk, landingPlateNutrition, searchUrl
+ * flow: recibe props o estado derivado; calcula etiquetas, listas o variantes visuales; renderiza la seccion interactiva; delega eventos a callbacks, stores o modales del nivel superior.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: se prioriza composicion de interfaz y reutilizacion de piezas visuales
  */
 import type { ReactNode } from 'react';
 import type { SearchPlatesQuery } from '@app/contracts';
@@ -230,7 +230,7 @@ export const SearchFilters = ({ searchParams, onReplaceParams }: Props) => {
         </div>
       </Section>
 
-      <Section id="filtros-resenas" title="Reseñas y engagement">
+      <Section id="filtros-resenas" title="Reseñas e interaccion">
         {numField('Rating mín.', 'minRating', { min: 0, step: 0.1 })}
         {numField('Cant. reseñas mín.', 'minRatingsCount', { min: 0, step: 1 })}
         {numField('Likes mín.', 'minLikes', { min: 0, step: 1 })}
@@ -281,7 +281,7 @@ export const SearchFilters = ({ searchParams, onReplaceParams }: Props) => {
         </div>
       </Section>
 
-      <Section id="filtros-nutri-tags" title="Highlights nutrición">
+      <Section id="filtros-nutri-tags" title="Destacados nutricionales">
         <div className="search-filter-list">
           {NUTRITION_TAG_VALUES.map((v) => (
             <label key={v} className="custom-checkbox-container">
@@ -319,7 +319,7 @@ export const SearchFilters = ({ searchParams, onReplaceParams }: Props) => {
         </div>
       </Section>
 
-      <Section id="filtros-tags-cartel" title="Tags de carta (nombre)">
+      <Section id="filtros-tags-cartel" title="Etiquetas de carta (nombre)">
         <label className="search-filter-field">
           <span className="search-filter-field__label">Separados por coma</span>
           <input

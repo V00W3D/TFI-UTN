@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: payloads customer del catalogo y helpers de presentacion del modulo
+ * outputs: tipos, formateadores y mapeos reutilizados por la experiencia customer
+ * rules: mantener una traduccion consistente entre contratos y UI del modulo
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: @app/contracts, @app/sdk
+ * flow: recibe estructuras del catalogo customer; define tipos y helpers de presentacion; exporta mapeos reutilizados por listas y detalles del modulo.
  *
  * @estimation
  * complexity: Medium
@@ -27,23 +27,16 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: los helpers del dominio customer se centralizan en un archivo utilitario del modulo
  */
 import { GetPlatesContract } from '@app/contracts';
 import type { InferSuccess } from '@app/sdk';
+import { formatEnumLabel } from '../../tools/enumLabels';
 
 export type CustomerPlate = InferSuccess<typeof GetPlatesContract>[number];
 
 export const formatCustomerEnum = (value: string | null | undefined) => {
-  if (!value) return 'No especificado';
-
-  if (value === 'REGULAR') return 'Medium';
-
-  return value
-    .toLowerCase()
-    .split('_')
-    .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
-    .join(' ');
+  return formatEnumLabel(value);
 };
 
 export const formatCustomerPrice = (value: number) =>

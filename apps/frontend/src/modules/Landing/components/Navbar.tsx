@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: props de presentacion, estado derivado y callbacks
+ * outputs: bloques de UI interactivos reutilizables
+ * rules: mantener componentes composables y sin logica persistente
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: framer-motion, react-router-dom, appStore, NavSearchBar, NavProfile
+ * flow: recibe props o estado derivado; calcula etiquetas, listas o variantes visuales; renderiza la seccion interactiva; delega eventos a callbacks, stores o modales del nivel superior.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: se prioriza composicion de interfaz y reutilizacion de piezas visuales
  */
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
@@ -116,6 +116,20 @@ const Navbar = () => {
                 >
                   <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
                   <polyline points="14 2 14 8 20 8" />
+                </svg>
+              </Link>
+              <Link to="/facturacion" className="nav-action-btn" title="Facturación">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="square"
+                >
+                  <path d="M4 4h16v16H4z" />
+                  <path d="M8 8h8M8 12h8M8 16h5" />
                 </svg>
               </Link>
               <Link to="/config" className="nav-action-btn relative" title="Ajustes">

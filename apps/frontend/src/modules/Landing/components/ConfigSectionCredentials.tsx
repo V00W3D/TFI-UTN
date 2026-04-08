@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: props de presentacion, estado derivado y callbacks
+ * outputs: bloques de UI interactivos reutilizables
+ * rules: mantener componentes composables y sin logica persistente
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react, appStore, env, SectionFactory, GlobalProfileCard, AppIcons, toastStore, sdk
+ * flow: recibe props o estado derivado; calcula etiquetas, listas o variantes visuales; renderiza la seccion interactiva; delega eventos a callbacks, stores o modales del nivel superior.
  *
  * @estimation
  * complexity: Medium
@@ -27,10 +27,11 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: se prioriza composicion de interfaz y reutilizacion de piezas visuales
  */
 import { useCallback, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../../appStore';
 import { MODE } from '../../../env';
 import { SectionFactory } from '../../../components/shared/SectionFactory';
@@ -43,7 +44,7 @@ type ProfileFieldKey = 'name' | 'sname' | 'lname' | 'username' | 'sex';
 type SecurityFieldType = 'EMAIL_CHANGE' | 'PHONE_CHANGE' | 'PASSWORD_CHANGE';
 type EditingState = null | ProfileFieldKey;
 type SecurityIntent = 'verify' | 'change' | 'password';
-type ConfigViewMode = 'view' | 'requesting' | 'verifying' | 'plans';
+type ConfigViewMode = 'view' | 'requesting' | 'verifying';
 
 interface Address {
   id: string;
@@ -93,38 +94,6 @@ const EMPTY_ADDRESS_DRAFT: AddressDraft = {
   notes: '',
   isDefault: false,
 };
-
-const PLAN_CARDS = [
-  {
-    tier: 'REGULAR',
-    title: 'Cliente Regular',
-    accent: 'bg-qart-primary',
-    summary: 'Entrada base al ecosistema QART con acceso completo al menu y pedidos web.',
-    bullets: ['Acceso estandar al catalogo', 'Historial de pedidos', 'Gestion de datos personales'],
-  },
-  {
-    tier: 'VIP',
-    title: 'Cliente VIP',
-    accent: 'bg-qart-accent',
-    summary: 'Pensado para clientes frecuentes que quieren mas prioridad y beneficios.',
-    bullets: [
-      'Atencion prioritaria en promos',
-      'Beneficios por recurrencia',
-      'Experiencias y lanzamientos',
-    ],
-  },
-  {
-    tier: 'PREMIUM',
-    title: 'Cliente Premium',
-    accent: 'bg-qart-success',
-    summary: 'La capa alta del programa de cliente para quienes quieren trato diferencial.',
-    bullets: [
-      'Beneficios exclusivos',
-      'Mayor reconocimiento en campanas',
-      'Acceso preferente a novedades',
-    ],
-  },
-] as const;
 
 const SECURITY_COPY = {
   EMAIL_CHANGE: {
@@ -273,6 +242,7 @@ const CredentialRow = ({ label, value, helper, badge, actions = [] }: Credential
 export const ConfigSectionCredentials = () => {
   const { user, setUser } = useAppStore();
   const { error, success, warning } = useToastStore();
+  const navigate = useNavigate();
 
   const [editing, setEditing] = useState<EditingState>(null);
   const [securityFlow, setSecurityFlow] = useState<SecurityFlow | null>(null);
@@ -502,12 +472,6 @@ export const ConfigSectionCredentials = () => {
     }
   };
 
-  const openPlansView = () => {
-    setEditing(null);
-    setSecurityFlow(null);
-    setMode('plans');
-  };
-
   if (!user) {
     return (
       <div className="p-20 flex flex-col items-center justify-center border-4 border-dashed border-qart-primary bg-qart-bg-warm animate-pulse">
@@ -534,7 +498,6 @@ export const ConfigSectionCredentials = () => {
   const fullName = [user.name, user.sname, user.lname].filter(Boolean).join(' ');
   const customerTier = user.profile.tier;
   const rankLabel = formatTier(customerTier);
-  const activePlan = PLAN_CARDS.find((card) => card.tier === (customerTier ?? 'REGULAR'));
   const activeSecurityCopy = securityFlow
     ? SECURITY_COPY[securityFlow.type][securityFlow.intent]
     : null;
@@ -618,77 +581,6 @@ export const ConfigSectionCredentials = () => {
       </div>
     </div>
   ) : null;
-
-  const plansPanel = (
-    <div className="space-y-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
-            Rango actual
-          </p>
-          <h2 className="mt-2 text-2xl font-black uppercase tracking-tight text-qart-primary md:text-3xl">
-            Planes
-          </h2>
-          <p className="mt-2 text-sm text-qart-text-muted">
-            Tu cuenta está en <span className="font-bold text-qart-primary">{rankLabel}</span>.
-          </p>
-        </div>
-        <ActionButton
-          key="close-plans"
-          label="Volver"
-          variant="secondary"
-          onClick={() => setMode('view')}
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        {PLAN_CARDS.map((plan) => {
-          const isActive = activePlan?.tier === plan.tier;
-
-          return (
-            <article
-              key={plan.tier}
-              className={`border-2 p-5 ${
-                isActive
-                  ? 'border-qart-primary bg-qart-surface'
-                  : 'border-qart-border bg-qart-surface-sunken/70'
-              }`}
-            >
-              <div className={`mb-4 h-1.5 w-14 ${plan.accent}`} />
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.14em] text-qart-text-muted">
-                    {plan.tier}
-                  </p>
-                  <h3 className="mt-2 text-xl font-black uppercase tracking-tight text-qart-primary">
-                    {plan.title}
-                  </h3>
-                </div>
-                {isActive && (
-                  <span className="border border-qart-border bg-qart-primary px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.12em] text-white">
-                    Actual
-                  </span>
-                )}
-              </div>
-
-              <p className="mt-3 text-sm leading-relaxed text-qart-text-muted">{plan.summary}</p>
-
-              <div className="mt-4 space-y-2">
-                {plan.bullets.map((bullet) => (
-                  <p
-                    key={bullet}
-                    className="border border-qart-border bg-qart-bg-warm px-3 py-2 text-xs font-medium text-qart-primary"
-                  >
-                    {bullet}
-                  </p>
-                ))}
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    </div>
-  );
 
   const identityRows = [
     {
@@ -876,6 +768,7 @@ export const ConfigSectionCredentials = () => {
     {
       label: 'Rango',
       value: rankLabel,
+      helper: 'Los planes y precios ahora viven en Facturacion para separar cuenta de membresias.',
       actions: [
         {
           key: 'copy-rank',
@@ -885,10 +778,10 @@ export const ConfigSectionCredentials = () => {
         },
         {
           key: 'plans-rank',
-          label: 'Ver planes',
+          label: 'Ir a facturacion',
           variant: 'secondary' as const,
           icon: <ArrowRightIcon className="w-3.5 h-3.5" />,
-          onClick: openPlansView,
+          onClick: () => navigate('/facturacion'),
         },
       ],
     },
@@ -1120,10 +1013,6 @@ export const ConfigSectionCredentials = () => {
           editPanel
         ) : mode === 'view' ? (
           <SectionFactory sections={sections} className="space-y-10" />
-        ) : mode === 'plans' ? (
-          <div className="space-y-6 border-2 border-qart-primary bg-qart-surface p-6 shadow-[12px_12px_0_var(--qart-primary)]">
-            {plansPanel}
-          </div>
         ) : (
           <div className="space-y-6 border-2 border-qart-primary bg-qart-surface p-6 shadow-[12px_12px_0_var(--qart-primary)]">
             <div className="flex items-center gap-4">

@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: configuracion, modulos compartidos o datos semilla del backend
+ * outputs: constantes, bootstrap, helpers de catalogo o datos iniciales
+ * rules: mantener coherencia con entorno, contratos y datos base
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: sin imports directos; consumido por el modulo correspondiente
+ * flow: carga configuracion o datos base; coordina dependencias de infraestructura; expone constantes, helpers o bootstrap segun su responsabilidad.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: los archivos raiz concentran bootstrap y soporte comun del backend
  */
 export const PLATE_IMAGE_ROUTE_PREFIX = '/assets/plates';
 

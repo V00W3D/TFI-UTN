@@ -8,6 +8,9 @@
     "seed": "bun src/seed.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "start": "node dist/index.js",
+    "test": "vitest run -c vitest.config.ts",
+    "test:watch": "vitest -c vitest.config.ts",
+    "test:coverage": "vitest run -c vitest.config.ts --coverage",
     "plates:webp": "bash scripts/convert-plates-to-webp.sh",
     "db:reset": "prisma migrate reset",
     "db:migrate": "prisma migrate dev --name db_init",
@@ -16,26 +19,26 @@
   "dependencies": {
     "@app/contracts": "workspace:*",
     "@app/sdk": "workspace:*",
-    "@prisma/adapter-pg": "^7.4.2",
-    "@prisma/client": "^7.5.0",
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^7.7.0",
     "argon2": "^0.44.0",
     "chalk": "^5.6.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
+    "dotenv": "^17.4.1",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
-    "zod": "^4.0.0"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.9",
+    "@types/bun": "^1.3.11",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^25.5.0",
-    "prisma": "^7.4.2"
+    "@types/node": "^25.5.2",
+    "prisma": "^7.7.0"
   }
 }

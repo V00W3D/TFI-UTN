@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: infraestructura compartida, variables de entorno y adapters del backend
+ * outputs: helpers reutilizables para bootstrap, errores, DB o lectura de usuario
+ * rules: centralizar infraestructura y evitar duplicacion entre modulos
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: express, jsonwebtoken, env, @app/sdk
+ * flow: recibe configuracion o dependencias compartidas; resuelve la tarea transversal del backend; expone helpers reutilizables para el resto del servidor.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la infraestructura comun se centraliza en tools para simplificar mantenimiento
  */
 import type { Request } from 'express';
 import * as jwt from 'jsonwebtoken';

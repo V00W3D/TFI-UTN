@@ -1,3 +1,35 @@
+/**
+ * @file FormFactoryStyles.css
+ * @module Frontend
+ * @description Estilos complementarios para la fabrica de formularios del frontend.
+ *
+ * @tfi
+ * section: IEEE 830 12.1
+ * rf: RF-01
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: clases CSS y estados visuales de campos, botones y ayudas del formulario
+ * outputs: estilos reutilizables aplicados por FormFactory y sus componentes derivados
+ * rules: mantener consistencia visual entre formularios y encapsular estados de interaccion
+ *
+ * @technical
+ * dependencies: CSS, FormFactory.tsx, consumido por formularios del frontend
+ * flow: define reglas visuales del sistema de formularios; estiliza inputs, estados y addons; acompana el render generado por FormFactory.
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EO
+ * story_points: 2
+ * estimated_hours: 1
+ *
+ * @testing
+ * cases: TC-FORM-UI-01
+ *
+ * @notes
+ * decisions: los estilos del factory viven en una hoja dedicada para no sobrecargar el componente TSX.
+ */
+
 /* =============================================================================
    FormFactory — Estilos del sistema de campos
    Sin colores hardcodeados — todo |extrae de las variables CSS del tema activo.

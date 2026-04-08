@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: tokens visuales, paths de contenido y extensiones de Tailwind
+ * outputs: configuracion del sistema de estilos utilitarios del frontend
+ * rules: mantener consistencia visual y alcance correcto de clases
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: sin imports directos; consumido por el modulo correspondiente
+ * flow: declara el contenido que Tailwind debe escanear; extiende tema y tokens del proyecto; exporta la configuracion consumida por el pipeline CSS.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: Tailwind se configura en un unico punto para sostener coherencia visual del frontend
  */
 // tailwind.config.js
 export default {

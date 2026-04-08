@@ -44,7 +44,7 @@
  *   ❌ ENV vars                            — passed via ServerEnv
  */
 
-import { z } from 'zod';
+import * as z from 'zod';
 import type { Router, Request, Response, NextFunction } from 'express';
 import type { AnyContract, InferRequest, InferSuccess } from './Contracts';
 import { AppError, ERR, httpStatusFrom, type PublicErrorEnvelope } from './ErrorCodes';

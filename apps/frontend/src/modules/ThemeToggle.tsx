@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: estado visual del tema y eventos de cambio del usuario
+ * outputs: control de UI para alternar o visualizar el tema activo
+ * rules: mantener la interaccion visual desacoplada de la logica global de tema
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: framer-motion, appStore
+ * flow: lee el estado visual relacionado al tema; renderiza el control de alternancia; dispara la accion correspondiente cuando el usuario interactua.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: el cambio de tema se encapsula en un componente pequeno y reutilizable
  */
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '../appStore';

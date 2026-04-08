@@ -35,6 +35,7 @@ import { useNavigate } from 'react-router-dom';
 import { sdk } from '../../../tools/sdk';
 import type { InferRequest } from '@app/sdk';
 import type { SearchPlatesContract } from '@app/contracts';
+import { formatEnumLabel } from '../../../tools/enumLabels';
 
 /* ─── Icons ─── */
 const SearchIcon = () => (
@@ -191,7 +192,9 @@ const NavSearchBar = () => {
                   <span className="nav-search-suggestion__name">{plate.name}</span>
                   <div className="nav-search-suggestion__meta">
                     {plate.size && (
-                      <span className="nav-search-suggestion__type">{plate.size}</span>
+                      <span className="nav-search-suggestion__type">
+                        {formatEnumLabel(plate.size)}
+                      </span>
                     )}
                     {plate.menuPrice != null && (
                       <span className="nav-search-suggestion__price">

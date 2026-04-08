@@ -9,13 +9,13 @@
  * rnf: RNF-02
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: contenido hijo, props de layout y contexto visual de autenticacion
+ * outputs: estructura visual compartida para login y registro
+ * rules: separar layout auth de la logica de negocio de cada pagina
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react-router-dom, AuthPages.css
+ * flow: recibe contenido y props de composicion; arma la estructura visual comun de IAM; distribuye paneles y slots; renderiza el layout reutilizable de autenticacion.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: el layout auth se separa para reutilizar estructura y mantener paginas mas enfocadas
  */
 /**
  * @file AuthLayout.tsx

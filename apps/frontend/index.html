@@ -1,3 +1,34 @@
+<!--
+@file index.html
+@module Frontend
+@description Documento HTML base que hospeda la aplicacion React del frontend.
+
+@tfi
+section: IEEE 830 12.1
+rf: RF-17
+rnf: RNF-03
+
+@business
+inputs: metadatos HTML, nodos raiz y carga del entrypoint del frontend
+outputs: documento base servido por Vite para montar la interfaz
+rules: exponer una estructura minima y delegar la experiencia al bundle React
+
+@technical
+dependencies: Vite, src/main.tsx, consumido por el runtime del frontend
+flow: define el doctype y metadatos basicos; declara los nodos root y portal-root; carga el modulo src/main.tsx que inicia React.
+
+@estimation
+complexity: Low
+fpa: EQ
+story_points: 1
+estimated_hours: 1
+
+@testing
+cases: TC-FRONT-BOOT-01
+
+@notes
+decisions: el HTML raiz se mantiene minimo para que la app viva casi por completo en React.
+-->
 <!doctype html>
 <html lang="en">
   <head>

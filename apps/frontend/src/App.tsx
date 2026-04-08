@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: providers globales, rutas, estilos y variables publicas
+ * outputs: bootstrap de la aplicacion y configuracion base de la interfaz
+ * rules: centralizar montaje, entorno y navegacion
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react, AppRoutes, sdk, appStore, FloatingActions, ToastProvider
+ * flow: carga configuracion y providers base; monta rutas y capas compartidas; inicia el frontend o expone su configuracion global.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la base del frontend se concentra en archivos raiz pequenos y coordinados
  */
 /**
  * @file App.tsx

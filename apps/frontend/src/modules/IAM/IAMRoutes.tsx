@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: paginas, layouts y flags de alcance del frontend
+ * outputs: configuracion declarativa de rutas
+ * rules: mantener arbol de navegacion modular
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react-router-dom, AuthLayout, LoginPage, RegisterPage
+ * flow: declara rutas del modulo o de la app; enlaza paginas y layouts correspondientes; exporta la configuracion consumida por React Router.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: las rutas se definen por modulo para aislar navegacion
  */
 /**
  * @file IAMRoutes.tsx

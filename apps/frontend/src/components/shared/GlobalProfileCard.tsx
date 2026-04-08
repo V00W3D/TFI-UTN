@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: props de presentacion, estado derivado y callbacks
+ * outputs: bloques de UI interactivos reutilizables
+ * rules: mantener componentes composables y sin logica persistente
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: appStore, AppIcons, @app/contracts, zod
+ * flow: recibe props o estado derivado; calcula etiquetas, listas o variantes visuales; renderiza la seccion interactiva; delega eventos a callbacks, stores o modales del nivel superior.
  *
  * @estimation
  * complexity: Medium
@@ -27,12 +27,13 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: se prioriza composicion de interfaz y reutilizacion de piezas visuales
  */
 import { useAppStore } from '../../appStore';
 import { MailIcon, PhoneIcon, UsernameIcon } from './AppIcons';
 import type { AuthUserSchema } from '@app/contracts';
 import { z } from 'zod';
+import { formatEnumLabel } from '../../tools/enumLabels';
 
 type UserData = z.infer<typeof AuthUserSchema>;
 
@@ -56,7 +57,7 @@ export const GlobalProfileCard = ({ profile }: { profile?: UserData; isOwner?: b
 
       <div className="flex flex-wrap justify-end gap-1.5 absolute top-4 right-4">
         <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-primary text-white px-3 py-1 border border-white/20 shadow-sharp">
-          {user.role}
+          {formatEnumLabel(user.role)}
         </span>
         {user.profile.tier && (
           <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-accent text-white px-3 py-1 border border-white/20 shadow-sharp">
@@ -87,7 +88,7 @@ export const GlobalProfileCard = ({ profile }: { profile?: UserData; isOwner?: b
           </div>
           <div className="flex flex-col overflow-hidden">
             <span className="text-[9px] font-black uppercase text-qart-text-muted tracking-widest mb-0.5">
-              Electrónico
+              Correo electronico
             </span>
             <span className="truncate text-sm font-black tracking-tight">{user.email}</span>
           </div>
@@ -104,7 +105,7 @@ export const GlobalProfileCard = ({ profile }: { profile?: UserData; isOwner?: b
           </div>
           <div className="flex flex-col">
             <span className="text-[9px] font-black uppercase text-qart-text-muted tracking-widest mb-0.5">
-              Contacto
+              Telefono
             </span>
             <span className="text-sm font-black tracking-tight">
               {user.phone || 'NO REGISTRADO'}

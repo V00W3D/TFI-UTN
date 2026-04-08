@@ -46,7 +46,7 @@
  * - PERT: 1
  * - Planning Poker: 1
  */
-import { z } from 'zod';
+import * as z from 'zod';
 
 //#region CONFIG_TYPES
 /** @public Minimum or maximum string-length constraint. */

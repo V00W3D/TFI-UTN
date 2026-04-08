@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: payload validado del contrato, contexto HTTP y req.user cuando aplica
+ * outputs: respuesta tipada del endpoint o accion HTTP puntual
+ * rules: mantener handlers livianos y delegar negocio al service
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: api, getFeaturedPlatesService
+ * flow: recibe el payload validado por api.handler; verifica sesion si req.user es obligatorio; delega la operacion al service importado; devuelve la respuesta serializable del contrato.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: se separa transporte HTTP de logica de negocio para mantener handlers finos
  */
 import { api } from '../../../tools/api';
 import { getFeaturedPlatesService } from '../services/getFeaturedPlatesService';

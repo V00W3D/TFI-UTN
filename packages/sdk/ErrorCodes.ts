@@ -46,7 +46,7 @@
  * - PERT: 1
  * - Planning Poker: 1
  */
-import { z } from 'zod';
+import * as z from 'zod';
 
 //#region ERROR_CODES
 /** @public Exhaustive map of machine-readable error codes. */

@@ -25,7 +25,7 @@
 
     // ── Ambiente browser ─────────────────────────────────────────
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": ["vite/client", "node"],
+    "types": ["vite/client", "node", "vitest/globals", "@testing-library/jest-dom"],
     "useDefineForClassFields": true,
 
     // ── React ────────────────────────────────────────────────────

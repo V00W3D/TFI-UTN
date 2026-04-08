@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: paginas, layouts y flags de alcance del frontend
+ * outputs: configuracion declarativa de rutas
+ * rules: mantener arbol de navegacion modular
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react-router-dom, LandingPage, CraftPage, ConfigPage
+ * flow: declara rutas del modulo o de la app; enlaza paginas y layouts correspondientes; exporta la configuracion consumida por React Router.
  *
  * @estimation
  * complexity: Medium
@@ -27,12 +27,13 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: las rutas se definen por modulo para aislar navegacion
  */
 import type { RouteObject } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import CraftPage from './pages/CraftPage';
 import ConfigPage from './pages/ConfigPage';
+import BillingPage from './pages/BillingPage';
 
 /**
  * @file LandingRoutes.tsx
@@ -44,5 +45,7 @@ export const LandingRoutes: RouteObject = {
     { index: true, element: <LandingPage /> },
     { path: 'craft', element: <CraftPage /> },
     { path: 'config', element: <ConfigPage /> },
+    { path: 'facturacion', element: <BillingPage /> },
+    { path: 'facturación', element: <BillingPage /> },
   ],
 };

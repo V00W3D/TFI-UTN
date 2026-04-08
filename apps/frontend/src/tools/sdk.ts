@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: contratos, SDK cliente, eventos de formulario y configuracion del frontend
+ * outputs: helpers reutilizables de integracion, formularios y acceso a API
+ * rules: centralizar integraciones compartidas y sostener tipado fuerte
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: env, @app/sdk/ApiClient, @app/contracts, FormFactory
+ * flow: recibe contratos, estado o configuracion; construye helpers reutilizables para integrar UI, formularios y API; exporta piezas compartidas por el frontend.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: las integraciones transversales se encapsulan en herramientas reutilizables
  */
 import { BACKEND_URL } from '../env';
 import { createClientApi } from '@app/sdk/ApiClient';

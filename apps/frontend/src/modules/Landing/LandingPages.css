@@ -1,3 +1,35 @@
+/**
+ * @file LandingPages.css
+ * @module Landing
+ * @description Estilos compartidos por las paginas y secciones de la landing.
+ *
+ * @tfi
+ * section: IEEE 830 12.1
+ * rf: RF-18
+ * rnf: RNF-03
+ *
+ * @business
+ * inputs: clases CSS de secciones hero, cards, paneles y bloques informativos de la landing
+ * outputs: lenguaje visual consistente para las vistas publicas del frontend
+ * rules: mantener coherencia de marca, jerarquia visual y reutilizacion de estilos entre secciones
+ *
+ * @technical
+ * dependencies: CSS, paginas y componentes del modulo Landing, consumido por las rutas publicas del frontend
+ * flow: define reglas de layout y tipografia; estiliza secciones publicas y componentes de la landing; acompana la experiencia visual del modulo.
+ *
+ * @estimation
+ * complexity: Medium
+ * fpa: EO
+ * story_points: 2
+ * estimated_hours: 1
+ *
+ * @testing
+ * cases: TC-LANDING-UI-01
+ *
+ * @notes
+ * decisions: los estilos comunes de la landing se agrupan para sostener consistencia sin duplicar clases entre componentes.
+ */
+
 @import 'tailwindcss';
 
 .featured-dish-grid {

@@ -9,13 +9,13 @@
  * rnf: RNF-05
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: eventos de UI, datos compartidos y acciones del usuario
+ * outputs: estado global reactivo y acciones para mutarlo
+ * rules: mantener estado minimo y predecible
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: zustand
+ * flow: define el estado inicial del store; expone acciones para mutarlo; permite compartir interacciones entre vistas y componentes.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: se usa store global acotado para coordinar interacciones sin prop drilling
  */
 import { create } from 'zustand';
 

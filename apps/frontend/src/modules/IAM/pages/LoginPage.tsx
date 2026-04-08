@@ -9,13 +9,13 @@
  * rnf: RNF-02
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: stores, hooks, params de ruta, modales y componentes del modulo
+ * outputs: pantalla completa renderizada con sus flujos de interaccion
+ * rules: coordinar estado de pagina sin duplicar logica de dominio
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: react, framer-motion, react-router-dom, appStore, toastStore, sdk, AppIcons
+ * flow: lee estado global y local de la pantalla; coordina formularios, fetches o modales; compone secciones reutilizables; renderiza la experiencia completa de la pagina.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la pagina orquesta estado y delega presentacion fina a componentes especializados
  */
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';

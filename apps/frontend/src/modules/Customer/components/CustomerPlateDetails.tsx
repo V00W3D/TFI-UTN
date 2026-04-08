@@ -9,13 +9,13 @@
  * rnf: RNF-03
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: props de presentacion, estado derivado y callbacks
+ * outputs: bloques de UI interactivos reutilizables
+ * rules: mantener componentes composables y sin logica persistente
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: customerPlate, PlateDataIcons, CustomerDataPoint
+ * flow: recibe props o estado derivado; calcula etiquetas, listas o variantes visuales; renderiza la seccion interactiva; delega eventos a callbacks, stores o modales del nivel superior.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: se prioriza composicion de interfaz y reutilizacion de piezas visuales
  */
 import {
   formatCustomerEnum,
@@ -83,7 +83,7 @@ const CustomerPlateDetails = ({ plate }: CustomerPlateDetailsProps) => {
   return (
     <section className="customer-plate-details">
       <header>
-        <p>Ficha customer</p>
+        <p>Ficha de cliente</p>
         <h2>{plate.name}</h2>
         <p>{plate.description || 'Sin descripción extendida para este plato.'}</p>
       </header>

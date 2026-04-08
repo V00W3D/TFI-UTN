@@ -9,13 +9,13 @@
  * rnf: RNF-02
  *
  * @business
- * inputs: datos del modulo y dependencias compartidas
- * outputs: comportamiento o estructuras del modulo
- * rules: respetar contratos, seguridad y trazabilidad definidas en context.md
+ * inputs: payloads tipados, ids autenticados, helpers compartidos y acceso a Prisma cuando aplica
+ * outputs: datos de dominio listos para contrato, mutaciones persistidas o payloads auxiliares
+ * rules: normalizar datos, validar reglas de dominio y preservar consistencia transaccional
  *
  * @technical
- * dependencies: dependencias locales del archivo
- * flow: inicializa, transforma y expone la logica del modulo
+ * dependencies: client
+ * flow: normaliza los datos recibidos; consulta o muta dependencias de dominio e infraestructura; arma la respuesta del caso de uso; devuelve un resultado consumible por handlers u otros servicios.
  *
  * @estimation
  * complexity: Medium
@@ -27,7 +27,7 @@
  * cases: TC-AUDIT-01
  *
  * @notes
- * decisions: bloque agregado para cumplir el formato obligatorio de context.md
+ * decisions: la logica de negocio se concentra en funciones async reutilizables y desacopladas del transporte
  */
 import type { Prisma } from '../../../../prisma/generated/client';
 
