@@ -277,14 +277,14 @@ const RegisterPage = () => {
         transition={{ duration: 0.45, ease: 'easeOut' }}
         className="auth-panel auth-panel--register"
       >
-        <div className="auth-hero relative pt-[4.5rem]">
-          <div className="absolute top-6 left-6 z-20">
+        <div className="auth-hero flex flex-col pt-6 px-4">
+          <div className="flex justify-between items-center mb-6 z-20">
             <Link to="/" className="inline-flex items-center gap-2 text-[0.62rem] font-black uppercase tracking-widest text-qart-text-muted hover:text-qart-primary transition-colors border-2 border-qart-border-subtle hover:border-qart-border px-3 py-1.5 bg-qart-surface">
               <ArrowLeftIcon className="size-3" />
               <span>VOLVER AL INICIO</span>
             </Link>
           </div>
-          <div className="auth-badge">NUEVA CUENTA</div>
+          <div className="auth-badge self-start ml-2">NUEVA CUENTA</div>
 
           <div className="auth-hero-copy">
             <p className="auth-kicker">REGISTRO</p>

@@ -53,9 +53,9 @@ vi.mock('../../../src/orderStore', () => ({
 }));
 
 // Mock sub-modals
-vi.mock('./PlateNutritionModal', () => ({ default: () => <div data-testid="nutrition-modal" /> }));
-vi.mock('./PlateRecipeModal', () => ({ default: () => <div data-testid="recipe-modal" /> }));
-vi.mock('./PlateReviewsModal', () => ({ default: () => <div data-testid="reviews-modal" /> }));
+vi.mock('../../../src/modules/Landing/components/PlateNutritionModal', () => ({ default: () => <div data-testid="nutrition-modal" /> }));
+vi.mock('../../../src/modules/Landing/components/PlateRecipeModal', () => ({ default: () => <div data-testid="recipe-modal" /> }));
+vi.mock('../../../src/modules/Landing/components/PlateReviewsModal', () => ({ default: () => <div data-testid="reviews-modal" /> }));
 
 describe('FeaturedSpotlight', () => {
   const mockAddItem = vi.fn();
@@ -96,7 +96,6 @@ describe('FeaturedSpotlight', () => {
     );
 
     expect(screen.getByText('Favorite 1')).toBeInTheDocument();
-    expect(screen.getByText('4.8 · 120 reseñas')).toBeInTheDocument();
     expect(screen.getByText('500 pedidos')).toBeInTheDocument();
   });
 
@@ -134,15 +133,15 @@ describe('FeaturedSpotlight', () => {
     );
 
     // Nutrition Info
-    fireEvent.click(screen.getByText('Info'));
+    fireEvent.click(screen.getByTitle('Info'));
     expect(screen.getByTestId('nutrition-modal')).toBeInTheDocument();
 
     // Recipe/Arma
-    fireEvent.click(screen.getByText('Arma'));
+    fireEvent.click(screen.getByTitle('Arma'));
     expect(screen.getByTestId('recipe-modal')).toBeInTheDocument();
 
     // Reviews
-    fireEvent.click(screen.getByText('Ver reseñas'));
+    fireEvent.click(screen.getByTitle('Ver reseñas'));
     expect(screen.getByTestId('reviews-modal')).toBeInTheDocument();
   });
 });

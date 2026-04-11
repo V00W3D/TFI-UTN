@@ -38,6 +38,7 @@ import { formatLandingEnum, formatLandingPrice, type LandingPlate } from './land
 import PlateNutritionModal from './PlateNutritionModal';
 import PlateRecipeModal from './PlateRecipeModal';
 import PlateReviewsModal from './PlateReviewsModal';
+import { PlateDataIcon, StarRatingDisplay } from '../../../components/shared/PlateDataIcons';
 
 type Modal = { plateId: string; view: 'nutrition' | 'recipe' | 'reviews' } | null;
 
@@ -159,9 +160,13 @@ const FeaturedSpotlight = () => {
                 </div>
                 <div className="spotlight-card__body">
                   <div className="spotlight-card__badges">
-                    <span className="spotlight-badge">
-                      <IconStar className="spotlight-badge-ico" />
-                      {plate.avgRating.toFixed(1)} · {plate.ratingsCount} reseñas
+                    <span className="spotlight-badge bg-qart-surface flex items-center gap-2 pl-2">
+                      <StarRatingDisplay
+                         value={plate.avgRating}
+                         size={16}
+                         showValue={false}
+                      />
+                      <span className="text-[10px] font-black">{plate.avgRating.toFixed(1)}</span>
                     </span>
                     {plate.unitsSold > 0 && (
                       <span className="spotlight-badge spotlight-badge--sales">
@@ -172,28 +177,36 @@ const FeaturedSpotlight = () => {
                   <p className="spotlight-card__type">{formatLandingEnum(plate.recipe.type)}</p>
                   <h3 className="spotlight-card__name">{plate.name}</h3>
                   <p className="spotlight-card__price">{formatLandingPrice(plate.menuPrice)}</p>
-                  <div className="spotlight-card__actions">
+                  
+                  {/* Floating Actions Over Body */}
+                  <div className="absolute right-3 top-3 flex flex-col gap-2 z-20">
                     <button
                       type="button"
-                      className="spotlight-card__ghost"
+                      className="w-10 h-10 bg-qart-surface/90 border border-qart-border text-qart-text flex items-center justify-center rounded-none shadow-[2px_2px_0_var(--qart-border)] transition-transform hover:-translate-y-0.5 hover:border-qart-accent hover:text-qart-accent"
                       onClick={() => setModal({ plateId: plate.id, view: 'nutrition' })}
+                      title="Info"
                     >
-                      Info
+                      <PlateDataIcon icon="info" className="w-[1.2rem] h-[1.2rem]" />
                     </button>
                     <button
                       type="button"
-                      className="spotlight-card__ghost"
+                      className="w-10 h-10 bg-qart-surface/90 border border-qart-border text-qart-text flex items-center justify-center rounded-none shadow-[2px_2px_0_var(--qart-border)] transition-transform hover:-translate-y-0.5 hover:border-qart-accent hover:text-qart-accent"
                       onClick={() => setModal({ plateId: plate.id, view: 'recipe' })}
+                      title="Arma"
                     >
-                      Arma
+                      <PlateDataIcon icon="recipe" className="w-[1.2rem] h-[1.2rem]" />
                     </button>
+                  </div>
+
+                  <div className="spotlight-card__actions mt-auto">
                     <button
                       type="button"
                       className="spotlight-card__ghost spotlight-card__ghost--reviews"
                       onClick={() => setModal({ plateId: plate.id, view: 'reviews' })}
+                      title="Ver reseñas"
                     >
-                      <IconReviews className="spotlight-card__reviews-ico" />
-                      Ver reseñas
+                      <IconReviews className="size-5 shrink-0" />
+                      <span className="text-[10px] font-black uppercase tracking-widest ml-1">{plate.ratingsCount} Reseñas</span>
                     </button>
                     <button
                       type="button"
