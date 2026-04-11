@@ -31,7 +31,7 @@
  * decisions: focuses on boundary cases and default-omission behavior.
  */
 import { describe, expect, it } from 'vitest';
-import { parseSearchUrl, stringifySearchUrl, mergeSearchPayload, DEFAULT_SEARCH } from '../../src/modules/Search/searchUrl';
+import { parseSearchUrl, stringifySearchUrl, mergeSearchPayload, DEFAULT_SEARCH } from '../../../src/modules/Search/searchUrl';
 
 describe('searchUrl', () => {
   it('TC-SEARCH-URL-01: parseSearchUrl extrae arrays, números y query correctamente', () => {
