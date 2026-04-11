@@ -32,6 +32,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '../../../appStore';
 import { useOrderStore } from '../../../orderStore';
+import { useLocation } from 'react-router-dom';
 import { ParchmentIcon } from './OrderPanel';
 import Portal from '../../../components/shared/Portal';
 
@@ -88,12 +89,14 @@ const FloatingActions = () => {
   };
 
   const badgeCount = totalItems();
+  const location = useLocation();
+  const showOrderBtn = location.pathname === '/' || location.pathname === '/search';
 
   return (
     <Portal>
       <div className="floating-action-bar" role="group" aria-label="Acciones rápidas">
         <AnimatePresence>
-          {!isOpen && (
+          {!isOpen && showOrderBtn && (
             <motion.button
               key="order-panel-btn"
               initial={{ opacity: 0, x: 20 }}

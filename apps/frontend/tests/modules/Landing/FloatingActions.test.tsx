@@ -32,6 +32,7 @@
 import '@testing-library/jest-dom/vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import FloatingActions from '../../../src/modules/Landing/components/FloatingActions';
 import { useAppStore } from '../../../src/appStore';
 import { useOrderStore } from '../../../src/orderStore';
@@ -76,7 +77,11 @@ describe('FloatingActions', () => {
   });
 
   it('TC-FE-FA-01: cambia el tema cuando se clickea el botón de modo', () => {
-    render(<FloatingActions />);
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <FloatingActions />
+      </MemoryRouter>
+    );
     
     const themeBtn = screen.getByLabelText(/Cambiar a tema oscuro/i);
     fireEvent.click(themeBtn);
@@ -86,7 +91,11 @@ describe('FloatingActions', () => {
 
   it('TC-FE-FA-02: abre el panel de órdenes y muestra el contador de items', () => {
     mockTotalItems.mockReturnValue(5);
-    render(<FloatingActions />);
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <FloatingActions />
+      </MemoryRouter>
+    );
     
     const orderBtn = screen.getByLabelText(/Cerrar orden y ver historial/i);
     expect(screen.getByText('5')).toBeInTheDocument();
