@@ -277,10 +277,10 @@ const RegisterPage = () => {
         transition={{ duration: 0.45, ease: 'easeOut' }}
         className="auth-panel auth-panel--register"
       >
-        <div className="auth-hero">
-          <div className="auth-back-home auth-back-home--register">
-            <Link to="/" className="auth-back-link-top">
-              <ArrowLeftIcon className="size-[1.05rem]" />
+        <div className="auth-hero relative pt-[4.5rem]">
+          <div className="absolute top-6 left-6 z-20">
+            <Link to="/" className="inline-flex items-center gap-2 text-[0.62rem] font-black uppercase tracking-widest text-qart-text-muted hover:text-qart-primary transition-colors border-2 border-qart-border-subtle hover:border-qart-border px-3 py-1.5 bg-qart-surface">
+              <ArrowLeftIcon className="size-3" />
               <span>VOLVER AL INICIO</span>
             </Link>
           </div>

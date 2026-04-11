@@ -37,6 +37,7 @@ import {
 } from '../../Landing/components/landingPlateNutrition';
 import { useOrderStore } from '../../../orderStore';
 import { useAppStore } from '../../../appStore';
+import { StarRatingDisplay } from '../../../components/shared/PlateDataIcons';
 
 interface SearchPlateCardProps {
   plate: LandingPlate;
@@ -129,8 +130,18 @@ export const SearchPlateCard = ({
       <div className="search-plate-card__body">
         <p className="search-plate-card__meta">{formatLandingEnum(plate.recipe.type)}</p>
         <h3 className="search-plate-card__title">{plate.name}</h3>
+        
+        <div className="flex items-center gap-2 mb-2">
+          <StarRatingDisplay
+            value={plate.avgRating}
+            size={16}
+            showValue={false}
+          />
+          <strong className="text-xs font-black text-qart-text-muted">{plate.avgRating.toFixed(1)}</strong>
+        </div>
+
         <p className="search-plate-card__price">{formatLandingPrice(plate.menuPrice)}</p>
-        <div className="search-plate-card__actions">
+        <div className="search-plate-card__actions mt-auto">
           {!simpleMode && (
             <>
               <button
@@ -153,11 +164,11 @@ export const SearchPlateCard = ({
           )}
           <button
             type="button"
-            className="search-plate-card__icon-btn"
+            className="search-plate-card__icon-btn p-1.5 hover:text-qart-accent transition-colors"
             onClick={onReviews}
             title="Ver reseñas"
           >
-            <IconReviews className="search-plate-card__ico" />
+            <IconReviews className="w-6 h-6" />
           </button>
           <button
             type="button"

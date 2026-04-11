@@ -106,12 +106,12 @@ describe('PlateCard', () => {
     render(<PlateCard plate={mockPlate} onOpenNutrition={mockOnOpenNutrition} onOpenRecipe={mockOnOpenRecipe} />);
 
     // Click nutricion
-    const nutritionBtn = screen.getByText('Informacion nutricional');
+    const nutritionBtn = screen.getByTitle('Información nutricional');
     fireEvent.click(nutritionBtn);
     expect(mockOnOpenNutrition).toHaveBeenCalled();
 
     // Click receta
-    const recipeBtn = screen.getByText('Receta');
+    const recipeBtn = screen.getByTitle('Receta');
     fireEvent.click(recipeBtn);
     expect(mockOnOpenRecipe).toHaveBeenCalled();
   });

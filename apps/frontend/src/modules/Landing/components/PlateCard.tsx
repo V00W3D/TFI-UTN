@@ -127,6 +127,27 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
             />
           </span>
         </div>
+        
+        {/* Floating Actions Overlay */}
+        <div className="absolute right-3 bottom-[4.5rem] flex flex-col gap-3 z-20">
+          <button 
+            type="button" 
+            className="w-10 h-10 bg-qart-surface border-2 border-qart-border text-qart-text flex items-center justify-center rounded-none shadow-[3px_3px_0_var(--qart-border)] transition-transform hover:-translate-y-1 hover:border-qart-accent hover:text-qart-accent" 
+            onClick={onOpenNutrition}
+            title="Información nutricional"
+          >
+            <PlateDataIcon icon="info" className="w-[1.2rem] h-[1.2rem]" />
+          </button>
+          <button 
+            type="button" 
+            className="w-10 h-10 bg-qart-surface border-2 border-qart-border text-qart-text flex items-center justify-center rounded-none shadow-[3px_3px_0_var(--qart-border)] transition-transform hover:-translate-y-1 hover:border-qart-accent hover:text-qart-accent" 
+            onClick={onOpenRecipe}
+            title="Receta"
+          >
+            <PlateDataIcon icon="recipe" className="w-[1.2rem] h-[1.2rem]" />
+          </button>
+        </div>
+
         <div className="featured-card-media-signature">
           <span>Tamano</span>
           <strong title={`Tamano ${formatLandingEnum(plate.size)}`}>
@@ -147,16 +168,18 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
             <span className="featured-chip">{formatLandingEnum(plate.size)}</span>
           </div>
 
-          <div className="featured-rating-pill">
+          <div className="featured-rating-pill flex items-center gap-3">
             <StarRatingDisplay
               className="featured-star-rating"
               value={plate.avgRating}
-              size={14}
+              size={22}
               showValue={false}
             />
-            <div className="featured-rating-meta">
-              <strong>{plate.avgRating.toFixed(1)}</strong>
-              <span>{plate.ratingsCount} reseñas</span>
+            <div className="featured-rating-meta flex items-center gap-1.5 text-qart-text-muted">
+              <strong className="text-sm">{plate.avgRating.toFixed(1)}</strong>
+              <div className="w-px h-3 bg-qart-border mx-0.5" />
+              <PlateDataIcon icon="review" className="w-4 h-4 text-qart-text-subtle" />
+              <span className="text-xs font-bold">{plate.ratingsCount}</span>
             </div>
           </div>
         </div>
@@ -171,22 +194,7 @@ const PlateCard = ({ plate, onOpenNutrition, onOpenRecipe }: PlateCardProps) => 
           <p className="featured-card-quote">"{leadQuote}"</p>
         </div>
 
-        <div className="featured-card-actions featured-card-actions--pair">
-          <button type="button" className="featured-card-action" onClick={onOpenNutrition}>
-            <PlateDataIcon icon="info" className="featured-card-action-icon" />
-            <span>Informacion nutricional</span>
-          </button>
-          <button
-            type="button"
-            className="featured-card-action featured-card-action--primary"
-            onClick={onOpenRecipe}
-          >
-            <PlateDataIcon icon="recipe" className="featured-card-action-icon" />
-            <span>Receta</span>
-          </button>
-        </div>
-
-        <div className="featured-card-footer">
+        <div className="featured-card-footer mt-auto pt-6">
           <div>
             <span className="featured-price-label">Precio final</span>
             <strong className="featured-price-value">{formatLandingPrice(plate.menuPrice)}</strong>

@@ -49,6 +49,7 @@ const mockPlate: any = {
   name: 'Milanesa Clásica',
   menuPrice: 1800,
   imageUrl: null,
+  avgRating: 4.8,
   recipe: { type: 'MAIN' },
 };
 

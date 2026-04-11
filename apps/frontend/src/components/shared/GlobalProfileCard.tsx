@@ -55,22 +55,21 @@ export const GlobalProfileCard = ({ profile }: { profile?: UserData; isOwner?: b
       {/* Decorative architectural line */}
       <div className="absolute top-0 left-0 w-full h-1.5 bg-qart-accent" />
 
-      <div className="flex flex-wrap justify-end gap-1.5 absolute top-4 right-4">
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-primary text-white px-3 py-1 border border-white/20 shadow-sharp">
-          {formatEnumLabel(user.role)}
-        </span>
-        {user.profile.tier && (
-          <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-accent text-white px-3 py-1 border border-white/20 shadow-sharp">
-            {tierLabel}
-          </span>
-        )}
-      </div>
-
-      <div className="flex gap-5 items-center border-b-2 border-qart-border pb-6 mt-4">
+      <div className="flex gap-5 items-center border-b-2 border-qart-border pb-6 mt-2">
         <div className="w-20 h-20 bg-qart-primary flex items-center justify-center text-white text-3xl font-black shrink-0 border-2 border-qart-border shadow-sharp transition-transform group-hover:scale-105">
           {user.name?.charAt(0) || user.username?.charAt(0) || '?'}
         </div>
-        <div className="flex flex-col overflow-hidden">
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <div className="flex flex-wrap gap-1.5 mb-2">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-primary text-white px-3 py-1 border border-white/20 shadow-sharp">
+              {formatEnumLabel(user.role)}
+            </span>
+            {user.profile.tier && (
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] bg-qart-accent text-white px-3 py-1 border border-white/20 shadow-sharp">
+                {tierLabel}
+              </span>
+            )}
+          </div>
           <h3 className="font-black text-2xl tracking-tighter uppercase leading-[0.9] mb-1">
             {user.name} {user.sname ? `${user.sname} ` : ''}
             {user.lname}

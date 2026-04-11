@@ -60,8 +60,7 @@ const Contact = () => {
             </div>
 
             <p className="max-w-xl text-qart-text-muted text-[0.96rem] font-bold uppercase tracking-tight leading-tight">
-              Platos personalizables, una experiencia clara para pedir y una identidad bien local
-              pensada para la tesis.
+              Platos de autor únicos, una experiencia gastronómica inolvidable con identidad local para deleitar tu paladar.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -91,7 +90,7 @@ const Contact = () => {
               <div className="space-y-1 text-qart-text-muted text-[0.92rem] font-bold uppercase tracking-tight leading-snug">
                 <p className="text-qart-primary">Rivadavia 1050</p>
                 <p>San Miguel de Tucumán</p>
-                <p>Guiño UTN: bien cerquita de la Facultad Regional Tucumán.</p>
+                <p>En el epicentro histórico de la ciudad.</p>
               </div>
             </div>
           </div>
@@ -119,7 +118,7 @@ const Contact = () => {
 
         <div className="mt-12 pt-6 border-t-2 border-qart-border flex flex-col md:flex-row justify-between items-center gap-5">
           <p className="text-[10px] font-black text-qart-text-muted uppercase tracking-widest">
-            © 2026 QART. Proyecto académico para TFI UTN.
+            © 2026 QART RESTAURANTE. TODOS LOS DERECHOS RESERVADOS.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-6">
