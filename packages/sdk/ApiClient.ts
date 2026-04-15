@@ -184,7 +184,9 @@ const buildQueryString = (params: Record<string, unknown> | null | undefined): s
  * El formulario siempre guarda `''` para evitar warnings de inputs controlados.
  * Las columnas nullable de Prisma reciben `null` — nunca `''`.
  */
-const coerceEmptyStrings = (payload: Record<string, unknown> | null | undefined): Record<string, unknown> => {
+const coerceEmptyStrings = (
+  payload: Record<string, unknown> | null | undefined,
+): Record<string, unknown> => {
   if (!payload) return payload as any;
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(payload)) {

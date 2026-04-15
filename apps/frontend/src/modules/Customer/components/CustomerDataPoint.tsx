@@ -30,7 +30,8 @@
  * decisions: se prioriza composicion de interfaz y reutilizacion de piezas visuales
  */
 import type { ReactNode } from 'react';
-import { PlateDataIcon, type PlateDataIconKey } from '../../../components/shared/PlateDataIcons';
+import { PlateDataIcon, type PlateDataIconKey } from '@/shared/ui/PlateDataIcons';
+import { customerStyles } from '@/styles/modules/customer';
 
 interface CustomerDataPointProps {
   icon?: PlateDataIconKey;
@@ -39,19 +40,22 @@ interface CustomerDataPointProps {
   label?: string;
 }
 
-const iconStyle = {
-  width: 18,
-  height: 18,
-  marginRight: 7,
-  verticalAlign: 'text-bottom',
-} as const;
-
 const CustomerDataPoint = ({ icon, iconNode, label, value }: CustomerDataPointProps) => (
-  <span>
-    {iconNode ?? (icon ? <PlateDataIcon icon={icon} style={iconStyle} /> : null)}
-    {label ? <strong>{label}: </strong> : null}
+  <span className={customerStyles.dataPoint}>
+    {iconNode ?? (
+      icon ? (
+        <PlateDataIcon
+          icon={icon}
+          width={18}
+          height={18}
+          className={customerStyles.inlineIcon}
+        />
+      ) : null
+    )}
+    {label ? <strong className={customerStyles.dataPointStrong}>{label}: </strong> : null}
     {value}
   </span>
 );
 
 export default CustomerDataPoint;
+

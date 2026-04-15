@@ -29,22 +29,16 @@
  * @notes
  * decisions: se prioriza composicion de interfaz y reutilizacion de piezas visuales
  */
-import { formatCustomerEnum, formatCustomerPrice, type CustomerPlate } from '../customerPlate';
+import { formatCustomerEnum, formatCustomerPrice, type CustomerPlate } from '@/modules/Customer/customerPlate';
 import {
   PlateDataIcon,
   StarRatingDisplay,
   getIngredientIconKey,
   getPlateSizeIconKey,
   getPlateTypeIconKey,
-} from '../../../components/shared/PlateDataIcons';
-import CustomerDataPoint from './CustomerDataPoint';
-
-const inlineIconStyle = {
-  width: 18,
-  height: 18,
-  marginRight: 7,
-  verticalAlign: 'text-bottom',
-} as const;
+} from '@/shared/ui/PlateDataIcons';
+import { customerListItemStyles, customerSectionStyles, customerStyles } from '@/styles/modules/customer';
+import CustomerDataPoint from '@/modules/Customer/components/CustomerDataPoint';
 
 interface CustomerPlateListProps {
   plates: CustomerPlate[];
@@ -53,69 +47,93 @@ interface CustomerPlateListProps {
 }
 
 const CustomerPlateList = ({ plates, selectedPlateId, onSelect }: CustomerPlateListProps) => (
-  <section className="customer-plate-list">
-    <h2>Platos</h2>
+  <section className={customerSectionStyles({ tone: 'subtle' })}>
+    <div className={customerStyles.sectionHeader}>
+      <span className={customerStyles.sectionKicker}>Catálogo visible</span>
+      <h2 className={customerStyles.sectionTitle}>Platos</h2>
+      <p className={customerStyles.sectionCopy}>
+        Seleccioná un plato para abrir su ficha completa con nutrición, componentes y reseñas.
+      </p>
+    </div>
 
     {plates.length === 0 ? (
-      <p>No hay platos que coincidan con los filtros actuales.</p>
+      <p className={customerStyles.listEmpty}>No hay platos que coincidan con los filtros actuales.</p>
     ) : (
-      <ul>
+      <ul className={customerStyles.list}>
         {plates.map((plate) => (
           <li key={plate.id}>
             <button
               type="button"
               aria-pressed={selectedPlateId === plate.id}
               onClick={() => onSelect(plate.id)}
+              className={customerListItemStyles({ active: selectedPlateId === plate.id })}
             >
-              <strong>{plate.name}</strong>
-              <div>
-                <CustomerDataPoint icon="price" value={formatCustomerPrice(plate.menuPrice)} />
-                <span> · </span>
-                <CustomerDataPoint
-                  icon={getPlateSizeIconKey(plate.size)}
-                  value={formatCustomerEnum(plate.size)}
-                />
-                <span> · </span>
-                <CustomerDataPoint
-                  icon={getPlateTypeIconKey(plate.recipe.type)}
-                  value={formatCustomerEnum(plate.recipe.type)}
-                />
-                <span> · </span>
-                <CustomerDataPoint
-                  icon="availability"
-                  value={plate.isAvailable ? 'Disponible' : 'No disponible'}
-                />
+              <div className={customerStyles.listButtonTop}>
+                <strong className={customerStyles.listButtonTitle}>{plate.name}</strong>
+                <span className={customerStyles.helperPill}>
+                  {plate.isAvailable ? 'Disponible' : 'No disponible'}
+                </span>
               </div>
-              <div>
-                <StarRatingDisplay
-                  value={plate.avgRating}
-                  reviewCount={plate.ratingsCount}
-                  size={14}
-                />
-              </div>
-              <p>{plate.description || 'Sin descripción breve.'}</p>
-              <small>
+
+              <div className={customerStyles.listButtonBody}>
+                <div className={customerStyles.listMeta}>
+                  <CustomerDataPoint icon="price" value={formatCustomerPrice(plate.menuPrice)} />
+                  <span className={customerStyles.listMetaDivider}>·</span>
+                  <CustomerDataPoint
+                    icon={getPlateSizeIconKey(plate.size)}
+                    value={formatCustomerEnum(plate.size)}
+                  />
+                  <span className={customerStyles.listMetaDivider}>·</span>
+                  <CustomerDataPoint
+                    icon={getPlateTypeIconKey(plate.recipe.type)}
+                    value={formatCustomerEnum(plate.recipe.type)}
+                  />
+                  <span className={customerStyles.listMetaDivider}>·</span>
+                  <CustomerDataPoint
+                    icon="availability"
+                    value={plate.isAvailable ? 'Disponible' : 'No disponible'}
+                  />
+                </div>
+
+                <div className={customerStyles.listRating}>
+                  <StarRatingDisplay
+                    value={plate.avgRating}
+                    reviewCount={plate.ratingsCount}
+                    size={14}
+                    className={customerStyles.starRating}
+                  />
+                </div>
+
+                <p className={customerStyles.listDescription}>
+                  {plate.description || 'Sin descripción breve.'}
+                </p>
+
                 {plate.recipe.items.length > 0 ? (
-                  <>
-                    {plate.recipe.items.slice(0, 4).map((item, index) => (
-                      <span key={item.id}>
+                  <div className={customerStyles.ingredientRow}>
+                    {plate.recipe.items.slice(0, 4).map((item) => (
+                      <span key={item.id} className={customerStyles.ingredientPill}>
                         <PlateDataIcon
                           icon={getIngredientIconKey(
                             item.variant.ingredient.name,
                             item.variant.ingredient.category,
                           )}
-                          style={inlineIconStyle}
+                          width={18}
+                          height={18}
+                          className={customerStyles.inlineIcon}
                         />
                         {item.variant.ingredient.name}
-                        {index < Math.min(plate.recipe.items.length, 4) - 1 ? ' · ' : ''}
                       </span>
                     ))}
-                    {plate.recipe.items.length > 4 ? ' · mas componentes' : ''}
-                  </>
+                    {plate.recipe.items.length > 4 ? (
+                      <span className={customerStyles.helperPill}>Más componentes</span>
+                    ) : null}
+                  </div>
                 ) : (
-                  <CustomerDataPoint icon="ingredient" value="Sin ingredientes cargados" />
+                  <p className={customerStyles.listEmpty}>
+                    <CustomerDataPoint icon="ingredient" value="Sin ingredientes cargados" />
+                  </p>
                 )}
-              </small>
+              </div>
             </button>
           </li>
         ))}
@@ -125,3 +143,4 @@ const CustomerPlateList = ({ plates, selectedPlateId, onSelect }: CustomerPlateL
 );
 
 export default CustomerPlateList;
+

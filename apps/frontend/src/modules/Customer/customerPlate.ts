@@ -31,7 +31,7 @@
  */
 import { GetPlatesContract } from '@app/contracts';
 import type { InferSuccess } from '@app/sdk';
-import { formatEnumLabel } from '../../tools/enumLabels';
+import { formatEnumLabel } from '@/shared/utils/enumLabels';
 
 export type CustomerPlate = InferSuccess<typeof GetPlatesContract>[number];
 

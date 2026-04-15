@@ -34,8 +34,19 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { Alias } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const frontendRoot = path.resolve(__dirname, 'src');
+
+const frontendAliases: Alias[] = [
+  { find: /^@\//, replacement: `${frontendRoot}/` },
+  { find: '@shared', replacement: path.resolve(frontendRoot, 'shared') },
+  { find: '@store', replacement: path.resolve(frontendRoot, 'shared/store') },
+  { find: '@utils', replacement: path.resolve(frontendRoot, 'shared/utils') },
+  { find: '@modules', replacement: path.resolve(frontendRoot, 'modules') },
+  { find: '@styles', replacement: path.resolve(frontendRoot, 'styles') },
+];
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, __dirname, '');
@@ -62,7 +73,7 @@ export default defineConfig(({ mode }) => {
     },
 
     resolve: {
-      tsconfigPaths: true,
+      alias: frontendAliases,
     },
 
     build: {

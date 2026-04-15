@@ -34,10 +34,12 @@
     // ── Paths locales (dentro de src/) ───────────────────────────
     // @app/sdk y @app/contracts se resuelven via workspace — NO van acá.
     "paths": {
-      "@store": ["./src/appStore.ts"],
-      "@env": ["./src/qartEnv.ts"],
-      "@tools/*": ["./src/tools/*"],
-      "@modules/*": ["./src/modules/*"]
+      "@/*": ["./src/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@store/*": ["./src/shared/store/*"],
+      "@utils/*": ["./src/shared/utils/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@styles/*": ["./src/styles/*"]
     },
     "sourceMap": false
   },

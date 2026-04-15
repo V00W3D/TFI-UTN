@@ -11,7 +11,7 @@ type BillingSeed = {
   id: BillingPlanId;
   name: string;
   eyebrow: string;
-  accentClassName: string;
+  accentTone: 'primary' | 'accent' | 'success';
   summary: string;
   monthlyCostNet: number;
   qartMultiplier: number;
@@ -38,7 +38,7 @@ const BILLING_SEEDS: BillingSeed[] = [
     id: 'REGULAR',
     name: 'Regular',
     eyebrow: 'Entrada al ecosistema',
-    accentClassName: 'bg-qart-primary',
+    accentTone: 'primary',
     summary:
       'Para quien quiere comer mejor, sumar puntos QART y ver la informacion nutricional esencial sin pagar de mas.',
     monthlyCostNet: 6200,
@@ -56,7 +56,7 @@ const BILLING_SEEDS: BillingSeed[] = [
     id: 'VIP',
     name: 'VIP',
     eyebrow: 'Personalizacion ligera',
-    accentClassName: 'bg-qart-accent',
+    accentTone: 'accent',
     summary:
       'Para quien ya no quiere elegir a ciegas: define objetivo, recibe sugerencias y empieza a usar al restaurante como apoyo nutricional.',
     monthlyCostNet: 12400,
@@ -75,7 +75,7 @@ const BILLING_SEEDS: BillingSeed[] = [
     id: 'PREMIUM',
     name: 'Premium',
     eyebrow: 'Coach nutricional completo',
-    accentClassName: 'bg-qart-success',
+    accentTone: 'success',
     summary:
       'Para quien quiere convertir el restaurante en un sistema de acompanamiento real, con planificacion, correcciones dinamicas y beneficios concretos.',
     monthlyCostNet: 24800,

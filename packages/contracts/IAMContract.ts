@@ -134,8 +134,11 @@ export const RegisterInputSchema = z
   });
 
 export const RegisterContract = defineEndpoint('public', 'POST /iam/register')
-  .IO(RegisterInputSchema, z.void())
-  .doc('Customer registration', 'Creates a new customer account. Redirect to login on success.')
+  .IO(RegisterInputSchema, AuthUserSchema)
+  .doc(
+    'Customer registration',
+    'Creates a new customer account. Returns the user object on success.',
+  )
   .build();
 
 export const LogoutContract = defineEndpoint('auth', 'POST /iam/logout')

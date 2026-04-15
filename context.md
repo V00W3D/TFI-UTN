@@ -65,13 +65,13 @@ Client → API → Service → DB → Response
 
 ---
 
-## 3. PROJECT RULES (CRITICAL)
+## 3. GLOBAL CODE RULES (CRITICAL)
 
 ### 3.1 Code Philosophy
 
 - Functional programming ONLY
 - ❌ NO classes
-- ❌ NO function keyword
+- ❌ NO `function` keyword
 - ✅ ONLY arrow functions → `const fn = () => {}`
 - Early returns + guard clauses
 - Zero `any`
@@ -85,10 +85,12 @@ Client → API → Service → DB → Response
 - Use absolute paths or aliases:
   - `@app/sdk`
   - `@app/contracts`
+- Frontend: ALWAYS use `@/` for local frontend imports (tsconfig paths)
+- ❌ NEVER use relative imports like `../../components/...`
 
 ---
 
-### 3.3 Module Structure
+### 3.3 Backend Module Structure
 
 ```text
 modules/{Domain}/
@@ -244,19 +246,227 @@ Each implementation must include:
 
 ---
 
-## 10. HARD RULES FOR AI AGENTS
+## 10. FRONTEND ARCHITECTURE RULES (CRITICAL)
 
-### 10.1 Mandatory Workflow after each change:
-- **ALWAYS** perform a typecheck (`bun run typecheck:backend` or `bun run typecheck:frontend` as applicable).
-- **ALWAYS** run unit tests in the affected areas to ensure no regressions.
-- **NEVER** commit/finish a task without verifying these two steps.
+### 10.1 Styling System (MANDATORY)
+
+> `/styles/*` is the SINGLE SOURCE OF TRUTH for ALL styling. Nothing outside `/styles/*` is allowed to define styles.
+
+- ❌ NO `.css` files
+- ❌ NO inline Tailwind classes in JSX
+- ❌ NO raw `className` strings inside `.tsx` or `.ts`
+- ❌ NEVER define styles inside components
+- ✅ ALL styles MUST come from `/styles/*`
+- ✅ ALL styles MUST be static strings (Tailwind JIT safe)
+- ❌ NO dynamic Tailwind generation:
+  - `"bg-" + color`
+  - Template strings with runtime values
+
+---
+
+### 10.2 Required Styling Libraries
+
+- `clsx`
+- `class-variance-authority (cva)`
+
+Utility function (MANDATORY):
+
+```ts
+import clsx from 'clsx';
+export const cn = (...inputs: any[]) => clsx(inputs);
+```
+
+ALL component styles MUST use `cva`:
+
+```ts
+import { cva } from 'class-variance-authority';
+
+export const buttonStyles = cva('rounded font-medium transition', {
+  variants: {
+    variant: {
+      primary: 'bg-blue-500 text-white',
+      secondary: 'bg-gray-200 text-black',
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+  },
+});
+```
+
+ALL conditionals MUST use `cn()`:
+
+```tsx
+<div className={cn(baseStyle, isActive && activeStyle)} />
+```
+
+---
+
+### 10.3 Component Style Usage
+
+```tsx
+import { buttonStyles } from '@/styles/components/button';
+
+<button className={buttonStyles()} />;
+```
+
+---
+
+### 10.4 Module Architecture (MANDATORY)
+
+Each module MUST define:
+
+- `${ModuleName}Route.tsx` — Uses react-router-dom (object-based). Orchestrates module routing and app integration.
+- `${ModuleName}View.tsx` — Main UI of the module. MUST be composed from smaller components, NOT monolithic.
+
+Rules:
+
+- ❌ DO NOT create `pages/` folders
+- ❌ DO NOT rely on layout systems unless strictly necessary
+- ✅ Layout usage is OPTIONAL — prefer composition ALWAYS
+
+---
+
+### 10.5 Modularization Strategy
+
+- Components MUST be split when they grow
+- Each large component MUST live in its own folder
+- Internal folder structure is flexible BUT MUST remain consistent across the project
+- Extract subcomponents, hooks, and logic layers into separate files
+- Large files MUST be split — no exceptions
+
+---
+
+### 10.6 Naming Rules (VERY IMPORTANT)
+
+Names MUST be:
+
+- Short
+- Clear
+- Expressive
+
+Prefer:
+
+- `UserForm.tsx`
+- `AuthButton.tsx`
+- `DashboardHeader.tsx`
+
+Avoid:
+
+- Long overdescriptive names
+- Redundant naming patterns
+
+> Consistency belongs to structure and content, NOT long file names.
+
+---
+
+### 10.7 Folder Rules
+
+- DO NOT introduce a new global structure
+- ADAPT to the existing structure
+- SIMPLIFY where possible
+- REMOVE unnecessary nesting
+- KEEP naming consistent and semantic
+
+---
+
+### 10.8 Code Quality Rules
+
+- Components must be predictable
+- No hidden logic
+- No duplicated UI patterns
+- Reuse styles and patterns ALWAYS
+- SDK contracts from `packages/*` MUST be followed — NEVER bypass SDK logic
+
+---
+
+### 10.9 AI Optimization Rules
+
+The system MUST be deterministic, composable, and predictable.
+
+An AI MUST:
+
+- Select `cva` variants — NEVER invent inline styles
+- Reuse existing tokens from `/styles/*`
+- NEVER generate raw className strings
+
+---
+
+### 10.10 Non-Negotiable Frontend Checklist
+
+- `/styles/*` is the ONLY styling source
+- NEVER use inline Tailwind classes
+- ALWAYS import styles from `/styles/*`
+- ALWAYS use `cva` for component styles
+- ALWAYS use `cn()` for conditional classes
+- NEVER define styles inside components
+- ALWAYS use absolute imports with `@/`
+- Components MUST remain modular
+- `View` files MUST be composed, NOT monolithic
+- Avoid layout systems unless strictly necessary
+- Files MUST remain small and focused
+- Avoid duplication at all costs
+- Follow SDK contracts from `packages/*` at all times
+
+---
+
+## 11. MANDATORY AGENT WORKFLOW
+
+### 11.1 After Every Change (NO EXCEPTIONS)
+
+1. Run typecheck:
+   - `bun run typecheck:backend` (if backend was touched)
+   - `bun run typecheck:frontend` (if frontend was touched)
+2. Run unit tests in affected areas — ensure zero regressions
+3. ❌ NEVER commit or finish a task without completing steps 1 and 2
+
+---
+
+### 11.2 Frontend Migration Workflow (STRICT ORDER)
+
+When refactoring or adding frontend styling:
+
+1. Scan ALL `.tsx` and `.ts` files involved
+2. Extract ALL `className` usages
+3. Move ALL styles into `/styles/*` as `cva` definitions or tokens
+4. Replace ALL usages with imported variables or `cva` variants
+5. Validate UI visually — ensure ZERO regressions
+6. Verify Tailwind JIT still detects ALL classes (no dynamic strings)
+7. ONLY THEN delete any `.css` files that were fully migrated
+
+---
+
+### 11.3 Git Commit Rule (MANDATORY)
+
+After completing any significant change:
+
+```bash
+git add .
+
+git commit -m "refactor(scope): short description of change" \
+-m "Detail line 1" \
+-m "Detail line 2" \
+-m "Detail line 3"
+```
+
+---
+
+## 12. HARD RULES FOR AI AGENTS
 
 ### ALWAYS:
-- Add metadata block
+
+- Add metadata block to every file
 - Map to RF or RNF
 - Define inputs/outputs
 - Explain logic briefly
 - Add estimation
+- Use `cva` for all component styles
+- Use `cn()` for all conditional classes
+- Import styles from `/styles/*`
+- Use absolute imports with `@`
+- Compose `View` files from smaller components
+- Run typecheck after every change
+- Run tests after every change
 
 ### NEVER:
 
@@ -266,10 +476,18 @@ Each implementation must include:
 - Use `any`
 - Ignore business rules
 - Write unstructured code
+- Use inline Tailwind classes
+- Define styles inside components
+- Use relative imports
+- Create `.css` files
+- Use dynamic Tailwind class generation
+- Bypass SDK contracts
+- Create monolithic View files
+- Commit without typecheck + test verification
 
 ---
 
-## 11. OUTPUT FORMAT (STRICT)
+## 13. OUTPUT FORMAT (STRICT)
 
 When generating code:
 
@@ -279,7 +497,7 @@ When generating code:
 
 ---
 
-## 12. FINAL GOAL
+## 14. FINAL GOAL
 
 The system must allow automatic generation of:
 
@@ -290,15 +508,24 @@ The system must allow automatic generation of:
 
 Using ONLY code metadata.
 
+Frontend must reach:
+
+- Zero `.css` files
+- Zero inline `className` strings
+- Fully centralized styling system (`/styles/*`)
+- Clean, modular, composable frontend
+- Absolute import consistency
+- AI-ready, deterministic architecture
+
 ---
 
-## 13. REAL REPOSITORY CONTEXT (EXPLICIT IMPLEMENTATION MAP)
+## 15. REAL REPOSITORY CONTEXT (EXPLICIT IMPLEMENTATION MAP)
 
 This section does NOT weaken the mandatory rules above.
 
 Its purpose is to give agents exact code references so they can apply the mandatory rules correctly in the current monorepo.
 
-### 13.1 Workspace Layout
+### 15.1 Workspace Layout
 
 Root workspace:
 
@@ -324,7 +551,7 @@ Measured source count during audit:
 
 - Authored TS/TSX files in scope: `153`
 
-### 13.2 Contracts Package
+### 15.2 Contracts Package
 
 Primary entrypoint:
 
@@ -373,7 +600,7 @@ Exact files:
   - `POST /customers/addresses`
   - `PUT /customers/addresses`
 
-### 13.3 SDK Package
+### 15.3 SDK Package
 
 Primary entrypoint:
 
@@ -412,7 +639,7 @@ Exact responsibilities by file:
 - `packages/sdk/ErrorCodes.ts`
   - defines public errors and HTTP status mapping
 
-### 13.4 Backend Integration
+### 15.4 Backend Integration
 
 Main composition files:
 
@@ -450,7 +677,7 @@ modules/{Domain}/
   index.ts
 ```
 
-### 13.5 Frontend Integration
+### 15.5 Frontend Integration
 
 Main composition files:
 
@@ -474,7 +701,7 @@ Design system / visual context sources:
 - `apps/frontend/src/index.css`
 - `apps/frontend/public/themes/*.css`
 
-### 13.6 Import and Alias Reality
+### 15.6 Import and Alias Reality
 
 Workspace aliases in real use:
 
@@ -490,7 +717,7 @@ Backend local aliases from `apps/backend/tsconfig.json`:
 - `@tools/*`
 - `@modules/*`
 
-### 13.7 Existing Reusable Factories and Shared Abstractions
+### 15.7 Existing Reusable Factories and Shared Abstractions
 
 If something repeats, agents should prefer extending these existing abstractions first:
 
@@ -511,9 +738,9 @@ If something repeats, agents should prefer extending these existing abstractions
 - settings shell:
   - `apps/frontend/src/modules/Landing/components/settings/SettingsLayout.tsx`
 
-### 13.8 Audit Snapshot Against Mandatory Rules
+### 15.8 Audit Snapshot Against Mandatory Rules
 
-This subsection is descriptive only. It does not override the mandatory rules in sections 3, 5, and 10.
+This subsection is descriptive only. It does not override the mandatory rules in sections 3, 5, 10, 11, and 12.
 
 Observed during repository-wide authored-code audit:
 
@@ -530,7 +757,7 @@ Therefore:
 - The repository is still being aligned to that standard.
 - Future generated or modified code must follow the mandatory standard even if legacy files do not yet fully comply.
 
-### 13.9 Validation Commands
+### 15.9 Validation Commands
 
 Use these commands when applying or checking the mandatory rules:
 
@@ -540,7 +767,7 @@ Use these commands when applying or checking the mandatory rules:
 - `bun run build:frontend`
 - `bun run build:backend`
 
-### 13.10 Generated Code Exception
+### 15.10 Generated Code Exception
 
 Do not manually normalize generated sources under:
 

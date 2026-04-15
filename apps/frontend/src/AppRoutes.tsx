@@ -34,16 +34,19 @@
 import { useRoutes } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 
-import { CustomerRoutes } from '@modules/Customer/CustomerRoutes';
-import { IAMRoutes } from '@modules/IAM/IAMRoutes';
-import { LandingRoutes } from '@modules/Landing/LandingRoutes';
-import { SearchRoutes } from '@modules/Search/SearchRoutes';
-import { PUBLIC_APP_SCOPE } from './qartEnv';
+import { CustomerRoute } from '@/modules/Customer/CustomerRoute';
+import { IAMRoute } from '@/modules/IAM/IAMRoute';
+import { LandingRoute } from '@/modules/Landing/LandingRoute';
+import { SearchRoute } from '@/modules/Search/SearchRoute';
+import * as qartEnv from '@/shared/utils/qartEnv';
 
-const shared: RouteObject[] = [LandingRoutes, SearchRoutes, IAMRoutes];
+const sharedRoutes: RouteObject[] = [LandingRoute, SearchRoute, IAMRoute];
 
 const AppRoutes = () => {
-  const routes: RouteObject[] = PUBLIC_APP_SCOPE === 'full' ? [...shared, CustomerRoutes] : shared;
+  const routes: RouteObject[] =
+    qartEnv.PUBLIC_APP_SCOPE === 'full'
+      ? [...sharedRoutes, CustomerRoute]
+      : sharedRoutes;
 
   return useRoutes(routes);
 };
